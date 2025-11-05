@@ -7,218 +7,350 @@
   <meta name="description" content="We roll your trash & recycling cans to the curb and back. Reliable, friendly help in Sun City, Sun City West, Surprise & Peoria." />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
+    :root {
       --bg:#0b0b0b;
       --text:#fff;
       --muted:#b6b6b6;
       --panel:#141414;
-      --panel2:#191919;
       --ring:rgba(255,255,255,.14);
-      --shadow:0 12px 36px rgba(0,0,0,.48);
-      --radius:16px;
-      --radius-lg:18px;
-
-      /* spacing scale */
-      --space-1:6px;
-      --space-2:10px;
-      --space-3:14px;
-      --space-4:18px;
-      --space-5:24px;
-      --space-6:32px;
-      --space-7:40px;
-      --space-8:56px;
-      --space-9:72px;
-      --space-10:96px;
     }
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif}
-    img{max-width:100%;display:block}
-    a{color:inherit;text-decoration:none}
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Poppins', sans-serif;
+      line-height:1.6;
+    }
 
-    .container{max-width:1200px;margin:0 auto;padding:0 var(--space-5)}
-    @media(min-width:1024px){ .container{padding:0 var(--space-6)} }
+    a { color:inherit; text-decoration:none; }
 
-    /* ===== Header ===== */
-    header.site{
-      position:sticky;top:0;z-index:50;
+    .container {
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 24px;
+    }
+
+    /* ===== HEADER ===== */
+    header.site {
+      position:sticky;
+      top:0;
+      z-index:50;
       background:rgba(0,0,0,.7);
       backdrop-filter:saturate(120%) blur(6px);
       border-bottom:1px solid var(--ring);
     }
-    .bar{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:var(--space-5);
-      padding:calc(env(safe-area-inset-top,0) + var(--space-5)) 0 var(--space-5);
-    }
-    .brand{display:flex;align-items:center;gap:var(--space-4)}
-    .brand img{
-      height:44px;width:auto;object-fit:contain;
-    }
-    @media(min-width:1024px){ .brand img{height:54px} }
 
-    /* Desktop nav (visible ≥1024px) */
-    nav.desktop{
-      display:none;align-items:center;gap:var(--space-6);font-weight:600;
-    }
-    nav.desktop a{opacity:.85}
-    nav.desktop a:hover{opacity:1}
-    .desk-phone{
-      display:none;align-items:center;gap:10px;font-weight:600;opacity:.9
+    .bar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:22px 28px; /* added breathing room */
     }
 
-    /* Mobile hamburger (visible <1024px) */
-    .hamburger{
-      display:inline-flex;flex-direction:column;gap:5px;
+    .brand img {
+      height:46px;
+      width:auto;
+      object-fit:contain;
+    }
+
+    nav.desktop {
+      display:none;
+      align-items:center;
+      gap:32px;
+      font-weight:600;
+    }
+
+    nav.desktop a:hover { opacity:.85; }
+
+    .desk-phone {
+      display:none;
+      font-weight:600;
+    }
+
+    .hamburger {
+      display:inline-flex;
+      flex-direction:column;
+      gap:5px;
       border:1px solid var(--ring);
-      padding:12px;border-radius:12px;cursor:pointer;
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.08);
+      cursor:pointer;
     }
-    .hamburger span{display:block;width:22px;height:2px;background:#fff}
 
-    @media(min-width:1024px){
-      .hamburger{display:none}
-      nav.desktop{display:flex}
-      .desk-phone{display:flex}
+    .hamburger span {
+      display:block;
+      width:22px;
+      height:2px;
+      background:#fff;
+    }
+
+    @media(min-width:1024px) {
+      .hamburger { display:none; }
+      nav.desktop { display:flex; }
+      .desk-phone { display:flex; }
+      .bar { padding:26px 48px; }
     }
 
     /* Drawer */
-    .overlay{
-      position:fixed;inset:0;background:rgba(0,0,0,.5);
-      opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60;
+    .overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.5);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:60;
     }
-    .overlay.show{opacity:1;pointer-events:auto}
 
-    .drawer{
-      position:fixed;inset:0 0 0 auto;width:min(86vw,380px);
+    .overlay.show {
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .drawer {
+      position:fixed;
+      top:0;
+      right:0;
+      height:100%;
+      width:min(86vw,380px);
       background:var(--panel);
-      transform:translateX(100%);transition:transform .28s ease;z-index:61;
-      display:flex;flex-direction:column;height:100%;
-      box-shadow:var(--shadow);
-    }
-    .drawer.open{transform:translateX(0)}
-    .drawer .drawer-head{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:var(--space-6) var(--space-6) var(--space-5);
-      border-bottom:1px solid var(--ring)
-    }
-    .drawer .drawer-body{padding:var(--space-6);display:grid;gap:10px}
-    .drawer a.item{padding:14px;border-radius:12px}
-    .drawer a.item:hover{background:var(--panel2)}
-    .drawer .cta{
-      margin:var(--space-5) var(--space-6);display:grid;gap:12px
-    }
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      gap:10px;padding:14px 20px;border-radius:12px;font-weight:600;
-      border:1px solid var(--ring)
-    }
-    .btn.primary{background:#fff;color:#000;border-color:#fff}
-    .btn.ghost{background:transparent}
-    .phone-pill{
-      display:flex;align-items:center;justify-content:center;
-      gap:10px;padding:12px;border-radius:999px;background:var(--panel2);
-      border:1px solid var(--ring)
+      transform:translateX(100%);
+      transition:transform .28s ease;
+      z-index:61;
+      display:flex;
+      flex-direction:column;
     }
 
-    /* ===== Hero ===== */
-    section{padding:var(--space-9) 0}
-    @media(min-width:1024px){ section{padding:var(--space-10) 0} }
-
-    .hero{border-bottom:1px solid var(--ring);padding-top:var(--space-10)}
-    .hero h1{
-      font-size:clamp(32px,5.2vw,56px);line-height:1.1;text-align:center;margin:0 0 var(--space-4)
-    }
-    .hero p{
-      max-width:860px;margin:0 auto var(--space-6);
-      color:var(--muted);text-align:center;font-size:clamp(17px,1.9vw,19px);line-height:1.6
-    }
-    .actions{display:flex;justify-content:center;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-2)}
-    .kicker{color:var(--muted);text-align:center;margin-top:var(--space-4);font-size:15px}
-
-    /* ===== Cards / “How it works” ===== */
-    .how h2,.pricing h2,.service h2{font-size:clamp(26px,3.6vw,36px);text-align:center;margin:0 0 var(--space-7)}
-    .card-grid{
-      display:grid;gap:var(--space-6)
-    }
-    @media(min-width:900px){ .card-grid{grid-template-columns:repeat(3,1fr)} }
-
-    .card{
-      background:var(--panel);border:1px solid var(--ring);border-radius:var(--radius-lg);
-      padding:var(--space-7);box-shadow:var(--shadow)
-    }
-    .card h3{margin:0 0 var(--space-3);font-size:20px}
-    .card p{margin:0;color:var(--muted);line-height:1.7}
-
-    /* ===== Pricing ===== */
-    .price-wrap{display:grid;gap:var(--space-6)}
-    @media(min-width:1024px){ .price-wrap{grid-template-columns:repeat(3,1fr)} }
-    .price-card{
-      background:#fff;color:#111;border-radius:20px;border:0;
-      padding:var(--space-7);box-shadow:0 12px 30px rgba(0,0,0,.28)
-    }
-    .price-card h4{margin:0 0 8px;font-size:20px}
-    .price{font-weight:700;font-size:38px;margin-bottom:12px}
-    .price small{font-weight:600;font-size:14px;color:#333}
-    .features{margin:var(--space-5) 0 var(--space-6);padding:0;list-style:none}
-    .features li{display:flex;gap:10px;margin:10px 0}
-    .price-actions{display:flex;gap:12px;flex-wrap:wrap}
-
-    /* ===== Service Area ===== */
-    .badge-panel{
-      background:var(--panel);border:1px solid var(--ring);border-radius:var(--radius-lg);
-      padding:var(--space-7);text-align:center;max-width:820px;margin:0 auto
+    .drawer.open {
+      transform:translateX(0);
     }
 
-    /* ===== Footer ===== */
-    footer{
+    .drawer .drawer-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:28px;
+      border-bottom:1px solid var(--ring);
+    }
+
+    .drawer .drawer-body {
+      padding:28px;
+      display:grid;
+      gap:14px;
+    }
+
+    .drawer a.item {
+      padding:14px;
+      border-radius:12px;
+    }
+
+    .drawer a.item:hover {
+      background:rgba(255,255,255,0.05);
+    }
+
+    .drawer .cta {
+      margin:24px 28px;
+      display:grid;
+      gap:12px;
+    }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:12px;
+      font-weight:600;
+      border:1px solid var(--ring);
+    }
+
+    .btn.primary {
+      background:#fff;
+      color:#000;
+      border-color:#fff;
+    }
+
+    .btn.ghost {
+      background:transparent;
+    }
+
+    .phone-pill {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--ring);
+    }
+
+    /* ===== HERO ===== */
+    section {
+      padding:90px 0;
+    }
+
+    .hero {
+      border-bottom:1px solid var(--ring);
+      padding-top:120px;
+      text-align:center;
+    }
+
+    .hero h1 {
+      font-size:clamp(32px,5.2vw,56px);
+      line-height:1.1;
+      margin-bottom:20px;
+    }
+
+    .hero p {
+      color:var(--muted);
+      max-width:800px;
+      margin:0 auto 40px;
+      font-size:clamp(17px,1.9vw,19px);
+    }
+
+    .actions {
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .kicker {
+      color:var(--muted);
+      text-align:center;
+      margin-top:18px;
+      font-size:15px;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how h2, .pricing h2, .service h2 {
+      font-size:clamp(26px,3.6vw,36px);
+      text-align:center;
+      margin-bottom:60px;
+    }
+
+    .card-grid {
+      display:grid;
+      gap:28px;
+    }
+
+    @media(min-width:900px) {
+      .card-grid {
+        grid-template-columns:repeat(3,1fr);
+      }
+    }
+
+    .card {
+      background:var(--panel);
+      border:1px solid var(--ring);
+      border-radius:16px;
+      padding:48px;
+      text-align:left;
+    }
+
+    .card h3 {
+      margin-bottom:12px;
+      font-size:20px;
+    }
+
+    .card p {
+      color:var(--muted);
+    }
+
+    /* ===== PRICING ===== */
+    .price-wrap {
+      display:grid;
+      gap:28px;
+    }
+
+    @media(min-width:1024px) {
+      .price-wrap {
+        grid-template-columns:repeat(3,1fr);
+      }
+    }
+
+    .price-card {
+      background:#fff;
+      color:#000;
+      border-radius:20px;
+      padding:48px;
+      text-align:left;
+    }
+
+    .price-card h4 {
+      margin-bottom:6px;
+      font-size:20px;
+    }
+
+    .price {
+      font-weight:700;
+      font-size:38px;
+      margin-bottom:12px;
+    }
+
+    .features {
+      list-style:none;
+      margin:24px 0 32px;
+      padding:0;
+    }
+
+    .features li {
+      margin-bottom:10px;
+    }
+
+    .price-actions {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    /* ===== SERVICE AREA ===== */
+    .badge-panel {
+      background:var(--panel);
+      border:1px solid var(--ring);
+      border-radius:16px;
+      padding:60px;
+      text-align:center;
+      max-width:820px;
+      margin:0 auto;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
       border-top:1px solid var(--ring);
-      padding:var(--space-9) 0 var(--space-10);
-      color:var(--muted);text-align:center
+      padding:80px 0 90px;
+      color:var(--muted);
+      text-align:center;
     }
-
-    /* Utility hide */
-    .hide{display:none}
-    @media(min-width:1024px){ .hide-lg{display:none} }
-    @media(max-width:1023.98px){ .hide-sm{display:none} }
   </style>
 </head>
+
 <body>
   <!-- ===== HEADER ===== -->
   <header class="site">
-    <div class="container bar">
-      <a class="brand" href="#top" aria-label="BinPals Home">
-        <!-- Use your exact logo file name -->
-        <img src="./BinPals-Arizona-Service.png" alt="BinPals logo">
-      </a>
-
-      <!-- Desktop nav (words) -->
-      <nav class="desktop hide-sm">
+    <div class="bar">
+      <a class="brand" href="#top"><img src="./BinPals-Arizona-Service.png" alt="BinPals logo"></a>
+      <nav class="desktop">
         <a href="#how">How it works</a>
         <a href="#pricing">Pricing</a>
         <a href="#area">Service area</a>
         <a href="#start">Start service</a>
       </nav>
-
-      <!-- Desktop phone -->
-      <a class="desk-phone hide-sm" href="tel:6235550199" aria-label="Call BinPals">
-        <span>623-555-0199</span>
-      </a>
-
-      <!-- Mobile hamburger (no phone in the top bar) -->
-      <button class="hamburger hide-lg" aria-label="Open menu" id="openMenu">
-        <span></span><span></span><span></span>
-      </button>
+      <a class="desk-phone" href="tel:6235550199">623-555-0199</a>
+      <button class="hamburger" id="openMenu"><span></span><span></span><span></span></button>
     </div>
   </header>
 
-  <!-- Drawer + overlay -->
   <div class="overlay" id="overlay"></div>
-  <aside class="drawer" id="drawer" aria-hidden="true">
+  <aside class="drawer" id="drawer">
     <div class="drawer-head">
       <strong>Menu</strong>
-      <button class="hamburger" aria-label="Close menu" id="closeMenu">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="hamburger" id="closeMenu"><span></span><span></span><span></span></button>
     </div>
     <div class="drawer-body">
       <a class="item" href="#how">How it works</a>
@@ -227,7 +359,6 @@
       <a class="item" href="#start">Start service</a>
     </div>
     <div class="cta">
-      <!-- Phone and Get Started live inside the mobile drawer -->
       <a class="phone-pill" href="tel:6235550199">📞 623-555-0199</a>
       <a class="btn primary" href="#start">Get Started</a>
     </div>
@@ -328,28 +459,24 @@
     </div>
   </section>
 
-  <!-- ===== START / CTA ===== -->
+  <!-- ===== CTA ===== -->
   <section id="start">
     <div class="container" style="text-align:center">
       <h2>Ready to stop worrying about trash day?</h2>
-      <div class="actions" style="margin-top:var(--space-5)">
-        <a class="btn primary" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Open Sign-Up Form</a>
+      <div class="actions" style="margin-top:24px">
+        <a class="btn primary" href="https://forms.gle/your-google-form" target="_blank">Open Sign-Up Form</a>
         <a class="btn" href="tel:6235550199">Talk to Us</a>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="container">
-      © <span id="y"></span> BinPals • Sun City &amp; Surprise, AZ • 623-555-0199
-    </div>
+    <div class="container">© <span id="y"></span> BinPals • Sun City &amp; Surprise, AZ • 623-555-0199</div>
   </footer>
 
   <script>
-    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Drawer controls
     const drawer = document.getElementById('drawer');
     const overlay = document.getElementById('overlay');
     const openBtn = document.getElementById('openMenu');
@@ -358,20 +485,18 @@
     function openDrawer(){
       drawer.classList.add('open');
       overlay.classList.add('show');
-      drawer.setAttribute('aria-hidden','false');
       document.body.style.overflow='hidden';
     }
+
     function closeDrawer(){
       drawer.classList.remove('open');
       overlay.classList.remove('show');
-      drawer.setAttribute('aria-hidden','true');
       document.body.style.overflow='';
     }
-    openBtn?.addEventListener('click', openDrawer);
-    closeBtn?.addEventListener('click', closeDrawer);
-    overlay?.addEventListener('click', closeDrawer);
-    // close on ESC
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeDrawer(); });
+
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
   </script>
 </body>
 </html>
