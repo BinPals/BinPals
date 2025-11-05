@@ -9,24 +9,48 @@
   <meta name="description" content="We roll your trash & recycling cans to the curb and back — serving Sun City, Sun City West, Surprise & Peoria. Simple, reliable, senior-friendly service." />
   <style>
     :root{
-      --bg:#000; --ink:#fff; --muted:#cfcfcf; --line:#171717; --max:1150px; --radius:12px;
+      --bg:#000; --ink:#fff; --muted:#cfcfcf; --line:#171717;
+      --max:1150px; --radius:12px;
+      --pad-x: clamp(18px, 4vw, 28px);
+      --header-h: 64px;
     }
+
+    /* Base */
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:#000;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    html,body{margin:0;padding:0;background:#000;color:#fff;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;height:auto;display:block}
-    .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+
+    /* Layout helpers */
+    .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
     /* Header */
-    header{position:sticky;top:0;z-index:10;background:#000;border-bottom:1px solid var(--line)}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:46px}
-    .phone{font-weight:700}
+    header{
+      position:sticky;top:0;z-index:20;background:#000;border-bottom:1px solid var(--line);
+      padding-top: env(safe-area-inset-top);
+    }
+    .nav{
+      height:var(--header-h);
+      display:flex;align-items:center;justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;}
+    /* Smaller logo + breathing room */
+    .brand img{
+      height:38px; /* smaller */
+      width:auto;
+      border-radius:6px; /* subtle refinement */
+    }
+    .phone{font-weight:700;white-space:nowrap}
+
+    /* Hide phone text on very small screens (menu has Call button) */
+    @media (max-width:420px){ .phone{display:none} }
 
     /* Hero */
-    .hero{padding:86px 0 56px;text-align:center}
-    .hero h1{font-size:42px;line-height:1.08;margin:0 0 14px}
+    .hero{padding:72px 0 52px;text-align:center}
+    .hero h1{font-size:40px;line-height:1.08;margin:0 0 14px}
     .hero p{max-width:680px;margin:0 auto 24px;font-size:18px;color:var(--muted);line-height:1.55}
 
     .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -35,116 +59,227 @@
     .btn-outline{background:transparent;border-color:#fff;color:#fff}
     .note{margin-top:12px;color:#a7a7a7}
 
-    section{padding:64px 0;border-top:1px solid var(--line)}
+    /* Sections */
+    section{padding:56px 0;border-top:1px solid var(--line)}
     h2{font-size:28px;margin:0 0 18px;text-align:center}
-
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
     .card,.price,.area{background:#0b0b0b;border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-
     .card h3{margin:0 0 8px;font-size:18px}
     .muted{color:var(--muted)}
-
     .price{text-align:center}
     .price strong{display:block;font-size:26px;margin:6px 0}
-
     .area{text-align:center;color:#e8e8e8}
 
-    footer{text-align:center;padding:40px 22px;color:#9d9d9d;font-size:14px}
+    /* Footer */
+    footer{text-align:center;padding:40px var(--pad-x);color:#9d9d9d;font-size:14px}
 
+    /* Mobile/Tablet Sidebar Menu (hidden on desktop) */
+    .hamburger{
+      display:none; /* shown under 1024px */
+      height:40px;width:40px;border:1px solid #262626;border-radius:10px;
+      background:#0b0b0b;color:#fff;display:grid;place-items:center;cursor:pointer;
+    }
+    .hamburger span{display:block;width:18px;height:2px;background:#fff;position:relative}
+    .hamburger span::before,.hamburger span::after{
+      content:"";position:absolute;left:0;width:18px;height:2px;background:#fff
+    }
+    .hamburger span::before{top:-6px}
+    .hamburger span::after{top:6px}
+
+    .drawer{
+      position:fixed;inset:0 auto 0 0;width:min(84vw,360px);transform:translateX(-100%);
+      background:#000;border-right:1px solid var(--line);z-index:30;
+      transition:transform .25s ease;display:flex;flex-direction:column;gap:8px;
+      padding: calc(10px + env(safe-area-inset-top)) var(--pad-x) 20px;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer a{
+      display:block;padding:14px 10px;border-radius:10px;border:1px solid #191919;background:#0b0b0b;
+      font-weight:700;text-align:left
+    }
+    .drawer .drawer-head{
+      display:flex;align-items:center;justify-content:space-between;margin-bottom:8px
+    }
+    .drawer .drawer-head img{height:30px}
+    .drawer .close{
+      height:36px;width:36px;border-radius:10px;border:1px solid #262626;background:#0b0b0b;color:#fff;
+      display:grid;place-items:center;cursor:pointer
+    }
+    .scrim{
+      position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:saturate(120%) blur(2px);
+      opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:25;
+    }
+    .scrim.show{opacity:1;pointer-events:auto}
+
+    /* Show hamburger & drawer under 1024px only */
+    @media (max-width:1024px){
+      .hamburger{display:grid}
+    }
+    @media (min-width:1025px){
+      .drawer, .scrim{display:none}
+    }
+
+    /* Mobile tweaks */
     @media (max-width:760px){
-      .hero{padding-top:64px}
+      .hero{padding-top:56px}
       .hero h1{font-size:32px}
-      .brand img{height:40px}
+      .brand img{height:34px}
+    }
+
+    /* Small hover motion (if allowed) */
+    @media (prefers-reduced-motion:no-preference){
+      .btn{transition:opacity .2s ease}
+      .btn:hover{opacity:.85}
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap nav">
-    <a class="brand" href="/">
-      <!-- ✅ Your real logo file -->
-      <img src="BinPals-arizona.png?v=2" alt="BinPals logo"
-           onerror="this.remove();document.getElementById('fallbackBrand').style.display='inline-block'">
-      <span id="fallbackBrand" style="display:none;font-weight:800;font-size:22px;letter-spacing:.2px">BinPals</span>
-    </a>
-    <a class="phone" href="tel:6235550199">📞 623-555-0199</a>
+  <!-- Sidebar Drawer (mobile/tablet only) -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <img src="BinPals-Arizona-Service.png?v=2" alt="BinPals logo">
+      <button class="close" id="closeDrawer" aria-label="Close menu">✕</button>
+    </div>
+    <a href="#home">Home</a>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#area">Service area</a>
+    <a href="#signup">Start Service</a>
+    <a href="tel:6235550199">📞 Call Us</a>
   </div>
-</header>
+  <div class="scrim" id="scrim" aria-hidden="true"></div>
 
-<main class="wrap">
+  <!-- Header -->
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="BinPals home">
+        <!-- smaller, not touching walls -->
+        <img src="BinPals-Arizona-Service.png?v=2" alt="BinPals logo"
+             onerror="this.style.display='none';document.getElementById('fallbackBrand').style.display='inline-block'">
+        <span id="fallbackBrand" style="display:none;font-weight:800;font-size:20px;letter-spacing:.2px">BinPals</span>
+      </a>
 
-  <section class="hero" id="home">
-    <h1>Never take the trash out again.</h1>
-    <p>We roll your trash & recycling cans to the curb and back — friendly, reliable help for Sun City, Sun City West, Surprise & Peoria.</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="#signup">Start Service</a>
-      <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
+      <!-- Hamburger (mobile/tablet only) -->
+      <button class="hamburger" id="openDrawer" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+        <span></span>
+      </button>
+
+      <!-- Phone shows on md+ and some small screens -->
+      <a class="phone" href="tel:6235550199">📞 623-555-0199</a>
     </div>
-    <div class="note">Local • Insured • HOA-Friendly</div>
-  </section>
+  </header>
 
-  <section id="how">
-    <h2>How it works</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>1) Tell us your days</h3>
-        <p class="muted">Give your trash & recycle schedule. Gate/garage code optional.</p>
+  <main class="wrap">
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <h1>Never take the trash out again.</h1>
+      <p>We roll your trash &amp; recycling cans to the curb and back — friendly, reliable help for Sun City, Sun City West, Surprise &amp; Peoria.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#signup">Start Service</a>
+        <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
       </div>
-      <div class="card">
-        <h3>2) We roll the bins</h3>
-        <p class="muted">We set bins out the night before pickup and return them neatly by the end of pickup day.</p>
+      <div class="note">Local • Insured • HOA-Friendly</div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how">
+      <h2>How it works</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>1) Tell us your days</h3>
+          <p class="muted">Give your trash &amp; recycle schedule. Gate/garage code optional.</p>
+        </div>
+        <div class="card">
+          <h3>2) We roll the bins</h3>
+          <p class="muted">We set bins out the night before pickup and return them neatly by the end of pickup day.</p>
+        </div>
+        <div class="card">
+          <h3>3) You relax</h3>
+          <p class="muted">We handle trash day like clockwork — even when you’re out of town.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>3) You relax</h3>
-        <p class="muted">We handle trash day like clockwork — even when you’re out of town.</p>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing">
+      <h2>Simple pricing</h2>
+      <div class="grid">
+        <div class="price">
+          <h3>Weekly Service</h3>
+          <strong>$39 / month</strong>
+          <p class="muted">Extra bins: +$5/month each</p>
+          <p style="margin-top:14px"><a class="btn btn-primary" href="#signup">Start Monthly</a></p>
+        </div>
+        <div class="price">
+          <h3>Annual Plan</h3>
+          <strong>$399 / year</strong>
+          <p class="muted">~2 months free • Extra bins: +$50/year each</p>
+          <p style="margin-top:14px"><a class="btn btn-primary" href="#signup">Choose Annual</a></p>
+        </div>
+        <div class="price">
+          <h3>One-Time Assist</h3>
+          <strong>$15</strong>
+          <p class="muted">Need help once? Easy.</p>
+          <p style="margin-top:14px"><a class="btn btn-primary" href="#signup">Book One-Time</a></p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="pricing">
-    <h2>Simple pricing</h2>
-    <div class="grid">
-      <div class="price">
-        <h3>Weekly Service</h3>
-        <strong>$39 / month</strong>
-        <p class="muted">Extra bins: +$5/month each</p>
+    <!-- Area -->
+    <section id="area">
+      <h2>Service area</h2>
+      <div class="area">
+        Sun City • Sun City West • Surprise • Peoria<br>
+        <span class="muted">Not sure you’re in range? <a href="tel:6235550199">Call us</a> and we’ll confirm.</span>
       </div>
-      <div class="price">
-        <h3>Annual Plan</h3>
-        <strong>$399 / year</strong>
-        <p class="muted">~2 months free • Extra bins: +$50/year each</p>
+    </section>
+
+    <!-- Signup -->
+    <section id="signup">
+      <h2>Ready to stop worrying about trash day?</h2>
+      <div style="text-align:center;margin-top:12px">
+        <!-- Replace # with your Google Form URL -->
+        <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Open Sign-Up Form</a>
+        <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
       </div>
-      <div class="price">
-        <h3>One-Time Assist</h3>
-        <strong>$15</strong>
-        <p class="muted">Need help once? Easy.</p>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <section id="area">
-    <h2>Service area</h2>
-    <div class="area">
-       Sun City • Sun City West • Surprise • Peoria<br>
-      <span class="muted">Not sure you’re in range? Call and we’ll confirm.</span>
-    </div>
-  </section>
+  <footer>
+    © <span id="y"></span> BinPals • Sun City &amp; Surprise, AZ • <a href="tel:6235550199" style="color:#9d9d9d">623-555-0199</a>
+  </footer>
 
-  <section id="signup">
-    <h2>Ready to stop worrying about trash day?</h2>
-    <div style="text-align:center;margin-top:12px">
-      <a class="btn btn-primary" href="#">Open Sign-Up Form</a>
-      <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
-    </div>
-  </section>
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-</main>
+    // Drawer logic (mobile/tablet only)
+    const drawer = document.getElementById('drawer');
+    const scrim = document.getElementById('scrim');
+    const openBtn = document.getElementById('openDrawer');
+    const closeBtn = document.getElementById('closeDrawer');
 
-<footer>
-  © <span id="y"></span> BinPals • Sun City & Surprise, AZ • <a href="tel:6235550199" style="color:#9d9d9d">623-555-0199</a>
-</footer>
+    function openDrawer(){
+      drawer.classList.add('open');
+      scrim.classList.add('show');
+      openBtn.setAttribute('aria-expanded','true');
+      drawer.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      scrim.classList.remove('show');
+      openBtn.setAttribute('aria-expanded','false');
+      drawer.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+    openBtn?.addEventListener('click', openDrawer);
+    closeBtn?.addEventListener('click', closeDrawer);
+    scrim?.addEventListener('click', closeDrawer);
 
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+    // Close drawer on nav click
+    drawer?.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeDrawer));
+  </script>
 </body>
 </html>
