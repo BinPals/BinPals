@@ -1,55 +1,73 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>BinPals — Never take the trash out again.</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="We roll your trash & recycling cans to the curb and back in Sun City, Sun City West, Surprise & Peoria." />
   <style>
     :root{
-      --bg:#000; --ink:#fff; --muted:#cfcfcf; --line:#161616;
-      --max:1150px;
+      --bg:#000; --ink:#fff; --muted:#cfcfcf; --line:#171717; --max:1150px;
+      --radius:12px;
     }
+    /* Reset / base */
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    a{color:inherit}
+    html,body{margin:0;padding:0;background:#000;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;height:auto;display:block}
+
     .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
 
     /* Header */
     header{position:sticky;top:0;z-index:10;background:#000;border-bottom:1px solid var(--line)}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
-    .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-    .logo img{height:44px;display:block}
-    .phone{font-weight:700;text-decoration:none}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:44px}
+    .phone{font-weight:700}
 
     /* Hero */
-    .hero{padding:80px 0 56px;text-align:center}
+    .hero{padding:86px 0 56px;text-align:center}
     .hero h1{font-size:42px;line-height:1.08;margin:0 0 14px}
     .hero p{max-width:680px;margin:0 auto 24px;font-size:18px;color:var(--muted);line-height:1.55}
+
     .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .btn{display:inline-block;border-radius:10px;padding:14px 26px;font-weight:800;font-size:16px;text-decoration:none;border:2px solid transparent}
+    .btn{display:inline-block;border-radius:10px;padding:14px 26px;font-weight:800;font-size:16px;border:2px solid transparent}
     .btn-primary{background:#fff;color:#000}
     .btn-outline{background:transparent;border-color:#fff;color:#fff}
-    .hero small{display:block;margin-top:12px;color:#aaaaaa}
+    .note{margin-top:12px;color:#a7a7a7}
 
     /* Sections */
     section{padding:64px 0;border-top:1px solid var(--line)}
     h2{font-size:28px;margin:0 0 18px;text-align:center}
-    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:18px}
-    .card{background:#0b0b0b;border:1px solid var(--line);border-radius:12px;padding:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+
+    .card,.price,.area{
+      background:#0b0b0b;border:1px solid var(--line);border-radius:var(--radius);padding:20px
+    }
     .card h3{margin:0 0 8px;font-size:18px}
-    .card p{margin:0;color:var(--muted)}
-    .pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .price{background:#0b0b0b;border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center}
+    .muted{color:var(--muted)}
+
+    .price{text-align:center}
     .price strong{display:block;font-size:26px;margin:6px 0}
-    .area{background:#0b0b0b;border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;color:#e6e6e6}
+
+    .area{text-align:center;color:#e8e8e8}
 
     /* Footer */
-    footer{padding:40px 0 24px;text-align:center;color:#9d9d9d;font-size:14px}
+    footer{text-align:center;padding:40px 22px;color:#9d9d9d;font-size:14px}
 
+    /* Mobile tweaks */
     @media (max-width:760px){
-      .hero{padding-top:62px}
+      .hero{padding-top:64px}
       .hero h1{font-size:32px}
+      .brand img{height:40px}
+    }
+
+    /* Prefers reduced motion */
+    @media (prefers-reduced-motion:no-preference){
+      .btn{transition:opacity .2s ease}
+      .btn:hover{opacity:.85}
     }
   </style>
 </head>
@@ -58,41 +76,43 @@
   <!-- Header -->
   <header>
     <div class="wrap nav">
-      <a class="logo" href="/">
-        <!-- Uses your file at repo root -->
-        <img src="binpals-logo-white-transparent.png" alt="BinPals">
+      <a class="brand" href="/">
+        <!-- LOGO FROM REPO ROOT -->
+        <img src="binpals-logo-white-transparent.png?v=2" alt="BinPals logo"
+             onerror="this.remove();document.getElementById('fallbackBrand').style.display='inline-block'">
+        <span id="fallbackBrand" style="display:none;font-weight:800;font-size:22px;letter-spacing:.2px">BinPals</span>
       </a>
       <a class="phone" href="tel:6235550199">📞 623-555-0199</a>
     </div>
   </header>
 
-  <!-- Hero -->
   <main class="wrap">
+    <!-- Hero -->
     <section class="hero" id="home">
       <h1>Never take the trash out again.</h1>
-      <p>We roll your trash & recycling cans to the curb and back — reliable, friendly help for Sun City, Sun City West, Surprise &amp; Peoria.</p>
+      <p>We roll your trash &amp; recycling cans to the curb and back — reliable, friendly help for Sun City, Sun City West, Surprise &amp; Peoria.</p>
       <div class="cta">
         <a class="btn btn-primary" href="#signup">Start Service</a>
         <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
       </div>
-      <small>Local • Insured • HOA-Friendly</small>
+      <div class="note">Local • Insured • HOA-Friendly</div>
     </section>
 
     <!-- How it works -->
     <section id="how">
       <h2>How it works</h2>
-      <div class="steps">
+      <div class="grid">
         <div class="card">
           <h3>1) Tell us your days</h3>
-          <p>Choose trash &amp; recycle pickup days. Add gate/garage code (optional).</p>
+          <p class="muted">Choose trash &amp; recycle pickup days. Add gate/garage code (optional).</p>
         </div>
         <div class="card">
           <h3>2) We roll the bins</h3>
-          <p>Set out the night before pickup and return bins neatly after pickup.</p>
+          <p class="muted">Set out the night before pickup and return bins neatly after pickup.</p>
         </div>
         <div class="card">
           <h3>3) You relax</h3>
-          <p>Friendly reminders before service. Pause anytime — no contracts.</p>
+          <p class="muted">Friendly reminders before service. Pause anytime — no contracts.</p>
         </div>
       </div>
     </section>
@@ -100,22 +120,18 @@
     <!-- Pricing -->
     <section id="pricing">
       <h2>Simple pricing</h2>
-      <div class="pricing">
+      <div class="grid">
         <div class="price">
           <h3>Weekly Service</h3>
           <strong>$39 / month</strong>
-          <p>1 trash + 1 recycle • set-out & return • reminders</p>
-          <p style="margin-top:14px">
-            <a class="btn btn-primary" href="#signup">Start Weekly</a>
-          </p>
+          <p class="muted">1 trash + 1 recycle • set-out &amp; return • reminders</p>
+          <p style="margin-top:14px"><a class="btn btn-primary" href="#signup">Start Weekly</a></p>
         </div>
         <div class="price">
           <h3>Twice-Weekly</h3>
           <strong>$59 / month</strong>
-          <p>Two service days • extra bins +$5 • pause anytime</p>
-          <p style="margin-top:14px">
-            <a class="btn btn-primary" href="#signup">Start Twice-Weekly</a>
-          </p>
+          <p class="muted">Two service days • extra bins +$5 • pause anytime</p>
+          <p style="margin-top:14px"><a class="btn btn-primary" href="#signup">Start Twice-Weekly</a></p>
         </div>
       </div>
     </section>
@@ -125,15 +141,15 @@
       <h2>Service area</h2>
       <div class="area">
         Sun City • Sun City West • Surprise • Peoria<br>
-        <span style="color:#bcbcbc">Not sure you’re in range? <a href="tel:6235550199">Call us</a> and we’ll confirm.</span>
+        <span class="muted">Not sure you’re in range? <a href="tel:6235550199">Call us</a> and we’ll confirm.</span>
       </div>
     </section>
 
-    <!-- Signup anchor -->
+    <!-- Signup -->
     <section id="signup">
       <h2>Ready to stop worrying about trash day?</h2>
       <div style="text-align:center;margin-top:12px">
-        <!-- Replace the # with your Google Form link when ready -->
+        <!-- Replace # with your Google Form URL -->
         <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Open Sign-Up Form</a>
         <a class="btn btn-outline" href="tel:6235550199">Talk to Us</a>
       </div>
@@ -141,7 +157,7 @@
   </main>
 
   <footer>
-    © <span id="y"></span> BinPals • Sun City &amp; Surprise, AZ • <a href="tel:6235550199" style="color:#9d9d9d;text-decoration:none;">623-555-0199</a>
+    © <span id="y"></span> BinPals • Sun City &amp; Surprise, AZ • <a href="tel:6235550199" style="color:#9d9d9d">623-555-0199</a>
   </footer>
 
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
