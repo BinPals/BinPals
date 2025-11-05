@@ -1,178 +1,183 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>BinPals — Never take trash day again.</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="We roll your trash & recycling bins to the curb and back. Reliable, senior-friendly service for Sun City, Sun City West, Surprise & Peoria.">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --ink:#0c1117; --ink-2:#2b313a; --muted:#6b7280;
-      --bg:#f2f6fb; --card:#ffffff; --line:#e6eaf1;
-      --brand:#111827;           /* almost-black for primary pill */
-      --accent:#1f73ff;          /* blue accent */
-      --green:#34a853;           /* green accent (secondary spots) */
-      --radius:18px; --radius-sm:12px; --pad:22px; --max:1120px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
-    a{color:inherit}
-    .wrap{max-width:var(--max);margin:0 auto;padding:18px}
-    /* Header */
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px}
-    .logo{width:40px;height:40px;border-radius:10px;background:#0c1117;display:grid;place-items:center}
-    .logo .can{position:relative;width:20px;height:20px}
-    .logo .can:before{content:"";position:absolute;inset:5px 3px 2px;background:#fff;border-radius:4px}
-    .logo .can:after{content:"";position:absolute;left:6px;top:2px;width:16px;height:4px;background:#fff;border-radius:2px;transform:rotate(10deg)}
-    .phone a{text-decoration:none;font-weight:700}
-    /* Hero */
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;border-radius:28px;background:linear-gradient(#f6f9ff,#f1f6fb);padding:28px;border:1px solid var(--line)}
-    .bins{width:100%;height:auto}
-    h1{font-size:44px;line-height:1.06;margin:0 0 10px}
-    .sub{font-size:18px;color:var(--muted);margin:0 0 18px}
-    .cta{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{appearance:none;cursor:pointer;border-radius:999px;padding:14px 22px;font-weight:800;font-size:16px;border:2px solid transparent;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
-    .btn-primary{background:var(--brand);color:#fff}
-    .btn-secondary{background:#fff;border-color:var(--line)}
-    /* Sections */
-    section{margin:34px 0}
-    .kicker{font-weight:800;font-size:14px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-    h2{font-size:28px;margin:0 0 14px}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
-    .card h3{margin:0 0 8px;font-size:18px}
-    ul{margin:0;padding-left:18px;color:var(--ink-2);line-height:1.55}
-    /* Service area box */
-    .mapbox{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px}
-    .badge{display:inline-block;background:#eaf2ff;color:#0b47a1;font-weight:800;border-radius:999px;padding:6px 10px;font-size:13px}
-    /* Footer */
-    footer{margin:40px 0 10px;color:var(--muted);font-size:14px;text-align:center}
-    /* Responsive */
-    @media (max-width:960px){ .hero{grid-template-columns:1fr;gap:22px} h1{font-size:36px} }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BinPals • Trash Bin Service in Sun City</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #000;
+    color: #fff;
+  }
+
+  header {
+    background: #000;
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 1px solid #111;
+  }
+
+  .container {
+    max-width: 1150px;
+    margin: auto;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 120px 22px 90px;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 18px;
+    max-width: 640px;
+    margin: auto;
+    opacity: .9;
+    line-height: 1.6;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: #fff;
+    color: #000;
+    padding: 16px 36px;
+    margin-top: 32px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+  }
+
+  .btn-primary:hover {opacity: .8;}
+
+  .btn-outline {
+    display: inline-block;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 16px 36px;
+    margin-top: 16px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+  }
+  .btn-outline:hover {opacity: .7;}
+
+  .badge-line {
+    margin-top: 18px;
+    opacity: .6;
+    font-size: 16px;
+  }
+
+  .section {
+    padding: 90px 22px;
+    text-align: center;
+  }
+
+  .step-box {
+    max-width: 650px;
+    margin: 0 auto 50px;
+    background: #111;
+    padding: 28px;
+    border-radius: 10px;
+    border: 1px solid #1c1c1c;
+    text-align: left;
+  }
+
+  footer {
+    text-align: center;
+    padding: 50px 22px;
+    opacity: .6;
+    font-size: 15px;
+  }
+
+  @media (max-width: 768px){
+    h1 {font-size: 32px;}
+  }
+</style>
 </head>
+
+
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo"><span class="can" aria-hidden="true"></span></div>
-        <span>BinPals</span>
-      </div>
-      <div class="phone"><a href="tel:623-555-0199">📞 623-555-0199</a></div>
-    </header>
+<header>
+  <div class="container">
+    <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+      <img src="binpals-logo-white-transparent.png" alt="BinPals" style="height:44px;">
+    </a>
 
-    <!-- HERO -->
-    <section class="hero" aria-label="Intro">
-      <div>
-        <h1>Never take trash day again.</h1>
-        <p class="sub">We roll your cans to the curb and back — reliable, friendly, and HOA-friendly service for Sun City, Sun City West, Surprise & Peoria.</p>
-        <div class="cta">
-          <a class="btn btn-primary" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Start Service</a>
-          <a class="btn btn-secondary" href="tel:623-555-0199">Talk to Us</a>
-        </div>
-        <div style="margin-top:14px"><span class="badge">Local • Insured • Senior-friendly</span></div>
-      </div>
-      <div>
-        <!-- Inline SVG bins (gray + blue) -->
-        <svg class="bins" viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two outdoor bins">
-          <defs>
-            <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0" stop-color="#ffffff"/>
-              <stop offset="1" stop-color="#f6f7fb"/>
-            </linearGradient>
-          </defs>
-          <rect x="0" y="0" width="720" height="420" fill="none"/>
-          <!-- House lines (stylized) -->
-          <g opacity=".12" stroke="#0c1117" stroke-width="3" fill="none">
-            <path d="M530 40 L690 110 690 360 410 360 410 110 530 40Z"/>
-            <path d="M420 140 H680 M420 190 H680 M420 240 H680"/>
-          </g>
-          <!-- Left bin (light gray) -->
-          <g transform="translate(60,110)">
-            <rect x="0" y="10" rx="18" ry="18" width="240" height="250" fill="url(#g1)" stroke="#dfe3ea" stroke-width="3"/>
-            <rect x="30" y="0" width="180" height="16" rx="6" fill="#dfe3ea"/>
-            <circle cx="56" cy="290" r="22" fill="#fff" stroke="#dfe3ea" stroke-width="10"/>
-            <circle cx="184" cy="290" r="22" fill="#fff" stroke="#dfe3ea" stroke-width="10"/>
-          </g>
-          <!-- Right bin (blue) -->
-          <g transform="translate(370,90)">
-            <rect x="0" y="20" rx="18" ry="18" width="240" height="270" fill="#1f73ff" opacity=".12" />
-            <rect x="0" y="20" rx="18" ry="18" width="240" height="270" fill="none" stroke="#7fb0ff" stroke-width="3"/>
-            <rect x="30" y="0" width="180" height="16" rx="6" fill="#7fb0ff"/>
-            <circle cx="56" cy="310" r="22" fill="#fff" stroke="#7fb0ff" stroke-width="10"/>
-            <circle cx="184" cy="310" r="22" fill="#fff" stroke="#7fb0ff" stroke-width="10"/>
-          </g>
-        </svg>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section>
-      <div class="kicker">How it works</div>
-      <h2>Trash day, handled for you</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Tell us your days</h3>
-          <ul><li>Select trash & recycle pickup days.</li><li>Add gate/garage code (optional).</li></ul>
-        </div>
-        <div class="card">
-          <h3>We roll the bins</h3>
-          <ul><li>Set out the night before pickup.</li><li>Return bins neatly after pickup.</li></ul>
-        </div>
-        <div class="card">
-          <h3>You relax</h3>
-          <ul><li>Friendly reminders before service.</li><li>Pause anytime—no contracts.</li></ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section>
-      <div class="kicker">Simple pricing</div>
-      <h2>Clear plans, no surprise fees</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Weekly Service</h3>
-          <p style="font-weight:800;font-size:22px;margin:8px 0">$39 / month</p>
-          <ul><li>1 trash + 1 recycle</li><li>Set-out & return</li><li>Night-before reminder</li></ul>
-          <p><a class="btn btn-primary" href="https://forms.gle/your-google-form" target="_blank">Start Weekly</a></p>
-        </div>
-        <div class="card">
-          <h3>Twice-Weekly</h3>
-          <p style="font-weight:800;font-size:22px;margin:8px 0">$59 / month</p>
-          <ul><li>Two service days/week</li><li>Extra bins +$5 each</li><li>Pause anytime</li></ul>
-          <p><a class="btn btn-primary" href="https://forms.gle/your-google-form" target="_blank">Start Twice-Weekly</a></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- AREA -->
-    <section>
-      <div class="kicker">Service area</div>
-      <div class="mapbox">
-        Sun City • Sun City West • Surprise • Peoria
-        <div style="margin-top:10px;color:var(--muted);font-size:14px">
-          Not sure you’re in range? <a href="tel:623-555-0199">Call us</a> and we’ll confirm.
-        </div>
-      </div>
-    </section>
-
-    <!-- FINAL CTA -->
-    <section>
-      <h2>Ready to stop worrying about trash day?</h2>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://forms.gle/your-google-form" target="_blank">Start Service</a>
-        <a class="btn btn-secondary" href="tel:623-555-0199">Talk to Us</a>
-      </div>
-    </section>
-
-    <footer>
-      © <span id="y"></span> BinPals • Sun City & Surprise, AZ • <a href="tel:623-555-0199">623-555-0199</a>
-      <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-    </footer>
+    <a href="tel:6235550199" style="color:#fff;font-size:18px;font-weight:600;text-decoration:none;">
+      📞 623-555-0199
+    </a>
   </div>
+</header>
+
+
+<section class="hero">
+  <h1>Never take the trash out again.</h1>
+  <p>
+    We roll your trash & recycling cans to the curb and back.  
+    Reliable, friendly service for Sun City, Sun City West, Surprise & Peoria.
+  </p>
+
+  <a class="btn-primary" href="#signup">Start Service</a><br>
+  <a class="btn-outline" href="tel:6235550199">Call to Sign Up</a>
+
+  <div class="badge-line">Local • Insured • HOA-Friendly</div>
+</section>
+
+
+
+<section class="section" id="how">
+  <h2 style="font-size:32px;font-weight:700;margin-bottom:40px;">How It Works</h2>
+
+  <div class="step-box">
+    <h3 style="margin:0 0 10px;font-size:22px;">1) Tell us your days</h3>
+    <p style="margin:0;">
+      Choose your trash & recycle pickup days.  
+      Add gate/garage code (optional).
+    </p>
+  </div>
+
+  <div class="step-box">
+    <h3 style="margin:0 0 10px;font-size:22px;">2) We roll the bins</h3>
+    <p style="margin:0;">
+      We take them out before pickup and return them after.
+    </p>
+  </div>
+
+  <div class="step-box" id="signup">
+    <h3 style="margin:0 0 10px;font-size:22px;">3) Enjoy hands-free trash day</h3>
+    <p style="margin:0;">
+      Relax — we handle it. Rain or shine.
+    </p>
+  </div>
+
+  <a class="btn-primary" href="https://forms.gle" target="_blank">Sign Up Form</a>
+</section>
+
+
+<footer>
+  © 2025 BinPals • Sun City, AZ
+</footer>
+
 </body>
 </html>
