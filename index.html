@@ -1,297 +1,199 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BinPals — Never take the trash out again.</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="dark" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="We roll your trash & recycling cans to the curb and back — serving Sun City, Sun City West, Surprise & Peoria. Simple, reliable, senior-friendly service." />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BinPals — Can-to-Curb Service</title>
 
-  <!-- ✅ Poppins Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bg: #000;
-      --ink: #fff;
-      --muted: #cfcfcf;
-      --line: #171717;
-      --max: 1150px;
-      --radius: 12px;
-      --pad-x: clamp(18px, 4vw, 28px);
-      --section-space: 90px;
+    :root{
+      --bg:#0b0b0b;
+      --text:#ffffff;
+      --muted:#a7a7a7;
+      --panel:#141414;
+      --panel2:#191919;
+      --ring:rgba(255,255,255,.14);
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+      --radius:16px;
+      --pad:clamp(48px,5vw,90px); /* section vertical padding */
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+    /* Header */
+    header.site{
+      position:sticky; top:0; z-index:50;
+      background:rgba(0,0,0,.7); backdrop-filter:saturate(120%) blur(6px);
+      border-bottom:1px solid var(--ring);
+    }
+    .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand img{
+      height:42px; /* smaller, not touching sides */
+      width:auto;
+      object-fit:contain;
+    }
+    .brand-name{font-weight:700;letter-spacing:.3px}
+    nav.desktop{display:none;gap:26px;font-weight:600}
+    nav.desktop a{opacity:.85}
+    nav.desktop a:hover{opacity:1}
+
+    .phone-link{display:flex;align-items:center;gap:10px;white-space:nowrap;font-weight:600}
+    .phone-link svg{width:18px;height:18px;opacity:.9}
+
+    /* Hamburger (hidden on desktop) */
+    .hamburger{display:inline-flex;flex-direction:column;gap:4px;border:1px solid var(--ring);padding:8px;border-radius:10px;cursor:pointer}
+    .hamburger span{display:block;width:20px;height:2px;background:#fff}
+
+    /* Mobile sidebar */
+    .drawer{
+      position:fixed; inset:0 0 0 auto; width:min(84vw,360px);
+      background:var(--panel); transform:translateX(100%);
+      transition:transform .25s ease; box-shadow:var(--shadow); z-index:60;
+      display:flex; flex-direction:column
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer header{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--ring)}
+    .drawer nav{display:grid;padding:10px}
+    .drawer nav a{padding:14px 12px;border-radius:12px}
+    .drawer nav a:hover{background:var(--panel2)}
+    .drawer .call{margin:10px;padding:12px 14px;border:1px solid var(--ring);border-radius:12px;text-align:center}
+
+    /* Desktop breakpoint */
+    @media (min-width: 1024px){
+      nav.desktop{display:flex}
+      .hamburger{display:none} /* hide hamburger on desktop */
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Poppins', system-ui, sans-serif;
-      scroll-behavior: smooth;
-    }
+    /* Hero */
+    .hero{padding:var(--pad) 0;border-bottom:1px solid var(--ring)}
+    .hero h1{font-size:clamp(28px,5vw,48px);line-height:1.12;text-align:center;margin:0 0 16px}
+    .hero p{max-width:860px;margin:0 auto 22px;text-align:center;color:var(--muted);font-size:clamp(16px,1.9vw,18px)}
+    .actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px}
+    .kicker{color:var(--muted);text-align:center;margin-top:10px}
 
-    a { color: inherit; text-decoration: none; transition: opacity 0.2s ease; }
-    a:hover { opacity: 0.75; }
-    img { display: block; max-width: 100%; height: auto; }
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-weight:600;border:1px solid transparent;white-space:nowrap}
+    .btn-primary{background:#fff;color:#000}
+    .btn-outline{background:transparent;border-color:var(--ring)}
+    .btn-outline:hover{background:#1d1d1d}
 
-    /* ===== HEADER ===== */
-    header {
-      position: sticky;
-      top: 0;
-      background: rgba(0, 0, 0, 0.95);
-      border-bottom: 1px solid var(--line);
-      z-index: 50;
-      backdrop-filter: saturate(180%) blur(10px);
-    }
+    /* Section heading */
+    .section{padding:var(--pad) 0}
+    .section h2{font-size:clamp(24px,3.4vw,34px);text-align:center;margin:0 0 28px}
 
-    .nav {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 var(--pad-x);
-      height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    /* How it works */
+    .step-grid{display:grid;gap:22px}
+    @media (min-width: 900px){ .step-grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
+    .card{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--ring);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .card h3{margin:0 0 6px}
+    .card p{margin:0;color:#e9e9e9}
 
-    .brand img {
-      height: 40px;
-      width: auto;
-    }
+    /* Service area panel */
+    .area{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--ring);border-radius:var(--radius);padding:22px;text-align:center;max-width:860px;margin:0 auto}
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      font-weight: 600;
-      font-size: 15px;
-      text-transform: uppercase;
-    }
+    /* Pricing (from mock) */
+    #pricing .pricing-sub{color:var(--muted);text-align:center;margin:-6px 0 24px}
+    #pricing .billing-toggle{display:flex;justify-content:center;margin:8px 0 36px}
+    #pricing .billing-toggle input{display:none}
+    #pricing .billing-toggle label{display:flex;gap:10px;background:var(--panel);padding:6px;border-radius:999px;border:1px solid var(--ring)}
+    #pricing .pill{padding:10px 16px;border-radius:999px;font-size:14px;color:var(--muted);transition:.2s}
+    #pricing input:not(:checked) ~ label .monthly{background:#fff;color:#000}
+    #pricing input:checked ~ label .quarterly{background:#fff;color:#000}
 
-    /* ===== MOBILE MENU ===== */
-    .hamburger {
-      display: none; /* ✅ hidden by default */
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      background: #0b0b0b;
-      border: 1px solid #222;
-      color: #fff;
-      place-items: center;
-      cursor: pointer;
-    }
+    .price-grid{display:grid;gap:22px}
+    @media (min-width: 900px){ .price-grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
+    .price-card{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--ring);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);position:relative}
+    .price-card.pop{outline:2px solid #fff; outline-offset:0}
+    .badge{position:absolute;right:18px;top:18px;background:#fff;color:#000;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600}
+    .cost{display:flex;align-items:baseline;gap:4px}
+    .currency{font-weight:600;font-size:22px}
+    .amount{font-size:44px;font-weight:700;letter-spacing:.5px}
+    .cycle{margin:2px 0 16px;color:var(--muted);font-size:13px}
+    .features{list-style:none;margin:10px 0 22px;padding:0;display:grid;gap:10px}
+    .features li{padding-left:24px;position:relative}
+    .features li::before{content:"✓";position:absolute;left:0;top:0;color:#77ff9a}
+    .btn-wide{width:100%}
 
-    .hamburger span,
-    .hamburger span::before,
-    .hamburger span::after {
-      content: "";
-      display: block;
-      background: #fff;
-      height: 2px;
-      width: 18px;
-      position: relative;
-    }
-    .hamburger span::before { position: absolute; top: -6px; }
-    .hamburger span::after { position: absolute; top: 6px; }
-
-    .drawer {
-      position: fixed;
-      inset: 0 auto 0 0;
-      width: min(80vw, 340px);
-      background: #000;
-      border-right: 1px solid #222;
-      padding: 24px;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      z-index: 30;
-    }
-    .drawer.open { transform: translateX(0); }
-
-    .drawer a {
-      padding: 12px 16px;
-      background: #0b0b0b;
-      border-radius: 10px;
-      border: 1px solid #222;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .scrim {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 25;
-    }
-    .scrim.show { opacity: 1; pointer-events: auto; }
-
-    /* ===== HERO ===== */
-    .hero {
-      text-align: center;
-      padding: var(--section-space) 20px calc(var(--section-space) - 10px);
-    }
-
-    .hero h1 {
-      font-size: 42px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .hero p {
-      max-width: 680px;
-      margin: 0 auto 36px;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 18px;
-    }
-
-    .cta {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .btn {
-      padding: 14px 26px;
-      border-radius: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      border: 2px solid #fff;
-    }
-
-    .btn-primary { background: #fff; color: #000; border: none; }
-    .btn-outline { background: transparent; color: #fff; }
-
-    .note { color: #aaa; font-size: 14px; }
-
-    /* ===== SECTIONS ===== */
-    section {
-      padding: var(--section-space) 20px;
-      border-top: 1px solid var(--line);
-    }
-
-    h2 {
-      text-align: center;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 50px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 36px;
-      max-width: var(--max);
-      margin: auto;
-    }
-
-    .card, .price, .area {
-      background: #0b0b0b;
-      border: 1px solid #222;
-      border-radius: 12px;
-      padding: 32px;
-      line-height: 1.6;
-    }
-
-    .card h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .price { text-align: center; }
-    .price strong { display: block; font-size: 26px; margin: 10px 0; }
-
-    .area {
-      text-align: center;
-      font-size: 16px;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      text-align: center;
-      padding: 60px 20px;
-      color: #9d9d9d;
-      font-size: 14px;
-      letter-spacing: 0.3px;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      .nav-links { display: none; }
-      .hamburger { display: grid; } /* ✅ only show here */
-    }
-
-    @media (min-width: 1025px) {
-      .hamburger { display: none !important; } /* ✅ force hide on desktop */
-    }
-
-    @media (max-width: 760px) {
-      .hero h1 { font-size: 34px; }
-      .brand img { height: 36px; }
-      section { padding: 70px 20px; }
-    }
+    /* Footer */
+    footer{padding:30px 0;border-top:1px solid var(--ring);text-align:center;color:var(--muted);font-size:14px}
   </style>
 </head>
 <body>
 
-  <!-- Drawer -->
-  <div class="drawer" id="drawer">
-    <a href="#home">Home</a>
-    <a href="#how">How it works</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#area">Service area</a>
-    <a href="#signup">Start Service</a>
-    <a href="tel:6235550199">📞 Call Us</a>
-  </div>
-  <div class="scrim" id="scrim"></div>
+  <!-- Drawer (mobile/tablet) -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <header>
+      <strong>Menu</strong>
+      <button id="closeDrawer" class="btn btn-outline">Close</button>
+    </header>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#how">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#area">Service Area</a>
+      <a href="https://forms.gle/your-google-form" id="start">Start Service</a>
+    </nav>
+    <a class="call" href="tel:623-555-0199">📞 623-555-0199</a>
+  </aside>
 
   <!-- Header -->
-  <header>
-    <div class="nav">
-      <a class="brand" href="/">
-        <img src="BinPals-Arizona-Service.png?v=4" alt="BinPals logo">
+  <header class="site" id="home">
+    <div class="container bar">
+      <a class="brand" href="#home" aria-label="BinPals home">
+        <img src="./BinPals-Arizona-Service.png" alt="BinPals logo">
       </a>
-      <nav class="nav-links">
+
+      <!-- Desktop nav -->
+      <nav class="desktop">
         <a href="#home">Home</a>
-        <a href="#how">How it works</a>
+        <a href="#how">How It Works</a>
         <a href="#pricing">Pricing</a>
-        <a href="#area">Service area</a>
-        <a href="#signup">Start Service</a>
+        <a href="#area">Service Area</a>
+        <a class="btn btn-primary" href="https://forms.gle/your-google-form">Start Service</a>
       </nav>
-      <button class="hamburger" id="hamburger" aria-label="Open menu">
-        <span></span>
-      </button>
+
+      <!-- Phone & Hamburger (hamburger hidden on desktop by CSS) -->
+      <div style="display:flex;align-items:center;gap:12px">
+        <a class="phone-link" href="tel:623-555-0199" aria-label="Call BinPals">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.77.66 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.48-1.12a2 2 0 0 1 2.11-.45c.83.32 1.7.54 2.6.66A2 2 0 0 1 22 16.92z"/></svg>
+          <span>623-555-0199</span>
+        </a>
+        <button id="openDrawer" class="hamburger" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="hero" id="home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
       <h1>Never take the trash out again.</h1>
       <p>We roll your trash &amp; recycling cans to the curb and back — friendly, reliable help for Sun City, Sun City West, Surprise &amp; Peoria.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="#signup">Start Service</a>
-        <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://forms.gle/your-google-form">Start Service</a>
+        <a class="btn btn-outline" href="tel:623-555-0199">Call to Sign Up</a>
       </div>
-      <div class="note">Local • Insured • HOA-Friendly</div>
-    </section>
+      <div class="kicker">Local • Insured • HOA-Friendly</div>
+    </div>
+  </section>
 
-    <section id="how">
-      <h2>How it works</h2>
-      <div class="grid">
+  <!-- How it works -->
+  <section id="how" class="section">
+    <div class="container">
+      <h2>How It Works</h2>
+      <div class="step-grid">
         <div class="card">
           <h3>1) Tell us your days</h3>
-          <p>Give your trash &amp; recycle schedule. Gate/garage code optional.</p>
+          <p>Choose trash &amp; recycle pickup days. Add gate/garage code (optional).</p>
         </div>
         <div class="card">
           <h3>2) We roll the bins</h3>
@@ -302,63 +204,128 @@
           <p>We handle trash day like clockwork — even when you’re out of town.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="pricing">
-      <h2>Simple pricing</h2>
-      <div class="grid">
-        <div class="price">
-          <h3>Weekly Service</h3>
-          <strong>$39 / month</strong>
-          <p>Extra bins: +$5/month each</p>
-        </div>
-        <div class="price">
-          <h3>Annual Plan</h3>
-          <strong>$399 / year</strong>
-          <p>~2 months free • Extra bins: +$50/year each</p>
-        </div>
-        <div class="price">
-          <h3>One-Time Assist</h3>
-          <strong>$15</strong>
-          <p>Need help once? Easy.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="area">
-      <h2>Service area</h2>
+  <!-- Service area -->
+  <section id="area" class="section">
+    <div class="container">
+      <h2>Service Area</h2>
       <div class="area">
         Sun City • Sun City West • Surprise • Peoria<br>
-        <span>Not sure you’re in range? <a href="tel:6235550199">Call us</a> and we’ll confirm.</span>
+        <span style="color:var(--muted)">Not sure you’re in range? Call us and we’ll confirm.</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="signup">
-      <h2>Ready to stop worrying about trash day?</h2>
-      <div style="text-align:center;margin-top:16px;">
-        <a class="btn btn-primary" href="#">Open Sign-Up Form</a>
-        <a class="btn btn-outline" href="tel:6235550199">Call to Sign Up</a>
+  <!-- Pricing -->
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2>Get Started</h2>
+      <p class="pricing-sub">All plans include a two-week free trial. Cancel anytime.</p>
+
+      <div class="billing-toggle" role="group" aria-label="Billing period">
+        <input id="billingToggle" type="checkbox" />
+        <label for="billingToggle">
+          <span class="pill monthly">Monthly Subscription</span>
+          <span class="pill quarterly">Quarterly Discount</span>
+        </label>
       </div>
-    </section>
-  </main>
+
+      <div class="price-grid">
+        <!-- Starter -->
+        <article class="price-card">
+          <div class="cost">
+            <span class="currency">$</span>
+            <span class="amount" data-monthly="49" data-quarterly="39">49</span>
+          </div>
+          <h3 style="margin:6px 0 0">Starter</h3>
+          <div class="cycle" data-cycle>Per property / month, billed monthly</div>
+          <ul class="features">
+            <li>Service for up to 2 cans</li>
+            <li>Cans delivered to the curb and back</li>
+            <li>One collection day per week</li>
+          </ul>
+          <a class="btn btn-primary btn-wide" href="https://forms.gle/your-google-form">Go Starter</a>
+        </article>
+
+        <!-- Premium -->
+        <article class="price-card pop">
+          <div class="badge">Most Popular</div>
+          <div class="cost">
+            <span class="currency">$</span>
+            <span class="amount" data-monthly="65" data-quarterly="54">65</span>
+          </div>
+          <h3 style="margin:6px 0 0">Premium</h3>
+          <div class="cycle" data-cycle>Per property / month, billed monthly</div>
+          <ul class="features">
+            <li>Service for up to 4 cans</li>
+            <li>All access to client dashboard</li>
+            <li>Up to two collection days per week</li>
+          </ul>
+          <a class="btn btn-primary btn-wide" href="https://forms.gle/your-google-form">Go Premium</a>
+        </article>
+
+        <!-- Business -->
+        <article class="price-card">
+          <div class="cost">
+            <span class="currency">$</span>
+            <span class="amount" data-monthly="75" data-quarterly="65">75</span>
+          </div>
+          <h3 style="margin:6px 0 0">Business</h3>
+          <div class="cycle" data-cycle>Per property / month, billed monthly</div>
+          <ul class="features">
+            <li>Service for up to 6 cans</li>
+            <li>All Premium features +</li>
+            <li>Dedicated account manager</li>
+          </ul>
+          <a class="btn btn-primary btn-wide" href="https://forms.gle/your-google-form">Go Business</a>
+        </article>
+      </div>
+
+      <div class="actions" style="margin-top:26px">
+        <a class="btn btn-outline" href="#compare">Compare Features ↗</a>
+      </div>
+    </div>
+  </section>
 
   <footer>
-    © <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ • <a href="tel:6235550199" style="color:#9d9d9d;">623-555-0199</a>
+    © <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ • 623-555-0199
   </footer>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Mobile drawer
     const drawer = document.getElementById('drawer');
-    const scrim = document.getElementById('scrim');
-    const hamburger = document.getElementById('hamburger');
-    hamburger.addEventListener('click', () => {
-      drawer.classList.add('open');
-      scrim.classList.add('show');
-    });
-    scrim.addEventListener('click', () => {
-      drawer.classList.remove('open');
-      scrim.classList.remove('show');
-    });
+    const openBtn = document.getElementById('openDrawer');
+    const closeBtn = document.getElementById('closeDrawer');
+    function openDrawer(){drawer.classList.add('open');openBtn.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');}
+    function closeDrawer(){drawer.classList.remove('open');openBtn.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');}
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
+
+    // Pricing toggle
+    (function(){
+      const toggle = document.getElementById('billingToggle');
+      const amounts = document.querySelectorAll('#pricing .amount');
+      const cycles  = document.querySelectorAll('#pricing [data-cycle]');
+      function render(){
+        const quarterly = toggle.checked; // checked => quarterly discount pill selected
+        amounts.forEach(el=>{
+          el.textContent = quarterly ? el.dataset.quarterly : el.dataset.monthly;
+        });
+        cycles.forEach(el=>{
+          el.textContent = quarterly
+            ? 'Per property / month, billed quarterly'
+            : 'Per property / month, billed monthly';
+        });
+      }
+      toggle.addEventListener('change', render);
+      render();
+    })();
+
+    // Year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
