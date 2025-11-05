@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="We roll your trash & recycling cans to the curb and back — serving Sun City, Sun City West, Surprise & Peoria. Simple, reliable, senior-friendly service." />
 
-  <!-- ✅ Poppins font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- ✅ Poppins Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -20,7 +20,7 @@
       --max: 1150px;
       --radius: 12px;
       --pad-x: clamp(18px, 4vw, 28px);
-      --section-space: 80px;
+      --section-space: 90px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,19 +71,20 @@
 
     /* ===== MOBILE MENU ===== */
     .hamburger {
-      display: none;
+      display: none; /* ✅ hidden by default */
       width: 42px;
       height: 42px;
       border-radius: 8px;
       background: #0b0b0b;
       border: 1px solid #222;
       color: #fff;
-      display: grid;
       place-items: center;
       cursor: pointer;
     }
 
-    .hamburger span, .hamburger span::before, .hamburger span::after {
+    .hamburger span,
+    .hamburger span::before,
+    .hamburger span::after {
       content: "";
       display: block;
       background: #fff;
@@ -144,7 +145,7 @@
 
     .hero p {
       max-width: 680px;
-      margin: 0 auto 30px;
+      margin: 0 auto 36px;
       color: var(--muted);
       line-height: 1.6;
       font-size: 18px;
@@ -153,8 +154,9 @@
     .cta {
       display: flex;
       justify-content: center;
-      gap: 14px;
+      gap: 16px;
       flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
     .btn {
@@ -165,22 +167,10 @@
       border: 2px solid #fff;
     }
 
-    .btn-primary {
-      background: #fff;
-      color: #000;
-      border: none;
-    }
+    .btn-primary { background: #fff; color: #000; border: none; }
+    .btn-outline { background: transparent; color: #fff; }
 
-    .btn-outline {
-      background: transparent;
-      color: #fff;
-    }
-
-    .note {
-      margin-top: 16px;
-      color: #aaa;
-      font-size: 14px;
-    }
+    .note { color: #aaa; font-size: 14px; }
 
     /* ===== SECTIONS ===== */
     section {
@@ -192,15 +182,15 @@
       text-align: center;
       font-size: 28px;
       font-weight: 700;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 36px;
       max-width: var(--max);
       margin: auto;
     }
@@ -209,7 +199,7 @@
       background: #0b0b0b;
       border: 1px solid #222;
       border-radius: 12px;
-      padding: 28px;
+      padding: 32px;
       line-height: 1.6;
     }
 
@@ -230,7 +220,7 @@
     /* ===== FOOTER ===== */
     footer {
       text-align: center;
-      padding: 50px 20px;
+      padding: 60px 20px;
       color: #9d9d9d;
       font-size: 14px;
       letter-spacing: 0.3px;
@@ -239,13 +229,17 @@
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1024px) {
       .nav-links { display: none; }
-      .hamburger { display: grid; }
+      .hamburger { display: grid; } /* ✅ only show here */
+    }
+
+    @media (min-width: 1025px) {
+      .hamburger { display: none !important; } /* ✅ force hide on desktop */
     }
 
     @media (max-width: 760px) {
       .hero h1 { font-size: 34px; }
       .brand img { height: 36px; }
-      section { padding: 60px 20px; }
+      section { padding: 70px 20px; }
     }
   </style>
 </head>
@@ -266,7 +260,7 @@
   <header>
     <div class="nav">
       <a class="brand" href="/">
-        <img src="BinPals-Arizona-Service.png?v=3" alt="BinPals logo">
+        <img src="BinPals-Arizona-Service.png?v=4" alt="BinPals logo">
       </a>
       <nav class="nav-links">
         <a href="#home">Home</a>
