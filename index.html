@@ -30,7 +30,6 @@
     .nav-desktop{display:none;gap:28px;align-items:center;font-weight:600}
     .nav-desktop a{color:var(--text);text-decoration:none;opacity:.9}
     .nav-desktop a:hover{opacity:1}
-    .nav-desktop .call{font-weight:700;letter-spacing:.2px;opacity:1}
     .hamburger{inline-size:44px;block-size:44px;border-radius:10px;border:1px solid var(--outline);
       display:flex;align-items:center;justify-content:center;background:#171717;cursor:pointer}
     .hamburger span,.hamburger span:before,.hamburger span:after{
@@ -38,7 +37,7 @@
     .hamburger span:before{position:absolute;transform:translateY(-6px)}
     .hamburger span:after{position:absolute;transform:translateY(6px)}
 
-    /* Drawer (reworked: logo top, nav middle, CTA bottom) */
+    /* Drawer */
     .drawer{
       position:fixed;inset:0 0 0 auto;width:min(82vw,360px);background:#101010;border-left:1px solid var(--ring);
       transform:translateX(100%);transition:transform .28s ease;z-index:60;display:flex;flex-direction:column;min-height:100%;
@@ -130,12 +129,11 @@
         <img src="BinPals-Arizona-Service.png" alt="BinPals" />
       </a>
 
-      <!-- Desktop navigation -->
+      <!-- Desktop navigation (no phone) -->
       <nav class="nav-desktop" aria-label="Primary">
         <a href="#how">How it works</a>
         <a href="#pricing">Pricing</a>
         <a href="#service-area">Service area</a>
-        <a class="call" href="tel:6235550199">623-555-0199</a>
         <a class="btn btn-ghost-on-dark" href="#start">Start Service</a>
       </nav>
 
@@ -164,10 +162,9 @@
       <a href="#service-area" onclick="closeDrawer()">Service area</a>
     </nav>
 
-    <!-- BOTTOM: CTA -->
+    <!-- BOTTOM: CTA (no call) -->
     <div class="drawer__bottom">
       <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener" onclick="closeDrawer()">Get Started</a>
-      <a class="btn btn-outline-on-light" href="tel:6235550199">Call 623-555-0199</a>
     </div>
   </aside>
 
@@ -181,8 +178,8 @@
       </p>
 
       <div class="cluster" id="start">
-        <a class="btn btn-ghost-on-dark" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Start Service</a>
-        <a class="btn btn-outline-on-dark" href="tel:6235550199">Call to Sign Up</a>
+        <a class="btn btn-ghost-on-dark" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Open Sign-Up Form</a>
+        <a class="btn btn-outline-on-dark" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Get Started</a>
       </div>
 
       <div class="kickers">Local • Insured • HOA-Friendly</div>
@@ -217,7 +214,10 @@
     <div class="container">
       <div class="band">
         <strong style="display:block;font-size:20px;margin-bottom:8px;">Service area</strong>
-        <div style="color:#d7d7d7">Sun City • Sun City West • Surprise • Peoria<br />Not sure you’re in range? Call us and we’ll confirm.</div>
+        <div style="color:#d7d7d7">
+          Sun City • Sun City West • Surprise • Peoria<br />
+          Not sure you’re in range? <a href="https://forms.gle/your-google-form" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Message us</a> and we’ll confirm.
+        </div>
       </div>
     </div>
   </section>
@@ -250,7 +250,6 @@
           </ul>
           <div class="price-actions">
             <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Go Starter</a>
-            <a class="btn btn-outline-on-light" href="tel:6235550199">Call</a>
           </div>
         </article>
 
@@ -265,7 +264,6 @@
           </ul>
           <div class="price-actions">
             <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Go Premium</a>
-            <a class="btn btn-outline-on-light" href="tel:6235550199">Call</a>
           </div>
         </article>
 
@@ -280,7 +278,6 @@
           </ul>
           <div class="price-actions">
             <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Go Business</a>
-            <a class="btn btn-outline-on-light" href="tel:6235550199">Call</a>
           </div>
         </article>
       </div>
@@ -289,7 +286,7 @@
 
   <footer>
     <div class="container center" style="font-weight:600">
-      © <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ • 623-555-0199
+      © <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ
     </div>
   </footer>
 
