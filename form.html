@@ -1,209 +1,386 @@
-<!DOCTYPE html>
+<!-- form.html -->
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Get Started | BinPals</title>
 
-  <!-- Poppins Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bg: #0c0c0c;
-      --text: #ffffff;
-      --accent: #ffffff;
-      --muted: #bdbdbd;
-      --radius: 14px;
+    :root{
+      --bg:#0e0e0e;
+      --panel:#151515;
+      --panel-2:#1b1b1b;
+      --text:#ffffff;
+      --muted:#bfbfbf;
+      --ring:#333;
+      --accent:#ffffff;
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+      --radius:18px;
+      --gap:28px;
+      --pad:24px;
+      --max:1100px; /* page width */
+      --card:840px; /* form card width */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 40px 16px;
+    /* ====== Header ====== */
+    .site-wrap{max-width:var(--max); margin:0 auto; padding-inline:20px;}
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:saturate(140%) blur(8px);
+      background:rgba(14,14,14,.7);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      height:72px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+      padding:10px 0;
+    }
+    .brand img{
+      height:36px; width:auto; display:block;
+      filter:drop-shadow(0 2px 0 rgba(255,255,255,.05));
+    }
+    .brand span{ font-weight:700; letter-spacing:.2px; }
+
+    /* desktop links */
+    .nav-links{
+      display:flex; align-items:center; gap:28px;
+      font-weight:500;
+    }
+    .nav-links a{
+      color:var(--text); text-decoration:none; opacity:.9;
+    }
+    .nav-links a:hover{opacity:1}
+
+    .cta{
+      appearance:none; cursor:pointer;
+      background:#fff; color:#000; font-weight:600;
+      border:2px solid #fff; border-radius:999px; padding:10px 16px;
+      transition:.18s ease;
+    }
+    .cta:hover{background:#000; color:#fff}
+
+    /* mobile hamburger (hidden on desktop) */
+    .hamburger{
+      display:none; width:44px; height:44px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12); background:var(--panel); color:#fff;
+      align-items:center; justify-content:center; cursor:pointer;
+    }
+    .hamburger svg{width:22px;height:22px}
+
+    /* Drawer */
+    .drawer{
+      position:fixed; inset:0; z-index:60; display:none;
+    }
+    .drawer.open{display:block}
+    .drawer .scrim{
+      position:absolute; inset:0; background:rgba(0,0,0,.5);
+    }
+    .drawer-panel{
+      position:absolute; top:0; right:0; height:100%; width:min(88vw,380px);
+      background:var(--panel); border-left:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow); display:flex; flex-direction:column;
+    }
+    .drawer-head{display:flex; align-items:center; justify-content:space-between; padding:18px 18px 8px}
+    .drawer-head img{height:34px}
+    .drawer-links{
+      padding:14px 18px; display:flex; flex-direction:column; gap:10px; margin-top:6px;
+    }
+    .drawer-links a{
+      color:var(--text); text-decoration:none; padding:14px 12px; border-radius:12px;
+      background:var(--panel-2); border:1px solid rgba(255,255,255,.08);
+    }
+    .drawer-bottom{margin-top:auto; padding:18px; border-top:1px solid rgba(255,255,255,.08)}
+    .btn-outline, .btn-solid{
+      width:100%; padding:14px 16px; border-radius:12px; font-weight:700; cursor:pointer; transition:.18s;
+    }
+    .btn-outline{
+      background:transparent; color:#fff; border:2px solid #fff;
+    }
+    .btn-outline:hover{background:#fff; color:#000}
+    .btn-solid{
+      background:#fff; color:#000; border:2px solid #fff;
+    }
+    .btn-solid:hover{background:#000; color:#fff}
+
+    /* hide/show based on viewport */
+    @media (max-width: 1024px){
+      .nav-links, .cta{display:none}
+      .hamburger{display:flex}
+    }
+    @media (min-width: 1025px){
+      .drawer{display:none !important}
     }
 
-    .form-container {
-      background: #121212;
-      padding: 40px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 520px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    /* ====== Page header spacer ====== */
+    .page-pad{padding:40px 0}
+
+    /* ====== Form ====== */
+    .form-wrap{
+      max-width:var(--card); margin:0 auto 64px; background:var(--panel);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      padding: clamp(22px, 4vw, 40px);
+    }
+    .form-title{ text-align:center; font-weight:800; letter-spacing:.2px; font-size: clamp(24px, 2.6vw, 32px); margin-bottom:26px; }
+
+    form{display:grid; gap:18px}
+    .grid{
+      display:grid; gap:18px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 820px){
+      .grid{grid-template-columns: 1fr 1fr}
     }
 
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 28px;
+    label{font-weight:600; font-size:.95rem}
+    .field{
+      margin-top:8px;
+      background:var(--panel-2); border:1px solid var(--ring);
+      color:var(--text); border-radius:12px; width:100%;
+      padding:14px 14px; outline:none;
+      transition:border-color .18s ease, background .18s ease;
     }
+    .field:focus{border-color:#777}
+    textarea.field{min-height:120px; resize:vertical}
 
-    label {
-      display: block;
-      margin-bottom: 18px;
-      font-weight: 600;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    select.field{appearance:none; background-image:linear-gradient(45deg,transparent 50%, #999 50%),linear-gradient(135deg,#999 50%, transparent 50%); background-position: calc(100% - 18px) calc(1.1em), calc(100% - 12px) calc(1.1em); background-size:6px 6px, 6px 6px; background-repeat:no-repeat;}
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 14px 16px;
-      background: transparent;
-      border: 1.6px solid rgba(255, 255, 255, 0.3);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-size: 15px;
-      font-family: inherit;
-      transition: 0.2s ease border-color, 0.2s ease background;
-    }
+    .row{display:flex; gap:14px; flex-wrap:wrap}
+    .row .half{flex:1 1 220px}
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #fff;
-      background: rgba(255,255,255,0.05);
-    }
+    .help{color:var(--muted); font-size:.92rem; margin-top:2px}
 
-    textarea {
-      min-height: 100px;
-      resize: vertical;
+    .actions{display:flex; gap:12px; margin-top:10px}
+    .btn{
+      appearance:none; cursor:pointer; font-weight:800;
+      padding:14px 18px; border-radius:14px; transition:.2s; border:2px solid #fff;
     }
+    .btn.white{ background:#fff; color:#000; }
+    .btn.white:hover{ background:#000; color:#fff; }
+    .btn.ghost{ background:transparent; color:#fff; }
+    .btn.ghost:hover{ background:#fff; color:#000; }
 
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: var(--radius);
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s ease;
+    .notice{
+      display:none; margin-top:10px; padding:12px 14px;
+      border-radius:12px; background:#0f291e; color:#d0ffe9; border:1px solid #1e8a5e;
     }
-
-    button:hover {
-      background: #000;
-      color: #fff;
-      border: 1.5px solid #fff;
-    }
-
-    .success-message {
-      text-align: center;
-      margin-top: 20px;
-      color: #00d26a;
-      font-weight: 600;
-    }
-
-    .back-link {
-      text-align: center;
-      margin-top: 24px;
-    }
-
-    .back-link a {
-      color: var(--accent);
-      text-decoration: underline;
-      font-weight: 500;
-    }
-
-    @media (max-width: 480px) {
-      .form-container {
-        padding: 28px;
-      }
-    }
+    .notice.error{background:#2a1111; color:#ffd6d6; border-color:#a64a4a}
+    .notice.show{display:block}
   </style>
 </head>
 <body>
 
-  <div class="form-container">
-    <h1>Get Started with BinPals</h1>
-    <form id="binpalsForm" action="https://formspree.io/f/xgvpgrqg" method="POST">
-      
-      <label>
-        Full Name:
-        <input type="text" name="name" required>
-      </label>
+  <!-- Header -->
+  <header>
+    <div class="site-wrap nav">
+      <a class="brand" href="index.html" aria-label="BinPals Home">
+        <img src="./BinPals-Arizona-Service.png" alt="BinPals logo" />
+      </a>
 
-      <label>
-        Email Address:
-        <input type="email" name="email" required>
-      </label>
+      <!-- Desktop links -->
+      <nav class="nav-links">
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#service-area">Service area</a>
+      </nav>
 
-      <label>
-        Phone Number:
-        <input type="tel" name="phone" required>
-      </label>
+      <button class="cta" onclick="location.href='form.html'">Get Started</button>
 
-      <label>
-        Address:
-        <input type="text" name="address" placeholder="Street, City, ZIP" required>
-      </label>
-
-      <label>
-        Service Plan:
-        <select name="plan" required>
-          <option value="">Select a Plan</option>
-          <option value="Starter">Starter – $39/mo</option>
-          <option value="Premium">Premium – $54/mo</option>
-          <option value="Business">Business – $65/mo</option>
-        </select>
-      </label>
-
-      <label>
-        Preferred Start Date:
-        <input type="date" name="start_date" required>
-      </label>
-
-      <label>
-        Notes / Gate Code (Optional):
-        <textarea name="message" placeholder="Any additional info..."></textarea>
-      </label>
-
-      <button type="submit">Submit</button>
-    </form>
-
-    <div class="success-message" id="successMessage" style="display:none;">
-      Thank you! Your request has been sent.
+      <!-- Mobile hamburger -->
+      <button class="hamburger" id="openMenu" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </div>
+  </header>
 
-    <div class="back-link">
-      <a href="index.html">← Back to Home</a>
-    </div>
+  <!-- Mobile drawer -->
+  <div class="drawer" id="drawer">
+    <div class="scrim" id="closeMenu"></div>
+    <aside class="drawer-panel">
+      <div class="drawer-head">
+        <img src="./BinPals-Arizona-Service.png" alt="BinPals" />
+        <button class="hamburger" id="closeX" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" d="M6 6l12 12M18 6l-12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="drawer-links">
+        <a href="index.html#how" onclick="closeDrawer()">How it works</a>
+        <a href="index.html#pricing" onclick="closeDrawer()">Pricing</a>
+        <a href="index.html#service-area" onclick="closeDrawer()">Service area</a>
+      </nav>
+
+      <div class="drawer-bottom">
+        <button class="btn-solid" onclick="location.href='form.html'">Get Started</button>
+      </div>
+    </aside>
   </div>
 
-  <script>
-    const form = document.getElementById('binpalsForm');
-    const successMessage = document.getElementById('successMessage');
+  <div class="page-pad"></div>
 
-    form.addEventListener('submit', async (e) => {
+  <!-- Form Card -->
+  <section class="site-wrap">
+    <div class="form-wrap">
+      <h1 class="form-title">Get Started with BinPals</h1>
+
+      <form id="signupForm" novalidate>
+        <!-- Name -->
+        <div>
+          <label>Full Name
+            <input class="field" type="text" name="name" placeholder="First & Last" required>
+          </label>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label>Email Address
+            <input class="field" type="email" name="email" placeholder="you@email.com" required>
+          </label>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label>Phone Number
+            <input class="field" type="tel" name="phone" placeholder="(555) 555-5555" required>
+          </label>
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label>Service Address
+            <input class="field" type="text" name="address" placeholder="Street, City, ZIP" required>
+          </label>
+          <div class="help">Gate/garage code can be added in Notes.</div>
+        </div>
+
+        <!-- Plan + Add-ons (two columns on desktop) -->
+        <div class="grid">
+          <div>
+            <label>Service Plan
+              <select class="field" name="plan" required>
+                <option value="" selected>Select a plan</option>
+                <option value="Starter — up to 2 cans">Starter — up to 2 cans</option>
+                <option value="Premium — up to 4 cans">Premium — up to 4 cans</option>
+                <option value="Business — up to 6 cans">Business — up to 6 cans</option>
+              </select>
+            </label>
+          </div>
+
+          <div>
+            <label>Billing
+              <select class="field" name="billing" required>
+                <option value="" selected>Select billing</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Monthly">Monthly</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="half">
+            <label>Extra Bins (optional)
+              <input class="field" type="number" name="extra_bins" min="0" value="0">
+            </label>
+          </div>
+          <div class="half">
+            <label>Preferred Start Date
+              <input class="field" type="date" name="start_date">
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label>Notes / Gate Code (Optional)
+            <textarea class="field" name="notes" placeholder="Anything we should know?"></textarea>
+          </label>
+        </div>
+
+        <div>
+          <label style="display:flex; gap:10px; align-items:center; font-weight:500">
+            <input type="checkbox" required />
+            I agree to be contacted about scheduling and service.
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn white" type="submit">Submit</button>
+          <a class="btn ghost" href="index.html">Back to Home</a>
+        </div>
+
+        <div id="msgOk" class="notice">Thanks! Your request was sent. We’ll reach out to confirm details.</div>
+        <div id="msgErr" class="notice error">Something went wrong. Please try again or email us.</div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Drawer behavior
+    const drawer = document.getElementById('drawer');
+    const openBtn = document.getElementById('openMenu');
+    const closeBtn = document.getElementById('closeX');
+    const scrim = document.getElementById('closeMenu');
+
+    function closeDrawer(){ drawer.classList.remove('open'); document.body.style.overflow=''; }
+    function openDrawer(){ drawer.classList.add('open'); document.body.style.overflow='hidden'; }
+
+    openBtn && openBtn.addEventListener('click', openDrawer);
+    closeBtn && closeBtn.addEventListener('click', closeDrawer);
+    scrim && scrim.addEventListener('click', closeDrawer);
+
+    // Formspree submit with fetch to keep user on-page
+    const form = document.getElementById('signupForm');
+    const ok = document.getElementById('msgOk');
+    const err = document.getElementById('msgErr');
+
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
+      ok.classList.remove('show'); err.classList.remove('show');
+
       const data = new FormData(form);
-      const response = await fetch(form.action, {
-        method: form.method,
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (response.ok) {
-        form.reset();
-        successMessage.style.display = 'block';
-      } else {
-        alert('There was an issue submitting your form. Please try again.');
+      try{
+        const res = await fetch('https://formspree.io/f/xgvpgrqg', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: data
+        });
+
+        if(res.ok){
+          ok.classList.add('show');
+          form.reset();
+          window.scrollTo({top:0, behavior:'smooth'});
+        }else{
+          err.classList.add('show');
+        }
+      }catch(_){
+        err.classList.add('show');
       }
     });
   </script>
+</body>
+</html>
 
 </body>
 </html>
