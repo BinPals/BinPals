@@ -21,11 +21,11 @@
       -webkit-font-smoothing:antialiased;line-height:1.55;
     }
     .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad-x)}
+
     /* Header */
     .site-header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(8px);
       background:color-mix(in srgb, var(--bg) 85%, transparent);border-bottom:1px solid var(--ring)}
     .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad-x)}
-    .brand{display:flex;align-items:center;gap:14px;min-width:0}
     .brand img{height:38px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
     .nav-desktop{display:none;gap:28px;align-items:center;font-weight:600}
     .nav-desktop a{color:var(--text);text-decoration:none;opacity:.9}
@@ -38,14 +38,11 @@
     .hamburger span:after{position:absolute;transform:translateY(6px)}
 
     /* Drawer */
-    .drawer{
-      position:fixed;inset:0 0 0 auto;width:min(82vw,360px);background:#101010;border-left:1px solid var(--ring);
-      transform:translateX(100%);transition:transform .28s ease;z-index:60;display:flex;flex-direction:column;min-height:100%;
-    }
+    .drawer{position:fixed;inset:0 0 0 auto;width:min(82vw,360px);background:#101010;border-left:1px solid var(--ring);
+      transform:translateX(100%);transition:transform .28s ease;z-index:60;display:flex;flex-direction:column;min-height:100%}
     .drawer.open{transform:translateX(0)}
     .drawer__top{padding:18px var(--pad-x);border-bottom:1px solid var(--ring);display:flex;align-items:center;justify-content:space-between}
-    .drawer__logo{display:flex;align-items:center;gap:10px}
-    .drawer__logo img{height:30px;width:auto;display:block}
+    .drawer__logo img{height:30px;width:auto}
     .drawer__close{background:none;border:1px solid var(--outline);color:#fff;border-radius:10px;padding:8px 10px;font-weight:600}
     .drawer__links{padding:8px var(--pad-x) 18px;display:flex;flex-direction:column;gap:6px;flex:1;overflow:auto}
     .drawer__links a{color:#fff;text-decoration:none;font-weight:600;padding:14px 0;border-bottom:1px solid var(--ring)}
@@ -53,15 +50,6 @@
     .drawer__bottom{padding:16px var(--pad-x) 20px;border-top:1px solid var(--ring);display:grid;gap:10px}
     .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(1px);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:55}
     .scrim.show{opacity:1;pointer-events:auto}
-
-    /* Sections */
-    .section{padding-block:var(--section-y)}
-    .hero{padding-block:clamp(56px,8vw,120px)}
-    .eyebrow{color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
-    h1{font-size:clamp(28px,5vw,44px);line-height:1.15;margin:12px 0 18px;font-weight:800}
-    .lead{max-width:880px;margin:0 auto;color:#e8e8e8;font-size:clamp(16px,2.25vw,20px)}
-    .cluster{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px}
-    .kickers{margin-top:14px;color:var(--muted);font-weight:600;letter-spacing:.2px}
 
     /* Buttons */
     .btn{appearance:none;border:1.4px solid #000;border-radius:12px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;gap:8px;justify-content:center}
@@ -74,6 +62,14 @@
     .btn-outline-on-light{background:transparent;color:#000;border-color:#000}
     .btn-outline-on-light:hover{background:#000;color:#fff}
 
+    /* Sections */
+    .section{padding-block:var(--section-y)}
+    .center{text-align:center}
+    h1{font-size:clamp(28px,5vw,44px);line-height:1.15;margin:12px 0 18px;font-weight:800}
+    .lead{max-width:880px;margin:0 auto;color:#e8e8e8;font-size:clamp(16px,2.25vw,20px)}
+    .cluster{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+    .kickers{margin-top:14px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+
     /* Cards */
     .how{display:grid;gap:22px;margin-top:36px}
     .card{background:#111;border:1px solid var(--ring);border-radius:18px;padding:22px 22px 20px;box-shadow:var(--shadow)}
@@ -82,12 +78,6 @@
     .band{background:#0f0f0f;border-block:1px solid var(--ring);border-radius:18px;padding:22px}
 
     /* Pricing */
-    .pricing-wrap{margin-top:14px}
-    .toggle{display:flex;align-items:center;gap:14px;justify-content:center;margin:10px 0 28px}
-    .switch{position:relative;width:64px;height:32px;background:#1a1a1a;border:1px solid var(--outline);border-radius:999px;cursor:pointer}
-    .knob{position:absolute;top:3px;left:3px;width:26px;height:26px;background:#fff;border-radius:999px;transition:left .2s ease}
-    .switch.active .knob{left:35px}
-    .toggle label{font-weight:700;color:#eaeaea}
     .pricing-grid{display:grid;gap:22px;grid-template-columns:1fr;align-items:stretch}
     .price-card{background:#fff;color:#000;border-radius:22px;border:1px solid #dadada;box-shadow:var(--shadow);padding:26px 22px}
     .price-title{margin:0 0 8px;font-weight:700;font-size:22px}
@@ -98,25 +88,13 @@
     .list li:before{content:"✓";position:absolute;left:0;top:0}
     .price-actions{display:flex;gap:10px;flex-wrap:wrap}
 
-    /* Helpers */
     footer{border-top:1px solid var(--ring);padding-block:28px;color:#bdbdbd}
-    .center{text-align:center}
-    .mt-xxl{margin-top:clamp(48px,8vw,96px)}
-    .mt-xl{margin-top:clamp(32px,6vw,72px)}
-    .mt-lg{margin-top:clamp(20px,4.5vw,48px)}
-    .spacious{padding-block:clamp(64px,9vw,140px)}
-    .row{display:grid;gap:24px}
 
-    /* Breakpoints */
-    @media (min-width:640px){.how{grid-template-columns:repeat(2,1fr)}}
     @media (min-width:1024px){
-      .brand img{height:44px}
       .nav-desktop{display:flex}
       .hamburger{display:none}
       .how{grid-template-columns:repeat(3,1fr)}
-      .row-3{grid-template-columns:repeat(3,1fr)}
       .pricing-grid{grid-template-columns:repeat(3,1fr)}
-      .card{padding:26px}
     }
   </style>
 </head>
@@ -125,86 +103,52 @@
   <!-- Header -->
   <header class="site-header">
     <div class="header-inner container">
-      <a class="brand" href="#top" aria-label="BinPals Home">
-        <img src="BinPals-Arizona-Service.png" alt="BinPals" />
-      </a>
-
-      <!-- Desktop navigation (no phone) -->
-      <nav class="nav-desktop" aria-label="Primary">
+      <a class="brand" href="#top"><img src="BinPals-Arizona-Service.png" alt="BinPals" /></a>
+      <nav class="nav-desktop">
         <a href="#how">How it works</a>
         <a href="#pricing">Pricing</a>
         <a href="#service-area">Service area</a>
-        <a class="btn btn-ghost-on-dark" href="#start">Start Service</a>
+        <a class="btn btn-ghost-on-dark" href="form.html">Get Started</a>
       </nav>
-
-      <!-- Mobile / Tablet hamburger -->
-      <button id="openDrawer" class="hamburger" aria-label="Open menu">
-        <span></span>
-      </button>
+      <button id="openDrawer" class="hamburger" aria-label="Open menu"><span></span></button>
     </div>
   </header>
 
   <!-- Drawer -->
   <div id="scrim" class="scrim"></div>
   <aside id="drawer" class="drawer" aria-hidden="true">
-    <!-- TOP: Logo + Close -->
     <div class="drawer__top">
-      <div class="drawer__logo">
-        <img src="BinPals-Arizona-Service.png" alt="BinPals" />
-      </div>
-      <button id="closeDrawer" class="drawer__close" aria-label="Close menu">Close</button>
+      <div class="drawer__logo"><img src="BinPals-Arizona-Service.png" alt="BinPals" /></div>
+      <button id="closeDrawer" class="drawer__close">Close</button>
     </div>
-
-    <!-- MIDDLE: Links -->
-    <nav class="drawer__links" aria-label="Mobile">
+    <nav class="drawer__links">
       <a href="#how" onclick="closeDrawer()">How it works</a>
       <a href="#pricing" onclick="closeDrawer()">Pricing</a>
       <a href="#service-area" onclick="closeDrawer()">Service area</a>
     </nav>
-
-    <!-- BOTTOM: CTA (no call) -->
     <div class="drawer__bottom">
-      <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener" onclick="closeDrawer()">Get Started</a>
+      <a class="btn btn-ghost-on-light" href="form.html" onclick="closeDrawer()">Get Started</a>
     </div>
   </aside>
 
   <!-- Hero -->
-  <section class="hero section center" id="top">
+  <section class="section center" id="top">
     <div class="container">
       <h1>Never take the trash out again.</h1>
-      <p class="lead">
-        We roll your trash &amp; recycling cans to the curb and back — friendly, reliable help for
-        Sun City, Sun City West, Surprise &amp; Peoria.
-      </p>
-
-      <div class="cluster" id="start">
-        <a class="btn btn-ghost-on-dark" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Open Sign-Up Form</a>
-        <a class="btn btn-outline-on-dark" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
+      <p class="lead">We roll your trash &amp; recycling cans to the curb and back — friendly, reliable help for Sun City, Sun City West, Surprise &amp; Peoria.</p>
+      <div class="cluster"><a class="btn btn-ghost-on-dark" href="form.html">Get Started</a></div>
       <div class="kickers">Local • Insured • HOA-Friendly</div>
     </div>
   </section>
 
   <!-- How it works -->
-  <section class="section spacious" id="how">
+  <section class="section" id="how">
     <div class="container center">
-      <h2 class="eyebrow">Simple & reliable</h2>
-      <h2 style="margin:6px 0 0;font-size:clamp(24px,3.8vw,34px);font-weight:800;">How it works</h2>
-
-      <div class="how mt-lg">
-        <div class="card">
-          <h3>1) Tell us your days</h3>
-          <p>Choose trash &amp; recycle pickup schedule. Add gate/garage code (optional).</p>
-        </div>
-        <div class="card">
-          <h3>2) We roll the bins</h3>
-          <p>We set bins out the night before pickup and return them neatly by the end of pickup day.</p>
-        </div>
-        <div class="card">
-          <h3>3) You relax</h3>
-          <p>We handle trash day like clockwork — even when you’re out of town.</p>
-        </div>
+      <h2 style="font-size:clamp(24px,3.8vw,34px);font-weight:800;">How it works</h2>
+      <div class="how">
+        <div class="card"><h3>1) Tell us your days</h3><p>Choose trash &amp; recycle pickup schedule. Add gate/garage code (optional).</p></div>
+        <div class="card"><h3>2) We roll the bins</h3><p>We set bins out the night before pickup and return them neatly by the end of pickup day.</p></div>
+        <div class="card"><h3>3) You relax</h3><p>We handle trash day like clockwork — even when you’re out of town.</p></div>
       </div>
     </div>
   </section>
@@ -216,78 +160,27 @@
         <strong style="display:block;font-size:20px;margin-bottom:8px;">Service area</strong>
         <div style="color:#d7d7d7">
           Sun City • Sun City West • Surprise • Peoria<br />
-          Not sure you’re in range? <a href="https://forms.gle/your-google-form" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Message us</a> and we’ll confirm.
+          Not sure you’re in range? <a href="form.html" style="color:#fff;text-decoration:underline">Message us</a> and we’ll confirm.
         </div>
       </div>
     </div>
   </section>
 
   <!-- Pricing -->
-  <section class="section spacious" id="pricing" aria-label="Pricing">
-    <div class="container">
-      <div class="center">
-        <h2 style="margin:0 0 6px;font-size:clamp(24px,3.8vw,34px);font-weight:800;">Get Started</h2>
-        <p class="lead" style="font-size:16px;max-width:680px;margin-inline:auto;color:#d8d8d8">Choose monthly or quarterly billing. Cancel anytime.</p>
-      </div>
-
-      <div class="toggle">
-        <label>Quarterly</label>
-        <button id="priceSwitch" class="switch" aria-pressed="false" aria-label="Toggle monthly pricing">
-          <span class="knob"></span>
-        </button>
-        <label>Monthly</label>
-      </div>
-
-      <div class="pricing-grid pricing-wrap">
-        <article class="price-card" data-monthly="49" data-quarterly="39">
-          <h3 class="price-title">Starter</h3>
-          <p class="price-big"><span class="price">$39</span> <span style="font-weight:700">/mo</span></p>
-          <p class="price-sub">billed quarterly</p>
-          <ul class="list">
-            <li>Service for up to 2 cans</li>
-            <li>Set out &amp; return once per week</li>
-            <li>Extra bin add-on available</li>
-          </ul>
-          <div class="price-actions">
-            <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Go Starter</a>
-          </div>
-        </article>
-
-        <article class="price-card" data-monthly="65" data-quarterly="54">
-          <h3 class="price-title">Premium</h3>
-          <p class="price-big"><span class="price">$54</span> <span style="font-weight:700">/mo</span></p>
-          <p class="price-sub">billed quarterly</p>
-          <ul class="list">
-            <li>Service for up to 4 cans</li>
-            <li>All access to client dashboard</li>
-            <li>Up to two collection days per week</li>
-          </ul>
-          <div class="price-actions">
-            <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Go Premium</a>
-          </div>
-        </article>
-
-        <article class="price-card" data-monthly="75" data-quarterly="65">
-          <h3 class="price-title">Business</h3>
-          <p class="price-big"><span class="price">$65</span> <span style="font-weight:700">/mo</span></p>
-          <p class="price-sub">billed quarterly</p>
-          <ul class="list">
-            <li>Service for up to 6 cans</li>
-            <li>All Premium features +</li>
-            <li>Dedicated account manager</li>
-          </ul>
-          <div class="price-actions">
-            <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener">Go Business</a>
-          </div>
-        </article>
+  <section class="section" id="pricing">
+    <div class="container center">
+      <h2 style="font-size:clamp(24px,3.8vw,34px);font-weight:800;">Pricing</h2>
+      <p class="lead" style="font-size:16px;max-width:680px;margin-inline:auto;color:#d8d8d8">Choose monthly or quarterly billing. Cancel anytime.</p>
+      <div class="pricing-grid">
+        <article class="price-card"><h3 class="price-title">Starter</h3><p class="price-big">$39<span style="font-weight:700">/mo</span></p><p class="price-sub">billed quarterly</p><ul class="list"><li>Service for up to 2 cans</li><li>Set out &amp; return once per week</li><li>Extra bin add-on available</li></ul><div class="price-actions"><a class="btn btn-ghost-on-light" href="form.html">Get Started</a></div></article>
+        <article class="price-card"><h3 class="price-title">Premium</h3><p class="price-big">$54<span style="font-weight:700">/mo</span></p><p class="price-sub">billed quarterly</p><ul class="list"><li>Service for up to 4 cans</li><li>All access to client dashboard</li><li>Up to two collection days per week</li></ul><div class="price-actions"><a class="btn btn-ghost-on-light" href="form.html">Get Started</a></div></article>
+        <article class="price-card"><h3 class="price-title">Business</h3><p class="price-big">$65<span style="font-weight:700">/mo</span></p><p class="price-sub">billed quarterly</p><ul class="list"><li>Service for up to 6 cans</li><li>All Premium features +</li><li>Dedicated account manager</li></ul><div class="price-actions"><a class="btn btn-ghost-on-light" href="form.html">Get Started</a></div></article>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="container center" style="font-weight:600">
-      © <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ
-    </div>
+    <div class="container center" style="font-weight:600">© <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ</div>
   </footer>
 
   <script>
@@ -296,36 +189,13 @@
     const scrim = document.getElementById('scrim');
     const openBtn = document.getElementById('openDrawer');
     const closeBtn = document.getElementById('closeDrawer');
+    function openDrawer(){drawer.classList.add('open');scrim.classList.add('show');document.body.style.overflow='hidden';}
+    function closeDrawer(){drawer.classList.remove('open');scrim.classList.remove('show');document.body.style.overflow='';}
+    openBtn.addEventListener('click',openDrawer);
+    closeBtn.addEventListener('click',closeDrawer);
+    scrim.addEventListener('click',closeDrawer);
 
-    function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('show'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-    function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-
-    openBtn.addEventListener('click', openDrawer);
-    closeBtn.addEventListener('click', closeDrawer);
-    scrim.addEventListener('click', closeDrawer);
-
-    // Pricing toggle
-    const switchBtn = document.getElementById('priceSwitch');
-    const cards = document.querySelectorAll('.price-card');
-
-    function setMode(mode){
-      cards.forEach(card=>{
-        const priceEl = card.querySelector('.price');
-        const subEl = card.querySelector('.price-sub');
-        const monthly = card.dataset.monthly;
-        const quarterly = card.dataset.quarterly;
-        if(mode==='monthly'){ priceEl.textContent = '$'+monthly; subEl.textContent='billed monthly'; }
-        else{ priceEl.textContent = '$'+quarterly; subEl.textContent='billed quarterly'; }
-      });
-      const isMonthly = mode==='monthly';
-      switchBtn.classList.toggle('active', isMonthly);
-      switchBtn.setAttribute('aria-pressed', isMonthly ? 'true' : 'false');
-    }
-    switchBtn.addEventListener('click', ()=>{ const on = switchBtn.classList.toggle('active'); setMode(on?'monthly':'quarterly'); });
-    setMode('quarterly');
-
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('year').textContent=new Date().getFullYear();
   </script>
 </body>
 </html>
