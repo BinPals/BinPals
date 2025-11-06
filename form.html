@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BinPals — Start Service</title>
+  <meta name="description" content="Start BinPals service: we roll your trash & recycling cans to the curb and back in Sun City & Surprise." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0b0b;--text:#ffffff;--muted:#c9c9c9;--ring:#2f2f2f;--outline:#2a2a2a;
+      --max:1200px;--pad-x:clamp(16px,4vw,32px);--section-y:clamp(56px,8vw,120px);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55}
+    .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad-x)}
+    /* Header (same as site) */
+    .site-header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(8px);
+      background:color-mix(in srgb, var(--bg) 85%, transparent);border-bottom:1px solid var(--ring)}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad-x)}
+    .brand img{height:38px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+    .nav-desktop{display:none;gap:28px;align-items:center;font-weight:600}
+    .nav-desktop a{color:#fff;text-decoration:none;opacity:.9}
+    .nav-desktop a:hover{opacity:1}
+    .hamburger{inline-size:44px;block-size:44px;border-radius:10px;border:1px solid var(--outline);
+      display:flex;align-items:center;justify-content:center;background:#171717;cursor:pointer}
+    .hamburger span,.hamburger span:before,.hamburger span:after{
+      content:"";display:block;width:20px;height:2px;background:#fff;border-radius:2px;position:relative}
+    .hamburger span:before{position:absolute;transform:translateY(-6px)}
+    .hamburger span:after{position:absolute;transform:translateY(6px)}
+
+    /* Drawer */
+    .drawer{position:fixed;inset:0 0 0 auto;width:min(82vw,360px);background:#101010;border-left:1px solid var(--ring);
+      transform:translateX(100%);transition:transform .28s ease;z-index:60;display:flex;flex-direction:column;min-height:100%}
+    .drawer.open{transform:translateX(0)}
+    .drawer__top{padding:18px var(--pad-x);border-bottom:1px solid var(--ring);display:flex;align-items:center;justify-content:space-between}
+    .drawer__logo img{height:30px;width:auto}
+    .drawer__close{background:none;border:1px solid var(--outline);color:#fff;border-radius:10px;padding:8px 10px;font-weight:600}
+    .drawer__links{padding:8px var(--pad-x) 18px;display:flex;flex-direction:column;gap:6px;flex:1;overflow:auto}
+    .drawer__links a{color:#fff;text-decoration:none;font-weight:600;padding:14px 0;border-bottom:1px solid var(--ring)}
+    .drawer__links a:last-child{border-bottom:none}
+    .drawer__bottom{padding:16px var(--pad-x) 20px;border-top:1px solid var(--ring);display:grid;gap:10px}
+    .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(1px);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:55}
+    .scrim.show{opacity:1;pointer-events:auto}
+
+    /* Buttons (smart contrast) */
+    .btn{appearance:none;border:1.4px solid #000;border-radius:12px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+    .btn-ghost-on-dark{background:#fff;color:#000;border-color:#000}
+    .btn-ghost-on-dark:hover{background:#000;color:#fff}
+    .btn-outline-on-dark{background:transparent;color:#fff;border-color:#fff}
+    .btn-outline-on-dark:hover{background:#fff;color:#000}
+    .btn-ghost-on-light{background:#fff;color:#000;border-color:#000}
+    .btn-ghost-on-light:hover{background:#000;color:#fff}
+    .btn-outline-on-light{background:transparent;color:#000;border-color:#000}
+    .btn-outline-on-light:hover{background:#000;color:#fff}
+
+    /* Page body */
+    .section{padding-block:var(--section-y)}
+    .center{text-align:center}
+    .headline{font-size:clamp(24px,4.2vw,36px);font-weight:800;margin:0 0 10px}
+    .lead{max-width:760px;margin:0 auto;color:#e0e0e0}
+
+    /* Form container */
+    .form-shell{max-width:900px;margin:28px auto 0;border:1px solid var(--ring);border-radius:18px;overflow:hidden;background:#0f0f0f}
+    .frame{display:block;width:100%;min-height:75vh;border:0;background:#0f0f0f}
+
+    /* Desktop show nav */
+    @media (min-width:1024px){
+      .nav-desktop{display:flex}
+      .hamburger{display:none}
+    }
+
+    footer{border-top:1px solid var(--ring);padding:28px 0;color:#bdbdbd}
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="index.html" aria-label="BinPals Home">
+        <img src="BinPals-Arizona-Service.png" alt="BinPals" />
+      </a>
+      <nav class="nav-desktop" aria-label="Primary">
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#service-area">Service area</a>
+        <a class="btn btn-ghost-on-dark" href="form.html">Start Service</a>
+      </nav>
+      <button id="openDrawer" class="hamburger" aria-label="Open menu"><span></span></button>
+    </div>
+  </header>
+
+  <!-- Drawer -->
+  <div id="scrim" class="scrim"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer__top">
+      <div class="drawer__logo"><img src="BinPals-Arizona-Service.png" alt="BinPals"></div>
+      <button id="closeDrawer" class="drawer__close" aria-label="Close menu">Close</button>
+    </div>
+    <nav class="drawer__links" aria-label="Mobile">
+      <a href="index.html#how" onclick="closeDrawer()">How it works</a>
+      <a href="index.html#pricing" onclick="closeDrawer()">Pricing</a>
+      <a href="index.html#service-area" onclick="closeDrawer()">Service area</a>
+    </nav>
+    <div class="drawer__bottom">
+      <a class="btn btn-ghost-on-light" href="form.html" onclick="closeDrawer()">Get Started</a>
+    </div>
+  </aside>
+
+  <!-- Body -->
+  <section class="section">
+    <div class="container center">
+      <h1 class="headline">Start Service</h1>
+      <p class="lead">Tell us about your address, pickup days, and any gate/garage access. You can pause or cancel anytime.</p>
+
+      <!-- Google Form embed -->
+      <div class="form-shell">
+        <!-- Replace the src below with your Google Form "Embed" URL -->
+        <iframe class="frame" src="https://docs.google.com/forms/d/e/REPLACE_WITH_YOUR_GOOGLE_FORM_EMBED/viewform?embedded=true">Loading…</iframe>
+      </div>
+
+      <!-- Optional: If you want a backup “open in new tab” link -->
+      <p style="margin-top:14px">
+        <a class="btn btn-outline-on-dark" href="https://docs.google.com/forms/d/e/REPLACE_WITH_YOUR_GOOGLE_FORM_EMBED/viewform" target="_blank" rel="noopener">Open Form in New Tab</a>
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container center" style="font-weight:600">© <span id="year"></span> BinPals • Sun City &amp; Surprise, AZ</div>
+  </footer>
+
+  <script>
+    // Drawer
+    const drawer = document.getElementById('drawer');
+    const scrim = document.getElementById('scrim');
+    const openBtn = document.getElementById('openDrawer');
+    const closeBtn = document.getElementById('closeDrawer');
+    function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('show'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    scrim.addEventListener('click', closeDrawer);
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
