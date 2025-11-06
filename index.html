@@ -9,19 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg: #0b0b0b;
-      --bg-soft:#121212;
-      --card:#181818;
-      --text:#ffffff;
-      --muted:#c9c9c9;
-      --accent:#ffffff;
-      --outline:#2a2a2a;
-      --ring:#2f2f2f;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --max:1200px;
-      --pad-x: clamp(16px, 4vw, 32px);
-      --section-y: clamp(56px, 8vw, 120px);
-      --radius:16px;
+      --bg:#0b0b0b;--bg-soft:#121212;--card:#181818;--text:#ffffff;--muted:#c9c9c9;
+      --accent:#ffffff;--outline:#2a2a2a;--ring:#2f2f2f;--shadow:0 10px 30px rgba(0,0,0,.35);
+      --max:1200px;--pad-x:clamp(16px,4vw,32px);--section-y:clamp(56px,8vw,120px);--radius:16px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -32,119 +22,75 @@
     }
     .container{max-width:var(--max);margin:0 auto;padding:0 var(--pad-x)}
     /* Header */
-    .site-header{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:saturate(140%) blur(8px);
-      background:color-mix(in srgb, var(--bg) 85%, transparent);
-      border-bottom:1px solid var(--ring);
-    }
-    .header-inner{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px var(--pad-x);
-    }
+    .site-header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(8px);
+      background:color-mix(in srgb, var(--bg) 85%, transparent);border-bottom:1px solid var(--ring)}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad-x)}
     .brand{display:flex;align-items:center;gap:14px;min-width:0}
-    .brand img{
-      height:38px; /* smaller on mobile */
-      width:auto;display:block;
-      filter:drop-shadow(0 2px 6px rgba(0,0,0,.35));
-    }
-    /* Desktop nav (hidden on mobile/tablet) */
-    .nav-desktop{
-      display:none;gap:28px;align-items:center;font-weight:600;
-    }
+    .brand img{height:38px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+    .nav-desktop{display:none;gap:28px;align-items:center;font-weight:600}
     .nav-desktop a{color:var(--text);text-decoration:none;opacity:.9}
     .nav-desktop a:hover{opacity:1}
-    .nav-desktop .call{
-      font-weight:700;letter-spacing:.2px;opacity:1
-    }
-    /* Hamburger (mobile & tablet only) */
-    .hamburger{
-      inline-size:44px;block-size:44px;border-radius:10px;
-      border:1px solid var(--outline);display:flex;align-items:center;justify-content:center;
-      background:#171717;cursor:pointer;
-    }
-    .hamburger span,
-    .hamburger span:before,
-    .hamburger span:after{
-      content:"";display:block;width:20px;height:2px;background:#fff;border-radius:2px;position:relative;
-    }
+    .nav-desktop .call{font-weight:700;letter-spacing:.2px;opacity:1}
+    .hamburger{inline-size:44px;block-size:44px;border-radius:10px;border:1px solid var(--outline);
+      display:flex;align-items:center;justify-content:center;background:#171717;cursor:pointer}
+    .hamburger span,.hamburger span:before,.hamburger span:after{
+      content:"";display:block;width:20px;height:2px;background:#fff;border-radius:2px;position:relative}
     .hamburger span:before{position:absolute;transform:translateY(-6px)}
     .hamburger span:after{position:absolute;transform:translateY(6px)}
-    /* Drawer */
+
+    /* Drawer (reworked: logo top, nav middle, CTA bottom) */
     .drawer{
-      position:fixed;inset:0 0 0 auto; /* right side */
-      width:min(82vw,360px);background:#101010;border-left:1px solid var(--ring);
-      transform:translateX(100%);transition:transform .28s ease;z-index:60;
-      display:flex;flex-direction:column;
+      position:fixed;inset:0 0 0 auto;width:min(82vw,360px);background:#101010;border-left:1px solid var(--ring);
+      transform:translateX(100%);transition:transform .28s ease;z-index:60;display:flex;flex-direction:column;min-height:100%;
     }
     .drawer.open{transform:translateX(0)}
-    .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:18px var(--pad-x);border-bottom:1px solid var(--ring)}
-    .drawer-main{padding:16px var(--pad-x) 28px;display:flex;flex-direction:column;gap:14px}
-    .drawer a{color:#fff;text-decoration:none;font-weight:600;padding:12px 0;border-bottom:1px solid var(--ring)}
-    .drawer a:last-child{border-bottom:none}
-    .drawer-cta{margin-top:12px;display:grid;gap:10px}
-    .drawer-close{background:none;border:1px solid var(--outline);color:#fff;border-radius:10px;padding:10px 12px}
-    .scrim{
-      position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(1px);
-      opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:55;
-    }
+    .drawer__top{padding:18px var(--pad-x);border-bottom:1px solid var(--ring);display:flex;align-items:center;justify-content:space-between}
+    .drawer__logo{display:flex;align-items:center;gap:10px}
+    .drawer__logo img{height:30px;width:auto;display:block}
+    .drawer__close{background:none;border:1px solid var(--outline);color:#fff;border-radius:10px;padding:8px 10px;font-weight:600}
+    .drawer__links{padding:8px var(--pad-x) 18px;display:flex;flex-direction:column;gap:6px;flex:1;overflow:auto}
+    .drawer__links a{color:#fff;text-decoration:none;font-weight:600;padding:14px 0;border-bottom:1px solid var(--ring)}
+    .drawer__links a:last-child{border-bottom:none}
+    .drawer__bottom{padding:16px var(--pad-x) 20px;border-top:1px solid var(--ring);display:grid;gap:10px}
+    .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(1px);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:55}
     .scrim.show{opacity:1;pointer-events:auto}
 
-    /* Hero */
+    /* Sections */
     .section{padding-block:var(--section-y)}
-    .hero{padding-block:clamp(56px, 8vw, 120px)}
+    .hero{padding-block:clamp(56px,8vw,120px)}
     .eyebrow{color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
-    h1{font-size:clamp(28px, 5vw, 44px);line-height:1.15;margin:12px 0 18px;font-weight:800}
+    h1{font-size:clamp(28px,5vw,44px);line-height:1.15;margin:12px 0 18px;font-weight:800}
     .lead{max-width:880px;margin:0 auto;color:#e8e8e8;font-size:clamp(16px,2.25vw,20px)}
     .cluster{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px}
     .kickers{margin-top:14px;color:var(--muted);font-weight:600;letter-spacing:.2px}
 
-    /* Buttons (smart contrast) */
-    .btn{
-      appearance:none;border:1.4px solid #000;border-radius:12px;
-      padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer;
-      transition:.18s ease;display:inline-flex;align-items:center;gap:8px;
-    }
-    /* default used on dark sections */
+    /* Buttons */
+    .btn{appearance:none;border:1.4px solid #000;border-radius:12px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;gap:8px;justify-content:center}
     .btn-ghost-on-dark{background:#fff;color:#000;border-color:#000}
     .btn-ghost-on-dark:hover{background:#000;color:#fff}
     .btn-outline-on-dark{background:transparent;color:#fff;border-color:#fff}
     .btn-outline-on-dark:hover{background:#fff;color:#000}
-
-    /* inside white cards */
     .btn-ghost-on-light{background:#fff;color:#000;border-color:#000}
     .btn-ghost-on-light:hover{background:#000;color:#fff}
     .btn-outline-on-light{background:transparent;color:#000;border-color:#000}
     .btn-outline-on-light:hover{background:#000;color:#fff}
 
-    /* “How it works” cards */
+    /* Cards */
     .how{display:grid;gap:22px;margin-top:36px}
-    .card{
-      background:#111;border:1px solid var(--ring);
-      border-radius:18px;padding:22px 22px 20px;box-shadow:var(--shadow)
-    }
+    .card{background:#111;border:1px solid var(--ring);border-radius:18px;padding:22px 22px 20px;box-shadow:var(--shadow)}
     .card h3{margin:0 0 8px;font-weight:700;font-size:20px}
     .card p{margin:0;color:#d8d8d8}
-
-    /* Service area band */
     .band{background:#0f0f0f;border-block:1px solid var(--ring);border-radius:18px;padding:22px}
 
     /* Pricing */
     .pricing-wrap{margin-top:14px}
-    .toggle{
-      display:flex;align-items:center;gap:14px;justify-content:center;margin:10px 0 28px
-    }
+    .toggle{display:flex;align-items:center;gap:14px;justify-content:center;margin:10px 0 28px}
     .switch{position:relative;width:64px;height:32px;background:#1a1a1a;border:1px solid var(--outline);border-radius:999px;cursor:pointer}
     .knob{position:absolute;top:3px;left:3px;width:26px;height:26px;background:#fff;border-radius:999px;transition:left .2s ease}
     .switch.active .knob{left:35px}
     .toggle label{font-weight:700;color:#eaeaea}
-    .pricing-grid{
-      display:grid;gap:22px;grid-template-columns:1fr;align-items:stretch
-    }
-    .price-card{
-      background:#fff;color:#000;border-radius:22px;border:1px solid #dadada;box-shadow:var(--shadow);
-      padding:26px 22px;
-    }
+    .pricing-grid{display:grid;gap:22px;grid-template-columns:1fr;align-items:stretch}
+    .price-card{background:#fff;color:#000;border-radius:22px;border:1px solid #dadada;box-shadow:var(--shadow);padding:26px 22px}
     .price-title{margin:0 0 8px;font-weight:700;font-size:22px}
     .price-big{margin:0 0 4px;font-weight:800;font-size:clamp(28px,4.2vw,40px)}
     .price-sub{margin:0 0 16px;color:#444;font-weight:600}
@@ -153,10 +99,8 @@
     .list li:before{content:"✓";position:absolute;left:0;top:0}
     .price-actions{display:flex;gap:10px;flex-wrap:wrap}
 
-    /* Footer */
+    /* Helpers */
     footer{border-top:1px solid var(--ring);padding-block:28px;color:#bdbdbd}
-
-    /* Layout helpers */
     .center{text-align:center}
     .mt-xxl{margin-top:clamp(48px,8vw,96px)}
     .mt-xl{margin-top:clamp(32px,6vw,72px)}
@@ -165,9 +109,7 @@
     .row{display:grid;gap:24px}
 
     /* Breakpoints */
-    @media (min-width:640px){
-      .how{grid-template-columns:repeat(2,1fr)}
-    }
+    @media (min-width:640px){.how{grid-template-columns:repeat(2,1fr)}}
     @media (min-width:1024px){
       .brand img{height:44px}
       .nav-desktop{display:flex}
@@ -207,18 +149,25 @@
   <!-- Drawer -->
   <div id="scrim" class="scrim"></div>
   <aside id="drawer" class="drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <strong>Menu</strong>
-      <button id="closeDrawer" class="drawer-close">Close</button>
+    <!-- TOP: Logo + Close -->
+    <div class="drawer__top">
+      <div class="drawer__logo">
+        <img src="BinPals-Arizona-Service.png" alt="BinPals" />
+      </div>
+      <button id="closeDrawer" class="drawer__close" aria-label="Close menu">Close</button>
     </div>
-    <div class="drawer-main">
+
+    <!-- MIDDLE: Links -->
+    <nav class="drawer__links" aria-label="Mobile">
       <a href="#how" onclick="closeDrawer()">How it works</a>
       <a href="#pricing" onclick="closeDrawer()">Pricing</a>
       <a href="#service-area" onclick="closeDrawer()">Service area</a>
-      <div class="drawer-cta">
-        <a class="btn btn-ghost-on-light" href="tel:6235550199">Call 623-555-0199</a>
-        <a class="btn btn-outline-on-light" href="#start" onclick="closeDrawer()">Get Started</a>
-      </div>
+    </nav>
+
+    <!-- BOTTOM: CTA -->
+    <div class="drawer__bottom">
+      <a class="btn btn-ghost-on-light" href="https://forms.gle/your-google-form" target="_blank" rel="noopener" onclick="closeDrawer()">Get Started</a>
+      <a class="btn btn-outline-on-light" href="tel:6235550199">Call 623-555-0199</a>
     </div>
   </aside>
 
@@ -281,7 +230,6 @@
         <p class="lead" style="font-size:16px;max-width:680px;margin-inline:auto;color:#d8d8d8">Choose monthly or quarterly billing. Cancel anytime.</p>
       </div>
 
-      <!-- Toggle -->
       <div class="toggle">
         <label>Quarterly</label>
         <button id="priceSwitch" class="switch" aria-pressed="false" aria-label="Toggle monthly pricing">
@@ -291,11 +239,10 @@
       </div>
 
       <div class="pricing-grid pricing-wrap">
-        <!-- Starter -->
         <article class="price-card" data-monthly="49" data-quarterly="39">
           <h3 class="price-title">Starter</h3>
           <p class="price-big"><span class="price">$39</span> <span style="font-weight:700">/mo</span></p>
-          <p class="price-sub" id="starter-sub">billed quarterly</p>
+          <p class="price-sub">billed quarterly</p>
           <ul class="list">
             <li>Service for up to 2 cans</li>
             <li>Set out &amp; return once per week</li>
@@ -307,11 +254,10 @@
           </div>
         </article>
 
-        <!-- Premium -->
         <article class="price-card" data-monthly="65" data-quarterly="54">
           <h3 class="price-title">Premium</h3>
           <p class="price-big"><span class="price">$54</span> <span style="font-weight:700">/mo</span></p>
-          <p class="price-sub" id="premium-sub">billed quarterly</p>
+          <p class="price-sub">billed quarterly</p>
           <ul class="list">
             <li>Service for up to 4 cans</li>
             <li>All access to client dashboard</li>
@@ -323,11 +269,10 @@
           </div>
         </article>
 
-        <!-- Business -->
         <article class="price-card" data-monthly="75" data-quarterly="65">
           <h3 class="price-title">Business</h3>
           <p class="price-big"><span class="price">$65</span> <span style="font-weight:700">/mo</span></p>
-          <p class="price-sub" id="business-sub">billed quarterly</p>
+          <p class="price-sub">billed quarterly</p>
           <ul class="list">
             <li>Service for up to 6 cans</li>
             <li>All Premium features +</li>
@@ -349,52 +294,37 @@
   </footer>
 
   <script>
-    // Drawer logic
+    // Drawer
     const drawer = document.getElementById('drawer');
     const scrim = document.getElementById('scrim');
     const openBtn = document.getElementById('openDrawer');
     const closeBtn = document.getElementById('closeDrawer');
 
-    function openDrawer(){
-      drawer.classList.add('open');
-      scrim.classList.add('show');
-      drawer.setAttribute('aria-hidden','false');
-      document.body.style.overflow='hidden';
-    }
-    function closeDrawer(){
-      drawer.classList.remove('open');
-      scrim.classList.remove('show');
-      drawer.setAttribute('aria-hidden','true');
-      document.body.style.overflow='';
-    }
+    function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('show'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+
     openBtn.addEventListener('click', openDrawer);
     closeBtn.addEventListener('click', closeDrawer);
     scrim.addEventListener('click', closeDrawer);
 
-    // Pricing toggle logic
+    // Pricing toggle
     const switchBtn = document.getElementById('priceSwitch');
     const cards = document.querySelectorAll('.price-card');
 
-    function setMode(mode){ // mode: 'monthly' | 'quarterly'
+    function setMode(mode){
       cards.forEach(card=>{
         const priceEl = card.querySelector('.price');
+        const subEl = card.querySelector('.price-sub');
         const monthly = card.dataset.monthly;
         const quarterly = card.dataset.quarterly;
-        if(mode==='monthly'){ priceEl.textContent = '$' + monthly; }
-        else{ priceEl.textContent = '$' + quarterly; }
-        const sub = card.querySelector('.price-sub');
-        sub.textContent = mode==='monthly' ? 'billed monthly' : 'billed quarterly';
+        if(mode==='monthly'){ priceEl.textContent = '$'+monthly; subEl.textContent='billed monthly'; }
+        else{ priceEl.textContent = '$'+quarterly; subEl.textContent='billed quarterly'; }
       });
       const isMonthly = mode==='monthly';
       switchBtn.classList.toggle('active', isMonthly);
       switchBtn.setAttribute('aria-pressed', isMonthly ? 'true' : 'false');
     }
-    // click to toggle
-    switchBtn.addEventListener('click', ()=>{
-      const isMonthly = switchBtn.classList.toggle('active');
-      setMode(isMonthly ? 'monthly' : 'quarterly');
-    });
-    // Default = quarterly
+    switchBtn.addEventListener('click', ()=>{ const on = switchBtn.classList.toggle('active'); setMode(on?'monthly':'quarterly'); });
     setMode('quarterly');
 
     // Year
