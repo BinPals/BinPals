@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <script src="site.js" defer></script>
+
   <style>
     :root{
       --bg:#f5f7fb;
@@ -343,53 +345,7 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <a class="logo" href="#">
-        <img src="BinPals-Arizona-Service.png" alt="BinPals logo" />
-      </a>
-
-      <!-- Desktop nav -->
-      <nav class="nav" aria-label="primary">
-        <a href="#how">How it works</a>
-        <a href="#why">Why choose us</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#service-area">Service area</a>
-      </nav>
-
-      <!-- Desktop CTA -->
-      <div class="header-cta">
-        <a class="btn btn--ghost" href="form.html">Get Started</a>
-      </div>
-
-      <!-- Mobile hamburger -->
-      <button class="hamburger" id="openMenu" aria-label="Open menu">
-        <span></span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Mobile Drawer -->
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="sheet">
-      <div class="sheet-head">
-        <div class="sheet-title">Menu</div>
-        <button class="sheet-close" id="closeMenu">Close</button>
-      </div>
-
-      <div class="sheet-nav">
-        <a href="#how" data-close>How it works</a>
-        <a href="#why" data-close>Why choose us</a>
-        <a href="#pricing" data-close>Pricing</a>
-        <a href="#service-area" data-close>Service area</a>
-      </div>
-
-      <div class="sheet-foot">
-        <a class="btn" href="form.html">Get Started</a>
-      </div>
-    </div>
-  </div>
+  <div data-include="partials/header.html"></div>
 
   <!-- Hero -->
   <section class="hero">
@@ -520,55 +476,9 @@
     </div>
   </section>
 
-  <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <img src="BinPals-Arizona-Service.png" alt="BinPals Trash Valet Service" />
-          <p>Premium valet trash pickup for busy homeowners, snowbirds, and communities throughout the Northwest Valley.</p>
-        </div>
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <ul>
-            <li><a href="tel:6235550199">623-555-0199</a></li>
-            <li><a href="mailto:hello@binpals.com">hello@binpals.com</a></li>
-            <li>Peoria, Arizona</li>
-          </ul>
-        </div>
-        <div class="footer-service">
-          <h3>Service area</h3>
-          <ul>
-            <li>Peoria</li>
-            <li>Sun City</li>
-            <li>Sun City West</li>
-            <li>Surprise</li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-meta">
-        <span>© <span id="y"></span> BinPals Trash Valet</span>
-        <span>Licensed • Insured • Locally owned</span>
-      </div>
-    </div>
-  </footer>
+  <div data-include="partials/footer.html"></div>
 
   <script>
-    // Year
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // Drawer
-    const drawer = document.getElementById('drawer');
-    const openBtn = document.getElementById('openMenu');
-    const closeBtn = document.getElementById('closeMenu');
-    const closeLinks = drawer.querySelectorAll('[data-close]');
-
-    function openDrawer(){ drawer.setAttribute('aria-hidden','false'); }
-    function closeDrawer(){ drawer.setAttribute('aria-hidden','true'); }
-    openBtn.addEventListener('click', openDrawer);
-    closeBtn.addEventListener('click', closeDrawer);
-    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
-    closeLinks.forEach(a=>a.addEventListener('click', closeDrawer));
-
     // Pricing toggle
     const switchEl = document.getElementById('billingSwitch');
     switchEl.addEventListener('click', ()=>{
