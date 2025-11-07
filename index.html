@@ -12,15 +12,15 @@
 
   <style>
     :root{
-      --bg:#0c0c0c;
-      --panel:#121212;
-      --panel-2:#161616;
-      --text:#ffffff;
-      --muted:#bdbdbd;
-      --brand:#ffffff;
-      --shadow: 0 10px 30px rgba(0,0,0,.4);
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --panel-2:#f0f4ff;
+      --text:#0f172a;
+      --muted:#475569;
+      --brand:#22c55e;
+      --shadow:0 18px 40px rgba(15, 23, 42, .08);
       --radius:18px;
-      --radius-sm:12px;
+      --radius-sm:14px;
       --gap: clamp(20px, 2.5vw, 36px);
       --container: 1200px;
     }
@@ -40,8 +40,10 @@
     /* Header */
     .header{
       position:sticky; top:0; z-index:50;
-      backdrop-filter:saturate(140%) blur(8px);
-      background:rgba(12,12,12,.75); border-bottom:1px solid rgba(255,255,255,.06);
+      backdrop-filter:saturate(180%) blur(12px);
+      background:#0b0b0f;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
     }
     .header-inner{
       display:grid; grid-template-columns:auto 1fr auto;
@@ -53,125 +55,311 @@
 
     /* Desktop nav */
     .nav{display:none; align-items:center; justify-content:center; gap:28px}
-    .nav a{font-weight:600; font-size:14px; opacity:.9}
+    .nav a{font-weight:600; font-size:14px; color:#f8fafc; opacity:.75}
     .nav a:hover{opacity:1}
 
     /* Header CTA (desktop) */
     .header-cta{display:none}
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
-      gap:10px; padding:12px 18px; border-radius:999px; font-weight:700; font-size:14px;
-      border:2px solid #fff; color:#0c0c0c; background:#fff; transition:.2s ease;
+      gap:10px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:15px;
+      border:0; color:#fff; background:#16a34a;
+      box-shadow:0 14px 30px rgba(34,197,94,.28);
+      transition:.2s ease;
     }
-    .btn:hover{filter:brightness(95%)}
+    .btn:hover{background:#15803d; transform:translateY(-2px)}
     .btn--ghost{
-      background:transparent; color:#fff; border-color:#fff;
+      background:transparent;
+      color:#f8fafc;
+      border:2px solid rgba(248,250,252,.25);
+      box-shadow:none;
     }
-    .btn--ghost:hover{background:#fff; color:#0c0c0c}
+    .btn--ghost:hover{
+      background:rgba(248,250,252,.12);
+      color:#fff;
+      border-color:rgba(248,250,252,.45);
+    }
 
     /* Mobile hamburger */
     .hamburger{
       display:inline-flex; align-items:center; justify-content:center;
-      width:42px; height:42px; border-radius:12px; border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
+      width:42px; height:42px; border-radius:12px; border:1px solid rgba(248,250,252,.24);
+      background:rgba(248,250,252,.1);
     }
     .hamburger span, .hamburger::before, .hamburger::after{
-      content:""; display:block; width:20px; height:2px; background:#fff; border-radius:2px;
+      content:""; display:block; width:20px; height:2px; background:#f8fafc; border-radius:2px;
     }
     .hamburger{gap:4px}
 
     /* Drawer */
     .drawer{
-      position:fixed; inset:0; background:rgba(0,0,0,.6); display:none;
+      position:fixed; inset:0; background:rgba(15,23,42,.45); display:none;
     }
     .drawer[aria-hidden="false"]{display:block}
     .sheet{
       position:absolute; inset:0 0 0 auto; width:min(90vw,420px); height:100%;
-      background:var(--panel); border-left:1px solid rgba(255,255,255,.08);
+      background:var(--panel); border-left:1px solid rgba(15,23,42,.1);
       display:flex; flex-direction:column;
       transform:translateX(100%); transition:.25s ease transform;
     }
     .drawer[aria-hidden="false"] .sheet{transform:translateX(0)}
-    .sheet-head{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid rgba(255,255,255,.08)}
+    .sheet-head{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid rgba(15,23,42,.06)}
     .sheet-title{font-weight:700; font-size:18px}
-    .sheet-close{border:1px solid rgba(255,255,255,.14); background:transparent; color:#fff; border-radius:999px; padding:8px 14px; font-weight:600}
+    .sheet-close{border:1px solid rgba(15,23,42,.1); background:rgba(241,245,249,.6); color:#0f172a; border-radius:999px; padding:8px 14px; font-weight:600}
     .sheet-nav{display:flex; flex-direction:column; gap:10px; padding:14px 16px}
-    .sheet-nav a{display:block; padding:16px 12px; border-bottom:1px solid rgba(255,255,255,.06); font-weight:600}
-    .sheet-foot{margin-top:auto; padding:18px; border-top:1px solid rgba(255,255,255,.08)}
+    .sheet-nav a{display:block; padding:16px 12px; border-bottom:1px solid rgba(15,23,42,.06); font-weight:600; color:#0f172a}
+    .sheet-foot{margin-top:auto; padding:18px; border-top:1px solid rgba(15,23,42,.06)}
     .sheet-foot .btn{width:100%}
 
     /* Sections */
     section{padding: clamp(72px, 9vw, 140px) 0}
-    #pricing{padding: clamp(56px, 7vw, 110px) 0}
+    #pricing{
+      padding: clamp(56px, 7vw, 110px) 0;
+      position:relative;
+      overflow:hidden;
+    }
+    #pricing::before{display:none}
+    #pricing .container{position:relative; z-index:1}
     .eyebrow{letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--muted); font-size:12px}
-    h1{font-size: clamp(34px, 4.2vw, 56px); line-height:1.12; margin:0 0 18px}
-    h2{font-size: clamp(24px, 3vw, 36px); margin:0 0 18px}
-    p.lead{color:var(--muted); font-size: clamp(16px,1.5vw,18px); margin:0 auto 22px; max-width:850px}
+    h1{font-size: clamp(36px, 4.8vw, 62px); line-height:1.12; margin:0 0 18px; color:#0f172a}
+    h2{font-size: clamp(28px, 3.4vw, 40px); margin:0 0 18px; color:#0f172a}
+    p.lead{color:var(--muted); font-size: clamp(16px,1.6vw,19px); margin:0 auto 22px; max-width:850px}
 
     .center{text-align:center}
     .stack{display:flex; gap:12px; flex-wrap:wrap; justify-content:center}
+    .hero-lead{color:#1e293b}
+    .hero-tags{
+      margin-top:24px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .hero-tags span{
+      display:inline-flex;
+      align-items:center;
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:13px;
+      background:rgba(15,23,42,.08);
+      color:#0f172a;
+      border:1px solid rgba(148,163,184,.35);
+    }
 
     /* Hero spacing */
-    .hero{padding: clamp(120px, 16vw, 220px) 0 clamp(84px, 12vw, 180px)}
+    .hero{
+      padding: clamp(120px, 16vw, 220px) 0 clamp(84px, 12vw, 180px);
+      background:#f8fafc;
+    }
     /* Hero margin inside (mobile already looked good; we add safe padding edges) */
     .hero .container{padding-left: clamp(16px,4vw,40px); padding-right: clamp(16px,4vw,40px)}
 
-    /* How it works cards */
-    .cards{display:grid; gap:var(--gap)}
-    .card{
-      background:linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius);
-      padding: clamp(18px,2.2vw,26px);
-      box-shadow: var(--shadow);
+    /* How it works */
+    #how{position:relative; overflow:hidden}
+    #how::before,
+    #how::after{display:none}
+    #how .container{position:relative; z-index:1}
+    .cards{
+      display:grid; gap:var(--gap);
+      position:relative;
     }
-    .card h3{margin:0 0 10px; font-size:20px}
-    .card p{margin:0; color:var(--muted)}
+    .cards::before{
+      content:"";
+      position:absolute; inset:20px 0 20px 40px;
+      border-left:1px dashed rgba(148,163,184,.25);
+      opacity:0;
+      pointer-events:none;
+    }
+    .card{
+      position:relative;
+      background:var(--panel);
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:var(--radius);
+      padding: clamp(24px,2.8vw,34px);
+      box-shadow:none;
+      transition:transform .25s ease, border-color .25s ease;
+      display:flex; flex-direction:column; gap:14px;
+      isolation:isolate;
+    }
+    .card::before{display:none}
+    .card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(59,130,246,.28);
+    }
+    .card-meta{display:flex; gap:18px; align-items:flex-start; position:relative; z-index:1}
+    .card-icon{
+      width:66px;
+      height:66px;
+      border-radius:22px;
+      background:#16a34a;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      box-shadow:0 12px 24px rgba(22,163,74,.25);
+    }
+    .card-icon svg{width:30px; height:30px}
+    .card-step{display:inline-block; font-weight:600; font-size:13px; color:#16a34a; letter-spacing:.02em; text-transform:uppercase; margin-bottom:4px}
+    .card h3{margin:0; font-size:22px; position:relative; z-index:1}
+    .card p{margin:0; color:var(--muted); position:relative; z-index:1}
+    .card-note{
+      margin-top:auto;
+      padding:16px 18px;
+      background:rgba(226,232,240,.6);
+      border-radius:var(--radius-sm);
+      border:1px solid rgba(148,163,184,.35);
+      color:#0f172a;
+      font-weight:500;
+      position:relative; z-index:1;
+    }
+    .how-subhead{
+      font-size: clamp(19px, 2.4vw, 26px);
+      max-width:720px;
+      margin:14px auto 0;
+      color:#1e293b;
+      font-weight:500;
+    }
+
+    /* Why choose us */
+    #why{
+      background:#f1f5f9;
+    }
+    .why-intro{margin-bottom:40px}
+    .why-grid{
+      display:grid;
+      gap:var(--gap);
+    }
+    .why-card{
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding: clamp(24px,2.6vw,34px);
+      box-shadow: var(--shadow);
+      border:1px solid rgba(148,163,184,.2);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .why-card h3{margin:0; font-size:20px; color:#0f172a}
+    .why-card p{margin:0; color:var(--muted)}
+    .why-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      font-weight:700;
+      color:#fff;
+      background:#16a34a;
+      box-shadow:0 12px 22px rgba(22,163,74,.22);
+    }
 
     /* Pricing */
     .pricing-top{margin-bottom: clamp(24px,3.5vw,42px)}
     .toggle{
       display:inline-flex; align-items:center; gap:12px; border-radius:999px;
-      padding:6px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12)
+      padding:6px;
+      background:rgba(148,163,184,.2);
+      border:1px solid rgba(148,163,184,.35);
     }
-    .toggle label{font-weight:600; font-size:14px}
+    .toggle label{font-weight:600; font-size:14px; color:#0f172a}
     .switch{
-      width:56px; height:30px; border-radius:999px; position:relative; background:#1f1f1f; border:2px solid rgba(255,255,255,.25); cursor:pointer;
+      width:56px; height:30px; border-radius:999px; position:relative; background:#e2e8f0; border:2px solid rgba(148,163,184,.35); cursor:pointer;
     }
     .knob{
       position:absolute; top:50%; transform:translateY(-50%);
-      left:4px; width:22px; height:22px; border-radius:999px; background:#fff; transition:.2s ease left, .2s ease background;
+      left:4px; width:22px; height:22px; border-radius:999px; background:#16a34a; transition:.2s ease left, .2s ease background;
+      box-shadow:0 10px 20px rgba(22,163,74,.25);
     }
     .switch[data-mode="monthly"] .knob{left:30px}
     .price-grid{display:grid; gap: clamp(18px,2.2vw,26px)}
     .price{
-      background:#fff; color:#0c0c0c; border-radius:var(--radius); padding: clamp(18px,2.6vw,28px);
+      background:var(--panel);
+      color:#0f172a;
+      border-radius:var(--radius);
+      padding: clamp(22px,2.8vw,32px);
       box-shadow: var(--shadow);
-      border:1px solid rgba(0,0,0,.06);
+      border:1px solid rgba(148,163,184,.22);
     }
     .price h4{margin:0 0 6px; font-size:22px}
-    .num{font-size: clamp(28px,3.4vw,40px); font-weight:800; margin:6px 0 2px}
-    .sub{color:#444; font-weight:600; margin-bottom:14px}
+    .num{font-size: clamp(30px,3.8vw,44px); font-weight:800; margin:6px 0 2px; color:#0f172a}
+    .sub{color:#1e293b; font-weight:600; margin-bottom:14px}
     .list{margin:0 0 18px; padding:0; list-style:none}
-    .list li{display:flex; gap:10px; align-items:flex-start; margin:10px 0; color:#1d1d1d}
-    .list li:before{content:"✓"; font-weight:800}
-    .price .btn{width:fit-content; border-color:#0c0c0c}
+    .list li{display:flex; gap:10px; align-items:flex-start; margin:10px 0; color:#0f172a}
+    .list li:before{content:"✓"; font-weight:800; color:var(--brand)}
+    .price .btn{width:fit-content}
+    .price .btn.btn--ghost{
+      color:#0f172a;
+      border-color:rgba(15,23,42,.14);
+    }
+    .price .btn.btn--ghost:hover{
+      background:#0f172a;
+      color:#fff;
+      border-color:#0f172a;
+    }
 
     /* Footer */
-    footer{padding:40px 0; color:var(--muted); font-size:14px}
+    footer{padding:56px 0; color:#e2e8f0; font-size:14px; background:#0b0b0f}
+    .footer-inner{
+      display:grid;
+      gap:32px;
+    }
+    .footer-brand{display:flex; flex-direction:column; gap:14px; max-width:360px}
+    .footer-brand img{height:36px; width:auto}
+    .footer-brand p{margin:0; color:rgba(226,232,240,.75)}
+    footer h3{
+      margin:0 0 12px;
+      font-size:16px;
+      color:#f8fafc;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .footer-contact ul,
+    .footer-service ul{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+    }
+    .footer-contact a{color:#34d399; font-weight:600}
+    .footer-contact a:hover{color:#22c55e}
+    footer a{text-decoration:none}
+    footer a:hover{text-decoration:underline}
+    .footer-meta{
+      margin-top:32px;
+      padding-top:24px;
+      border-top:1px solid rgba(148,163,184,.28);
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:space-between;
+      color:rgba(226,232,240,.65);
+    }
+    .footer-meta span{display:block}
 
     /* Layout: desktop */
     @media (min-width:768px){
-      .cards{grid-template-columns:repeat(3,1fr)}
+      .cards{grid-template-columns:repeat(3,1fr); position:relative}
+      .cards::before{inset:40px 80px auto 80px; border-left:none; border-top:1px dashed rgba(148,163,184,.25); opacity:.6}
+      .card{padding: clamp(26px,2.8vw,38px)}
+      .card::before{inset:24px 24px auto auto}
       .price-grid{grid-template-columns:repeat(3,1fr)}
       section{padding: clamp(110px, 12vw, 190px) 0}
       #pricing{padding: clamp(80px, 9vw, 140px) 0}
+      .why-grid{grid-template-columns:repeat(2,1fr)}
+      .footer-inner{grid-template-columns:repeat(3, minmax(0,1fr)); align-items:start}
     }
     @media (min-width:1024px){
       .nav{display:flex}
       .header-cta{display:block}
       .hamburger{display:none}          /* ← hide the ghost pill on desktop */
       .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
+      .why-grid{grid-template-columns:repeat(4,1fr)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card{transition:none}
+      .card:hover{transform:none}
     }
   </style>
 </head>
@@ -187,6 +375,7 @@
       <!-- Desktop nav -->
       <nav class="nav" aria-label="primary">
         <a href="#how">How it works</a>
+        <a href="#why">Why choose us</a>
         <a href="#pricing">Pricing</a>
         <a href="#service-area">Service area</a>
       </nav>
@@ -213,6 +402,7 @@
 
       <div class="sheet-nav">
         <a href="#how" data-close>How it works</a>
+        <a href="#why" data-close>Why choose us</a>
         <a href="#pricing" data-close>Pricing</a>
         <a href="#service-area" data-close>Service area</a>
       </div>
@@ -226,12 +416,16 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container center">
-      <h1>Never take the trash out again.</h1>
-      <p class="lead">We roll your trash &amp; recycling cans to the curb and back — friendly, reliable help for Sun City, Sun City West, Surprise &amp; Peoria.</p>
-      <div class="stack" style="margin-top:10px">
+      <h1>Arizona's friendliest trash valet service.</h1>
+      <p class="lead hero-lead">BinPals keeps pickup night simple for busy households, travelers, and snowbirds across Peoria, Surprise, Sun City, and Sun City West.</p>
+      <div class="stack" style="margin-top:18px">
         <a class="btn" href="form.html">Get Started</a>
       </div>
-      <p class="eyebrow" style="margin-top:16px">Local • Insured • HOA-Friendly</p>
+      <div class="hero-tags" aria-label="service highlights">
+        <span>Insured team</span>
+        <span>HOA-approved</span>
+        <span>Evening + return service</span>
+      </div>
     </div>
   </section>
 
@@ -240,20 +434,99 @@
     <div class="container">
       <div class="center" style="margin-bottom:28px">
         <h2>How it works</h2>
+        <p class="how-subhead">From your first booking to every curbside visit, we keep trash day effortless and dependable.</p>
       </div>
       <div class="cards">
         <div class="card">
-          <h3>1) Tell us your days</h3>
-          <p>Choose trash &amp; recycle pickup schedule. Add gate/garage code (optional).</p>
+          <div class="card-meta">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 3h6" />
+                <path d="M12 3v3.2" />
+                <path d="M8 7h8a2 2 0 0 1 2 2v9.2a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
+                <path d="M9 12h6" />
+                <path d="M9 15h3.5" />
+              </svg>
+            </div>
+            <div>
+              <span class="card-step">Step 01</span>
+              <h3>Customize your service</h3>
+            </div>
+          </div>
+          <p>Pick your trash and recycle nights, share gate or garage codes, and let us know any special requests.</p>
+          <p class="card-note">We send a friendly confirmation so you know your route is locked in.</p>
         </div>
         <div class="card">
-          <h3>2) We roll the bins</h3>
-          <p>We set bins out the night before pickup and return them neatly by the end of pickup day.</p>
+          <div class="card-meta">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 7h15" />
+                <path d="M10 11h9" />
+                <path d="M4 11h3" />
+                <path d="M4 15h15" />
+                <path d="M4 19h9" />
+                <path d="M18.5 15v4" />
+                <path d="m18.5 19 2 2" />
+              </svg>
+            </div>
+            <div>
+              <span class="card-step">Step 02</span>
+              <h3>We handle bin day</h3>
+            </div>
+          </div>
+          <p>Our crew arrives the evening before collection to stage the cans, and we return them curb-free by dusk.</p>
+          <p class="card-note">Rain or shine, you’ll get a quick update once the bins are back home.</p>
         </div>
         <div class="card">
-          <h3>3) You relax</h3>
-          <p>We handle trash day like clockwork — even when you’re out of town.</p>
+          <div class="card-meta">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 4v4.5" />
+                <path d="M4.8 9.5 8.6 11" />
+                <path d="m19.2 9.5-3.8 1.5" />
+                <path d="M8.6 17 12 19.5 15.4 17" />
+                <circle cx="12" cy="13.5" r="3" />
+              </svg>
+            </div>
+            <div>
+              <span class="card-step">Step 03</span>
+              <h3>Relax and enjoy</h3>
+            </div>
+          </div>
+          <p>Sit back while we keep things tidy like clockwork — even when you’re traveling or busy with guests.</p>
+          <p class="card-note">Need to pause or add pickups? Manage it in one message with our support team.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="container">
+      <div class="center why-intro">
+        <h2>Why choose BinPals Trash Valet Service in Peoria, AZ</h2>
+        <p class="lead">We treat every neighborhood like our own — proactive communication, respectful service, and sparkling curbs week after week.</p>
+      </div>
+      <div class="why-grid">
+        <article class="why-card">
+          <div class="why-icon" aria-hidden="true">✓</div>
+          <h3>Resident-loved team</h3>
+          <p>Uniformed pros who know your HOA guidelines, greet neighbors, and secure every gate behind them.</p>
+        </article>
+        <article class="why-card">
+          <div class="why-icon" aria-hidden="true">✓</div>
+          <h3>Reliable schedule updates</h3>
+          <p>Text alerts keep you in the loop for holiday shifts or special pickups so there’s never a surprise trash day.</p>
+        </article>
+        <article class="why-card">
+          <div class="why-icon" aria-hidden="true">✓</div>
+          <h3>Snowbird + travel friendly</h3>
+          <p>Stay away as long as you like — we’ll stage, return, and tidy bins automatically while you’re out of town.</p>
+        </article>
+        <article class="why-card">
+          <div class="why-icon" aria-hidden="true">✓</div>
+          <h3>Flexible extras</h3>
+          <p>Add recycling runs, bulk-day reminders, or community-wide valet support with one quick message.</p>
+        </article>
       </div>
     </div>
   </section>
@@ -326,7 +599,35 @@
   </section>
 
   <footer>
-    <div class="container center">© <span id="y"></span> BinPals • Sun City &amp; Surprise, AZ</div>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="BinPals-Arizona-Service.png" alt="BinPals Trash Valet Service" />
+          <p>Premium valet trash pickup for busy homeowners, snowbirds, and communities throughout the Northwest Valley.</p>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <ul>
+            <li><a href="tel:6235550199">623-555-0199</a></li>
+            <li><a href="mailto:hello@binpals.com">hello@binpals.com</a></li>
+            <li>Peoria, Arizona</li>
+          </ul>
+        </div>
+        <div class="footer-service">
+          <h3>Service area</h3>
+          <ul>
+            <li>Peoria</li>
+            <li>Sun City</li>
+            <li>Sun City West</li>
+            <li>Surprise</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>© <span id="y"></span> BinPals Trash Valet</span>
+        <span>Licensed • Insured • Locally owned</span>
+      </div>
+    </div>
   </footer>
 
   <script>
