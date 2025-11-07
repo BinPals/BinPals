@@ -63,11 +63,11 @@
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       gap:10px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:15px;
-      border:0; color:#fff; background:linear-gradient(135deg, #16a34a, #22c55e);
+      border:0; color:#fff; background:#16a34a;
       box-shadow:0 14px 30px rgba(34,197,94,.28);
       transition:.2s ease;
     }
-    .btn:hover{filter:brightness(.95); transform:translateY(-2px)}
+    .btn:hover{background:#15803d; transform:translateY(-2px)}
     .btn--ghost{
       background:transparent;
       color:#15803d;
@@ -114,16 +114,7 @@
       position:relative;
       overflow:hidden;
     }
-    #pricing::before{
-      content:"";
-      position:absolute;
-      inset:-140px 20% auto 20%;
-      height:320px;
-      background:radial-gradient(circle at top, rgba(59,130,246,.12), transparent 70%);
-      filter:blur(70px);
-      opacity:.7;
-      pointer-events:none;
-    }
+    #pricing::before{display:none}
     #pricing .container{position:relative; z-index:1}
     .eyebrow{letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--muted); font-size:12px}
     h1{font-size: clamp(36px, 4.8vw, 62px); line-height:1.12; margin:0 0 18px; color:#0f172a}
