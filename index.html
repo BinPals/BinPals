@@ -87,6 +87,11 @@
     }
     .hamburger{gap:4px}
 
+    @media (max-width: 1023px){
+      .header-inner{grid-template-columns:auto 1fr;}
+      .hamburger{justify-self:end;}
+    }
+
     /* Drawer */
     .drawer{
       position:fixed; inset:0; background:rgba(15,23,42,.45); display:none;
