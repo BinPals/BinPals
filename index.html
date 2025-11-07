@@ -153,8 +153,14 @@
 
     /* How it works */
     #how{position:relative; overflow:hidden}
-    #how::before,
-    #how::after{display:none}
+    #how::before{
+      content:"";
+      position:absolute; inset:10% 10% auto; height:360px;
+      background:radial-gradient(circle at top, rgba(124,246,196,.28), transparent 70%);
+      filter:blur(70px);
+      opacity:.8;
+      pointer-events:none;
+    }
     #how .container{position:relative; z-index:1}
     .cards{
       display:grid; gap:var(--gap);
@@ -163,91 +169,50 @@
     .cards::before{
       content:"";
       position:absolute; inset:20px 0 20px 40px;
-      border-left:1px dashed rgba(148,163,184,.25);
+      border-left:1px dashed rgba(255,255,255,.18);
       opacity:0;
       pointer-events:none;
     }
     .card{
       position:relative;
-      background:var(--panel);
-      border:1px solid rgba(148,163,184,.25);
+      background:linear-gradient(140deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.1);
       border-radius:var(--radius);
-      padding: clamp(24px,2.8vw,34px);
-      box-shadow:none;
-      transition:transform .25s ease, border-color .25s ease;
-      display:flex; flex-direction:column; gap:14px;
+      padding: clamp(20px,2.6vw,30px);
+      box-shadow: var(--shadow);
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      display:flex; flex-direction:column; gap:12px;
       isolation:isolate;
     }
-    .card::before{display:none}
+    .card::before{
+      content:"";
+      position:absolute; inset:18px 18px auto auto; width:48px; height:48px; border-radius:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,0));
+      opacity:.4; z-index:0;
+    }
     .card:hover{
       transform:translateY(-6px);
-      border-color:rgba(59,130,246,.28);
+      border-color:rgba(255,255,255,.3);
+      box-shadow:0 18px 40px rgba(0,0,0,.45);
     }
-    .card-meta{display:flex; gap:18px; align-items:flex-start; position:relative; z-index:1}
-    .card-icon{
-      width:66px;
-      height:66px;
-      border-radius:22px;
-      background:#16a34a;
-      display:grid;
-      place-items:center;
-      color:#fff;
-      box-shadow:0 12px 24px rgba(22,163,74,.25);
+    .card-num{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:56px; height:56px; border-radius:18px;
+      background:linear-gradient(135deg, #22c55e, #4ade80);
+      font-weight:700; font-size:18px; color:#0c0c0c;
+      box-shadow:0 12px 28px rgba(34,197,94,.35);
     }
-    .card-icon svg{width:30px; height:30px}
-    .card-step{display:inline-block; font-weight:600; font-size:13px; color:#16a34a; letter-spacing:.02em; text-transform:uppercase; margin-bottom:4px}
-    .card h3{margin:0; font-size:22px; position:relative; z-index:1}
+    .card h3{margin:0; font-size:21px; position:relative; z-index:1}
     .card p{margin:0; color:var(--muted); position:relative; z-index:1}
     .card-note{
       margin-top:auto;
-      padding:16px 18px;
-      background:rgba(226,232,240,.6);
+      padding:14px 16px;
+      background:rgba(12,12,12,.45);
       border-radius:var(--radius-sm);
-      border:1px solid rgba(148,163,184,.35);
-      color:#0f172a;
+      border:1px solid rgba(255,255,255,.08);
+      color:#f3f3f3;
       font-weight:500;
       position:relative; z-index:1;
-    }
-    .how-subhead{
-      font-size: clamp(19px, 2.4vw, 26px);
-      max-width:720px;
-      margin:14px auto 0;
-      color:#1e293b;
-      font-weight:500;
-    }
-
-    /* Why choose us */
-    #why{
-      background:#f1f5f9;
-    }
-    .why-intro{margin-bottom:40px}
-    .why-grid{
-      display:grid;
-      gap:var(--gap);
-    }
-    .why-card{
-      background:var(--panel);
-      border-radius:var(--radius);
-      padding: clamp(24px,2.6vw,34px);
-      box-shadow: var(--shadow);
-      border:1px solid rgba(148,163,184,.2);
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-    .why-card h3{margin:0; font-size:20px; color:#0f172a}
-    .why-card p{margin:0; color:var(--muted)}
-    .why-icon{
-      width:46px;
-      height:46px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      font-size:24px;
-      font-weight:700;
-      color:#fff;
-      background:#16a34a;
-      box-shadow:0 12px 22px rgba(22,163,74,.22);
     }
 
     /* Pricing */
@@ -281,17 +246,16 @@
     .num{font-size: clamp(30px,3.8vw,44px); font-weight:800; margin:6px 0 2px; color:#0f172a}
     .sub{color:#1e293b; font-weight:600; margin-bottom:14px}
     .list{margin:0 0 18px; padding:0; list-style:none}
-    .list li{display:flex; gap:10px; align-items:flex-start; margin:10px 0; color:#0f172a}
-    .list li:before{content:"✓"; font-weight:800; color:var(--brand)}
-    .price .btn{width:fit-content}
+    .list li{display:flex; gap:10px; align-items:flex-start; margin:10px 0; color:#1d1d1d}
+    .list li:before{content:"✓"; font-weight:800}
+    .price .btn{width:fit-content; border-color:#0c0c0c}
     .price .btn.btn--ghost{
-      color:#0f172a;
-      border-color:rgba(15,23,42,.14);
+      color:#0c0c0c;
+      background:transparent;
     }
     .price .btn.btn--ghost:hover{
-      background:#0f172a;
+      background:#0c0c0c;
       color:#fff;
-      border-color:#0f172a;
     }
 
     /* Footer */
@@ -300,9 +264,9 @@
     /* Layout: desktop */
     @media (min-width:768px){
       .cards{grid-template-columns:repeat(3,1fr); position:relative}
-      .cards::before{inset:40px 80px auto 80px; border-left:none; border-top:1px dashed rgba(148,163,184,.25); opacity:.6}
-      .card{padding: clamp(26px,2.8vw,38px)}
-      .card::before{inset:24px 24px auto auto}
+      .cards::before{inset:40px 80px auto 80px; border-left:none; border-top:1px dashed rgba(255,255,255,.18); opacity:.6}
+      .card{padding: clamp(24px,2.6vw,34px)}
+      .card::before{inset:22px 22px auto auto}
       .price-grid{grid-template-columns:repeat(3,1fr)}
       section{padding: clamp(110px, 12vw, 190px) 0}
       #pricing{padding: clamp(80px, 9vw, 140px) 0}
@@ -314,6 +278,10 @@
       .hamburger{display:none}          /* ← hide the ghost pill on desktop */
       .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
       .why-grid{grid-template-columns:repeat(4,1fr)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card{transition:none}
+      .card:hover{transform:none}
     }
     @media (prefers-reduced-motion: reduce){
       .card{transition:none}
@@ -392,65 +360,24 @@
     <div class="container">
       <div class="center" style="margin-bottom:28px">
         <h2>How it works</h2>
-        <p class="how-subhead">From your first booking to every curbside visit, we keep trash day effortless and dependable.</p>
+        <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#e9fff2; font-weight:500;">From your first booking to every curbside visit, we keep trash day effortless and dependable.</p>
       </div>
       <div class="cards">
         <div class="card">
-          <div class="card-meta">
-            <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M9 3h6" />
-                <path d="M12 3v3.2" />
-                <path d="M8 7h8a2 2 0 0 1 2 2v9.2a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
-                <path d="M9 12h6" />
-                <path d="M9 15h3.5" />
-              </svg>
-            </div>
-            <div>
-              <span class="card-step">Step 01</span>
-              <h3>Customize your service</h3>
-            </div>
-          </div>
+          <div class="card-num">01</div>
+          <h3>Customize your service</h3>
           <p>Pick your trash and recycle nights, share gate or garage codes, and let us know any special requests.</p>
           <p class="card-note">We send a friendly confirmation so you know your route is locked in.</p>
         </div>
         <div class="card">
-          <div class="card-meta">
-            <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M4 7h15" />
-                <path d="M10 11h9" />
-                <path d="M4 11h3" />
-                <path d="M4 15h15" />
-                <path d="M4 19h9" />
-                <path d="M18.5 15v4" />
-                <path d="m18.5 19 2 2" />
-              </svg>
-            </div>
-            <div>
-              <span class="card-step">Step 02</span>
-              <h3>We handle bin day</h3>
-            </div>
-          </div>
+          <div class="card-num">02</div>
+          <h3>We handle bin day</h3>
           <p>Our crew arrives the evening before collection to stage the cans, and we return them curb-free by dusk.</p>
           <p class="card-note">Rain or shine, you’ll get a quick update once the bins are back home.</p>
         </div>
         <div class="card">
-          <div class="card-meta">
-            <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 4v4.5" />
-                <path d="M4.8 9.5 8.6 11" />
-                <path d="m19.2 9.5-3.8 1.5" />
-                <path d="M8.6 17 12 19.5 15.4 17" />
-                <circle cx="12" cy="13.5" r="3" />
-              </svg>
-            </div>
-            <div>
-              <span class="card-step">Step 03</span>
-              <h3>Relax and enjoy</h3>
-            </div>
-          </div>
+          <div class="card-num">03</div>
+          <h3>Relax and enjoy</h3>
           <p>Sit back while we keep things tidy like clockwork — even when you’re traveling or busy with guests.</p>
           <p class="card-note">Need to pause or add pickups? Manage it in one message with our support team.</p>
         </div>
@@ -458,34 +385,10 @@
     </div>
   </section>
 
-  <section id="why">
-    <div class="container">
-      <div class="center why-intro">
-        <h2>Why choose BinPals Trash Valet Service in Peoria, AZ</h2>
-        <p class="lead">We treat every neighborhood like our own — proactive communication, respectful service, and sparkling curbs week after week.</p>
-      </div>
-      <div class="why-grid">
-        <article class="why-card">
-          <div class="why-icon" aria-hidden="true">✓</div>
-          <h3>Resident-loved team</h3>
-          <p>Uniformed pros who know your HOA guidelines, greet neighbors, and secure every gate behind them.</p>
-        </article>
-        <article class="why-card">
-          <div class="why-icon" aria-hidden="true">✓</div>
-          <h3>Reliable schedule updates</h3>
-          <p>Text alerts keep you in the loop for holiday shifts or special pickups so there’s never a surprise trash day.</p>
-        </article>
-        <article class="why-card">
-          <div class="why-icon" aria-hidden="true">✓</div>
-          <h3>Snowbird + travel friendly</h3>
-          <p>Stay away as long as you like — we’ll stage, return, and tidy bins automatically while you’re out of town.</p>
-        </article>
-        <article class="why-card">
-          <div class="why-icon" aria-hidden="true">✓</div>
-          <h3>Flexible extras</h3>
-          <p>Add recycling runs, bulk-day reminders, or community-wide valet support with one quick message.</p>
-        </article>
-      </div>
+  <section>
+    <div class="container center">
+      <h2>Why choose us</h2>
+      <p class="lead" style="font-size: clamp(20px, 2.6vw, 28px); font-weight:600; color:#bbf7d0;">BinPals Trash Valet Service Peoria, AZ</p>
     </div>
   </section>
 
