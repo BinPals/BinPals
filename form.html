@@ -12,17 +12,18 @@
 
   <style>
     :root{
-      --bg:#f5f7fb;
+      --bg:#ffffff;
       --panel:#ffffff;
-      --panel-2:#f0f4ff;
+      --panel-2:#f8fafc;
       --text:#0f172a;
       --muted:#475569;
       --brand:#16a34a;
       --brand-dark:#15803d;
       --accent:#0ea5e9;
-      --shadow:0 16px 40px rgba(15,23,42,.08);
-      --radius:24px;
-      --radius-sm:14px;
+      --stroke:rgba(15,23,42,.08);
+      --shadow:0 32px 70px rgba(15,23,42,.08);
+      --radius:28px;
+      --radius-sm:16px;
       --gap: clamp(20px, 2.5vw, 36px);
       --container: 1140px;
     }
@@ -106,55 +107,74 @@
 
     section{padding: clamp(88px, 8vw, 144px) 0}
     .center{text-align:center}
-    .form-hero{background:#eef2ff; position:relative; overflow:hidden}
-    .form-hero::before{
-      content:"";
-      position:absolute; inset:-140px -40px auto auto;
-      width:320px; height:320px; border-radius:50%;
-      background:radial-gradient(circle at center, rgba(34,197,94,.25), transparent 65%);
-      opacity:.8;
+    .form-hero{background:#fff; position:relative; overflow:hidden; border-bottom:1px solid rgba(15,23,42,.08); padding:0;}
+    .form-hero .container{
+      max-width:none;
+      padding: clamp(56px,8vw,112px) clamp(16px,6vw,120px) clamp(88px,9vw,128px);
     }
+    .form-intro{
+      max-width:var(--container);
+      margin:0 auto clamp(32px,5vw,60px);
+    }
+    .form-hero::before{display:none}
     .form-hero .lead{color:var(--muted); max-width:720px; margin:12px auto 0}
 
     .form-card{
-      margin: clamp(32px,4vw,54px) auto 0;
-      max-width:720px;
+      margin:0;
+      max-width:none;
+      width:100%;
       background:var(--panel);
       border-radius:var(--radius);
-      border:1px solid rgba(148,163,184,.22);
+      border:1px solid var(--stroke);
       box-shadow:var(--shadow);
-      padding: clamp(28px,4vw,48px);
+      padding: clamp(32px,4vw,52px);
       position:relative;
       overflow:hidden;
+      display:grid;
+      gap: clamp(28px,3vw,42px);
     }
-    form{display:grid; gap:28px}
+    .form-shell{
+      width:100%;
+    }
+    .form-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      pointer-events:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+    }
+    .form-card.is-complete{padding: clamp(44px,5vw,64px);}
+    .form-card.is-complete .progress{display:none}
+    form{display:grid; gap:32px; position:relative}
     label{display:block; font-weight:600; font-size:15px}
     .field{
       margin-top:10px;
-      background:#f8fafc;
-      border:1px solid rgba(148,163,184,.35);
-      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(15,23,42,.08);
+      border-radius:16px;
       width:100%;
-      padding:14px 18px;
+      padding:16px 18px;
       font:inherit;
       color:var(--text);
       outline:none;
       transition:border-color .18s ease, box-shadow .18s ease;
+      box-shadow:0 10px 30px rgba(15,23,42,.04);
     }
     .field:focus{
       border-color:var(--accent);
-      box-shadow:0 0 0 3px rgba(14,165,233,.18);
+      box-shadow:0 0 0 4px rgba(14,165,233,.15);
     }
     textarea.field{min-height:120px; resize:vertical}
 
-    .progress{display:grid; gap:16px}
+    .progress{display:grid; gap:18px}
     .progress-rail{
-      height:4px; border-radius:999px; background:rgba(148,163,184,.3); position:relative;
+      height:6px; border-radius:999px; background:rgba(148,163,184,.24); position:relative;
       overflow:hidden;
     }
     .progress-fill{
       position:absolute; inset:0 auto 0 0; height:100%; width:0%; border-radius:999px;
-      background:linear-gradient(90deg, var(--brand), #22d3ee);
+      background:linear-gradient(90deg, var(--brand), #0ea5e9);
       transition:width .35s ease;
     }
     .progress-steps{
@@ -162,17 +182,40 @@
       gap:12px; flex-wrap:wrap;
     }
     .progress-steps li{
-      display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px; font-weight:500;
+      display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px; font-weight:600;
+      padding:10px 14px;
+      border-radius:16px;
+      background:rgba(148,163,184,.12);
+      transition:.25s ease;
     }
     .progress-steps .circle{
-      width:34px; height:34px; border-radius:50%; border:2px solid rgba(148,163,184,.35);
+      width:34px; height:34px; border-radius:50%; border:2px solid transparent;
       display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px;
-      background:#fff; transition:.3s ease;
+      background:#fff; box-shadow:0 10px 22px rgba(15,23,42,.08);
     }
-    .progress-steps li.is-active{color:var(--text)}
+    .progress-steps li.is-active{color:var(--text); background:rgba(22,163,74,.12)}
     .progress-steps li.is-active .circle{
-      border-color:transparent; background:var(--brand); color:#fff; box-shadow:0 6px 20px rgba(34,197,94,.4);
+      border-color:transparent; background:var(--brand); color:#fff; box-shadow:0 16px 32px rgba(34,197,94,.35);
     }
+
+    .complete-state{display:none; text-align:center; gap:20px; justify-items:center}
+    .complete-icon{
+      width:72px; height:72px; border-radius:24px;
+      background:rgba(22,163,74,.12);
+      display:grid; place-items:center;
+      color:var(--brand);
+      box-shadow:0 20px 40px rgba(34,197,94,.18);
+    }
+    .complete-icon svg{width:34px; height:34px}
+    .complete-state h2{margin:8px 0 0; font-size:clamp(26px,3vw,32px)}
+    .complete-state p{margin:0; color:var(--muted); max-width:440px; line-height:1.6}
+    .complete-actions{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:12px}
+    .complete-actions .btn{min-width:180px}
+    .form-card.is-complete .complete-state{display:grid}
+    .form-card.is-complete form{display:none}
+    .form-card.is-complete .form-alerts{display:none}
+
+    .form-alerts{display:grid; gap:12px}
 
     .steps{position:relative}
     .step{
@@ -194,41 +237,44 @@
     .option-list{display:grid; gap:16px}
     .option-card{
       position:relative;
-      border:1px solid rgba(148,163,184,.32);
-      border-radius:18px;
-      padding:20px 22px;
+      border:1px solid rgba(15,23,42,.08);
+      border-radius:20px;
+      padding:22px 24px;
       display:grid;
-      gap:6px;
+      gap:8px;
       transition:.25s ease;
       cursor:pointer;
-      background:#f8fafc;
+      background:#fff;
+      box-shadow:0 18px 34px rgba(15,23,42,.05);
     }
-    .option-card:hover{border-color:rgba(14,165,233,.45); box-shadow:0 16px 40px rgba(14,165,233,.12)}
+    .option-card:hover{border-color:rgba(14,165,233,.45); box-shadow:0 20px 44px rgba(14,165,233,.14)}
     .option-card input{position:absolute; inset:0; opacity:0; pointer-events:none}
     .option-title{font-weight:700; font-size:17px}
     .option-desc{color:var(--muted); font-size:14px}
     .option-card.is-selected{
-      border-color:transparent;
-      background:linear-gradient(135deg, rgba(34,197,94,.12), rgba(14,165,233,.08));
-      box-shadow:0 20px 44px rgba(34,197,94,.18);
+      border-color:rgba(34,197,94,.4);
+      background:linear-gradient(135deg, rgba(34,197,94,.1), rgba(14,165,233,.08));
+      box-shadow:0 24px 48px rgba(34,197,94,.2);
     }
     .option-card.is-selected .option-title{color:var(--brand-dark)}
 
     .plan-card{
       display:grid;
       gap:20px;
-      border:1px solid rgba(148,163,184,.28);
-      border-radius:20px;
-      padding:24px;
-      background:#f8fafc;
+      border:1px solid rgba(15,23,42,.08);
+      border-radius:22px;
+      padding:26px;
+      background:#fff;
+      box-shadow:0 20px 46px rgba(15,23,42,.08);
     }
     @media(min-width:640px){
       .plan-card{grid-template-columns:auto 1fr; align-items:center}
     }
     .plan-visual{
-      width:120px; height:120px; border-radius:28px;
-      background:linear-gradient(135deg, rgba(34,197,94,.15), rgba(14,165,233,.12));
+      width:120px; height:120px; border-radius:30px;
+      background:linear-gradient(135deg, rgba(34,197,94,.18), rgba(14,165,233,.12));
       display:grid; place-items:center; overflow:hidden;
+      box-shadow:0 18px 40px rgba(14,165,233,.16);
     }
     .plan-visual img{width:120px; height:120px; object-fit:cover}
     .plan-title{margin:0; font-size:22px}
@@ -245,12 +291,13 @@
     .step-footer .spacer{flex:1 1 auto}
 
     .summary{
-      border:1px solid rgba(148,163,184,.28);
-      border-radius:20px;
-      padding:22px;
-      background:#f8fafc;
+      border:1px solid rgba(15,23,42,.08);
+      border-radius:22px;
+      padding:24px;
+      background:#fff;
       display:grid;
       gap:18px;
+      box-shadow:0 18px 40px rgba(15,23,42,.06);
     }
     .summary-group{display:grid; gap:6px}
     .summary-row{display:flex; justify-content:space-between; gap:18px; color:var(--text); font-size:15px}
@@ -262,8 +309,8 @@
     .notice{
       display:none;
       margin:0;
-      padding:14px 18px;
-      border-radius:16px;
+      padding:16px 20px;
+      border-radius:18px;
       border:1px solid rgba(34,197,94,.28);
       background:#ecfdf5;
       color:#166534;
@@ -381,12 +428,26 @@
 
   <main>
     <section class="form-hero">
-      <div class="container center">
-        <h1>Schedule your BinPals clean in minutes</h1>
-        <p class="lead">Tell us a little about your home and how many bins you have. We’ll recommend the perfect plan and route your request straight to our crew.</p>
+      <div class="container">
+        <div class="form-intro center">
+          <h1>Schedule your BinPals clean in minutes</h1>
+          <p class="lead">Tell us a little about your home and how many bins you have. We’ll recommend the perfect plan and route your request straight to our crew.</p>
+        </div>
 
-        <div class="form-card">
-          <form id="serviceForm" novalidate>
+        <div class="form-shell">
+          <div class="form-card" data-form-card>
+          <div class="complete-state" data-complete-state hidden role="status">
+            <div class="complete-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.25 12a8.25 8.25 0 1 1-16.5 0 8.25 8.25 0 0 1 16.5 0Z" stroke="currentColor" stroke-width="1.5"/><path d="m9.25 12.25 1.75 1.75 3.75-3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h2>Request received</h2>
+            <p>Thanks! Your request is on its way. A BinPals coordinator will reach out shortly to confirm your clean.</p>
+            <div class="complete-actions">
+              <a class="btn" href="index.html">Back to home</a>
+              <button type="button" class="btn btn-secondary" data-restart>Submit another request</button>
+            </div>
+          </div>
+          <form id="serviceForm" novalidate data-form-body>
             <div class="progress">
               <div class="progress-rail" aria-hidden="true">
                 <div class="progress-fill" data-progress-fill></div>
@@ -401,6 +462,10 @@
 
             <input type="hidden" name="recommended_plan" id="recommendedPlan">
             <input type="hidden" name="plan_price" id="planPrice">
+
+            <div class="form-alerts">
+              <div id="formError" class="notice error" role="alert">Oops! Something went wrong. Please try again or email <a href="mailto:hello@binpals.com">hello@binpals.com</a>.</div>
+            </div>
 
             <div class="steps">
               <div class="step" data-step-index="0" aria-hidden="false">
@@ -509,10 +574,9 @@
               </div>
             </div>
 
-            <div id="formSuccess" class="notice" role="status">Thanks! Your request is on its way. A BinPals coordinator will reach out shortly to confirm your clean.</div>
-            <div id="formError" class="notice error" role="alert">Oops! Something went wrong. Please try again or email <a href="mailto:hello@binpals.com">hello@binpals.com</a>.</div>
           </form>
         </div>
+      </div>
       </div>
     </section>
   </main>
@@ -584,8 +648,10 @@
     const summaryPlanPrice = summaryPlan.querySelector('[data-summary-plan-price]');
     const summaryPlanCopy = summaryPlan.querySelector('[data-summary-plan-copy]');
     const summaryPlanFeatures = summaryPlan.querySelector('[data-summary-plan-features]');
-    const successNotice = document.getElementById('formSuccess');
     const errorNotice = document.getElementById('formError');
+    const formCardElement = document.querySelector('[data-form-card]');
+    const completionState = document.querySelector('[data-complete-state]');
+    const restartBtn = document.querySelector('[data-restart]');
     const recommendedPlanInput = document.getElementById('recommendedPlan');
     const planPriceInput = document.getElementById('planPrice');
 
@@ -652,7 +718,8 @@
       });
     }
 
-    function showStep(index){
+    function showStep(index, options = {}){
+      const { scrollToTop = true } = options;
       currentStep = index;
       steps.forEach((step, i)=>{
         const isActive = i === index;
@@ -671,7 +738,9 @@
       if(index === 3){
         renderSummary();
       }
-      window.scrollTo({top:0, behavior:'smooth'});
+      if(scrollToTop){
+        window.scrollTo({top:0, behavior:'smooth'});
+      }
     }
 
     function validateStep(index){
@@ -793,12 +862,47 @@
       });
     });
 
-    showStep(0);
+    showStep(0, {scrollToTop:false});
     updatePlanHighlights();
+
+    function resetWizard(){
+      form.reset();
+      planButtonStep2.disabled = true;
+      reviewBtn.disabled = true;
+      showStep(0, {scrollToTop:false});
+      updatePlanHighlights();
+      updatePlanCard();
+      errorNotice.classList.remove('show');
+    }
+
+    function showCompletion(){
+      if(completionState){
+        completionState.removeAttribute('hidden');
+      }
+      if(formCardElement){
+        formCardElement.classList.add('is-complete');
+        window.scrollTo({top:formCardElement.offsetTop - 40, behavior:'smooth'});
+      }
+    }
+
+    function hideCompletion(){
+      if(completionState){
+        completionState.setAttribute('hidden','');
+      }
+      if(formCardElement){
+        formCardElement.classList.remove('is-complete');
+      }
+    }
+
+    restartBtn && restartBtn.addEventListener('click', ()=>{
+      hideCompletion();
+      resetWizard();
+      const firstField = form.querySelector('input[name="name"]');
+      firstField && firstField.focus();
+    });
 
     form.addEventListener('submit', async (event)=>{
       event.preventDefault();
-      successNotice.classList.remove('show');
       errorNotice.classList.remove('show');
 
       if(!validateStep(3)){
@@ -814,13 +918,8 @@
         });
 
         if(response.ok){
-          successNotice.classList.add('show');
-          form.reset();
-          planButtonStep2.disabled = true;
-          reviewBtn.disabled = true;
-          showStep(0);
-          updatePlanHighlights();
-          updatePlanCard();
+          resetWizard();
+          showCompletion();
         }else{
           errorNotice.classList.add('show');
         }
