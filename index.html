@@ -116,17 +116,69 @@
     /* Hero margin inside (mobile already looked good; we add safe padding edges) */
     .hero .container{padding-left: clamp(16px,4vw,40px); padding-right: clamp(16px,4vw,40px)}
 
-    /* How it works cards */
-    .cards{display:grid; gap:var(--gap)}
-    .card{
-      background:linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius);
-      padding: clamp(18px,2.2vw,26px);
-      box-shadow: var(--shadow);
+    /* How it works */
+    #how{position:relative; overflow:hidden}
+    #how::before{
+      content:"";
+      position:absolute; inset:10% 10% auto; height:360px;
+      background:radial-gradient(circle at top, rgba(124,246,196,.28), transparent 70%);
+      filter:blur(70px);
+      opacity:.8;
+      pointer-events:none;
     }
-    .card h3{margin:0 0 10px; font-size:20px}
-    .card p{margin:0; color:var(--muted)}
+    #how .container{position:relative; z-index:1}
+    .cards{
+      display:grid; gap:var(--gap);
+      position:relative;
+    }
+    .cards::before{
+      content:"";
+      position:absolute; inset:20px 0 20px 40px;
+      border-left:1px dashed rgba(255,255,255,.18);
+      opacity:0;
+      pointer-events:none;
+    }
+    .card{
+      position:relative;
+      background:linear-gradient(140deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:var(--radius);
+      padding: clamp(20px,2.6vw,30px);
+      box-shadow: var(--shadow);
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      display:flex; flex-direction:column; gap:12px;
+      isolation:isolate;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:18px 18px auto auto; width:48px; height:48px; border-radius:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,0));
+      opacity:.4; z-index:0;
+    }
+    .card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(255,255,255,.3);
+      box-shadow:0 18px 40px rgba(0,0,0,.45);
+    }
+    .card-num{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:56px; height:56px; border-radius:18px;
+      background:linear-gradient(135deg, #22c55e, #4ade80);
+      font-weight:700; font-size:18px; color:#0c0c0c;
+      box-shadow:0 12px 28px rgba(34,197,94,.35);
+    }
+    .card h3{margin:0; font-size:21px; position:relative; z-index:1}
+    .card p{margin:0; color:var(--muted); position:relative; z-index:1}
+    .card-note{
+      margin-top:auto;
+      padding:14px 16px;
+      background:rgba(12,12,12,.45);
+      border-radius:var(--radius-sm);
+      border:1px solid rgba(255,255,255,.08);
+      color:#f3f3f3;
+      font-weight:500;
+      position:relative; z-index:1;
+    }
 
     /* Pricing */
     .pricing-top{margin-bottom: clamp(24px,3.5vw,42px)}
@@ -170,7 +222,10 @@
 
     /* Layout: desktop */
     @media (min-width:768px){
-      .cards{grid-template-columns:repeat(3,1fr)}
+      .cards{grid-template-columns:repeat(3,1fr); position:relative}
+      .cards::before{inset:40px 80px auto 80px; border-left:none; border-top:1px dashed rgba(255,255,255,.18); opacity:.6}
+      .card{padding: clamp(24px,2.6vw,34px)}
+      .card::before{inset:22px 22px auto auto}
       .price-grid{grid-template-columns:repeat(3,1fr)}
       section{padding: clamp(110px, 12vw, 190px) 0}
       #pricing{padding: clamp(80px, 9vw, 140px) 0}
@@ -180,6 +235,10 @@
       .header-cta{display:block}
       .hamburger{display:none}          /* ← hide the ghost pill on desktop */
       .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card{transition:none}
+      .card:hover{transform:none}
     }
   </style>
 </head>
@@ -248,21 +307,35 @@
     <div class="container">
       <div class="center" style="margin-bottom:28px">
         <h2>How it works</h2>
+        <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#e9fff2; font-weight:500;">From your first booking to every curbside visit, we keep trash day effortless and dependable.</p>
       </div>
       <div class="cards">
         <div class="card">
-          <h3>1) Tell us your days</h3>
-          <p>Choose trash &amp; recycle pickup schedule. Add gate/garage code (optional).</p>
+          <div class="card-num">01</div>
+          <h3>Customize your service</h3>
+          <p>Pick your trash and recycle nights, share gate or garage codes, and let us know any special requests.</p>
+          <p class="card-note">We send a friendly confirmation so you know your route is locked in.</p>
         </div>
         <div class="card">
-          <h3>2) We roll the bins</h3>
-          <p>We set bins out the night before pickup and return them neatly by the end of pickup day.</p>
+          <div class="card-num">02</div>
+          <h3>We handle bin day</h3>
+          <p>Our crew arrives the evening before collection to stage the cans, and we return them curb-free by dusk.</p>
+          <p class="card-note">Rain or shine, you’ll get a quick update once the bins are back home.</p>
         </div>
         <div class="card">
-          <h3>3) You relax</h3>
-          <p>We handle trash day like clockwork — even when you’re out of town.</p>
+          <div class="card-num">03</div>
+          <h3>Relax and enjoy</h3>
+          <p>Sit back while we keep things tidy like clockwork — even when you’re traveling or busy with guests.</p>
+          <p class="card-note">Need to pause or add pickups? Manage it in one message with our support team.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container center">
+      <h2>Why choose us</h2>
+      <p class="lead" style="font-size: clamp(20px, 2.6vw, 28px); font-weight:600; color:#bbf7d0;">BinPals Trash Valet Service Peoria, AZ</p>
     </div>
   </section>
 
