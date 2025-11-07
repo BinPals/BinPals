@@ -1,4 +1,3 @@
-<!-- form.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,357 +6,452 @@
   <title>Get Started | BinPals</title>
 
   <!-- Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#0e0e0e;
-      --panel:#151515;
-      --panel-2:#1b1b1b;
-      --text:#ffffff;
-      --muted:#bfbfbf;
-      --ring:#333;
-      --accent:#ffffff;
-      --shadow:0 10px 30px rgba(0,0,0,.45);
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --panel-2:#f0f4ff;
+      --text:#0f172a;
+      --muted:#475569;
+      --brand:#22c55e;
+      --shadow:0 6px 18px rgba(15, 23, 42, .08);
       --radius:18px;
-      --gap:28px;
-      --pad:24px;
-      --max:1100px; /* page width */
-      --card:840px; /* form card width */
+      --radius-sm:14px;
+      --gap: clamp(20px, 2.5vw, 36px);
+      --container: 1200px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background:var(--bg);
+      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
-      line-height:1.5;
+      background:var(--bg);
       -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
     }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--container);margin:0 auto;padding:0 clamp(16px,3vw,32px)}
 
-    /* ====== Header ====== */
-    .site-wrap{max-width:var(--max); margin:0 auto; padding-inline:20px;}
-    header{
+    /* Header */
+    .header{
       position:sticky; top:0; z-index:50;
-      backdrop-filter:saturate(140%) blur(8px);
-      background:rgba(14,14,14,.7);
-      border-bottom:1px solid rgba(255,255,255,.06);
+      backdrop-filter:none;
+      background:#0b0b0f;
+      border-bottom:1px solid rgba(226,232,240,.08);
+      box-shadow:none;
     }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      height:72px;
+    .header-inner{
+      display:grid; grid-template-columns:auto 1fr auto;
+      align-items:center; gap:16px;
+      min-height:72px;
     }
-    .brand{
-      display:flex; align-items:center; gap:14px;
-      padding:10px 0;
-    }
-    .brand img{
-      height:36px; width:auto; display:block;
-      filter:drop-shadow(0 2px 0 rgba(255,255,255,.05));
-    }
-    .brand span{ font-weight:700; letter-spacing:.2px; }
+    .logo{display:block; height:44px}
+    .logo img{height:44px; width:auto; display:block}
 
-    /* desktop links */
-    .nav-links{
-      display:flex; align-items:center; gap:28px;
-      font-weight:500;
-    }
-    .nav-links a{
-      color:var(--text); text-decoration:none; opacity:.9;
-    }
-    .nav-links a:hover{opacity:1}
+    /* Desktop nav */
+    .nav{display:none; align-items:center; justify-content:center; gap:28px}
+    .nav a{font-weight:600; font-size:14px; color:#fff}
+    .nav a:hover{opacity:.9}
 
-    .cta{
-      appearance:none; cursor:pointer;
-      background:#fff; color:#000; font-weight:600;
-      border:2px solid #fff; border-radius:999px; padding:10px 16px;
-      transition:.18s ease;
+    /* Header CTA (desktop) */
+    .header-cta{display:none}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:15px;
+      border:0; color:#fff; background:#16a34a;
+      box-shadow:none;
+      transition:.2s ease;
     }
-    .cta:hover{background:#000; color:#fff}
+    .btn:hover{background:#15803d; transform:translateY(-2px)}
+    .btn--ghost{
+      background:transparent;
+      color:#fff;
+      border:2px solid rgba(255,255,255,.5);
+      box-shadow:none;
+    }
+    .btn--ghost:hover{background:rgba(255,255,255,.12)}
+    .btn-secondary{
+      background:transparent;
+      color:#0f172a;
+      border:2px solid rgba(15,23,42,.12);
+      transition:.2s ease;
+    }
+    .btn-secondary:hover{
+      background:#0f172a;
+      color:#fff;
+      border-color:#0f172a;
+    }
 
-    /* mobile hamburger (hidden on desktop) */
+    /* Mobile hamburger */
     .hamburger{
-      display:none; width:44px; height:44px; border-radius:12px;
-      border:1px solid rgba(255,255,255,.12); background:var(--panel); color:#fff;
-      align-items:center; justify-content:center; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      width:42px; height:42px; border-radius:12px; border:1px solid rgba(226,232,240,.18);
+      background:rgba(226,232,240,.06);
     }
-    .hamburger svg{width:22px;height:22px}
+    .hamburger span, .hamburger::before, .hamburger::after{
+      content:""; display:block; width:20px; height:2px; background:#e2e8f0; border-radius:2px;
+    }
+    .hamburger{gap:4px}
 
     /* Drawer */
     .drawer{
-      position:fixed; inset:0; z-index:60; display:none;
+      position:fixed; inset:0; background:rgba(15,23,42,.45); display:none;
     }
-    .drawer.open{display:block}
-    .drawer .scrim{
-      position:absolute; inset:0; background:rgba(0,0,0,.5);
+    .drawer[aria-hidden="false"]{display:block}
+    .sheet{
+      position:absolute; inset:0 0 0 auto; width:min(90vw,420px); height:100%;
+      background:var(--panel); border-left:1px solid rgba(15,23,42,.1);
+      display:flex; flex-direction:column;
+      transform:translateX(100%); transition:.25s ease transform;
     }
-    .drawer-panel{
-      position:absolute; top:0; right:0; height:100%; width:min(88vw,380px);
-      background:var(--panel); border-left:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow); display:flex; flex-direction:column;
-    }
-    .drawer-head{display:flex; align-items:center; justify-content:space-between; padding:18px 18px 8px}
-    .drawer-head img{height:34px}
-    .drawer-links{
-      padding:14px 18px; display:flex; flex-direction:column; gap:10px; margin-top:6px;
-    }
-    .drawer-links a{
-      color:var(--text); text-decoration:none; padding:14px 12px; border-radius:12px;
-      background:var(--panel-2); border:1px solid rgba(255,255,255,.08);
-    }
-    .drawer-bottom{margin-top:auto; padding:18px; border-top:1px solid rgba(255,255,255,.08)}
-    .btn-outline, .btn-solid{
-      width:100%; padding:14px 16px; border-radius:12px; font-weight:700; cursor:pointer; transition:.18s;
-    }
-    .btn-outline{
-      background:transparent; color:#fff; border:2px solid #fff;
-    }
-    .btn-outline:hover{background:#fff; color:#000}
-    .btn-solid{
-      background:#fff; color:#000; border:2px solid #fff;
-    }
-    .btn-solid:hover{background:#000; color:#fff}
+    .drawer[aria-hidden="false"] .sheet{transform:translateX(0)}
+    .sheet-head{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid rgba(15,23,42,.06)}
+    .sheet-title{font-weight:700; font-size:18px}
+    .sheet-close{border:1px solid rgba(15,23,42,.1); background:rgba(241,245,249,.6); color:#0f172a; border-radius:999px; padding:8px 14px; font-weight:600}
+    .sheet-nav{display:flex; flex-direction:column; gap:10px; padding:14px 16px}
+    .sheet-nav a{display:block; padding:16px 12px; border-bottom:1px solid rgba(15,23,42,.06); font-weight:600; color:#0f172a}
+    .sheet-foot{margin-top:auto; padding:18px; border-top:1px solid rgba(15,23,42,.06)}
+    .sheet-foot .btn{width:100%}
 
-    /* hide/show based on viewport */
-    @media (max-width: 1024px){
-      .nav-links, .cta{display:none}
-      .hamburger{display:flex}
-    }
-    @media (min-width: 1025px){
-      .drawer{display:none !important}
-    }
+    /* Layout */
+    .center{text-align:center}
+    section{padding: clamp(96px, 10vw, 160px) 0}
+    .form-hero{background:#f8fafc}
+    .form-hero .lead{color:var(--muted); max-width:760px; margin:12px auto 0}
 
-    /* ====== Page header spacer ====== */
-    .page-pad{padding:40px 0}
-
-    /* ====== Form ====== */
-    .form-wrap{
-      max-width:var(--card); margin:0 auto 64px; background:var(--panel);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius); box-shadow:var(--shadow);
-      padding: clamp(22px, 4vw, 40px);
+    .form-card{
+      margin: clamp(32px,4vw,48px) auto 0;
+      max-width:680px;
+      background:var(--panel);
+      border-radius:var(--radius);
+      border:1px solid rgba(148,163,184,.22);
+      box-shadow:none;
+      padding: clamp(26px,4vw,42px);
     }
-    .form-title{ text-align:center; font-weight:800; letter-spacing:.2px; font-size: clamp(24px, 2.6vw, 32px); margin-bottom:26px; }
-
-    form{display:grid; gap:18px}
-    .grid{
-      display:grid; gap:18px;
-      grid-template-columns: 1fr;
-    }
-    @media (min-width: 820px){
-      .grid{grid-template-columns: 1fr 1fr}
-    }
-
-    label{font-weight:600; font-size:.95rem}
+    form{display:grid; gap:20px}
+    label{display:block; font-weight:600; font-size:15px}
     .field{
       margin-top:8px;
-      background:var(--panel-2); border:1px solid var(--ring);
-      color:var(--text); border-radius:12px; width:100%;
-      padding:14px 14px; outline:none;
-      transition:border-color .18s ease, background .18s ease;
+      background:var(--panel-2);
+      border:1px solid rgba(148,163,184,.35);
+      border-radius:12px;
+      width:100%;
+      padding:14px 16px;
+      font:inherit;
+      color:var(--text);
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease;
     }
-    .field:focus{border-color:#777}
+    .field:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 3px rgba(34,197,94,.18);
+    }
     textarea.field{min-height:120px; resize:vertical}
-
-    select.field{appearance:none; background-image:linear-gradient(45deg,transparent 50%, #999 50%),linear-gradient(135deg,#999 50%, transparent 50%); background-position: calc(100% - 18px) calc(1.1em), calc(100% - 12px) calc(1.1em); background-size:6px 6px, 6px 6px; background-repeat:no-repeat;}
-
-    .row{display:flex; gap:14px; flex-wrap:wrap}
-    .row .half{flex:1 1 220px}
-
-    .help{color:var(--muted); font-size:.92rem; margin-top:2px}
-
-    .actions{display:flex; gap:12px; margin-top:10px}
-    .btn{
-      appearance:none; cursor:pointer; font-weight:800;
-      padding:14px 18px; border-radius:14px; transition:.2s; border:2px solid #fff;
+    select.field{
+      appearance:none;
+      background-image:linear-gradient(45deg, transparent 50%, #475569 50%), linear-gradient(135deg, #475569 50%, transparent 50%);
+      background-position:calc(100% - 22px) calc(1.2em), calc(100% - 16px) calc(1.2em);
+      background-size:6px 6px;
+      background-repeat:no-repeat;
     }
-    .btn.white{ background:#fff; color:#000; }
-    .btn.white:hover{ background:#000; color:#fff; }
-    .btn.ghost{ background:transparent; color:#fff; }
-    .btn.ghost:hover{ background:#fff; color:#000; }
+    .grid{
+      display:grid; gap:20px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:820px){
+      .grid{grid-template-columns:1fr 1fr}
+    }
+    .row{display:flex; gap:18px; flex-wrap:wrap}
+    .row .half{flex:1 1 220px}
+    .help{color:var(--muted); font-size:14px; margin-top:6px}
+
+    .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:6px}
 
     .notice{
-      display:none; margin-top:10px; padding:12px 14px;
-      border-radius:12px; background:#0f291e; color:#d0ffe9; border:1px solid #1e8a5e;
+      display:none;
+      margin-top:6px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(34,197,94,.28);
+      background:#ecfdf5;
+      color:#166534;
+      font-weight:500;
     }
-    .notice.error{background:#2a1111; color:#ffd6d6; border-color:#a64a4a}
+    .notice.error{
+      border-color:rgba(248,113,113,.35);
+      background:#fef2f2;
+      color:#991b1b;
+    }
     .notice.show{display:block}
+
+    /* Footer */
+    footer{
+      padding: clamp(48px,6vw,72px) 0;
+      color:#e2e8f0;
+      font-size:14px;
+      background:#06060b;
+      border-top:1px solid rgba(148,163,184,.18);
+    }
+    .footer-inner{
+      display:grid;
+      gap: clamp(28px,4vw,44px);
+      padding-bottom: clamp(32px,4vw,46px);
+      border-bottom:1px solid rgba(148,163,184,.14);
+    }
+    .footer-brand img{
+      width:120px;
+      height:auto;
+      display:block;
+      margin-bottom:18px;
+    }
+    .footer-brand p{margin:0; color:rgba(226,232,240,.72); line-height:1.6; max-width:360px}
+    .footer h3{
+      margin:0 0 14px;
+      font-size:16px;
+      font-weight:700;
+      color:#f8fafc;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+    }
+    .footer-inner ul{margin:0; padding:0; list-style:none; display:grid; gap:10px}
+    .footer-inner li{color:rgba(226,232,240,.76)}
+    .footer-inner a{color:#bbf7d0; font-weight:600}
+    .footer-inner a:hover{color:#86efac}
+    .footer-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px 24px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top: clamp(26px,3vw,40px);
+      color:rgba(226,232,240,.58);
+    }
+    .footer-meta span{display:inline-flex; align-items:center; gap:8px}
+    .footer-meta span::before{
+      content:"";
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:rgba(148,163,184,.45);
+    }
+    .footer-meta span:first-child::before{display:none}
+
+    /* Layout: desktop */
+    @media (min-width:1024px){
+      .nav{display:flex}
+      .header-cta{display:block}
+      .hamburger{display:none}
+    }
   </style>
 </head>
 <body>
 
   <!-- Header -->
-  <header>
-    <div class="site-wrap nav">
-      <a class="brand" href="index.html" aria-label="BinPals Home">
-        <img src="./BinPals-Arizona-Service.png" alt="BinPals logo" />
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="BinPals-Arizona-Service.png" alt="BinPals logo" />
       </a>
 
-      <!-- Desktop links -->
-      <nav class="nav-links">
+      <!-- Desktop nav -->
+      <nav class="nav" aria-label="primary">
         <a href="index.html#how">How it works</a>
+        <a href="index.html#why">Why choose us</a>
         <a href="index.html#pricing">Pricing</a>
         <a href="index.html#service-area">Service area</a>
       </nav>
 
-      <button class="cta" onclick="location.href='form.html'">Get Started</button>
+      <!-- Desktop CTA -->
+      <div class="header-cta">
+        <a class="btn btn--ghost" href="form.html">Get Started</a>
+      </div>
 
       <!-- Mobile hamburger -->
       <button class="hamburger" id="openMenu" aria-label="Open menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
+        <span></span>
       </button>
     </div>
   </header>
 
-  <!-- Mobile drawer -->
-  <div class="drawer" id="drawer">
-    <div class="scrim" id="closeMenu"></div>
-    <aside class="drawer-panel">
-      <div class="drawer-head">
-        <img src="./BinPals-Arizona-Service.png" alt="BinPals" />
-        <button class="hamburger" id="closeX" aria-label="Close menu">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" d="M6 6l12 12M18 6l-12 12"/>
-          </svg>
-        </button>
+  <!-- Mobile Drawer -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="sheet">
+      <div class="sheet-head">
+        <div class="sheet-title">Menu</div>
+        <button class="sheet-close" id="closeMenu">Close</button>
       </div>
 
-      <nav class="drawer-links">
-        <a href="index.html#how" onclick="closeDrawer()">How it works</a>
-        <a href="index.html#pricing" onclick="closeDrawer()">Pricing</a>
-        <a href="index.html#service-area" onclick="closeDrawer()">Service area</a>
-      </nav>
-
-      <div class="drawer-bottom">
-        <button class="btn-solid" onclick="location.href='form.html'">Get Started</button>
+      <div class="sheet-nav">
+        <a href="index.html#how" data-close>How it works</a>
+        <a href="index.html#why" data-close>Why choose us</a>
+        <a href="index.html#pricing" data-close>Pricing</a>
+        <a href="index.html#service-area" data-close>Service area</a>
       </div>
-    </aside>
+
+      <div class="sheet-foot">
+        <a class="btn" href="form.html">Get Started</a>
+      </div>
+    </div>
   </div>
 
-  <div class="page-pad"></div>
+  <main>
+    <section class="form-hero">
+      <div class="container center">
+        <h1>Get Started with BinPals</h1>
+        <p class="lead">Share a few details and our friendly crew will reach out to lock in your service plan and pickup schedule.</p>
 
-  <!-- Form Card -->
-  <section class="site-wrap">
-    <div class="form-wrap">
-      <h1 class="form-title">Get Started with BinPals</h1>
+        <div class="form-card">
+          <form id="signupForm" novalidate>
+            <div>
+              <label>Full Name
+                <input class="field" type="text" name="name" placeholder="First &amp; Last" required>
+              </label>
+            </div>
 
-      <form id="signupForm" novalidate>
-        <!-- Name -->
-        <div>
-          <label>Full Name
-            <input class="field" type="text" name="name" placeholder="First & Last" required>
-          </label>
+            <div>
+              <label>Email Address
+                <input class="field" type="email" name="email" placeholder="you@email.com" required>
+              </label>
+            </div>
+
+            <div>
+              <label>Phone Number
+                <input class="field" type="tel" name="phone" placeholder="(555) 555-5555" required>
+              </label>
+            </div>
+
+            <div>
+              <label>Service Address
+                <input class="field" type="text" name="address" placeholder="Street, City, ZIP" required>
+              </label>
+              <div class="help">Gate/garage code can be added in Notes.</div>
+            </div>
+
+            <div class="grid">
+              <div>
+                <label>Service Plan
+                  <select class="field" name="plan" required>
+                    <option value="" selected>Select a plan</option>
+                    <option value="Starter — up to 2 cans">Starter — up to 2 cans</option>
+                    <option value="Premium — up to 4 cans">Premium — up to 4 cans</option>
+                    <option value="Business — up to 6 cans">Business — up to 6 cans</option>
+                  </select>
+                </label>
+              </div>
+
+              <div>
+                <label>Billing
+                  <select class="field" name="billing" required>
+                    <option value="" selected>Select billing</option>
+                    <option value="Quarterly">Quarterly</option>
+                    <option value="Monthly">Monthly</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="half">
+                <label>Extra Bins (optional)
+                  <input class="field" type="number" name="extra_bins" min="0" value="0">
+                </label>
+              </div>
+              <div class="half">
+                <label>Preferred Start Date
+                  <input class="field" type="date" name="start_date">
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label>Notes / Gate Code (optional)
+                <textarea class="field" name="notes" placeholder="Anything we should know?"></textarea>
+              </label>
+            </div>
+
+            <div>
+              <label style="display:flex; gap:10px; align-items:center; font-weight:500">
+                <input type="checkbox" required />
+                I agree to be contacted about scheduling and service.
+              </label>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="submit">Submit</button>
+              <a class="btn btn-secondary" href="index.html">Back to Home</a>
+            </div>
+
+            <div id="msgOk" class="notice">Thanks! Your request was sent. We’ll reach out to confirm details.</div>
+            <div id="msgErr" class="notice error">Something went wrong. Please try again or email us.</div>
+          </form>
         </div>
+      </div>
+    </section>
+  </main>
 
-        <!-- Email -->
-        <div>
-          <label>Email Address
-            <input class="field" type="email" name="email" placeholder="you@email.com" required>
-          </label>
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="BinPals-Arizona-Service.png" alt="BinPals Trash Valet Service" />
+          <p>Premium valet trash pickup for busy homeowners, snowbirds, and communities throughout the Northwest Valley.</p>
         </div>
-
-        <!-- Phone -->
-        <div>
-          <label>Phone Number
-            <input class="field" type="tel" name="phone" placeholder="(555) 555-5555" required>
-          </label>
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <ul>
+            <li><a href="tel:6235550199">623-555-0199</a></li>
+            <li><a href="mailto:hello@binpals.com">hello@binpals.com</a></li>
+            <li>Peoria, Arizona</li>
+          </ul>
         </div>
-
-        <!-- Address -->
-        <div>
-          <label>Service Address
-            <input class="field" type="text" name="address" placeholder="Street, City, ZIP" required>
-          </label>
-          <div class="help">Gate/garage code can be added in Notes.</div>
+        <div class="footer-service">
+          <h3>Service area</h3>
+          <ul>
+            <li>Peoria</li>
+            <li>Sun City</li>
+            <li>Sun City West</li>
+            <li>Surprise</li>
+          </ul>
         </div>
-
-        <!-- Plan + Add-ons (two columns on desktop) -->
-        <div class="grid">
-          <div>
-            <label>Service Plan
-              <select class="field" name="plan" required>
-                <option value="" selected>Select a plan</option>
-                <option value="Starter — up to 2 cans">Starter — up to 2 cans</option>
-                <option value="Premium — up to 4 cans">Premium — up to 4 cans</option>
-                <option value="Business — up to 6 cans">Business — up to 6 cans</option>
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>Billing
-              <select class="field" name="billing" required>
-                <option value="" selected>Select billing</option>
-                <option value="Quarterly">Quarterly</option>
-                <option value="Monthly">Monthly</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="half">
-            <label>Extra Bins (optional)
-              <input class="field" type="number" name="extra_bins" min="0" value="0">
-            </label>
-          </div>
-          <div class="half">
-            <label>Preferred Start Date
-              <input class="field" type="date" name="start_date">
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label>Notes / Gate Code (Optional)
-            <textarea class="field" name="notes" placeholder="Anything we should know?"></textarea>
-          </label>
-        </div>
-
-        <div>
-          <label style="display:flex; gap:10px; align-items:center; font-weight:500">
-            <input type="checkbox" required />
-            I agree to be contacted about scheduling and service.
-          </label>
-        </div>
-
-        <div class="actions">
-          <button class="btn white" type="submit">Submit</button>
-          <a class="btn ghost" href="index.html">Back to Home</a>
-        </div>
-
-        <div id="msgOk" class="notice">Thanks! Your request was sent. We’ll reach out to confirm details.</div>
-        <div id="msgErr" class="notice error">Something went wrong. Please try again or email us.</div>
-      </form>
+      </div>
+      <div class="footer-meta">
+        <span>© <span id="y"></span> BinPals Trash Valet</span>
+        <span>Licensed • Insured • Locally owned</span>
+      </div>
     </div>
-  </section>
+  </footer>
 
   <script>
-    // Drawer behavior
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Drawer
     const drawer = document.getElementById('drawer');
     const openBtn = document.getElementById('openMenu');
-    const closeBtn = document.getElementById('closeX');
-    const scrim = document.getElementById('closeMenu');
+    const closeBtn = document.getElementById('closeMenu');
+    const closeLinks = drawer.querySelectorAll('[data-close]');
 
-    function closeDrawer(){ drawer.classList.remove('open'); document.body.style.overflow=''; }
-    function openDrawer(){ drawer.classList.add('open'); document.body.style.overflow='hidden'; }
-
+    function openDrawer(){ drawer.setAttribute('aria-hidden','false'); }
+    function closeDrawer(){ drawer.setAttribute('aria-hidden','true'); }
     openBtn && openBtn.addEventListener('click', openDrawer);
     closeBtn && closeBtn.addEventListener('click', closeDrawer);
-    scrim && scrim.addEventListener('click', closeDrawer);
+    drawer && drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
+    closeLinks.forEach(a=>a.addEventListener('click', closeDrawer));
 
-    // Formspree submit with fetch to keep user on-page
+    // Form submission
     const form = document.getElementById('signupForm');
     const ok = document.getElementById('msgOk');
     const err = document.getElementById('msgErr');
 
     form.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      ok.classList.remove('show'); err.classList.remove('show');
+      ok.classList.remove('show');
+      err.classList.remove('show');
 
       const data = new FormData(form);
       try{
@@ -379,8 +473,5 @@
       }
     });
   </script>
-</body>
-</html>
-
 </body>
 </html>
