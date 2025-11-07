@@ -17,12 +17,14 @@
       --panel-2:#f0f4ff;
       --text:#0f172a;
       --muted:#475569;
-      --brand:#22c55e;
-      --shadow:0 6px 18px rgba(15, 23, 42, .08);
-      --radius:18px;
+      --brand:#16a34a;
+      --brand-dark:#15803d;
+      --accent:#0ea5e9;
+      --shadow:0 16px 40px rgba(15,23,42,.08);
+      --radius:24px;
       --radius-sm:14px;
       --gap: clamp(20px, 2.5vw, 36px);
-      --container: 1200px;
+      --container: 1140px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -35,15 +37,14 @@
       text-rendering:optimizeLegibility;
     }
     a{color:inherit;text-decoration:none}
+    img{max-width:100%; display:block}
     .container{max-width:var(--container);margin:0 auto;padding:0 clamp(16px,3vw,32px)}
 
     /* Header */
     .header{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:none;
+      position:sticky; top:0; z-index:40;
       background:#0b0b0f;
       border-bottom:1px solid rgba(226,232,240,.08);
-      box-shadow:none;
     }
     .header-inner{
       display:grid; grid-template-columns:auto 1fr auto;
@@ -53,41 +54,27 @@
     .logo{display:block; height:44px}
     .logo img{height:44px; width:auto; display:block}
 
-    /* Desktop nav */
     .nav{display:none; align-items:center; justify-content:center; gap:28px}
     .nav a{font-weight:600; font-size:14px; color:#fff}
     .nav a:hover{opacity:.9}
 
-    /* Header CTA (desktop) */
     .header-cta{display:none}
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
-      gap:10px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:15px;
-      border:0; color:#fff; background:#16a34a;
-      box-shadow:none;
+      gap:10px; padding:12px 24px; border-radius:999px; font-weight:700; font-size:15px;
+      border:0; color:#fff; background:var(--brand);
+      box-shadow:none; cursor:pointer;
       transition:.2s ease;
     }
-    .btn:hover{background:#15803d; transform:translateY(-2px)}
-    .btn--ghost{
-      background:transparent;
-      color:#fff;
-      border:2px solid rgba(255,255,255,.5);
-      box-shadow:none;
-    }
-    .btn--ghost:hover{background:rgba(255,255,255,.12)}
+    .btn:hover{background:var(--brand-dark); transform:translateY(-1px)}
+    .btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
     .btn-secondary{
-      background:transparent;
+      background:#e2e8f0;
       color:#0f172a;
-      border:2px solid rgba(15,23,42,.12);
-      transition:.2s ease;
+      border:0;
     }
-    .btn-secondary:hover{
-      background:#0f172a;
-      color:#fff;
-      border-color:#0f172a;
-    }
+    .btn-secondary:hover{background:#cbd5f5; color:#0f172a; transform:none}
 
-    /* Mobile hamburger */
     .hamburger{
       display:inline-flex; align-items:center; justify-content:center;
       width:42px; height:42px; border-radius:12px; border:1px solid rgba(226,232,240,.18);
@@ -98,7 +85,6 @@
     }
     .hamburger{gap:4px}
 
-    /* Drawer */
     .drawer{
       position:fixed; inset:0; background:rgba(15,23,42,.45); display:none;
     }
@@ -118,65 +104,166 @@
     .sheet-foot{margin-top:auto; padding:18px; border-top:1px solid rgba(15,23,42,.06)}
     .sheet-foot .btn{width:100%}
 
-    /* Layout */
+    section{padding: clamp(88px, 8vw, 144px) 0}
     .center{text-align:center}
-    section{padding: clamp(96px, 10vw, 160px) 0}
-    .form-hero{background:#f8fafc}
-    .form-hero .lead{color:var(--muted); max-width:760px; margin:12px auto 0}
+    .form-hero{background:#eef2ff; position:relative; overflow:hidden}
+    .form-hero::before{
+      content:"";
+      position:absolute; inset:-140px -40px auto auto;
+      width:320px; height:320px; border-radius:50%;
+      background:radial-gradient(circle at center, rgba(34,197,94,.25), transparent 65%);
+      opacity:.8;
+    }
+    .form-hero .lead{color:var(--muted); max-width:720px; margin:12px auto 0}
 
     .form-card{
-      margin: clamp(32px,4vw,48px) auto 0;
-      max-width:680px;
+      margin: clamp(32px,4vw,54px) auto 0;
+      max-width:720px;
       background:var(--panel);
       border-radius:var(--radius);
       border:1px solid rgba(148,163,184,.22);
-      box-shadow:none;
-      padding: clamp(26px,4vw,42px);
+      box-shadow:var(--shadow);
+      padding: clamp(28px,4vw,48px);
+      position:relative;
+      overflow:hidden;
     }
-    form{display:grid; gap:20px}
+    form{display:grid; gap:28px}
     label{display:block; font-weight:600; font-size:15px}
     .field{
-      margin-top:8px;
-      background:var(--panel-2);
+      margin-top:10px;
+      background:#f8fafc;
       border:1px solid rgba(148,163,184,.35);
-      border-radius:12px;
+      border-radius:14px;
       width:100%;
-      padding:14px 16px;
+      padding:14px 18px;
       font:inherit;
       color:var(--text);
       outline:none;
       transition:border-color .18s ease, box-shadow .18s ease;
     }
     .field:focus{
-      border-color:var(--brand);
-      box-shadow:0 0 0 3px rgba(34,197,94,.18);
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(14,165,233,.18);
     }
     textarea.field{min-height:120px; resize:vertical}
-    select.field{
-      appearance:none;
-      background-image:linear-gradient(45deg, transparent 50%, #475569 50%), linear-gradient(135deg, #475569 50%, transparent 50%);
-      background-position:calc(100% - 22px) calc(1.2em), calc(100% - 16px) calc(1.2em);
-      background-size:6px 6px;
-      background-repeat:no-repeat;
-    }
-    .grid{
-      display:grid; gap:20px;
-      grid-template-columns:1fr;
-    }
-    @media(min-width:820px){
-      .grid{grid-template-columns:1fr 1fr}
-    }
-    .row{display:flex; gap:18px; flex-wrap:wrap}
-    .row .half{flex:1 1 220px}
-    .help{color:var(--muted); font-size:14px; margin-top:6px}
 
-    .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:6px}
+    .progress{display:grid; gap:16px}
+    .progress-rail{
+      height:4px; border-radius:999px; background:rgba(148,163,184,.3); position:relative;
+      overflow:hidden;
+    }
+    .progress-fill{
+      position:absolute; inset:0 auto 0 0; height:100%; width:0%; border-radius:999px;
+      background:linear-gradient(90deg, var(--brand), #22d3ee);
+      transition:width .35s ease;
+    }
+    .progress-steps{
+      list-style:none; margin:0; padding:0; display:flex; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+    }
+    .progress-steps li{
+      display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px; font-weight:500;
+    }
+    .progress-steps .circle{
+      width:34px; height:34px; border-radius:50%; border:2px solid rgba(148,163,184,.35);
+      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px;
+      background:#fff; transition:.3s ease;
+    }
+    .progress-steps li.is-active{color:var(--text)}
+    .progress-steps li.is-active .circle{
+      border-color:transparent; background:var(--brand); color:#fff; box-shadow:0 6px 20px rgba(34,197,94,.4);
+    }
+
+    .steps{position:relative}
+    .step{
+      display:none;
+      gap:22px;
+    }
+    .step[aria-hidden="false"]{display:grid; animation:fadeUp .35s ease}
+
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(12px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .grid{display:grid; gap:20px}
+    @media(min-width:720px){
+      .grid.two{grid-template-columns:1fr 1fr}
+    }
+
+    .option-list{display:grid; gap:16px}
+    .option-card{
+      position:relative;
+      border:1px solid rgba(148,163,184,.32);
+      border-radius:18px;
+      padding:20px 22px;
+      display:grid;
+      gap:6px;
+      transition:.25s ease;
+      cursor:pointer;
+      background:#f8fafc;
+    }
+    .option-card:hover{border-color:rgba(14,165,233,.45); box-shadow:0 16px 40px rgba(14,165,233,.12)}
+    .option-card input{position:absolute; inset:0; opacity:0; pointer-events:none}
+    .option-title{font-weight:700; font-size:17px}
+    .option-desc{color:var(--muted); font-size:14px}
+    .option-card.is-selected{
+      border-color:transparent;
+      background:linear-gradient(135deg, rgba(34,197,94,.12), rgba(14,165,233,.08));
+      box-shadow:0 20px 44px rgba(34,197,94,.18);
+    }
+    .option-card.is-selected .option-title{color:var(--brand-dark)}
+
+    .plan-card{
+      display:grid;
+      gap:20px;
+      border:1px solid rgba(148,163,184,.28);
+      border-radius:20px;
+      padding:24px;
+      background:#f8fafc;
+    }
+    @media(min-width:640px){
+      .plan-card{grid-template-columns:auto 1fr; align-items:center}
+    }
+    .plan-visual{
+      width:120px; height:120px; border-radius:28px;
+      background:linear-gradient(135deg, rgba(34,197,94,.15), rgba(14,165,233,.12));
+      display:grid; place-items:center; overflow:hidden;
+    }
+    .plan-visual img{width:120px; height:120px; object-fit:cover}
+    .plan-title{margin:0; font-size:22px}
+    .plan-price{margin:6px 0 12px; font-weight:700; color:var(--brand-dark)}
+    .plan-copy{color:var(--muted); margin:0 0 16px; line-height:1.5}
+    .plan-features{list-style:none; margin:0; padding:0; display:grid; gap:10px; color:var(--text); font-size:14px}
+    .plan-features li{display:flex; gap:10px; align-items:flex-start}
+    .plan-features li::before{
+      content:""; width:8px; height:8px; border-radius:50%; background:var(--brand); margin-top:7px;
+    }
+
+    .step-footer{display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap}
+    .step-footer .btn{min-width:140px}
+    .step-footer .spacer{flex:1 1 auto}
+
+    .summary{
+      border:1px solid rgba(148,163,184,.28);
+      border-radius:20px;
+      padding:22px;
+      background:#f8fafc;
+      display:grid;
+      gap:18px;
+    }
+    .summary-group{display:grid; gap:6px}
+    .summary-row{display:flex; justify-content:space-between; gap:18px; color:var(--text); font-size:15px}
+    .summary-row span{color:var(--muted); font-weight:500}
+    .summary-row strong{text-align:right}
+    .summary-plan{display:grid; gap:12px}
+    .summary-plan .plan-price{margin-top:0}
 
     .notice{
       display:none;
-      margin-top:6px;
-      padding:12px 14px;
-      border-radius:12px;
+      margin:0;
+      padding:14px 18px;
+      border-radius:16px;
       border:1px solid rgba(34,197,94,.28);
       background:#ecfdf5;
       color:#166534;
@@ -189,7 +276,6 @@
     }
     .notice.show{display:block}
 
-    /* Footer */
     footer{
       padding: clamp(48px,6vw,72px) 0;
       color:#e2e8f0;
@@ -241,7 +327,6 @@
     }
     .footer-meta span:first-child::before{display:none}
 
-    /* Layout: desktop */
     @media (min-width:1024px){
       .nav{display:flex}
       .header-cta{display:block}
@@ -251,14 +336,12 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header class="header">
     <div class="container header-inner">
       <a class="logo" href="index.html">
         <img src="BinPals-Arizona-Service.png" alt="BinPals logo" />
       </a>
 
-      <!-- Desktop nav -->
       <nav class="nav" aria-label="primary">
         <a href="index.html#how">How it works</a>
         <a href="index.html#why">Why choose us</a>
@@ -266,19 +349,16 @@
         <a href="index.html#service-area">Service area</a>
       </nav>
 
-      <!-- Desktop CTA -->
       <div class="header-cta">
-        <a class="btn btn--ghost" href="form.html">Get Started</a>
+        <a class="btn" href="form.html">Get Started</a>
       </div>
 
-      <!-- Mobile hamburger -->
       <button class="hamburger" id="openMenu" aria-label="Open menu">
         <span></span>
       </button>
     </div>
   </header>
 
-  <!-- Mobile Drawer -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="sheet">
       <div class="sheet-head">
@@ -302,92 +382,135 @@
   <main>
     <section class="form-hero">
       <div class="container center">
-        <h1>Get Started with BinPals</h1>
-        <p class="lead">Share a few details and our friendly crew will reach out to lock in your service plan and pickup schedule.</p>
+        <h1>Schedule your BinPals clean in minutes</h1>
+        <p class="lead">Tell us a little about your home and how many bins you have. We’ll recommend the perfect plan and route your request straight to our crew.</p>
 
         <div class="form-card">
-          <form id="signupForm" novalidate>
-            <div>
-              <label>Full Name
-                <input class="field" type="text" name="name" placeholder="First &amp; Last" required>
-              </label>
+          <form id="serviceForm" novalidate>
+            <div class="progress">
+              <div class="progress-rail" aria-hidden="true">
+                <div class="progress-fill" data-progress-fill></div>
+              </div>
+              <ol class="progress-steps">
+                <li data-progress-item="0" class="is-active"><span class="circle">1</span>Basic info</li>
+                <li data-progress-item="1"><span class="circle">2</span>Bin count</li>
+                <li data-progress-item="2"><span class="circle">3</span>Recommended plan</li>
+                <li data-progress-item="3"><span class="circle">4</span>Review &amp; submit</li>
+              </ol>
             </div>
 
-            <div>
-              <label>Email Address
-                <input class="field" type="email" name="email" placeholder="you@email.com" required>
-              </label>
-            </div>
+            <input type="hidden" name="recommended_plan" id="recommendedPlan">
+            <input type="hidden" name="plan_price" id="planPrice">
 
-            <div>
-              <label>Phone Number
-                <input class="field" type="tel" name="phone" placeholder="(555) 555-5555" required>
-              </label>
-            </div>
+            <div class="steps">
+              <div class="step" data-step-index="0" aria-hidden="false">
+                <div class="grid two">
+                  <label>Full name
+                    <input class="field" type="text" name="name" placeholder="First &amp; last" data-step-required>
+                  </label>
+                  <label>Email address
+                    <input class="field" type="email" name="email" placeholder="you@email.com" autocomplete="email" data-step-required>
+                  </label>
+                </div>
+                <div class="grid two">
+                  <label>Mobile phone
+                    <input class="field" type="tel" name="phone" placeholder="(555) 555-5555" autocomplete="tel" data-step-required>
+                  </label>
+                  <label>Service address
+                    <input class="field" type="text" name="address" placeholder="Street, City, ZIP" autocomplete="street-address" data-step-required>
+                  </label>
+                </div>
 
-            <div>
-              <label>Service Address
-                <input class="field" type="text" name="address" placeholder="Street, City, ZIP" required>
-              </label>
-              <div class="help">Gate/garage code can be added in Notes.</div>
-            </div>
-
-            <div class="grid">
-              <div>
-                <label>Service Plan
-                  <select class="field" name="plan" required>
-                    <option value="" selected>Select a plan</option>
-                    <option value="Starter — up to 2 cans">Starter — up to 2 cans</option>
-                    <option value="Premium — up to 4 cans">Premium — up to 4 cans</option>
-                    <option value="Business — up to 6 cans">Business — up to 6 cans</option>
-                  </select>
-                </label>
+                <div class="step-footer">
+                  <button type="button" class="btn btn-secondary" data-prev disabled>Back</button>
+                  <span class="spacer"></span>
+                  <button type="button" class="btn" data-next>Next</button>
+                </div>
               </div>
 
-              <div>
-                <label>Billing
-                  <select class="field" name="billing" required>
-                    <option value="" selected>Select billing</option>
-                    <option value="Quarterly">Quarterly</option>
-                    <option value="Monthly">Monthly</option>
-                  </select>
+              <div class="step" data-step-index="1" aria-hidden="true">
+                <div>
+                  <h2 style="margin:0 0 12px">How many bins do you need cleaned?</h2>
+                  <p style="margin:0 0 24px; color:var(--muted);">Pick the range that matches your curbside trash and recycle cans. We’ll tailor the visit length and crew.</p>
+                  <div class="option-list" role="radiogroup" aria-label="Select bin range">
+                    <label class="option-card">
+                      <input type="radio" name="bin_range" value="1-2" data-step-required>
+                      <span class="option-title">1 – 2 bins</span>
+                      <span class="option-desc">Perfect for small households or part-time residents.</span>
+                    </label>
+                    <label class="option-card">
+                      <input type="radio" name="bin_range" value="3-4" data-step-required>
+                      <span class="option-title">3 – 4 bins</span>
+                      <span class="option-desc">Great for families with trash, recycle, and yard bins.</span>
+                    </label>
+                    <label class="option-card">
+                      <input type="radio" name="bin_range" value="5-6" data-step-required>
+                      <span class="option-title">5 – 6 bins</span>
+                      <span class="option-desc">Ideal for casitas, HOAs, and light commercial spaces.</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="step-footer">
+                  <button type="button" class="btn btn-secondary" data-prev>Back</button>
+                  <span class="spacer"></span>
+                  <button type="button" class="btn" data-next id="toPlan" disabled>Next</button>
+                </div>
+              </div>
+
+              <div class="step" data-step-index="2" aria-hidden="true">
+                <div class="plan-card" data-plan-card>
+                  <div class="plan-visual">
+                    <img src="" alt="" data-plan-image hidden>
+                  </div>
+                  <div>
+                    <h2 class="plan-title" data-plan-title>Choose how many bins you have first</h2>
+                    <p class="plan-price" data-plan-price></p>
+                    <p class="plan-copy" data-plan-copy>Once you pick your bin count, we’ll show the BinPals package that keeps your cans sparkling on schedule.</p>
+                    <ul class="plan-features" data-plan-features></ul>
+                  </div>
+                </div>
+                <p style="margin:12px 0 0; color:var(--muted);">Want a different cadence? Tap back to change your bin range—each option updates instantly.</p>
+
+                <div class="step-footer">
+                  <button type="button" class="btn btn-secondary" data-prev>Back</button>
+                  <span class="spacer"></span>
+                  <button type="button" class="btn" data-next id="reviewBtn" disabled>Review</button>
+                </div>
+              </div>
+
+              <div class="step" data-step-index="3" aria-hidden="true">
+                <div class="summary">
+                  <div class="summary-plan">
+                    <div class="plan-card" style="margin:0" data-summary-plan>
+                      <div class="plan-visual">
+                        <img src="" alt="" data-summary-plan-image hidden>
+                      </div>
+                      <div>
+                        <h3 class="plan-title" data-summary-plan-title>Recommended plan</h3>
+                        <p class="plan-price" data-summary-plan-price></p>
+                        <p class="plan-copy" data-summary-plan-copy></p>
+                        <ul class="plan-features" data-summary-plan-features></ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="summary-group" data-summary></div>
+                </div>
+
+                <label>Notes for the crew (gate code, pets, etc.)
+                  <textarea class="field" name="notes" placeholder="Optional"></textarea>
                 </label>
+
+                <div class="step-footer">
+                  <button type="button" class="btn btn-secondary" data-prev>Back</button>
+                  <span class="spacer"></span>
+                  <button type="submit" class="btn">Submit request</button>
+                </div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="half">
-                <label>Extra Bins (optional)
-                  <input class="field" type="number" name="extra_bins" min="0" value="0">
-                </label>
-              </div>
-              <div class="half">
-                <label>Preferred Start Date
-                  <input class="field" type="date" name="start_date">
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label>Notes / Gate Code (optional)
-                <textarea class="field" name="notes" placeholder="Anything we should know?"></textarea>
-              </label>
-            </div>
-
-            <div>
-              <label style="display:flex; gap:10px; align-items:center; font-weight:500">
-                <input type="checkbox" required />
-                I agree to be contacted about scheduling and service.
-              </label>
-            </div>
-
-            <div class="actions">
-              <button class="btn" type="submit">Submit</button>
-              <a class="btn btn-secondary" href="index.html">Back to Home</a>
-            </div>
-
-            <div id="msgOk" class="notice">Thanks! Your request was sent. We’ll reach out to confirm details.</div>
-            <div id="msgErr" class="notice error">Something went wrong. Please try again or email us.</div>
+            <div id="formSuccess" class="notice" role="status">Thanks! Your request is on its way. A BinPals coordinator will reach out shortly to confirm your clean.</div>
+            <div id="formError" class="notice error" role="alert">Oops! Something went wrong. Please try again or email <a href="mailto:hello@binpals.com">hello@binpals.com</a>.</div>
           </form>
         </div>
       </div>
@@ -427,10 +550,8 @@
   </footer>
 
   <script>
-    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Drawer
     const drawer = document.getElementById('drawer');
     const openBtn = document.getElementById('openMenu');
     const closeBtn = document.getElementById('closeMenu');
@@ -443,33 +564,269 @@
     drawer && drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
     closeLinks.forEach(a=>a.addEventListener('click', closeDrawer));
 
-    // Form submission
-    const form = document.getElementById('signupForm');
-    const ok = document.getElementById('msgOk');
-    const err = document.getElementById('msgErr');
+    const form = document.getElementById('serviceForm');
+    const steps = Array.from(form.querySelectorAll('[data-step-index]'));
+    const progressFill = document.querySelector('[data-progress-fill]');
+    const progressItems = document.querySelectorAll('[data-progress-item]');
+    const planInputs = Array.from(form.querySelectorAll('input[name="bin_range"]'));
+    const planCard = document.querySelector('[data-plan-card]');
+    const planImage = planCard.querySelector('[data-plan-image]');
+    const planTitle = planCard.querySelector('[data-plan-title]');
+    const planPrice = planCard.querySelector('[data-plan-price]');
+    const planCopy = planCard.querySelector('[data-plan-copy]');
+    const planFeatures = planCard.querySelector('[data-plan-features]');
+    const planButtonStep2 = document.getElementById('toPlan');
+    const reviewBtn = document.getElementById('reviewBtn');
+    const summaryWrap = document.querySelector('[data-summary]');
+    const summaryPlan = document.querySelector('[data-summary-plan]');
+    const summaryPlanImage = summaryPlan.querySelector('[data-summary-plan-image]');
+    const summaryPlanTitle = summaryPlan.querySelector('[data-summary-plan-title]');
+    const summaryPlanPrice = summaryPlan.querySelector('[data-summary-plan-price]');
+    const summaryPlanCopy = summaryPlan.querySelector('[data-summary-plan-copy]');
+    const summaryPlanFeatures = summaryPlan.querySelector('[data-summary-plan-features]');
+    const successNotice = document.getElementById('formSuccess');
+    const errorNotice = document.getElementById('formError');
+    const recommendedPlanInput = document.getElementById('recommendedPlan');
+    const planPriceInput = document.getElementById('planPrice');
 
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      ok.classList.remove('show');
-      err.classList.remove('show');
+    let currentStep = 0;
 
-      const data = new FormData(form);
+    const planCatalog = {
+      '1-2': {
+        name: '2-Bin Plan',
+        label: '2-Bin Shine Plan',
+        price: '$35 / visit',
+        description: 'Quick and powerful clean for up to two curbside cans. Ideal for snowbirds and single-family homes.',
+        features: [
+          'High-pressure wash &amp; disinfect for two bins',
+          'Eco-friendly deodorizer that lasts for weeks',
+          'Flexible add-on visits when you need an extra refresh'
+        ],
+        image: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2228%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%3E2%3C/text%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2280%25%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22500%22%20fill%3D%22%23dcfce7%22%3EBins%3C/text%3E%3C/svg%3E'
+      },
+      '3-4': {
+        name: '4-Bin Plan',
+        label: '4-Bin Family Plan',
+        price: '$49 / visit',
+        description: 'Our most popular service. Handles trash, recycle, and yard bins without breaking a sweat.',
+        features: [
+          'Deep clean for up to four cans every visit',
+          'Priority routing with text alerts before arrival',
+          'Bundle-friendly — add patio or community bins anytime'
+        ],
+        image: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2228%22%20fill%3D%22%230ea5e9%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%3E4%3C/text%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2280%25%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22500%22%20fill%3D%22%23dcfce7%22%3EBins%3C/text%3E%3C/svg%3E'
+      },
+      '5-6': {
+        name: '6-Bin Plan',
+        label: '6-Bin Pro Plan',
+        price: '$69 / visit',
+        description: 'White-glove clean for large homes, casitas, and boutique commercial accounts that need extra love.',
+        features: [
+          'Up to six cans sanitized, rinsed, and deodorized',
+          'Dedicated service concierge for schedule tweaks',
+          'Optional add-ons for dumpsters or valet communities'
+        ],
+        image: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2228%22%20fill%3D%22%23a855f7%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%3E6%3C/text%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2280%25%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22500%22%20fill%3D%22%23dcfce7%22%3EBins%3C/text%3E%3C/svg%3E'
+      }
+    };
+
+    function updateProgress(){
+      const percent = (currentStep / (steps.length - 1)) * 100;
+      progressFill.style.width = `${percent}%`;
+      progressItems.forEach((item, index)=>{
+        item.classList.toggle('is-active', index <= currentStep);
+      });
+    }
+
+    function updateRequirements(){
+      steps.forEach((step, index)=>{
+        const requiredFields = step.querySelectorAll('[data-step-required]');
+        requiredFields.forEach(field=>{
+          if(index === currentStep){
+            field.setAttribute('required','');
+            field.removeAttribute('aria-invalid');
+          }else{
+            field.removeAttribute('required');
+          }
+        });
+      });
+    }
+
+    function showStep(index){
+      currentStep = index;
+      steps.forEach((step, i)=>{
+        const isActive = i === index;
+        step.setAttribute('aria-hidden', String(!isActive));
+        if(isActive){
+          step.classList.add('is-active');
+        }else{
+          step.classList.remove('is-active');
+        }
+      });
+      updateProgress();
+      updateRequirements();
+      if(index === 2){
+        updatePlanCard();
+      }
+      if(index === 3){
+        renderSummary();
+      }
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function validateStep(index){
+      const step = steps[index];
+      const requiredFields = Array.from(step.querySelectorAll('[data-step-required]'));
+      const checkedRadios = new Set();
+      for(const field of requiredFields){
+        if(field.type === 'radio'){
+          if(checkedRadios.has(field.name)) continue;
+          checkedRadios.add(field.name);
+          const groupChecked = planInputs.some(radio => radio.name === field.name && radio.checked);
+          if(!groupChecked){
+            field.setCustomValidity('Please pick the option that fits you best.');
+            field.reportValidity();
+            field.setCustomValidity('');
+            return false;
+          }
+        }else{
+          if(!field.checkValidity()){
+            field.reportValidity();
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    function nextStep(){
+      if(!validateStep(currentStep)) return;
+      if(currentStep < steps.length - 1){
+        showStep(currentStep + 1);
+      }
+    }
+
+    function prevStep(){
+      if(currentStep > 0){
+        showStep(currentStep - 1);
+      }
+    }
+
+    form.querySelectorAll('[data-next]').forEach(btn=>{
+      btn.addEventListener('click', nextStep);
+    });
+    form.querySelectorAll('[data-prev]').forEach(btn=>{
+      btn.addEventListener('click', prevStep);
+    });
+
+    function updatePlanHighlights(){
+      planInputs.forEach(input=>{
+        const card = input.closest('.option-card');
+        if(!card) return;
+        card.classList.toggle('is-selected', input.checked);
+      });
+    }
+
+    function updatePlanCard(){
+      const selected = form.querySelector('input[name="bin_range"]:checked');
+      if(!selected){
+        planTitle.textContent = 'Choose how many bins you have first';
+        planPrice.textContent = '';
+        planCopy.textContent = 'Once you pick your bin count, we’ll show the BinPals package that keeps your cans sparkling on schedule.';
+        planFeatures.innerHTML = '';
+        planImage.hidden = true;
+        reviewBtn.disabled = true;
+        recommendedPlanInput.value = '';
+        planPriceInput.value = '';
+        return;
+      }
+      const plan = planCatalog[selected.value];
+      if(!plan){
+        reviewBtn.disabled = true;
+        recommendedPlanInput.value = '';
+        planPriceInput.value = '';
+        return;
+      }
+      planTitle.textContent = plan.label;
+      planPrice.textContent = plan.price;
+      planCopy.innerHTML = plan.description;
+      planFeatures.innerHTML = plan.features.map(item => `<li>${item}</li>`).join('');
+      planImage.src = plan.image;
+      planImage.alt = `${plan.name} icon`;
+      planImage.hidden = false;
+      reviewBtn.disabled = false;
+      recommendedPlanInput.value = plan.name;
+      planPriceInput.value = plan.price;
+    }
+
+    function renderSummary(){
+      const selected = form.querySelector('input[name="bin_range"]:checked');
+      const plan = selected ? planCatalog[selected.value] : null;
+      const rows = [
+        {label: 'Name', value: form.elements.name.value},
+        {label: 'Email', value: form.elements.email.value},
+        {label: 'Phone', value: form.elements.phone.value},
+        {label: 'Service address', value: form.elements.address.value},
+        {label: 'Bins requested', value: selected ? selected.value.replace('-', ' to ') + ' bins' : ''}
+      ];
+      summaryWrap.innerHTML = rows
+        .filter(row => row.value)
+        .map(row => `<div class="summary-row"><span>${row.label}</span><strong>${row.value}</strong></div>`)
+        .join('');
+
+      if(plan){
+        summaryPlanTitle.textContent = plan.label;
+        summaryPlanPrice.textContent = plan.price;
+        summaryPlanCopy.innerHTML = plan.description;
+        summaryPlanFeatures.innerHTML = plan.features.map(item => `<li>${item}</li>`).join('');
+        summaryPlanImage.src = plan.image;
+        summaryPlanImage.alt = `${plan.name} icon`;
+        summaryPlanImage.hidden = false;
+      }
+    }
+
+    planInputs.forEach(input=>{
+      input.addEventListener('change', ()=>{
+        updatePlanHighlights();
+        updatePlanCard();
+        planButtonStep2.disabled = !form.querySelector('input[name="bin_range"]:checked');
+      });
+    });
+
+    showStep(0);
+    updatePlanHighlights();
+
+    form.addEventListener('submit', async (event)=>{
+      event.preventDefault();
+      successNotice.classList.remove('show');
+      errorNotice.classList.remove('show');
+
+      if(!validateStep(3)){
+        return;
+      }
+
+      const formData = new FormData(form);
       try{
-        const res = await fetch('https://formspree.io/f/xgvpgrqg', {
+        const response = await fetch('https://formspree.io/f/xgvpgrqg', {
           method: 'POST',
           headers: { 'Accept': 'application/json' },
-          body: data
+          body: formData
         });
 
-        if(res.ok){
-          ok.classList.add('show');
+        if(response.ok){
+          successNotice.classList.add('show');
           form.reset();
-          window.scrollTo({top:0, behavior:'smooth'});
+          planButtonStep2.disabled = true;
+          reviewBtn.disabled = true;
+          showStep(0);
+          updatePlanHighlights();
+          updatePlanCard();
         }else{
-          err.classList.add('show');
+          errorNotice.classList.add('show');
         }
-      }catch(_){
-        err.classList.add('show');
+      }catch(error){
+        console.error(error);
+        errorNotice.classList.add('show');
       }
     });
   </script>
