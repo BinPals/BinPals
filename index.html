@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="shared.css">
+
   <script src="site.js" defer></script>
 
   <style>
@@ -39,29 +41,6 @@
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--container);margin:0 auto;padding:0 clamp(16px,3vw,32px)}
 
-    /* Header */
-    .header{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:none;
-      background:#0b0b0f;
-      border-bottom:1px solid rgba(226,232,240,.08);
-      box-shadow:none;
-    }
-    .header-inner{
-      display:grid; grid-template-columns:auto 1fr auto;
-      align-items:center; gap:16px;
-      min-height:72px;
-    }
-    .logo{display:block; height:44px}
-    .logo img{height:44px; width:auto; display:block}
-
-    /* Desktop nav */
-    .nav{display:none; align-items:center; justify-content:center; gap:28px}
-    .nav a{font-weight:600; font-size:14px; color:#fff}
-    .nav a:hover{opacity:.9}
-
-    /* Header CTA (desktop) */
-    .header-cta{display:none}
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       gap:10px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:15px;
@@ -77,43 +56,6 @@
       box-shadow:none;
     }
     .btn--ghost:hover{background:rgba(255,255,255,.12)}
-
-    /* Mobile hamburger */
-    .hamburger{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:42px; height:42px; border-radius:12px; border:1px solid rgba(226,232,240,.18);
-      background:rgba(226,232,240,.06);
-    }
-    .hamburger span, .hamburger::before, .hamburger::after{
-      content:""; display:block; width:20px; height:2px; background:#e2e8f0; border-radius:2px;
-    }
-    .hamburger{gap:4px}
-
-    @media (max-width: 1023px){
-      .header-inner{grid-template-columns:auto 1fr;}
-      .hamburger{justify-self:end;}
-    }
-
-    /* Drawer */
-    .drawer{
-      position:fixed; inset:0; background:rgba(15,23,42,.45); display:none;
-    }
-    .drawer[aria-hidden="false"]{display:block}
-    .sheet{
-      position:absolute; inset:0 0 0 auto; width:min(90vw,420px); height:100%;
-      background:var(--panel); border-left:1px solid rgba(15,23,42,.1);
-      display:flex; flex-direction:column;
-      transform:translateX(100%); transition:.25s ease transform;
-    }
-    .drawer[aria-hidden="false"] .sheet{transform:translateX(0)}
-    .sheet-head{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid rgba(15,23,42,.06)}
-    .sheet-title{font-weight:700; font-size:18px}
-    .sheet-close{border:1px solid rgba(15,23,42,.1); background:rgba(241,245,249,.6); color:#0f172a; border-radius:999px; padding:8px 14px; font-weight:600}
-    .sheet-nav{display:flex; flex-direction:column; gap:10px; padding:14px 16px}
-    .sheet-nav a{display:block; padding:16px 12px; border-bottom:1px solid rgba(15,23,42,.06); font-weight:600; color:#0f172a}
-    .sheet-foot{margin-top:auto; padding:18px; border-top:1px solid rgba(15,23,42,.06)}
-    .sheet-foot .btn{width:100%}
-
     /* Sections */
     section{padding: clamp(72px, 9vw, 140px) 0}
     #pricing{
@@ -264,58 +206,6 @@
       color:#fff;
     }
 
-    /* Footer */
-    footer{
-      padding: clamp(48px,6vw,72px) 0;
-      color:#e2e8f0;
-      font-size:14px;
-      background:#06060b;
-      border-top:1px solid rgba(148,163,184,.18);
-    }
-    .footer-inner{
-      display:grid;
-      gap: clamp(28px,4vw,44px);
-      padding-bottom: clamp(32px,4vw,46px);
-      border-bottom:1px solid rgba(148,163,184,.14);
-    }
-    .footer-brand img{
-      width:120px;
-      height:auto;
-      display:block;
-      margin-bottom:18px;
-    }
-    .footer-brand p{margin:0; color:rgba(226,232,240,.72); line-height:1.6; max-width:360px}
-    .footer h3{
-      margin:0 0 14px;
-      font-size:16px;
-      font-weight:700;
-      color:#f8fafc;
-      letter-spacing:.02em;
-      text-transform:uppercase;
-    }
-    .footer-inner ul{margin:0; padding:0; list-style:none; display:grid; gap:10px}
-    .footer-inner li{color:rgba(226,232,240,.76)}
-    .footer-inner a{color:#bbf7d0; font-weight:600}
-    .footer-inner a:hover{color:#86efac}
-    .footer-meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px 24px;
-      align-items:center;
-      justify-content:space-between;
-      margin-top: clamp(26px,3vw,40px);
-      color:rgba(226,232,240,.58);
-    }
-    .footer-meta span{display:inline-flex; align-items:center; gap:8px}
-    .footer-meta span::before{
-      content:"";
-      width:6px;
-      height:6px;
-      border-radius:50%;
-      background:rgba(148,163,184,.45);
-    }
-    .footer-meta span:first-child::before{display:none}
-
     /* Layout: desktop */
     @media (min-width:768px){
       .cards{grid-template-columns:repeat(3,1fr); position:relative}
@@ -324,12 +214,8 @@
       section{padding: clamp(110px, 12vw, 190px) 0}
       #pricing{padding: clamp(80px, 9vw, 140px) 0}
       .why-grid{grid-template-columns:repeat(2,1fr)}
-      .footer-inner{grid-template-columns:2fr 1fr 1fr}
     }
     @media (min-width:1024px){
-      .nav{display:flex}
-      .header-cta{display:block}
-      .hamburger{display:none}          /* ← hide the ghost pill on desktop */
       .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
       .why-grid{grid-template-columns:repeat(4,1fr)}
     }
