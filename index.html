@@ -109,6 +109,20 @@
       position:relative;
     }
     .cards::before{display:none}
+    .why-grid{
+      display:grid;
+      gap: clamp(20px, 2.6vw, 34px);
+    }
+    .why-card{
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding: clamp(22px, 2.8vw, 32px);
+      border:1px solid rgba(148,163,184,.22);
+      box-shadow:none;
+      text-align:left;
+    }
+    .why-card h3{margin:0 0 10px; font-size:21px; color:#0f172a}
+    .why-card h4{margin:0; color:var(--muted); font-size:16px; font-weight:500}
     .card{
       position:relative;
       background:var(--brand);
@@ -191,7 +205,15 @@
       box-shadow:none;
       border:1px solid rgba(148,163,184,.22);
     }
-    .price h4{margin:0 0 6px; font-size:22px}
+    .price-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:10px;
+    }
+    .price-head h3{margin:0; font-size:22px; color:#0f172a}
+    .price-note{margin:4px 0 14px; color:#1e293b; font-size:16px; font-weight:500}
     .num{font-size: clamp(30px,3.8vw,44px); font-weight:800; margin:6px 0 2px; color:#0f172a}
     .sub{color:#1e293b; font-weight:600; margin-bottom:14px}
     .list{margin:0 0 18px; padding:0; list-style:none}
@@ -206,6 +228,31 @@
       background:#0c0c0c;
       color:#fff;
     }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      background:#f97316;
+      color:#fff;
+    }
+    .badge--popular{background:#16a34a;}
+    .testimonial{
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding: clamp(26px, 3vw, 36px);
+      border:1px solid rgba(148,163,184,.22);
+      max-width:720px;
+      margin:24px auto 0;
+    }
+    .testimonial h3{margin:0 0 12px; font-size: clamp(20px, 2.4vw, 26px); color:#0f172a}
+    .testimonial h4{margin:0; font-size:16px; color:var(--muted); font-weight:600}
+    #cta-peoria{background:#0f172a; color:#fff; padding: clamp(72px, 9vw, 130px) 0}
+    #cta-peoria h2{color:#fff; margin:0 0 20px}
 
     /* Layout: desktop */
     @media (min-width:768px){
@@ -237,8 +284,8 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container center">
-      <h1>Arizona's friendliest trash valet service.</h1>
-      <p class="lead hero-lead">BinPals keeps pickup night simple for busy households, travelers, and snowbirds across Peoria, Surprise, Sun City, and Sun City West.</p>
+      <h1>Arizona's Friendliest Trash Valet Service in Peoria, AZ</h1>
+      <p class="lead hero-lead">BinPals keeps pickup night simple for busy households, travelers, and snowbirds throughout Peoria, with limited availability in Surprise, Sun City, and Sun City West.</p>
       <div class="stack" style="margin-top:18px">
         <a class="btn" href="form.html">Get Started</a>
       </div>
@@ -249,25 +296,25 @@
   <section id="how">
     <div class="container">
       <div class="center" style="margin-bottom:28px">
-        <h2>How it works</h2>
+        <h2>How It Works</h2>
         <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#0f172a; font-weight:500;">Here’s exactly what happens from the moment you schedule until every bin is back in place.</p>
       </div>
       <div class="cards">
         <div class="card">
           <div class="card-num">01</div>
-          <h3>Share your schedule</h3>
+          <h3>Share Your Schedule</h3>
           <p>Choose your pickup nights, drop any gate or garage notes, and let us know how we can tailor the visit.</p>
           <p class="card-note">We lock in the details with a quick confirmation so you know exactly when we’ll swing by.</p>
         </div>
         <div class="card">
           <div class="card-num">02</div>
-          <h3>We stage and return</h3>
-          <p>The BinPals crew sets the cans out the night before collection, then brings them back tidy and out of sight.</p>
+          <h3>We Stage and Return</h3>
+          <p>The BinPals crew sets out your cans the night before collection and returns them clean and tucked away after pickup.</p>
           <p class="card-note">Expect a friendly update once everything is tucked away where it belongs.</p>
         </div>
         <div class="card">
           <div class="card-num">03</div>
-          <h3>Enjoy effortless service</h3>
+          <h3>Enjoy Effortless Service</h3>
           <p>Whether you’re home, traveling, or hosting guests, we keep your bin routine on autopilot every week.</p>
           <p class="card-note">Need a pause or extra pickup? Send a quick message and we’ll take care of the rest.</p>
         </div>
@@ -275,17 +322,42 @@
     </div>
   </section>
 
-  <section id="why">
+  <section id="about">
     <div class="container">
       <div class="split">
         <div class="split-media">
-          <img src="44FF880F-E70B-4F8A-9B98-C4B3BB042369.png" alt="BinPals trash valet team posing beside curbside bins" />
+          <img src="44FF880F-E70B-4F8A-9B98-C4B3BB042369.png" alt="BinPals trash valet team posing beside curbside bins in Peoria, Arizona" />
         </div>
         <div class="split-content">
-          <h2>BinPals Trash Valet</h2>
-          <p class="lead">Peoria’s dedicated valet trash crew for homeowners, travelers, and busy families.</p>
-          <p>We set out, return, and tidy your cans with dependable evening service, quick confirmations, and respectful handling every visit. From HOA-friendly routes to last-minute add-ons, our team keeps bin day simple so you can focus on what matters most.</p>
+          <h2>About BinPals</h2>
+          <p>BinPals is a locally owned trash valet service based in Peoria, Arizona. Built for busy homeowners, travelers, and snowbirds, our mission is to make trash day effortless. Licensed, insured, and dependable, we ensure every bin is set out, returned, and tucked away on time.</p>
           <a class="btn" href="form.html">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="container">
+      <div class="center" style="margin-bottom: 38px;">
+        <h2>Why Peoria Homeowners Choose BinPals</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>Reliable Weekly Service</h3>
+          <h4>Dependable pickups that keep your routine stress-free.</h4>
+        </div>
+        <div class="why-card">
+          <h3>Perfect for Snowbirds</h3>
+          <h4>Keep your Peoria home cared for even when you’re away.</h4>
+        </div>
+        <div class="why-card">
+          <h3>Locally Owned in Peoria</h3>
+          <h4>Friendly neighborhood service from people who live nearby.</h4>
+        </div>
+        <div class="why-card">
+          <h3>Easy Communication</h3>
+          <h4>Quick updates via text or your online dashboard.</h4>
         </div>
       </div>
     </div>
@@ -295,7 +367,7 @@
   <section id="pricing">
     <div class="container">
       <div class="center pricing-top">
-        <h2>Pricing</h2>
+        <h2>Peoria Valet Trash Pricing</h2>
         <p class="lead">Choose monthly or quarterly billing. Cancel anytime.</p>
 
         <div class="toggle" role="group" aria-label="billing switch" style="margin-top:10px">
@@ -310,9 +382,12 @@
       <div class="price-grid" id="priceGrid">
         <!-- Starter -->
         <div class="price">
-          <h4>Starter</h4>
+          <div class="price-head">
+            <h3>Starter</h3>
+          </div>
           <div class="num"><span data-q="$39/mo" data-m="$49/mo">$39/mo</span></div>
           <div class="sub"><span data-q="billed quarterly" data-m="billed monthly">billed quarterly</span></div>
+          <h4 class="price-note">Ideal for Peoria households with up to 2 bins.</h4>
           <ul class="list">
             <li>Service for up to 2 cans</li>
             <li>Set out &amp; return once per week</li>
@@ -323,9 +398,13 @@
 
         <!-- Premium -->
         <div class="price">
-          <h4>Premium</h4>
+          <div class="price-head">
+            <h3>Premium</h3>
+            <span class="badge badge--popular">Most Popular</span>
+          </div>
           <div class="num"><span data-q="$54/mo" data-m="$65/mo">$54/mo</span></div>
           <div class="sub"><span data-q="billed quarterly" data-m="billed monthly">billed quarterly</span></div>
+          <h4 class="price-note">Perfect for active Peoria families with multiple bins.</h4>
           <ul class="list">
             <li>Service for up to 4 cans</li>
             <li>All access to client dashboard</li>
@@ -336,9 +415,12 @@
 
         <!-- Business -->
         <div class="price">
-          <h4>Business</h4>
+          <div class="price-head">
+            <h3>Business</h3>
+          </div>
           <div class="num"><span data-q="$65/mo" data-m="$75/mo">$65/mo</span></div>
           <div class="sub"><span data-q="billed quarterly" data-m="billed monthly">billed quarterly</span></div>
+          <h4 class="price-note">Tailored for Peoria communities and HOA-managed properties.</h4>
           <ul class="list">
             <li>Service for up to 6 cans</li>
             <li>All Premium features +</li>
@@ -350,7 +432,72 @@
     </div>
   </section>
 
+  <!-- Testimonials -->
+  <section id="testimonials">
+    <div class="container center">
+      <h2>What Peoria Residents Are Saying</h2>
+      <div class="testimonial">
+        <h3>“BinPals makes trash night the easiest part of our week!”</h3>
+        <h4>– Peoria Homeowner</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta-peoria">
+    <div class="container center">
+      <h2>Ready to Make Trash Day Effortless in Peoria?</h2>
+      <a class="btn" href="form.html">Get Started</a>
+    </div>
+  </section>
+
   <div data-include="partials/footer.html"></div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "BinPals Trash Valet",
+      "image": "https://binpals.com/BinPals-Arizona-Service.png",
+      "@id": "https://binpals.com/#binpals",
+      "url": "https://binpals.com/",
+      "telephone": "+1-623-555-0199",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Peoria",
+        "addressRegion": "AZ",
+        "postalCode": "85382",
+        "addressCountry": "US"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Peoria" },
+        { "@type": "City", "name": "Surprise" },
+        { "@type": "City", "name": "Sun City" },
+        { "@type": "City", "name": "Sun City West" }
+      ],
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 33.5806,
+        "longitude": -112.2374
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "18:00"
+        }
+      ],
+      "serviceType": "Valet Trash Service",
+      "priceRange": "$$"
+    }
+  </script>
 
   <script>
     // Pricing toggle
