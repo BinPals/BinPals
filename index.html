@@ -100,6 +100,57 @@
     }
     /* Hero margin inside (mobile already looked good; we add safe padding edges) */
     .hero .container{padding-left: clamp(16px,4vw,40px); padding-right: clamp(16px,4vw,40px)}
+    .hero-inline-form{
+      margin-top: clamp(24px, 4vw, 36px);
+      display:flex;
+      justify-content:center;
+    }
+    .inline-form{
+      width:min(100%, 620px);
+      background:#fff;
+      border-radius:24px;
+      padding: clamp(20px,3.5vw,28px);
+      box-shadow:0 22px 60px rgba(15,23,42,.15);
+      display:grid;
+      gap:18px;
+      text-align:left;
+    }
+    .inline-form .mini-grid{
+      display:grid;
+      gap:14px;
+    }
+    @media(min-width:640px){
+      .inline-form .mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    .mini-field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .mini-field span{
+      font-size:13px;
+      font-weight:600;
+      color:#1e293b;
+    }
+    .mini-field input,
+    .mini-field select{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(15,23,42,.12);
+      font:inherit;
+      color:#0f172a;
+      box-shadow:0 8px 22px rgba(15,23,42,.06);
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease;
+    }
+    .mini-field input:focus,
+    .mini-field select:focus{
+      border-color:#0ea5e9;
+      box-shadow:0 0 0 3px rgba(14,165,233,.18);
+    }
+    .inline-form button{
+      justify-self:flex-start;
+    }
 
     /* How it works */
     #how{position:relative; overflow:hidden}
@@ -287,8 +338,36 @@
     <div class="container center">
       <h1>Arizona's Friendliest Trash Valet Service in Peoria, AZ</h1>
       <p class="lead hero-lead">Weekly set-out and return valet trash service for busy Peoria homeowners, travelers, and snowbirds, with limited availability in Surprise, Sun City, and Sun City West.</p>
-      <div class="stack" style="margin-top:18px">
-        <a class="btn" href="form.html" data-cta="get-started-peoria">Get Started</a>
+      <div class="hero-inline-form">
+        <form class="inline-form" action="form.html" method="get" novalidate>
+          <div class="mini-grid">
+            <label class="mini-field">
+              <span>Full name</span>
+              <input type="text" name="name" placeholder="First and last" autocomplete="name">
+            </label>
+            <label class="mini-field">
+              <span>Email</span>
+              <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+            </label>
+            <label class="mini-field">
+              <span>Address</span>
+              <input type="text" name="address" placeholder="Street, Peoria AZ" autocomplete="street-address">
+            </label>
+            <label class="mini-field">
+              <span>Bin count</span>
+              <select name="bin_count">
+                <option value="" disabled selected>Select</option>
+                <option value="1">1 bin</option>
+                <option value="2">2 bins</option>
+                <option value="3">3 bins</option>
+                <option value="4">4 bins</option>
+                <option value="5">5 bins</option>
+                <option value="6">6 bins</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn" type="submit" data-cta="get-started-peoria">Continue</button>
+        </form>
       </div>
     </div>
   </section>
