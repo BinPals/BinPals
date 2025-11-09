@@ -111,23 +111,24 @@
     .cards::before{display:none}
     .card{
       position:relative;
-      background:var(--panel);
-      border:1px solid rgba(148,163,184,.22);
+      background:var(--brand);
+      border:0;
       border-radius:var(--radius);
       padding: clamp(20px,2.6vw,30px);
       box-shadow:none;
-      transition:transform .25s ease, border-color .25s ease;
+      transition:transform .25s ease, box-shadow .25s ease;
       display:flex; flex-direction:column; gap:12px;
+      color:#fff;
     }
     .card:hover{
       transform:translateY(-6px);
-      border-color:rgba(15,23,42,.18);
+      box-shadow:0 18px 40px rgba(34,197,94,.25);
     }
     .card-num{
       display:inline-flex; align-items:center; justify-content:center;
       width:56px; height:56px; border-radius:18px;
-      background:#22c55e;
-      font-weight:700; font-size:18px; color:#0c0c0c;
+      background:rgba(255,255,255,.18);
+      font-weight:700; font-size:18px; color:#fff;
       box-shadow:none;
     }
 
@@ -151,15 +152,15 @@
     @media(min-width:900px){
       .split{grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr)}
     }
-    .card h3{margin:0; font-size:21px; position:relative; z-index:1}
-    .card p{margin:0; color:var(--muted); position:relative; z-index:1}
+    .card h3{margin:0; font-size:21px; position:relative; z-index:1; color:#fff}
+    .card p{margin:0; color:rgba(255,255,255,.88); position:relative; z-index:1}
     .card-note{
       margin-top:auto;
       padding:14px 16px;
-      background:var(--panel-2);
+      background:rgba(255,255,255,.18);
       border-radius:var(--radius-sm);
-      border:1px solid rgba(148,163,184,.22);
-      color:#0f172a;
+      border:1px solid rgba(255,255,255,.3);
+      color:#fff;
       font-weight:500;
     }
 
@@ -249,26 +250,26 @@
     <div class="container">
       <div class="center" style="margin-bottom:28px">
         <h2>How it works</h2>
-        <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#e9fff2; font-weight:500;">From your first booking to every curbside visit, we keep trash day effortless and dependable.</p>
+        <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#0f172a; font-weight:500;">Here’s exactly what happens from the moment you schedule until every bin is back in place.</p>
       </div>
       <div class="cards">
         <div class="card">
           <div class="card-num">01</div>
-          <h3>Customize your service</h3>
-          <p>Pick your trash and recycle nights, share gate or garage codes, and let us know any special requests.</p>
-          <p class="card-note">We send a friendly confirmation so you know your route is locked in.</p>
+          <h3>Share your schedule</h3>
+          <p>Choose your pickup nights, drop any gate or garage notes, and let us know how we can tailor the visit.</p>
+          <p class="card-note">We lock in the details with a quick confirmation so you know exactly when we’ll swing by.</p>
         </div>
         <div class="card">
           <div class="card-num">02</div>
-          <h3>We handle bin day</h3>
-          <p>Our crew arrives the evening before collection to stage the cans, and we return them curb-free by dusk.</p>
-          <p class="card-note">Rain or shine, you’ll get a quick update once the bins are back home.</p>
+          <h3>We stage and return</h3>
+          <p>The BinPals crew sets the cans out the night before collection, then brings them back tidy and out of sight.</p>
+          <p class="card-note">Expect a friendly update once everything is tucked away where it belongs.</p>
         </div>
         <div class="card">
           <div class="card-num">03</div>
-          <h3>Relax and enjoy</h3>
-          <p>Sit back while we keep things tidy like clockwork — even when you’re traveling or busy with guests.</p>
-          <p class="card-note">Need to pause or add pickups? Manage it in one message with our support team.</p>
+          <h3>Enjoy effortless service</h3>
+          <p>Whether you’re home, traveling, or hosting guests, we keep your bin routine on autopilot every week.</p>
+          <p class="card-note">Need a pause or extra pickup? Send a quick message and we’ll take care of the rest.</p>
         </div>
       </div>
     </div>
