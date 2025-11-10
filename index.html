@@ -150,6 +150,8 @@
     .hero-figure{
       position:relative;
       width:min(100%, 520px);
+      display:flex;
+      align-items:flex-end;
     }
     .hero-figure img{
       position:relative;
@@ -213,13 +215,25 @@
       z-index:2;
     }
     .estimate .container{
-      display:flex;
-      justify-content:center;
       padding-left: clamp(16px,4vw,40px);
       padding-right: clamp(16px,4vw,40px);
     }
+    .estimate-inner{
+      max-width:880px;
+      margin:0 auto;
+      display:grid;
+      gap: clamp(28px, 4vw, 42px);
+      justify-items:center;
+    }
+    .estimate-copy{
+      text-align:center;
+      max-width:560px;
+    }
+    .estimate-copy .eyebrow{color:#0f172a;}
+    .estimate-copy p{margin:14px auto 0; color:var(--muted); font-size:clamp(16px,1.5vw,19px);}
     .estimate .inline-form{
       width:min(100%, 680px);
+      justify-self:stretch;
     }
 
     /* How it works */
@@ -389,15 +403,17 @@
       .hero-inner{
         flex-direction:row;
         justify-content:space-between;
-        align-items:center;
+        align-items:stretch;
+        min-height: clamp(520px, 68vh, 640px);
       }
       .hero-copy{
         max-width:560px;
         text-align:left;
+        align-self:center;
       }
       .hero-cta{justify-content:flex-start;}
       .hero-tags{justify-content:flex-start;}
-      .hero-figure{width:min(44vw, 540px);}
+      .hero-figure{width:min(44vw, 540px); align-self:flex-end;}
     }
     @media (min-width:1024px){
       .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
@@ -442,36 +458,42 @@
 
   <section class="estimate" aria-labelledby="estimate-title">
     <div class="container">
-      <h2 id="estimate-title" class="sr-only">Request your valet trash estimate</h2>
-      <form class="inline-form" action="form.html" method="get" novalidate>
-        <div class="mini-grid">
-          <label class="mini-field">
-            <span>Full name</span>
-            <input type="text" name="name" placeholder="First and last" autocomplete="name">
-          </label>
-          <label class="mini-field">
-            <span>Email</span>
-            <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
-          </label>
-          <label class="mini-field">
-            <span>Address</span>
-            <input type="text" name="address" placeholder="Street, Peoria AZ" autocomplete="street-address">
-          </label>
-          <label class="mini-field">
-            <span>Bin count</span>
-            <select name="bin_count">
-              <option value="" disabled selected>Select</option>
-              <option value="1">1 bin</option>
-              <option value="2">2 bins</option>
-              <option value="3">3 bins</option>
-              <option value="4">4 bins</option>
-              <option value="5">5 bins</option>
-              <option value="6">6 bins</option>
-            </select>
-          </label>
+      <div class="estimate-inner">
+        <div class="estimate-copy">
+          <p class="eyebrow">Get your estimate</p>
+          <h2 id="estimate-title">Weekly valet trash pricing made easy</h2>
+          <p>Tell us where you live and how many bins you have—we’ll follow up with a tailored price and start date for your Peoria home.</p>
         </div>
-        <button class="btn" type="submit" data-cta="get-started-peoria">Continue</button>
-      </form>
+        <form class="inline-form" action="form.html" method="get" novalidate>
+          <div class="mini-grid">
+            <label class="mini-field">
+              <span>Full name</span>
+              <input type="text" name="name" placeholder="First and last" autocomplete="name">
+            </label>
+            <label class="mini-field">
+              <span>Email</span>
+              <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+            </label>
+            <label class="mini-field">
+              <span>Address</span>
+              <input type="text" name="address" placeholder="Street, Peoria AZ" autocomplete="street-address">
+            </label>
+            <label class="mini-field">
+              <span>Bin count</span>
+              <select name="bin_count">
+                <option value="" disabled selected>Select</option>
+                <option value="1">1 bin</option>
+                <option value="2">2 bins</option>
+                <option value="3">3 bins</option>
+                <option value="4">4 bins</option>
+                <option value="5">5 bins</option>
+                <option value="6">6 bins</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn" type="submit" data-cta="get-started-peoria">Continue</button>
+        </form>
+      </div>
     </div>
   </section>
 
