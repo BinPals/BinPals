@@ -178,10 +178,10 @@
       overflow:hidden;
     }
 
-    /* default container padding; boosted on desktop below */
+    /* container with more left padding on desktop */
     .hero .container{
-      padding-left: clamp(16px,4vw,40px);
-      padding-right: clamp(16px,4vw,40px);
+      padding-left: clamp(16px, 8vw, 120px);
+      padding-right: clamp(16px, 4vw, 56px);
     }
 
     .hero-inner{
@@ -780,11 +780,6 @@
     }
 
     @media (min-width:1024px){
-      .hero .container{
-        padding-left: clamp(64px, 8vw, 120px); /* extra left spacing like example */
-        padding-right: clamp(24px, 4vw, 56px);
-      }
-
       .why-grid{
         grid-template-columns:repeat(4,1fr);
       }
