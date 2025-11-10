@@ -338,6 +338,20 @@
       border-color:rgba(34,197,94,.6);
       box-shadow:0 20px 48px rgba(34,197,94,.16);
     }
+    .plan-picker__option:disabled,
+    .plan-picker__option[aria-disabled="true"]{
+      opacity:.5;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+      border-color:rgba(148,163,184,.28);
+    }
+    .plan-picker__option:disabled:hover,
+    .plan-picker__option[aria-disabled="true"]:hover{
+      transform:none;
+      border-color:rgba(148,163,184,.28);
+      box-shadow:none;
+    }
     .plan-picker__option.is-recommended:not(.is-selected){
       border-color:rgba(34,197,94,.45);
       box-shadow:0 20px 48px rgba(34,197,94,.14);
@@ -674,6 +688,7 @@
         label: 'Starter Plan',
         price: '$39/mo · billed quarterly',
         description: 'Service for up to 2 cans with once-per-week set out and return.',
+        maxBins: 2,
         features: [
           'Service for up to 2 cans',
           'Weekly valet set out & return',
@@ -686,6 +701,7 @@
         label: 'Premium Plan',
         price: '$54/mo · billed quarterly',
         description: 'Our most popular valet trash plan for up to 4 cans with flexible pickup days.',
+        maxBins: 4,
         features: [
           'Service for up to 4 cans',
           'Dashboard access for schedule updates',
@@ -698,6 +714,7 @@
         label: 'Business Plan',
         price: '$65/mo · billed quarterly',
         description: 'Extended valet support for large households, casitas, and light commercial needs.',
+        maxBins: Infinity,
         features: [
           'Service for up to 6 cans',
           'All Premium benefits included',
@@ -707,13 +724,20 @@
       }
     };
 
-    function getRecommendedPlanKey(){
+    function getSelectedBinTotal(){
       const trash = parseInt(form.elements.trash_bins.value, 10);
       const recycle = parseInt(form.elements.recycle_bins.value, 10);
       if(Number.isNaN(trash) || Number.isNaN(recycle)){
         return null;
       }
-      const total = trash + recycle;
+      return trash + recycle;
+    }
+
+    function getRecommendedPlanKey(){
+      const total = getSelectedBinTotal();
+      if(total === null){
+        return null;
+      }
       if(total <= 2){
         return 'starter';
       }
@@ -725,7 +749,15 @@
 
     function determinePlanKey(){
       const recommended = getRecommendedPlanKey();
-      return manualPlanKey || recommended;
+      if(manualPlanKey){
+        const total = getSelectedBinTotal();
+        const manualPlan = planCatalog[manualPlanKey];
+        const maxBins = manualPlan && typeof manualPlan.maxBins === 'number' ? manualPlan.maxBins : Infinity;
+        if(total === null || total <= maxBins){
+          return manualPlanKey;
+        }
+      }
+      return recommended;
     }
 
     function buildPlanPicker(){
@@ -753,10 +785,20 @@
       }
       const recommendedKey = getRecommendedPlanKey();
       const selectedKey = determinePlanKey();
+      const totalBins = getSelectedBinTotal();
       planOptionButtons.forEach(button => {
         const { planOption } = button.dataset;
-        const isSelected = selectedKey === planOption;
-        const isRecommended = recommendedKey === planOption;
+        const plan = planCatalog[planOption];
+        const maxBins = plan && typeof plan.maxBins === 'number' ? plan.maxBins : Infinity;
+        const overCapacity = totalBins !== null && totalBins > maxBins;
+        button.disabled = overCapacity;
+        if(overCapacity){
+          button.setAttribute('aria-disabled', 'true');
+        }else{
+          button.removeAttribute('aria-disabled');
+        }
+        const isSelected = !overCapacity && selectedKey === planOption;
+        const isRecommended = !overCapacity && recommendedKey === planOption;
         button.classList.toggle('is-selected', Boolean(isSelected));
         button.classList.toggle('is-recommended', Boolean(isRecommended));
         button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
@@ -776,9 +818,10 @@
       document.body.style.overflow = 'hidden';
       planPicker.removeAttribute('hidden');
       renderPlanSelection();
-      const focusTarget = (planOptionButtons.find(button => button.classList.contains('is-selected'))
-        || planOptionButtons.find(button => button.classList.contains('is-recommended'))
-        || planOptionButtons[0]
+      const availableButtons = planOptionButtons.filter(button => !button.disabled);
+      const focusTarget = (availableButtons.find(button => button.classList.contains('is-selected'))
+        || availableButtons.find(button => button.classList.contains('is-recommended'))
+        || availableButtons[0]
         || planPickerDialog);
       if(focusTarget && typeof focusTarget.focus === 'function'){
         setTimeout(()=>focusTarget.focus(), 0);
@@ -1021,7 +1064,7 @@
           return;
         }
         const optionKey = optionButton.dataset.planOption;
-        if(!planCatalog[optionKey]){
+        if(optionButton.disabled || !planCatalog[optionKey]){
           return;
         }
         manualPlanKey = optionKey;
