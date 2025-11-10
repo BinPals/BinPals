@@ -119,14 +119,14 @@
     }
 
     h1{
-      font-size: clamp(36px, 4.8vw, 62px);
+      font-size: clamp(36px, 4.4vw, 58px);
       line-height:1.12;
       margin:0 0 18px;
       color:#0f172a;
     }
 
     h2{
-      font-size: clamp(28px, 3.4vw, 40px);
+      font-size: clamp(26px, 3vw, 38px);
       margin:0 0 18px;
       color:#0f172a;
     }
@@ -196,7 +196,19 @@
       text-align:center;
       display:flex;
       flex-direction:column;
-      gap: clamp(18px, 4vw, 28px);
+      gap: clamp(18px, 3.6vw, 26px);
+    }
+
+    .hero-copy h1{
+      font-size: clamp(34px, 4vw, 52px);
+      line-height:1.1;
+    }
+
+    .hero-copy .lead{
+      font-size: clamp(16px, 1.4vw, 18px);
+      max-width: 540px;
+      margin-left:auto;
+      margin-right:auto;
     }
 
     .hero-cta{
@@ -456,6 +468,22 @@
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       display:block;
+    }
+
+    #about{
+      padding: clamp(60px, 7vw, 110px) 0;
+    }
+
+    #about .split{
+      max-width: 960px;
+      margin:0 auto;
+      gap: clamp(20px, 3vw, 40px);
+    }
+
+    #about .split-media img{
+      box-shadow:none;
+      max-width: clamp(260px, 30vw, 420px);
+      margin:0 auto;
     }
 
     .split-content h2{margin:0 0 16px}
@@ -923,33 +951,6 @@
     </div>
   </section>
 
-  <!-- Why -->
-  <section id="why">
-    <div class="container">
-      <div class="center" style="margin-bottom: 38px;">
-        <h2>Why Peoria Homeowners Choose BinPals</h2>
-      </div>
-      <div class="why-grid">
-        <div class="why-card">
-          <h3>Reliable Weekly Service</h3>
-          <h4>Dependable pickups that keep your routine stress-free.</h4>
-        </div>
-        <div class="why-card">
-          <h3>Perfect for Snowbirds</h3>
-          <h4>Keep your Peoria home cared for even when you’re away.</h4>
-        </div>
-        <div class="why-card">
-          <h3>Locally Owned in Peoria</h3>
-          <h4>Friendly neighborhood service from people who live nearby.</h4>
-        </div>
-        <div class="why-card">
-          <h3>Easy Communication</h3>
-          <h4>Quick updates via text or your online dashboard.</h4>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Pricing -->
   <section id="pricing">
     <div class="container">
@@ -1020,17 +1021,6 @@
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section id="testimonials">
-    <div class="container center">
-      <h2>What Peoria Residents Are Saying</h2>
-      <div class="testimonial">
-        <h3>“BinPals makes trash night the easiest part of our week!”</h3>
-        <h4>– Peoria Homeowner</h4>
-      </div>
-    </div>
-  </section>
-
   <!-- FAQs with accordion -->
   <section id="faqs">
     <div class="container">
@@ -1096,25 +1086,6 @@
     <div class="container center">
       <h2>Ready to Make Trash Day Effortless in Peoria?</h2>
       <a class="btn" href="form.html" data-cta="get-started-peoria">Get Started</a>
-    </div>
-  </section>
-
-  <!-- Service Areas -->
-  <section id="service-areas">
-    <div class="container">
-      <div class="center" style="margin-bottom: 32px;">
-        <h2>Service Areas</h2>
-      </div>
-      <div style="display:grid; gap: clamp(18px, 2.6vw, 28px); max-width:760px; margin:0 auto; text-align:center;">
-        <div>
-          <h3>Peoria, AZ (Primary Service Area)</h3>
-          <p>We prioritize Peoria homeowners for ongoing valet trash service.</p>
-        </div>
-        <div>
-          <h3>Limited Availability</h3>
-          <p>Surprise, Sun City, and Sun City West may be available depending on route capacity. Request service and we’ll confirm.</p>
-        </div>
-      </div>
     </div>
   </section>
 
