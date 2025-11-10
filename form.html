@@ -253,6 +253,128 @@
     @media(min-width:600px){
       .plan-card{grid-template-columns:auto 1fr; align-items:center}
     }
+    .plan-picker{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(15,23,42,.6);
+      backdrop-filter:blur(4px);
+      padding:clamp(20px,4vw,40px);
+      z-index:1000;
+    }
+    .plan-picker[hidden]{
+      display:none;
+    }
+    .plan-picker__dialog{
+      width:min(100%,960px);
+      max-height:min(90vh,720px);
+      overflow:auto;
+      background:#fff;
+      border-radius:24px;
+      padding:clamp(24px,4vw,36px);
+      box-shadow:0 28px 68px rgba(15,23,42,.18);
+      position:relative;
+    }
+    .plan-picker__close{
+      position:absolute;
+      top:18px;
+      right:18px;
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      border:1px solid rgba(15,23,42,.12);
+      background:rgba(248,250,252,.9);
+      color:var(--text);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      line-height:1;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .plan-picker__close:hover{
+      background:rgba(226,232,240,.9);
+      transform:translateY(-1px);
+    }
+    .plan-picker__title{
+      margin:0;
+      font-size:24px;
+    }
+    .plan-picker__lead{
+      margin:12px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      max-width:640px;
+    }
+    .plan-picker__grid{
+      display:grid;
+      gap:18px;
+      margin-top:24px;
+    }
+    @media(min-width:760px){
+      .plan-picker__grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+    }
+    .plan-picker__option{
+      position:relative;
+      padding:22px;
+      border-radius:20px;
+      border:2px solid rgba(15,23,42,.08);
+      background:#f8fafc;
+      box-shadow:0 18px 44px rgba(15,23,42,.1);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      text-align:left;
+      cursor:pointer;
+      font:inherit;
+      color:inherit;
+      transition:.2s ease;
+    }
+    .plan-picker__option:hover{
+      transform:translateY(-2px);
+      border-color:rgba(34,197,94,.6);
+      box-shadow:0 20px 48px rgba(34,197,94,.16);
+    }
+    .plan-picker__option.is-recommended:not(.is-selected){
+      border-color:rgba(34,197,94,.45);
+      box-shadow:0 20px 48px rgba(34,197,94,.14);
+    }
+    .plan-picker__option.is-selected{
+      border-color:var(--brand);
+      background:#ecfdf3;
+      box-shadow:0 24px 56px rgba(34,197,94,.2);
+    }
+    .plan-picker__badge{
+      position:absolute;
+      top:18px;
+      right:18px;
+      padding:4px 12px;
+      border-radius:999px;
+      background:var(--brand);
+      color:#fff;
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .plan-picker__name{
+      font-size:18px;
+      font-weight:700;
+    }
+    .plan-picker__price{
+      font-size:15px;
+      font-weight:700;
+      color:var(--brand-dark);
+    }
+    .plan-picker__description{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.5;
+    }
     .plan-visual{
       width:96px; height:96px; border-radius:26px;
       background:rgba(34,197,94,.12);
@@ -483,6 +605,15 @@
                 </div>
               </div>
 
+              <div class="plan-picker" data-plan-picker hidden>
+                <div class="plan-picker__dialog" role="dialog" aria-modal="true" aria-labelledby="planPickerTitle" aria-describedby="planPickerDescription" data-plan-picker-dialog tabindex="-1">
+                  <button type="button" class="plan-picker__close" data-plan-picker-close aria-label="Close plan picker">&times;</button>
+                  <h3 class="plan-picker__title" id="planPickerTitle">Choose your plan</h3>
+                  <p class="plan-picker__lead" id="planPickerDescription">Pick the BinPals plan that fits your household. Your recommended match is highlighted.</p>
+                  <div class="plan-picker__grid" data-plan-choice-grid></div>
+                </div>
+              </div>
+
             </form>
           </div>
         </div>
@@ -507,6 +638,10 @@
     const planCopy = planCard.querySelector('[data-plan-copy]');
     const planFeatures = planCard.querySelector('[data-plan-features]');
     const changePlanBtn = planCard.querySelector('[data-change-plan]');
+    const planPicker = document.querySelector('[data-plan-picker]');
+    const planPickerDialog = planPicker ? planPicker.querySelector('[data-plan-picker-dialog]') : null;
+    const planChoiceGrid = planPicker ? planPicker.querySelector('[data-plan-choice-grid]') : null;
+    const planPickerCloseButtons = planPicker ? planPicker.querySelectorAll('[data-plan-picker-close]') : [];
     const binNextBtn = document.getElementById('binNext');
     const confirmBtn = document.getElementById('confirmBtn');
     const summaryWrap = document.querySelector('[data-summary]');
@@ -523,8 +658,15 @@
     const recommendedPlanInput = document.getElementById('recommendedPlan');
     const planPriceInput = document.getElementById('planPrice');
     const binSelects = Array.from(form.querySelectorAll('[data-bin-select]'));
+    const planPreviewStep = planCard.closest('[data-step-index]');
+    const planPreviewIndex = steps.indexOf(planPreviewStep);
+    const confirmStep = summaryPlan.closest('[data-step-index]');
 
     let currentStep = 0;
+    let manualPlanKey = null;
+    let planOptionButtons = [];
+    let previousFocusedElement = null;
+    let previousBodyOverflow = '';
 
     const planCatalog = {
       starter: {
@@ -565,7 +707,7 @@
       }
     };
 
-    function determinePlanKey(){
+    function getRecommendedPlanKey(){
       const trash = parseInt(form.elements.trash_bins.value, 10);
       const recycle = parseInt(form.elements.recycle_bins.value, 10);
       if(Number.isNaN(trash) || Number.isNaN(recycle)){
@@ -579,6 +721,85 @@
         return 'premium';
       }
       return 'business';
+    }
+
+    function determinePlanKey(){
+      const recommended = getRecommendedPlanKey();
+      return manualPlanKey || recommended;
+    }
+
+    function buildPlanPicker(){
+      if(!planChoiceGrid){
+        return;
+      }
+      const options = Object.entries(planCatalog).map(([key, plan])=>`
+        <button type="button" class="plan-picker__option" data-plan-option="${key}" aria-pressed="false">
+          <span class="plan-picker__badge" data-plan-badge hidden>Recommended</span>
+          <span class="plan-picker__name">${plan.label}</span>
+          <span class="plan-picker__price">${plan.price}</span>
+          <p class="plan-picker__description">${plan.description}</p>
+          <ul class="plan-features">
+            ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
+          </ul>
+        </button>
+      `).join('');
+      planChoiceGrid.innerHTML = options;
+      planOptionButtons = Array.from(planChoiceGrid.querySelectorAll('[data-plan-option]'));
+    }
+
+    function renderPlanSelection(){
+      if(!planChoiceGrid || planOptionButtons.length === 0){
+        return;
+      }
+      const recommendedKey = getRecommendedPlanKey();
+      const selectedKey = determinePlanKey();
+      planOptionButtons.forEach(button => {
+        const { planOption } = button.dataset;
+        const isSelected = selectedKey === planOption;
+        const isRecommended = recommendedKey === planOption;
+        button.classList.toggle('is-selected', Boolean(isSelected));
+        button.classList.toggle('is-recommended', Boolean(isRecommended));
+        button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+        const badge = button.querySelector('[data-plan-badge]');
+        if(badge){
+          badge.hidden = !isRecommended;
+        }
+      });
+    }
+
+    function openPlanPicker(){
+      if(!planPicker){
+        return;
+      }
+      previousFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      previousBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      planPicker.removeAttribute('hidden');
+      renderPlanSelection();
+      const focusTarget = (planOptionButtons.find(button => button.classList.contains('is-selected'))
+        || planOptionButtons.find(button => button.classList.contains('is-recommended'))
+        || planOptionButtons[0]
+        || planPickerDialog);
+      if(focusTarget && typeof focusTarget.focus === 'function'){
+        setTimeout(()=>focusTarget.focus(), 0);
+      }
+    }
+
+    function closePlanPicker(){
+      if(!planPicker || planPicker.hasAttribute('hidden')){
+        return;
+      }
+      planPicker.setAttribute('hidden','');
+      document.body.style.overflow = previousBodyOverflow;
+      const returnTarget = previousFocusedElement || changePlanBtn;
+      if(returnTarget && typeof returnTarget.focus === 'function'){
+        setTimeout(()=>returnTarget.focus(), 0);
+      }
+    }
+
+    if(planChoiceGrid){
+      buildPlanPicker();
+      renderPlanSelection();
     }
 
     function updateProgress(){
@@ -634,10 +855,10 @@
       });
       updateProgress();
       updateRequirements();
-      if(index === 2){
+      if(planPreviewStep && steps[index] === planPreviewStep){
         updatePlanCard();
       }
-      if(index === 3){
+      if(confirmStep && steps[index] === confirmStep){
         renderSummary();
       }
       if(scrollToTop){
@@ -723,6 +944,7 @@
         planImage.hidden = true;
         recommendedPlanInput.value = '';
         planPriceInput.value = '';
+        renderPlanSelection();
         return;
       }
       const plan = planCatalog[planKey];
@@ -743,6 +965,7 @@
       confirmBtn.disabled = false;
       recommendedPlanInput.value = plan.name;
       planPriceInput.value = plan.price;
+      renderPlanSelection();
     }
 
     function renderSummary(){
@@ -782,18 +1005,61 @@
 
     binSelects.forEach(select=>{
       select.addEventListener('change', ()=>{
+        manualPlanKey = null;
         updatePlanCard();
       });
     });
 
     changePlanBtn && changePlanBtn.addEventListener('click', ()=>{
-      showStep(1);
+      openPlanPicker();
+    });
+
+    if(planChoiceGrid){
+      planChoiceGrid.addEventListener('click', event=>{
+        const optionButton = event.target.closest('[data-plan-option]');
+        if(!optionButton){
+          return;
+        }
+        const optionKey = optionButton.dataset.planOption;
+        if(!planCatalog[optionKey]){
+          return;
+        }
+        manualPlanKey = optionKey;
+        updatePlanCard();
+        closePlanPicker();
+        if(planPreviewIndex >= 0){
+          showStep(planPreviewIndex, {scrollToTop:false});
+        }
+      });
+    }
+
+    planPickerCloseButtons.forEach(button=>{
+      button.addEventListener('click', ()=>{
+        closePlanPicker();
+      });
+    });
+
+    if(planPicker){
+      planPicker.addEventListener('click', event=>{
+        if(event.target === planPicker){
+          closePlanPicker();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', event=>{
+      if(event.key === 'Escape' && planPicker && !planPicker.hasAttribute('hidden')){
+        closePlanPicker();
+      }
     });
 
     function resetWizard(){
       form.reset();
       binNextBtn.disabled = true;
       confirmBtn.disabled = true;
+      manualPlanKey = null;
+      renderPlanSelection();
+      closePlanPicker();
       showStep(0, {scrollToTop:false});
       updatePlanCard();
       errorNotice.classList.remove('show');
