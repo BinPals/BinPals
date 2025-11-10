@@ -119,25 +119,28 @@
       background:linear-gradient(90deg, var(--brand), #0ea5e9);
       transition:width .35s ease;
     }
-    .progress-steps{
-      list-style:none; margin:0; padding:0; display:flex; justify-content:space-between;
-      gap:12px; flex-wrap:wrap;
+    .progress-status{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:var(--muted);
     }
-    .progress-steps li{
-      display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; font-weight:600;
-      padding:8px 12px;
-      border-radius:14px;
-      background:rgba(148,163,184,.12);
-      transition:.25s ease;
+    .progress-count{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-weight:600;
     }
-    .progress-steps .circle{
-      width:30px; height:30px; border-radius:50%; border:2px solid rgba(148,163,184,.36);
-      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;
-      background:#fff;
+    .progress-count::after{
+      content:'·';
+      color:rgba(148,163,184,.7);
+      margin-left:8px;
     }
-    .progress-steps li.is-active{color:var(--text); background:#fff; border:1px solid rgba(14,165,233,.28)}
-    .progress-steps li.is-active .circle{
-      border-color:var(--brand); background:var(--brand); color:#fff;
+    .progress-label{
+      font-weight:600;
+      color:var(--text);
     }
 
     .complete-state{display:none; text-align:center; gap:20px; justify-items:center}
@@ -347,12 +350,10 @@
                 <div class="progress-rail" aria-hidden="true">
                   <div class="progress-fill" data-progress-fill></div>
                 </div>
-                <ol class="progress-steps">
-                  <li data-progress-item="0" class="is-active"><span class="circle">1</span>Basic info</li>
-                  <li data-progress-item="1"><span class="circle">2</span>Bin counts</li>
-                  <li data-progress-item="2"><span class="circle">3</span>Plan preview</li>
-                  <li data-progress-item="3"><span class="circle">4</span>Confirm</li>
-                </ol>
+                <div class="progress-status" data-progress-status role="status" aria-live="polite">
+                  <span class="progress-count" data-progress-current>Step 1 of 4</span>
+                  <span class="progress-label" data-progress-label>Basic info</span>
+                </div>
               </div>
 
               <input type="hidden" name="recommended_plan" id="recommendedPlan">
@@ -494,8 +495,11 @@
   <script>
     const form = document.getElementById('serviceForm');
     const steps = Array.from(form.querySelectorAll('[data-step-index]'));
+    const totalSteps = steps.length;
     const progressFill = document.querySelector('[data-progress-fill]');
-    const progressItems = document.querySelectorAll('[data-progress-item]');
+    const progressStatus = document.querySelector('[data-progress-status]');
+    const progressCurrent = document.querySelector('[data-progress-current]');
+    const progressLabel = document.querySelector('[data-progress-label]');
     const planCard = document.querySelector('[data-plan-card]');
     const planImage = planCard.querySelector('[data-plan-image]');
     const planTitle = planCard.querySelector('[data-plan-title]');
@@ -578,11 +582,25 @@
     }
 
     function updateProgress(){
-      const percent = (currentStep / (steps.length - 1)) * 100;
+      const denominator = Math.max(totalSteps - 1, 1);
+      const percent = (currentStep / denominator) * 100;
       progressFill.style.width = `${percent}%`;
-      progressItems.forEach((item, index)=>{
-        item.classList.toggle('is-active', index <= currentStep);
-      });
+      if(progressCurrent){
+        progressCurrent.textContent = `Step ${currentStep + 1} of ${totalSteps}`;
+      }
+      let activeLabel = '';
+      if(progressLabel){
+        const activeStep = steps[currentStep];
+        const heading = activeStep ? activeStep.querySelector('h3') : null;
+        activeLabel = heading ? heading.textContent : '';
+        progressLabel.textContent = activeLabel;
+      }
+      if(progressStatus){
+        const statusLabel = activeLabel
+          ? `Step ${currentStep + 1} of ${totalSteps}: ${activeLabel}`
+          : `Step ${currentStep + 1} of ${totalSteps}`;
+        progressStatus.setAttribute('aria-label', statusLabel);
+      }
     }
 
     function updateRequirements(){
