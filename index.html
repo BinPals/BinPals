@@ -107,9 +107,10 @@
     /* Hero spacing */
     .hero{
       position:relative;
-      padding: clamp(120px, 16vw, 220px) 0 clamp(140px, 12vw, 220px);
+      padding: clamp(120px, 16vw, 220px) 0 0;
       background:#fff;
       overflow:hidden;
+      --hero-figure-trim: clamp(64px, 10vw, 120px);
     }
     /* Hero margin inside (mobile already looked good; we add safe padding edges) */
     .hero .container{padding-left: clamp(16px,4vw,40px); padding-right: clamp(16px,4vw,40px)}
@@ -161,6 +162,7 @@
       border-radius: clamp(18px, 3vw, 28px);
       box-shadow:none;
       z-index:1;
+      clip-path: inset(0 0 var(--hero-figure-trim) 0);
     }
     .inline-form{
       width:min(100%, 620px);
@@ -212,6 +214,7 @@
       position:relative;
       margin-top:-150px;
       padding-bottom: clamp(72px, 9vw, 120px);
+      background:var(--bg);
       z-index:2;
     }
     .estimate .container{
@@ -416,7 +419,9 @@
       .hero-figure{width:min(44vw, 540px); align-self:flex-end;}
     }
     @media (min-width:1024px){
-      .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
+      .hero{
+        padding: clamp(170px, 14vw, 260px) 0 0;
+      }
       .why-grid{grid-template-columns:repeat(4,1fr)}
     }
     @media (max-width:640px){
