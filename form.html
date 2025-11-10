@@ -90,18 +90,20 @@
       width:100%;
       display:flex;
       justify-content:center;
+      padding: clamp(16px,5vw,48px) 0;
     }
 
     .form-card{
-      width:min(100%, 760px);
+      width:min(100%, 820px);
       background:#fff;
-      border-radius:20px;
-      border:1px solid rgba(148,163,184,.26);
-      padding: clamp(28px,4vw,48px);
+      border-radius:24px;
+      border:1px solid rgba(148,163,184,.18);
+      padding: clamp(32px,5vw,56px);
       position:relative;
       overflow:hidden;
       display:grid;
-      gap: clamp(24px,3vw,36px);
+      gap: clamp(28px,4vw,44px);
+      box-shadow: var(--shadow);
     }
     .form-card.is-complete{padding: clamp(44px,5vw,64px);}
     .form-card.is-complete .progress{display:none}
@@ -156,11 +158,11 @@
 
     .form-alerts{display:grid; gap:12px}
 
-    .steps{display:grid; gap:16px}
-    .step{
-      display:none;
-    }
+    .steps{display:grid; gap: clamp(24px,4vw,36px)}
+    .step{display:none}
     .step.is-active{display:block; animation:fadeUp .35s ease}
+    .step[aria-hidden="false"]{display:block}
+    .step[aria-hidden="true"]{display:none}
 
     @keyframes fadeUp{
       from{opacity:0; transform:translateY(12px)}
@@ -168,12 +170,12 @@
     }
 
     .step-card{
-      background:#fff;
-      border-radius:18px;
-      border:1px solid rgba(148,163,184,.22);
-      padding: clamp(22px,3vw,32px);
+      background:transparent;
+      border-radius:20px;
+      border:0;
+      padding:0;
       display:grid;
-      gap: clamp(18px,2.5vw,26px);
+      gap: clamp(22px,3vw,32px);
     }
     .step-card h3{margin:0; font-size:20px; color:#0f172a}
 
@@ -361,7 +363,7 @@
               </div>
 
               <div class="steps">
-                <div class="step" data-step-index="0" aria-hidden="false">
+                <div class="step is-active" data-step-index="0" aria-hidden="false">
                   <div class="step-card">
                     <h3>Basic info</h3>
                     <div class="field-grid">
@@ -390,7 +392,7 @@
                   </div>
                 </div>
 
-                <div class="step" data-step-index="1" aria-hidden="true">
+                <div class="step" data-step-index="1" aria-hidden="true" hidden>
                   <div class="step-card">
                     <h3>Bin counts</h3>
                     <div class="field-grid">
@@ -423,7 +425,7 @@
                   </div>
                 </div>
 
-                <div class="step" data-step-index="2" aria-hidden="true">
+                <div class="step" data-step-index="2" aria-hidden="true" hidden>
                   <div class="step-card">
                     <h3>Plan preview</h3>
                     <div class="plan-card" data-plan-card>
@@ -446,7 +448,7 @@
                   </div>
                 </div>
 
-                <div class="step" data-step-index="3" aria-hidden="true">
+                <div class="step" data-step-index="3" aria-hidden="true" hidden>
                   <div class="step-card">
                     <h3>Confirm</h3>
                     <div class="summary">
@@ -606,6 +608,11 @@
         const isActive = i === index;
         step.setAttribute('aria-hidden', String(!isActive));
         step.classList.toggle('is-active', isActive);
+        if(isActive){
+          step.removeAttribute('hidden');
+        }else{
+          step.setAttribute('hidden','');
+        }
       });
       updateProgress();
       updateRequirements();
