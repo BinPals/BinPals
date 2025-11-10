@@ -12,7 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="shared.css">
-
   <script src="site.js" defer></script>
 
   <style>
@@ -29,8 +28,10 @@
       --gap: clamp(20px, 2.5vw, 36px);
       --container: 1200px;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
@@ -39,8 +40,15 @@
       -webkit-font-smoothing:antialiased;
       text-rendering:optimizeLegibility;
     }
+
     a{color:inherit;text-decoration:none}
-    .container{max-width:var(--container);margin:0 auto;padding:0 clamp(16px,3vw,32px)}
+
+    .container{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:0 clamp(16px,3vw,32px);
+    }
+
     .sr-only{
       position:absolute;
       width:1px;
@@ -54,37 +62,93 @@
     }
 
     .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:10px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:15px;
-      border:0; color:#fff; background:#16a34a;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 22px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:15px;
+      border:0;
+      color:#fff;
+      background:#16a34a;
       box-shadow:none;
       transition:.2s ease;
+      cursor:pointer;
     }
-    .btn:hover{background:#15803d; transform:translateY(-2px)}
+
+    .btn:hover{
+      background:#15803d;
+      transform:translateY(-2px);
+    }
+
     .btn--ghost{
       background:transparent;
-      color:#fff;
-      border:2px solid rgba(255,255,255,.5);
+      color:#0f172a;
+      border:2px solid rgba(15,23,42,.85);
       box-shadow:none;
     }
-    .btn--ghost:hover{background:rgba(255,255,255,.12)}
+
+    .btn--ghost:hover{
+      background:#0f172a;
+      color:#fff;
+    }
+
     /* Sections */
-    section{padding: clamp(72px, 9vw, 140px) 0}
+
+    section{
+      padding: clamp(72px, 9vw, 140px) 0;
+    }
+
     #pricing{
       padding: clamp(56px, 7vw, 110px) 0;
       position:relative;
       overflow:hidden;
     }
+
     #pricing::before{display:none}
     #pricing .container{position:relative; z-index:1}
-    .eyebrow{letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--muted); font-size:12px}
-    h1{font-size: clamp(36px, 4.8vw, 62px); line-height:1.12; margin:0 0 18px; color:#0f172a}
-    h2{font-size: clamp(28px, 3.4vw, 40px); margin:0 0 18px; color:#0f172a}
-    p.lead{color:var(--muted); font-size: clamp(16px,1.6vw,19px); margin:0 auto 22px; max-width:850px}
+
+    .eyebrow{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    h1{
+      font-size: clamp(36px, 4.8vw, 62px);
+      line-height:1.12;
+      margin:0 0 18px;
+      color:#0f172a;
+    }
+
+    h2{
+      font-size: clamp(28px, 3.4vw, 40px);
+      margin:0 0 18px;
+      color:#0f172a;
+    }
+
+    p.lead{
+      color:var(--muted);
+      font-size: clamp(16px,1.6vw,19px);
+      margin:0 auto 22px;
+      max-width:850px;
+    }
 
     .center{text-align:center}
-    .stack{display:flex; gap:12px; flex-wrap:wrap; justify-content:center}
+
+    .stack{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
     .hero-lead{color:#1e293b}
+
     .hero-tags{
       margin-top:24px;
       display:flex;
@@ -92,6 +156,7 @@
       justify-content:center;
       flex-wrap:wrap;
     }
+
     .hero-tags span{
       display:inline-flex;
       align-items:center;
@@ -104,26 +169,33 @@
       border:1px solid rgba(148,163,184,.35);
     }
 
-    /* Hero spacing */
+    /* HERO */
+
     .hero{
       position:relative;
-      padding: clamp(120px, 16vw, 220px) 0 0;
+      padding: clamp(120px, 14vw, 200px) 0 0; /* big top space; no bottom so mascot can sit on edge */
       background:#fff;
       overflow:hidden;
-      --hero-figure-trim: clamp(64px, 10vw, 120px);
     }
-    /* Hero margin inside (mobile already looked good; we add safe padding edges) */
-    .hero .container{padding-left: clamp(16px,4vw,40px); padding-right: clamp(16px,4vw,40px)}
+
+    /* default container padding; boosted on desktop below */
+    .hero .container{
+      padding-left: clamp(16px,4vw,40px);
+      padding-right: clamp(16px,4vw,40px);
+    }
+
     .hero-inner{
       display:flex;
       flex-direction:column;
       gap: clamp(36px, 6vw, 64px);
       align-items:center;
     }
+
     .hero-copy{
       max-width: 620px;
       text-align:center;
     }
+
     .hero-cta{
       margin-top: clamp(24px, 4vw, 40px);
       display:flex;
@@ -132,6 +204,7 @@
       justify-content:center;
       align-items:center;
     }
+
     .hero-secondary{
       display:inline-flex;
       align-items:center;
@@ -140,30 +213,38 @@
       color:#0f172a;
       padding:10px 0;
     }
+
     .hero-secondary span{
       display:inline-block;
       transform:translateX(0);
       transition:transform .18s ease;
     }
+
     .hero-secondary:hover span{
       transform:translateX(4px);
     }
+
     .hero-figure{
       position:relative;
       width:min(100%, 520px);
       display:flex;
       align-items:flex-end;
     }
+
     .hero-figure img{
       position:relative;
       display:block;
       width:100%;
       height:auto;
-      border-radius: clamp(18px, 3vw, 28px);
+      border-radius:0;
       box-shadow:none;
       z-index:1;
-      clip-path: inset(0 0 var(--hero-figure-trim) 0);
+      clip-path:none;
+      margin-bottom:-1px; /* visually touching bottom of hero */
     }
+
+    /* Estimate / inline form */
+
     .inline-form{
       width:min(100%, 620px);
       background:#fff;
@@ -174,23 +255,30 @@
       gap:18px;
       text-align:left;
     }
+
     .inline-form .mini-grid{
       display:grid;
       gap:14px;
     }
+
     @media(min-width:640px){
-      .inline-form .mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .inline-form .mini-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
     }
+
     .mini-field{
       display:flex;
       flex-direction:column;
       gap:6px;
     }
+
     .mini-field span{
       font-size:13px;
       font-weight:600;
       color:#1e293b;
     }
+
     .mini-field input,
     .mini-field select{
       padding:12px 14px;
@@ -202,14 +290,17 @@
       outline:none;
       transition:border-color .18s ease, box-shadow .18s ease;
     }
+
     .mini-field input:focus,
     .mini-field select:focus{
       border-color:#0ea5e9;
       box-shadow:0 0 0 3px rgba(14,165,233,.18);
     }
+
     .inline-form button{
       justify-self:flex-start;
     }
+
     .estimate{
       position:relative;
       margin-top:-150px;
@@ -217,10 +308,12 @@
       background:var(--bg);
       z-index:2;
     }
+
     .estimate .container{
       padding-left: clamp(16px,4vw,40px);
       padding-right: clamp(16px,4vw,40px);
     }
+
     .estimate-inner{
       max-width:880px;
       margin:0 auto;
@@ -228,40 +321,38 @@
       gap: clamp(28px, 4vw, 42px);
       justify-items:center;
     }
+
     .estimate-copy{
       text-align:center;
       max-width:560px;
     }
+
     .estimate-copy .eyebrow{color:#0f172a;}
-    .estimate-copy p{margin:14px auto 0; color:var(--muted); font-size:clamp(16px,1.5vw,19px);}
+    .estimate-copy p{
+      margin:14px auto 0;
+      color:var(--muted);
+      font-size:clamp(16px,1.5vw,19px);
+    }
+
     .estimate .inline-form{
       width:min(100%, 680px);
-      justify-self:stretch;
+      justify-self:center; /* centered under text */
     }
 
     /* How it works */
+
     #how{position:relative; overflow:hidden}
     #how::before{display:none}
     #how .container{position:relative; z-index:1}
+
     .cards{
-      display:grid; gap:var(--gap);
+      display:grid;
+      gap:var(--gap);
       position:relative;
     }
+
     .cards::before{display:none}
-    .why-grid{
-      display:grid;
-      gap: clamp(20px, 2.6vw, 34px);
-    }
-    .why-card{
-      background:var(--panel);
-      border-radius:var(--radius);
-      padding: clamp(22px, 2.8vw, 32px);
-      border:1px solid rgba(148,163,184,.22);
-      box-shadow:none;
-      text-align:left;
-    }
-    .why-card h3{margin:0 0 10px; font-size:21px; color:#0f172a}
-    .why-card h4{margin:0; color:var(--muted); font-size:16px; font-weight:500}
+
     .card{
       position:relative;
       background:var(--brand);
@@ -270,43 +361,46 @@
       padding: clamp(20px,2.6vw,30px);
       box-shadow:none;
       transition:transform .25s ease, box-shadow .25s ease;
-      display:flex; flex-direction:column; gap:12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
       color:#fff;
     }
+
     .card:hover{
       transform:translateY(-6px);
       box-shadow:0 18px 40px rgba(34,197,94,.25);
     }
+
     .card-num{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:56px; height:56px; border-radius:18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:56px;
+      height:56px;
+      border-radius:18px;
       background:rgba(255,255,255,.18);
-      font-weight:700; font-size:18px; color:#fff;
+      font-weight:700;
+      font-size:18px;
+      color:#fff;
       box-shadow:none;
     }
 
-    /* Split feature */
-    .split{
-      display:grid;
-      gap: clamp(24px, 4vw, 48px);
-      align-items:center;
+    .card h3{
+      margin:0;
+      font-size:21px;
+      position:relative;
+      z-index:1;
+      color:#fff;
     }
-    .split-media img{
-      width:100%;
-      height:auto;
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      display:block;
+
+    .card p{
+      margin:0;
+      color:rgba(255,255,255,.88);
+      position:relative;
+      z-index:1;
     }
-    .split-content h2{margin:0 0 16px}
-    .split-content p{margin:0 0 18px; color:var(--muted); font-size:clamp(16px,1.5vw,19px)}
-    .split-content .lead{color:#0f172a; font-weight:600; font-size:clamp(18px,2vw,24px)}
-    .split-content .btn{margin-top:6px}
-    @media(min-width:900px){
-      .split{grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr)}
-    }
-    .card h3{margin:0; font-size:21px; position:relative; z-index:1; color:#fff}
-    .card p{margin:0; color:rgba(255,255,255,.88); position:relative; z-index:1}
+
     .card-note{
       margin-top:auto;
       padding:14px 16px;
@@ -317,25 +411,121 @@
       font-weight:500;
     }
 
+    /* Why */
+
+    .why-grid{
+      display:grid;
+      gap: clamp(20px, 2.6vw, 34px);
+    }
+
+    .why-card{
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding: clamp(22px, 2.8vw, 32px);
+      border:1px solid rgba(148,163,184,.22);
+      box-shadow:none;
+      text-align:left;
+    }
+
+    .why-card h3{
+      margin:0 0 10px;
+      font-size:21px;
+      color:#0f172a;
+    }
+
+    .why-card h4{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      font-weight:500;
+    }
+
+    /* Split feature */
+
+    .split{
+      display:grid;
+      gap: clamp(24px, 4vw, 48px);
+      align-items:center;
+    }
+
+    .split-media img{
+      width:100%;
+      height:auto;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      display:block;
+    }
+
+    .split-content h2{margin:0 0 16px}
+
+    .split-content p{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:clamp(16px,1.5vw,19px);
+    }
+
+    .split-content .lead{
+      color:#0f172a;
+      font-weight:600;
+      font-size:clamp(18px,2vw,24px);
+    }
+
+    .split-content .btn{margin-top:6px}
+
     /* Pricing */
-    .pricing-top{margin-bottom: clamp(24px,3.5vw,42px)}
+
+    .pricing-top{
+      margin-bottom: clamp(24px,3.5vw,42px);
+    }
+
     .toggle{
-      display:inline-flex; align-items:center; gap:12px; border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      border-radius:999px;
       padding:6px;
       background:rgba(148,163,184,.2);
       border:1px solid rgba(148,163,184,.35);
     }
-    .toggle label{font-weight:600; font-size:14px; color:#0f172a}
-    .switch{
-      width:56px; height:30px; border-radius:999px; position:relative; background:#e2e8f0; border:2px solid rgba(148,163,184,.35); cursor:pointer;
+
+    .toggle label{
+      font-weight:600;
+      font-size:14px;
+      color:#0f172a;
     }
+
+    .switch{
+      width:56px;
+      height:30px;
+      border-radius:999px;
+      position:relative;
+      background:#e2e8f0;
+      border:2px solid rgba(148,163,184,.35);
+      cursor:pointer;
+    }
+
     .knob{
-      position:absolute; top:50%; transform:translateY(-50%);
-      left:4px; width:22px; height:22px; border-radius:999px; background:#16a34a; transition:.2s ease left, .2s ease background;
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      left:4px;
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      background:#16a34a;
+      transition:.2s ease left, .2s ease background;
       box-shadow:none;
     }
-    .switch[data-mode="monthly"] .knob{left:30px}
-    .price-grid{display:grid; gap: clamp(18px,2.2vw,26px)}
+
+    .switch[data-mode="monthly"] .knob{
+      left:30px;
+    }
+
+    .price-grid{
+      display:grid;
+      gap: clamp(18px,2.2vw,26px);
+    }
+
     .price{
       background:var(--panel);
       color:#0f172a;
@@ -344,6 +534,7 @@
       box-shadow:none;
       border:1px solid rgba(148,163,184,.22);
     }
+
     .price-head{
       display:flex;
       align-items:center;
@@ -351,22 +542,52 @@
       gap:14px;
       margin-bottom:10px;
     }
-    .price-head h3{margin:0; font-size:22px; color:#0f172a}
-    .price-note{margin:4px 0 14px; color:#1e293b; font-size:16px; font-weight:500}
-    .num{font-size: clamp(30px,3.8vw,44px); font-weight:800; margin:6px 0 2px; color:#0f172a}
-    .sub{color:#1e293b; font-weight:600; margin-bottom:14px}
-    .list{margin:0 0 18px; padding:0; list-style:none}
-    .list li{display:flex; gap:10px; align-items:flex-start; margin:10px 0; color:#1d1d1d}
-    .list li:before{content:"✓"; font-weight:800}
-    .price .btn{width:fit-content; border-color:#0c0c0c}
-    .price .btn.btn--ghost{
-      color:#0c0c0c;
-      background:transparent;
+
+    .price-head h3{
+      margin:0;
+      font-size:22px;
+      color:#0f172a;
     }
-    .price .btn.btn--ghost:hover{
-      background:#0c0c0c;
-      color:#fff;
+
+    .price-note{
+      margin:4px 0 14px;
+      color:#1e293b;
+      font-size:16px;
+      font-weight:500;
     }
+
+    .num{
+      font-size: clamp(30px,3.8vw,44px);
+      font-weight:800;
+      margin:6px 0 2px;
+      color:#0f172a;
+    }
+
+    .sub{
+      color:#1e293b;
+      font-weight:600;
+      margin-bottom:14px;
+    }
+
+    .list{
+      margin:0 0 18px;
+      padding:0;
+      list-style:none;
+    }
+
+    .list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      margin:10px 0;
+      color:#1d1d1d;
+    }
+
+    .list li:before{
+      content:"✓";
+      font-weight:800;
+    }
+
     .badge{
       display:inline-flex;
       align-items:center;
@@ -379,7 +600,11 @@
       background:#f97316;
       color:#fff;
     }
-    .badge--popular{background:#16a34a;}
+
+    .badge--popular{
+      background:#16a34a;
+    }
+
     .testimonial{
       background:var(--panel);
       border-radius:var(--radius);
@@ -388,53 +613,194 @@
       max-width:720px;
       margin:24px auto 0;
     }
-    .testimonial h3{margin:0 0 12px; font-size: clamp(20px, 2.4vw, 26px); color:#0f172a}
-    .testimonial h4{margin:0; font-size:16px; color:var(--muted); font-weight:600}
-    #cta-peoria{background:#0f172a; color:#fff; padding: clamp(72px, 9vw, 130px) 0}
-    #cta-peoria h2{color:#fff; margin:0 0 20px}
 
-    /* Layout: desktop */
-    @media (min-width:768px){
-      .cards{grid-template-columns:repeat(3,1fr); position:relative}
-      .card{padding: clamp(24px,2.6vw,34px)}
-      .price-grid{grid-template-columns:repeat(3,1fr)}
-      section{padding: clamp(110px, 12vw, 190px) 0}
-      #pricing{padding: clamp(80px, 9vw, 140px) 0}
-      .why-grid{grid-template-columns:repeat(2,1fr)}
+    .testimonial h3{
+      margin:0 0 12px;
+      font-size: clamp(20px, 2.4vw, 26px);
+      color:#0f172a;
     }
+
+    .testimonial h4{
+      margin:0;
+      font-size:16px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    #cta-peoria{
+      background:#0f172a;
+      color:#fff;
+      padding: clamp(72px, 9vw, 130px) 0;
+    }
+
+    #cta-peoria h2{
+      color:#fff;
+      margin:0 0 20px;
+    }
+
+    /* FAQ accordion */
+
+    .faq-list{
+      display:grid;
+      gap:16px;
+      max-width:860px;
+      margin:0 auto;
+    }
+
+    .faq-item{
+      background:#fff;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.35);
+      overflow:hidden;
+      box-shadow:none;
+      transition:box-shadow .22s ease, border-color .22s ease, transform .22s ease;
+    }
+
+    .faq-item.active{
+      box-shadow:0 18px 40px rgba(15,23,42,.10);
+      border-color:#16a34a;
+      transform:translateY(-2px);
+    }
+
+    .faq-question{
+      width:100%;
+      padding:16px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+      font:inherit;
+      font-weight:600;
+      color:#0f172a;
+      text-align:left;
+    }
+
+    .faq-label{
+      flex:1;
+    }
+
+    .faq-icon{
+      width:20px;
+      height:20px;
+      border-radius:999px;
+      border:2px solid #9ca3af;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      color:#9ca3af;
+      flex-shrink:0;
+      transition:all .22s ease;
+    }
+
+    .faq-answer{
+      padding:0 18px 16px;
+      color:var(--muted);
+      font-size:15px;
+      max-height:0;
+      opacity:0;
+      transform:translateY(-4px);
+      transition:all .22s ease;
+      pointer-events:none;
+    }
+
+    .faq-item.active .faq-answer{
+      max-height:260px;
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+    }
+
+    .faq-item.active .faq-icon{
+      background:#16a34a;
+      border-color:#16a34a;
+      color:#fff;
+      transform:rotate(90deg);
+    }
+
+    /* Layout: desktop responsive */
+
+    @media (min-width:768px){
+      .cards{
+        grid-template-columns:repeat(3,1fr);
+      }
+
+      .card{
+        padding: clamp(24px,2.6vw,34px);
+      }
+
+      .price-grid{
+        grid-template-columns:repeat(3,1fr);
+      }
+
+      section{
+        padding: clamp(110px, 12vw, 190px) 0;
+      }
+
+      #pricing{
+        padding: clamp(80px, 9vw, 140px) 0;
+      }
+
+      .why-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media (min-width:900px){
+      .split{
+        grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr);
+      }
+    }
+
     @media (min-width:960px){
       .hero-inner{
         flex-direction:row;
         justify-content:space-between;
-        align-items:stretch;
-        min-height: clamp(520px, 68vh, 640px);
+        align-items:flex-end; /* bottom aligned */
+        min-height: clamp(520px, 70vh, 680px);
       }
+
       .hero-copy{
         max-width:560px;
         text-align:left;
-        align-self:center;
-        padding-bottom: clamp(32px, 5vw, 72px);
+        align-self:flex-end;
+        padding-bottom:64px; /* keeps text off very bottom */
       }
+
       .hero-cta{justify-content:flex-start;}
       .hero-tags{justify-content:flex-start;}
-      .hero-figure{width:min(44vw, 540px); align-self:flex-end;}
-    }
-    @media (min-width:1024px){
-      .hero{
-        padding: clamp(170px, 14vw, 260px) 0 0;
+
+      .hero-figure{
+        width:min(44vw, 540px);
+        align-self:flex-end;
       }
-      .why-grid{grid-template-columns:repeat(4,1fr)}
     }
+
+    @media (min-width:1024px){
+      .hero .container{
+        padding-left: clamp(64px, 8vw, 120px); /* extra left spacing like example */
+        padding-right: clamp(24px, 4vw, 56px);
+      }
+
+      .why-grid{
+        grid-template-columns:repeat(4,1fr);
+      }
+    }
+
     @media (max-width:640px){
-      .estimate{margin-top:-90px;}
+      .estimate{
+        margin-top:-90px;
+      }
     }
+
     @media (prefers-reduced-motion: reduce){
       .card{transition:none}
       .card:hover{transform:none}
-    }
-    @media (prefers-reduced-motion: reduce){
-      .card{transition:none}
-      .card:hover{transform:none}
+      .faq-item{transition:none}
+      .faq-item.active{transform:none}
     }
   </style>
 </head>
@@ -449,26 +815,31 @@
         <div class="hero-copy">
           <p class="eyebrow">Weekly valet trash for busy Peoria homeowners</p>
           <h1>Arizona's Friendliest Trash Valet Service in Peoria, AZ</h1>
-          <p class="lead hero-lead">Weekly set-out and return valet trash service for busy Peoria homeowners, travelers, and snowbirds, with limited availability in Surprise, Sun City, and Sun City West.</p>
+          <p class="lead hero-lead">
+            Weekly set-out and return valet trash service for busy Peoria homeowners, travelers, and snowbirds,
+            with limited availability in Surprise, Sun City, and Sun City West.
+          </p>
           <div class="hero-cta">
             <a class="btn" href="form.html" data-cta="get-started-peoria">Get Started</a>
             <a class="hero-secondary" href="#how">How it works <span aria-hidden="true">→</span></a>
           </div>
         </div>
         <div class="hero-figure">
-          <img src="8AEF6C88-44C6-4F86-834F-AA654189B3C7.PNG" alt="Cartoon illustration of a smiling BinPals valet trash professional" />
+          <img src="8AEF6C88-44C6-4F86-834F-AA654189B3C7.PNG"
+               alt="Cartoon illustration of a smiling BinPals valet trash professional" />
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Estimate -->
   <section class="estimate" aria-labelledby="estimate-title">
     <div class="container">
       <div class="estimate-inner">
         <div class="estimate-copy">
           <p class="eyebrow">Get your estimate</p>
           <h2 id="estimate-title">Weekly valet trash pricing made easy</h2>
-          <p>Tell us where you live and how many bins you have—we’ll follow up with a tailored price and start date for your Peoria home.</p>
+          <p>Tell us where you live and how many bins you have, we’ll follow up with a tailored price and start date for your Peoria home.</p>
         </div>
         <form class="inline-form" action="form.html" method="get" novalidate>
           <div class="mini-grid">
@@ -508,7 +879,9 @@
     <div class="container">
       <div class="center" style="margin-bottom:28px">
         <h2>How It Works</h2>
-        <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#0f172a; font-weight:500;">Here’s exactly what happens from the moment you schedule until every bin is back in place.</p>
+        <p style="font-size: clamp(18px, 2.3vw, 24px); max-width:720px; margin:14px auto 0; color:#0f172a; font-weight:500;">
+          Here’s exactly what happens from the moment you schedule until every bin is back in place.
+        </p>
       </div>
       <div class="cards">
         <div class="card">
@@ -533,21 +906,28 @@
     </div>
   </section>
 
+  <!-- About -->
   <section id="about">
     <div class="container">
       <div class="split">
         <div class="split-media">
-          <img src="44FF880F-E70B-4F8A-9B98-C4B3BB042369.png" alt="BinPals trash valet team posing beside curbside bins in Peoria, Arizona" />
+          <img src="44FF880F-E70B-4F8A-9B98-C4B3BB042369.png"
+               alt="BinPals trash valet team posing beside curbside bins in Peoria, Arizona" />
         </div>
         <div class="split-content">
           <h2>About BinPals</h2>
-          <p>BinPals is a locally owned trash valet service based in Peoria, Arizona. Built for busy homeowners, travelers, and snowbirds, our mission is to make trash day effortless. Licensed, insured, and dependable, we ensure every bin is set out, returned, and tucked away on time.</p>
+          <p>
+            BinPals is a locally owned trash valet service based in Peoria, Arizona. Built for busy homeowners,
+            travelers, and snowbirds, our mission is to make trash day effortless. Licensed, insured, and dependable,
+            we ensure every bin is set out, returned, and tucked away on time.
+          </p>
           <a class="btn" href="form.html" data-cta="get-started-peoria">Get Started</a>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Why -->
   <section id="why">
     <div class="container">
       <div class="center" style="margin-bottom: 38px;">
@@ -583,7 +963,8 @@
 
         <div class="toggle" role="group" aria-label="billing switch" style="margin-top:10px">
           <label id="qLabel">Quarterly</label>
-          <div id="billingSwitch" class="switch" data-mode="quarterly" aria-labelledby="qLabel mLabel" role="switch" aria-checked="false">
+          <div id="billingSwitch" class="switch" data-mode="quarterly"
+               aria-labelledby="qLabel mLabel" role="switch" aria-checked="false">
             <span class="knob"></span>
           </div>
           <label id="mLabel">Monthly</label>
@@ -654,31 +1035,61 @@
     </div>
   </section>
 
+  <!-- FAQs with accordion -->
   <section id="faqs">
     <div class="container">
       <div class="center" style="margin-bottom: 32px;">
         <h2>Frequently Asked Questions</h2>
       </div>
-      <div class="faq-list" style="display:grid; gap: clamp(18px, 2.6vw, 28px); max-width:860px; margin:0 auto;">
-        <div>
-          <h3>What does BinPals actually do?</h3>
-          <p>BinPals sets your trash and recycle bins out on pickup day and returns them after collection, so you never drag cans again.</p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span class="faq-label">What does BinPals actually do?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>BinPals sets your trash and recycle bins out on pickup day and returns them after collection, so you never drag cans again.</p>
+          </div>
         </div>
-        <div>
-          <h3>Do you serve all of Peoria, AZ?</h3>
-          <p>Yes. We focus on residential homes throughout Peoria, AZ. If you are just outside the city, contact us and we’ll confirm availability.</p>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span class="faq-label">Do you serve all of Peoria, AZ?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. We focus on residential homes throughout Peoria, AZ. If you are just outside the city, request service and we’ll confirm availability.</p>
+          </div>
         </div>
-        <div>
-          <h3>What days do you run service?</h3>
-          <p>We align with your neighborhood pickup schedule. You’ll choose your collection day during signup and we handle the rest.</p>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span class="faq-label">What days do you run service?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We align with your neighborhood pickup schedule. You’ll choose your collection day during signup and we handle the rest.</p>
+          </div>
         </div>
-        <div>
-          <h3>Can snowbirds or part-time residents use BinPals?</h3>
-          <p>Yes. We’re perfect for snowbirds, travelers, and part-time residents. You can pause or adjust service easily.</p>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span class="faq-label">Can snowbirds or part-time residents use BinPals?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. We’re perfect for snowbirds, travelers, and part-time residents. You can pause or adjust service easily.</p>
+          </div>
         </div>
-        <div>
-          <h3>How does billing work?</h3>
-          <p>Plans are billed monthly or quarterly with automatic payments. You can cancel anytime before your next billing cycle.</p>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span class="faq-label">How does billing work?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Plans are billed monthly or quarterly with automatic payments. You can cancel anytime before your next billing cycle.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -692,6 +1103,7 @@
     </div>
   </section>
 
+  <!-- Service Areas -->
   <section id="service-areas">
     <div class="container">
       <div class="center" style="margin-bottom: 32px;">
@@ -712,6 +1124,7 @@
 
   <div data-include="partials/footer.html"></div>
 
+  <!-- LocalBusiness Schema -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -758,21 +1171,49 @@
     }
   </script>
 
+  <!-- Pricing toggle -->
   <script>
-    // Pricing toggle
     const switchEl = document.getElementById('billingSwitch');
-    switchEl.addEventListener('click', ()=>{
-      const monthly = switchEl.getAttribute('data-mode') !== 'monthly';
-      switchEl.setAttribute('data-mode', monthly ? 'monthly' : 'quarterly');
-      switchEl.setAttribute('aria-checked', monthly ? 'true' : 'false');
+    if (switchEl) {
+      switchEl.addEventListener('click', () => {
+        const monthly = switchEl.getAttribute('data-mode') !== 'monthly';
+        switchEl.setAttribute('data-mode', monthly ? 'monthly' : 'quarterly');
+        switchEl.setAttribute('aria-checked', monthly ? 'true' : 'false');
 
-      document.querySelectorAll('.price .num span').forEach(span=>{
-        span.textContent = span.getAttribute(monthly ? 'data-m' : 'data-q');
+        document.querySelectorAll('.price .num span').forEach(span => {
+          span.textContent = span.getAttribute(monthly ? 'data-m' : 'data-q');
+        });
+        document.querySelectorAll('.price .sub span').forEach(span => {
+          span.textContent = span.getAttribute(monthly ? 'data-m' : 'data-q');
+        });
       });
-      document.querySelectorAll('.price .sub span').forEach(span=>{
-        span.textContent = span.getAttribute(monthly ? 'data-m' : 'data-q');
+    }
+  </script>
+
+  <!-- FAQ accordion -->
+  <script>
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isActive = item.classList.contains('active');
+
+        // close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+        // open clicked if it was not active
+        if (!isActive) {
+          item.classList.add('active');
+        }
       });
     });
+
+    // Open first FAQ by default
+    const firstFaq = document.querySelector('.faq-item');
+    if (firstFaq) {
+      firstFaq.classList.add('active');
+    }
   </script>
 </body>
 </html>
