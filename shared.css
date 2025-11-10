@@ -83,6 +83,7 @@
   inset:0;
   background:rgba(15,23,42,.45);
   display:none;
+  z-index:999;
 }
 .drawer[aria-hidden="false"]{display:block}
 .sheet{
