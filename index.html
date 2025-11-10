@@ -173,7 +173,7 @@
 
     .hero{
       position:relative;
-      padding: clamp(120px, 14vw, 200px) 0 0; /* big top space; no bottom so mascot can sit on edge */
+      padding: clamp(80px, 11vw, 160px) 0 0; /* reduced top space; no bottom so mascot can sit on edge */
       background:#fff;
       overflow:hidden;
     }
@@ -486,6 +486,13 @@
       margin:0 auto;
     }
 
+    .split-content{
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
     .split-content h2{margin:0 0 16px}
 
     .split-content p{
@@ -783,6 +790,11 @@
       .split{
         grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr);
       }
+
+      .split-content{
+        text-align:left;
+        align-items:flex-start;
+      }
     }
 
     @media (min-width:960px){
@@ -798,7 +810,7 @@
         max-width:560px;
         text-align:left;
         align-self:stretch;
-        padding-block: clamp(80px, 12vw, 140px);
+        padding-block: clamp(40px, 8vw, 110px);
         align-items:flex-start;
       }
 
@@ -941,9 +953,18 @@
         <div class="split-content">
           <h2>About BinPals</h2>
           <p>
-            BinPals is a locally owned trash valet service based in Peoria, Arizona. Built for busy homeowners,
-            travelers, and snowbirds, our mission is to make trash day effortless. Licensed, insured, and dependable,
-            we ensure every bin is set out, returned, and tucked away on time.
+            My great-grandfather started moving trash cans back from the curb to the gate at the age of 100. His
+            neighbors loved it because it kept him active, connected, and proud to help his community.
+          </p>
+          <p>
+            I’m continuing his journey in my own way with BinPals, Peoria’s friendliest trash valet service. We’re built
+            on that same neighborly spirit, helping homeowners, travelers, and snowbirds keep their homes looking clean
+            and cared for without the hassle.
+          </p>
+          <p>
+            With reliable weekly service, clear communication, and a friendly touch, we make trash day effortless.
+            Licensed, insured, and locally owned, we’re proud to serve Peoria with small-town care and dependable
+            service that you can count on. We keep Peoria moving, one bin at a time.
           </p>
           <a class="btn" href="form.html" data-cta="get-started-peoria">Get Started</a>
         </div>
