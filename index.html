@@ -41,6 +41,17 @@
     }
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--container);margin:0 auto;padding:0 clamp(16px,3vw,32px)}
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
@@ -95,15 +106,68 @@
 
     /* Hero spacing */
     .hero{
-      padding: clamp(120px, 16vw, 220px) 0 clamp(84px, 12vw, 180px);
-      background:#f8fafc;
+      position:relative;
+      padding: clamp(120px, 16vw, 220px) 0 clamp(140px, 12vw, 220px);
+      background:#fff;
+      overflow:hidden;
     }
     /* Hero margin inside (mobile already looked good; we add safe padding edges) */
     .hero .container{padding-left: clamp(16px,4vw,40px); padding-right: clamp(16px,4vw,40px)}
-    .hero-inline-form{
-      margin-top: clamp(24px, 4vw, 36px);
+    .hero-inner{
       display:flex;
+      flex-direction:column;
+      gap: clamp(36px, 6vw, 64px);
+      align-items:center;
+    }
+    .hero-copy{
+      max-width: 620px;
+      text-align:center;
+    }
+    .hero-cta{
+      margin-top: clamp(24px, 4vw, 40px);
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
       justify-content:center;
+      align-items:center;
+    }
+    .hero-secondary{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:600;
+      color:#0f172a;
+      padding:10px 0;
+    }
+    .hero-secondary span{
+      display:inline-block;
+      transform:translateX(0);
+      transition:transform .18s ease;
+    }
+    .hero-secondary:hover span{
+      transform:translateX(4px);
+    }
+    .hero-figure{
+      position:relative;
+      width:min(100%, 520px);
+    }
+    .hero-figure::before{
+      content:"";
+      position:absolute;
+      inset:8% -22% -14% -22%;
+      border-radius:50%;
+      background:radial-gradient(circle at center, rgba(15,23,42,.18), rgba(15,23,42,0));
+      z-index:0;
+      filter:blur(.5px);
+    }
+    .hero-figure img{
+      position:relative;
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius: clamp(18px, 3vw, 28px);
+      box-shadow:0 30px 70px rgba(15,23,42,.18);
+      z-index:1;
     }
     .inline-form{
       width:min(100%, 620px);
@@ -150,6 +214,21 @@
     }
     .inline-form button{
       justify-self:flex-start;
+    }
+    .estimate{
+      position:relative;
+      margin-top:-150px;
+      padding-bottom: clamp(72px, 9vw, 120px);
+      z-index:2;
+    }
+    .estimate .container{
+      display:flex;
+      justify-content:center;
+      padding-left: clamp(16px,4vw,40px);
+      padding-right: clamp(16px,4vw,40px);
+    }
+    .estimate .inline-form{
+      width:min(100%, 680px);
     }
 
     /* How it works */
@@ -315,9 +394,26 @@
       #pricing{padding: clamp(80px, 9vw, 140px) 0}
       .why-grid{grid-template-columns:repeat(2,1fr)}
     }
+    @media (min-width:960px){
+      .hero-inner{
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+      }
+      .hero-copy{
+        max-width:560px;
+        text-align:left;
+      }
+      .hero-cta{justify-content:flex-start;}
+      .hero-tags{justify-content:flex-start;}
+      .hero-figure{width:min(44vw, 540px);}
+    }
     @media (min-width:1024px){
       .hero{padding: clamp(170px, 14vw, 260px) 0 clamp(110px, 10vw, 210px)}
       .why-grid{grid-template-columns:repeat(4,1fr)}
+    }
+    @media (max-width:640px){
+      .estimate{margin-top:-90px;}
     }
     @media (prefers-reduced-motion: reduce){
       .card{transition:none}
@@ -335,40 +431,61 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="container center">
-      <h1>Arizona's Friendliest Trash Valet Service in Peoria, AZ</h1>
-      <p class="lead hero-lead">Weekly set-out and return valet trash service for busy Peoria homeowners, travelers, and snowbirds, with limited availability in Surprise, Sun City, and Sun City West.</p>
-      <div class="hero-inline-form">
-        <form class="inline-form" action="form.html" method="get" novalidate>
-          <div class="mini-grid">
-            <label class="mini-field">
-              <span>Full name</span>
-              <input type="text" name="name" placeholder="First and last" autocomplete="name">
-            </label>
-            <label class="mini-field">
-              <span>Email</span>
-              <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
-            </label>
-            <label class="mini-field">
-              <span>Address</span>
-              <input type="text" name="address" placeholder="Street, Peoria AZ" autocomplete="street-address">
-            </label>
-            <label class="mini-field">
-              <span>Bin count</span>
-              <select name="bin_count">
-                <option value="" disabled selected>Select</option>
-                <option value="1">1 bin</option>
-                <option value="2">2 bins</option>
-                <option value="3">3 bins</option>
-                <option value="4">4 bins</option>
-                <option value="5">5 bins</option>
-                <option value="6">6 bins</option>
-              </select>
-            </label>
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Weekly valet trash for busy Peoria homeowners</p>
+          <h1>Arizona's Friendliest Trash Valet Service in Peoria, AZ</h1>
+          <p class="lead hero-lead">Weekly set-out and return valet trash service for busy Peoria homeowners, travelers, and snowbirds, with limited availability in Surprise, Sun City, and Sun City West.</p>
+          <div class="hero-tags">
+            <span>Night-before bin staging</span>
+            <span>Return service included</span>
+            <span>Locally owned &amp; insured</span>
           </div>
-          <button class="btn" type="submit" data-cta="get-started-peoria">Continue</button>
-        </form>
+          <div class="hero-cta">
+            <a class="btn" href="form.html" data-cta="get-started-peoria">Get Started</a>
+            <a class="hero-secondary" href="#how">How it works <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="hero-figure">
+          <img src="44FF880F-E70B-4F8A-9B98-C4B3BB042369.png" alt="Illustration of a smiling BinPals valet trash professional" />
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section class="estimate" aria-labelledby="estimate-title">
+    <div class="container">
+      <h2 id="estimate-title" class="sr-only">Request your valet trash estimate</h2>
+      <form class="inline-form" action="form.html" method="get" novalidate>
+        <div class="mini-grid">
+          <label class="mini-field">
+            <span>Full name</span>
+            <input type="text" name="name" placeholder="First and last" autocomplete="name">
+          </label>
+          <label class="mini-field">
+            <span>Email</span>
+            <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+          </label>
+          <label class="mini-field">
+            <span>Address</span>
+            <input type="text" name="address" placeholder="Street, Peoria AZ" autocomplete="street-address">
+          </label>
+          <label class="mini-field">
+            <span>Bin count</span>
+            <select name="bin_count">
+              <option value="" disabled selected>Select</option>
+              <option value="1">1 bin</option>
+              <option value="2">2 bins</option>
+              <option value="3">3 bins</option>
+              <option value="4">4 bins</option>
+              <option value="5">5 bins</option>
+              <option value="6">6 bins</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn" type="submit" data-cta="get-started-peoria">Continue</button>
+      </form>
     </div>
   </section>
 
