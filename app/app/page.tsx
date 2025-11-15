@@ -1,5 +1,5 @@
 import { MarketingSite } from "@/components/marketing-site"
 
-export default function HomePage() {
+export default function AppLandingPage() {
   return <MarketingSite />
 }

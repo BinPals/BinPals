@@ -22,18 +22,21 @@ import {
   CreditCard,
 } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 interface CustomerAppProps {
   userName: string
-  onLogout: () => void
+  onLogout?: () => void
+  embedded?: boolean
 }
 
 type CustomerView = "dashboard" | "profile" | "notifications" | "billing" | "settings"
 
-export function CustomerApp({ userName, onLogout }: CustomerAppProps) {
+export function CustomerApp({ userName, onLogout, embedded = false }: CustomerAppProps) {
   const [currentView, setCurrentView] = useState<CustomerView>("dashboard")
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className={cn(embedded ? "min-h-full" : "min-h-screen", "bg-[#fafafa]")}>
       <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur-sm" style={{ borderColor: "#e5e7eb" }}>
         <div className="flex h-16 items-center justify-between px-6">
           <div className="text-xl font-bold" style={{ color: "#0f172a", letterSpacing: "-0.02em" }}>
@@ -59,7 +62,7 @@ export function CustomerApp({ userName, onLogout }: CustomerAppProps) {
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onLogout}>
+              <DropdownMenuItem onClick={() => onLogout?.()}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>
@@ -131,7 +134,12 @@ export function CustomerApp({ userName, onLogout }: CustomerAppProps) {
       </div>
 
       {/* Mobile Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-sand-border bg-white lg:hidden">
+      <nav
+        className={cn(
+          "border-t border-sand-border bg-white lg:hidden",
+          embedded ? "relative mt-6" : "fixed bottom-0 left-0 right-0 z-50",
+        )}
+      >
         <div className="grid grid-cols-3">
           <button
             onClick={() => setCurrentView("dashboard")}
