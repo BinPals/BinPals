@@ -10,8 +10,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { LayoutDashboard, Users, MapPin, CreditCard, Settings, LogOut, Filter, Check, X, Search } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 interface OperatorAppProps {
-  onLogout: () => void
+  onLogout?: () => void
+  embedded?: boolean
 }
 
 type OperatorView = "dashboard" | "routes" | "customers" | "billing" | "settings"
@@ -26,11 +29,11 @@ interface Stop {
   neighborhood: string
 }
 
-export function OperatorApp({ onLogout }: OperatorAppProps) {
+export function OperatorApp({ onLogout, embedded = false }: OperatorAppProps) {
   const [currentView, setCurrentView] = useState<OperatorView>("dashboard")
 
   return (
-    <div className="min-h-screen bg-sand">
+    <div className={cn(embedded ? "min-h-full" : "min-h-screen", "bg-sand") }>
       {/* Top Bar */}
       <header className="sticky top-0 z-50 border-b border-sand-border bg-white">
         <div className="flex h-16 items-center justify-between px-4 lg:px-6">
@@ -54,7 +57,7 @@ export function OperatorApp({ onLogout }: OperatorAppProps) {
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={onLogout}>
+                <DropdownMenuItem onClick={() => onLogout?.()}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>

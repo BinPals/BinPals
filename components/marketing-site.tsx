@@ -1,14 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, ArrowRight, Check, ChevronDown, Calendar, Bell, CreditCard, CheckCircle2 } from "lucide-react"
+import { Menu, X, ArrowRight, Check, ChevronDown } from "lucide-react"
 
-interface MarketingSiteProps {
-  onGetStarted: () => void
-  onLogin: () => void
-}
+import { CustomerApp } from "@/components/customer-app"
+import { OperatorApp } from "@/components/operator-app"
+import { ServiceRequestForm } from "@/components/service-request-form"
 
-export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
+export function MarketingSite() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeFaq, setActiveFaq] = useState<number>(0)
   const [pricingPeriod, setPricingPeriod] = useState<"monthly" | "quarterly">("monthly")
@@ -25,6 +24,12 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
     window.scrollTo({ top: 0, behavior: "smooth" })
     setMobileMenuOpen(false)
   }
+
+  const appSectionId = "customer-app"
+  const requestSectionId = "service-request"
+
+  const handleViewApp = () => scrollToSection(appSectionId)
+  const handleGetStarted = () => scrollToSection(requestSectionId)
 
   const faqs = [
     {
@@ -86,11 +91,11 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
               >
                 FAQ
               </button>
-              <button onClick={onLogin} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
+              <button onClick={handleViewApp} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
                 Login
               </button>
               <button
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="bg-green-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
               >
                 Get Started
@@ -125,11 +130,11 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
               >
                 FAQ
               </button>
-              <button onClick={onLogin} className="text-gray-700 hover:text-gray-900 font-medium text-left py-2">
+              <button onClick={handleViewApp} className="text-gray-700 hover:text-gray-900 font-medium text-left py-2">
                 Login
               </button>
               <button
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2 mt-2"
               >
                 Get Started
@@ -156,7 +161,7 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
               >
                 Get Started
@@ -173,155 +178,84 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
         </div>
       </section>
 
-      {/* Dashboard Demo */}
-      <section className="py-20 px-6">
+      {/* Unified App Experience */}
+      <section id={appSectionId} className="py-20 px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Manage Everything in One Place</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">One Experience for Web and App</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Track your service, manage billing, and stay updated with our easy-to-use dashboard
+              The same interface powers your public website and the live customer and operator dashboards.
             </p>
           </div>
 
-          <div className="max-w-5xl mx-auto">
-            {/* Dashboard Preview */}
-            <div className="bg-gray-50 rounded-2xl p-4 md:p-8 border-2 border-gray-200 shadow-2xl">
-              {/* Dashboard Header */}
-              <div className="bg-white rounded-xl p-6 mb-4 border border-gray-200">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">Welcome back, Sarah!</h3>
-                    <p className="text-gray-600">Your next service is in 2 days</p>
-                  </div>
-                  <div className="hidden md:flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-semibold">
-                      S
-                    </div>
-                  </div>
-                </div>
-
-                {/* Quick Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                    <div className="text-2xl font-bold text-green-700 mb-1">24</div>
-                    <div className="text-sm text-green-600">Services Completed</div>
-                  </div>
-                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-700 mb-1">100%</div>
-                    <div className="text-sm text-blue-600">On-Time Rate</div>
-                  </div>
-                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-                    <div className="text-2xl font-bold text-purple-700 mb-1">Premium</div>
-                    <div className="text-sm text-purple-600">Active Plan</div>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                    <div className="text-2xl font-bold text-gray-700 mb-1">3</div>
-                    <div className="text-sm text-gray-600">Bins Managed</div>
-                  </div>
-                </div>
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                <span className="text-sm font-semibold text-green-600 uppercase tracking-wide">Customer App</span>
+                <h3 className="text-3xl font-bold text-gray-900 mt-3">Everything residents need</h3>
+                <p className="text-gray-600 mt-3 leading-relaxed">
+                  Residents sign in to the exact experience you showcase on the marketing site. Manage pickups, billing, and alerts without context switching.
+                </p>
+                <ul className="mt-6 space-y-3">
+                  <li className="flex items-start gap-3">
+                    <Check className="text-green-600 mt-1" size={18} />
+                    <span className="text-gray-700">Schedule reminders, pause service, and confirm pickups from any device.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="text-green-600 mt-1" size={18} />
+                    <span className="text-gray-700">Real-time notifications keep homeowners updated on service status.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="text-green-600 mt-1" size={18} />
+                    <span className="text-gray-700">Billing, profile updates, and support live in one streamlined workspace.</span>
+                  </li>
+                </ul>
               </div>
-
-              {/* Dashboard Content Grid */}
-              <div className="grid md:grid-cols-2 gap-4">
-                {/* Upcoming Services */}
-                <div className="bg-white rounded-xl p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                      <Calendar className="text-green-600" size={20} />
-                    </div>
-                    <h4 className="font-bold text-gray-900">Upcoming Services</h4>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Next Pickup</div>
-                        <div className="text-xs text-gray-600">Thursday, Nov 15</div>
-                      </div>
-                      <div className="text-xs font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full">
-                        Confirmed
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Following Week</div>
-                        <div className="text-xs text-gray-600">Thursday, Nov 22</div>
-                      </div>
-                      <div className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                        Scheduled
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Recent Activity */}
-                <div className="bg-white rounded-xl p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Bell className="text-blue-600" size={20} />
-                    </div>
-                    <h4 className="font-bold text-gray-900">Recent Activity</h4>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="text-green-600 flex-shrink-0 mt-0.5" size={18} />
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Service Completed</div>
-                        <div className="text-xs text-gray-600">Bins returned on Nov 8 at 2:30 PM</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="text-green-600 flex-shrink-0 mt-0.5" size={18} />
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Payment Processed</div>
-                        <div className="text-xs text-gray-600">$59.00 charged on Nov 1</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="text-green-600 flex-shrink-0 mt-0.5" size={18} />
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Service Completed</div>
-                        <div className="text-xs text-gray-600">Bins returned on Nov 1 at 3:15 PM</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Billing Info */}
-                <div className="bg-white rounded-xl p-6 border border-gray-200 md:col-span-2">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <CreditCard className="text-purple-600" size={20} />
-                    </div>
-                    <h4 className="font-bold text-gray-900">Billing</h4>
-                  </div>
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-gray-900 text-white px-4 py-3 rounded-lg font-mono text-sm">
-                        •••• •••• •••• 4242
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Premium Plan</div>
-                        <div className="text-xs text-gray-600">$59/month • Next billing: Dec 1</div>
-                      </div>
-                    </div>
-                    <button className="text-sm font-semibold text-green-600 hover:text-green-700 px-4 py-2 rounded-lg border border-green-600 hover:bg-green-50 transition-colors">
-                      Manage Billing
-                    </button>
-                  </div>
+              <div className="rounded-[32px] border border-gray-200 shadow-2xl ring-1 ring-black/5 overflow-hidden bg-white">
+                <div className="h-[720px] overflow-y-auto">
+                  <CustomerApp embedded userName="Sarah" onLogout={scrollToTop} />
                 </div>
               </div>
             </div>
 
-            {/* CTA Below Dashboard */}
-            <div className="text-center mt-12">
-              <button
-                onClick={onGetStarted}
-                className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-colors inline-flex items-center gap-2"
-              >
-                Start Your Service
-                <ArrowRight size={20} />
-              </button>
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                <span className="text-sm font-semibold text-green-600 uppercase tracking-wide">Operator Console</span>
+                <h3 className="text-3xl font-bold text-gray-900 mt-3">Stay on top of every route</h3>
+                <p className="text-gray-600 mt-3 leading-relaxed">
+                  Dispatchers use the same design system to track stops, reconcile billing, and communicate with customers.
+                </p>
+                <ul className="mt-6 space-y-3">
+                  <li className="flex items-start gap-3">
+                    <Check className="text-green-600 mt-1" size={18} />
+                    <span className="text-gray-700">Filter routes by neighborhood and update stop statuses instantly.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="text-green-600 mt-1" size={18} />
+                    <span className="text-gray-700">Review customers, invoices, and route capacity in one dashboard.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="text-green-600 mt-1" size={18} />
+                    <span className="text-gray-700">Shared components make marketing updates automatically reflect in-app.</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-[32px] border border-gray-200 shadow-2xl ring-1 ring-black/5 overflow-hidden bg-white">
+                <div className="h-[720px] overflow-y-auto">
+                  <OperatorApp embedded onLogout={scrollToTop} />
+                </div>
+              </div>
             </div>
+          </div>
+
+          <div className="text-center mt-16">
+            <button
+              onClick={handleGetStarted}
+              className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-colors inline-flex items-center gap-2"
+            >
+              Start Your Service
+              <ArrowRight size={20} />
+            </button>
           </div>
         </div>
       </section>
@@ -415,7 +349,7 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
                 <span className="text-gray-600">/{pricingPeriod === "monthly" ? "month" : "quarter"}</span>
               </div>
               <button
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="w-full bg-gray-900 text-white py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors mb-8"
               >
                 Get Started
@@ -448,7 +382,7 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
                 <span className="text-green-50">/{pricingPeriod === "monthly" ? "month" : "quarter"}</span>
               </div>
               <button
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="w-full bg-white text-green-600 py-3 rounded-full font-semibold hover:bg-green-50 transition-colors mb-8"
               >
                 Get Started
@@ -482,7 +416,7 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
                 <span className="text-gray-600">/service</span>
               </div>
               <button
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="w-full bg-gray-900 text-white py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors mb-8"
               >
                 Get Started
@@ -505,6 +439,41 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
                   <span className="text-gray-700">Same-day available</span>
                 </li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Request */}
+      <section id={requestSectionId} className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
+                <span>📅</span>
+                Start your valet service
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Get scheduled in minutes</h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Drop in your address and bin count, pick the plan that fits, and we handle the rest. The request flow you see here is exactly what customers use when they sign up inside the app.
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <Check className="mt-1 text-green-600" size={18} />
+                  <span className="text-gray-700">Smart plan recommendations based on trash and recycling bin totals.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="mt-1 text-green-600" size={18} />
+                  <span className="text-gray-700">Form submissions route straight to the BinPals team—no duplicate marketing pages required.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="mt-1 text-green-600" size={18} />
+                  <span className="text-gray-700">Customers can restart the flow anytime to update schedules or add new properties.</span>
+                </li>
+              </ul>
+            </div>
+            <div className="rounded-[32px] border border-gray-200 shadow-2xl ring-1 ring-black/5 overflow-hidden">
+              <ServiceRequestForm embedded onBack={scrollToTop} />
             </div>
           </div>
         </div>
@@ -548,7 +517,7 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
             Join hundreds of Peoria residents who never worry about their bins
           </p>
           <button
-            onClick={onGetStarted}
+            onClick={handleGetStarted}
             className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-colors inline-flex items-center gap-2"
           >
             Get Started Today
@@ -596,7 +565,7 @@ export function MarketingSite({ onGetStarted, onLogin }: MarketingSiteProps) {
                 >
                   FAQ
                 </button>
-                <button onClick={onLogin} className="block text-gray-600 hover:text-gray-900 text-sm">
+                <button onClick={handleViewApp} className="block text-gray-600 hover:text-gray-900 text-sm">
                   Login
                 </button>
               </div>

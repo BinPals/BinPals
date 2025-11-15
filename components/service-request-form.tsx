@@ -7,9 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CheckCircle2, X } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 interface ServiceRequestFormProps {
-  onComplete: (data: FormData) => void
-  onBack: () => void
+  onComplete?: (data: FormData) => void
+  onBack?: () => void
+  embedded?: boolean
 }
 
 interface PlanConfig {
@@ -67,7 +70,7 @@ const planCatalog: Record<string, PlanConfig> = {
   },
 }
 
-export function ServiceRequestForm({ onComplete, onBack }: ServiceRequestFormProps) {
+export function ServiceRequestForm({ onComplete, onBack, embedded = false }: ServiceRequestFormProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const [showPlanPicker, setShowPlanPicker] = useState(false)
@@ -179,6 +182,7 @@ export function ServiceRequestForm({ onComplete, onBack }: ServiceRequestFormPro
       if (response.ok) {
         setIsComplete(true)
         window.scrollTo({ top: 0, behavior: "smooth" })
+        onComplete?.(submissionData)
       }
     } catch (error) {
       console.error("[v0] Form submission error:", error)
@@ -213,9 +217,11 @@ export function ServiceRequestForm({ onComplete, onBack }: ServiceRequestFormPro
   const currentPlan = planKey ? planCatalog[planKey] : null
   const recommendedKey = getRecommendedPlanKey()
 
+  const wrapperClasses = cn("bg-[#f5f7fb] px-4", embedded ? "py-12" : "min-h-screen py-12")
+
   if (isComplete) {
     return (
-      <div className="min-h-screen bg-[#f5f7fb] flex items-center justify-center p-4">
+      <div className={cn(wrapperClasses, "flex items-center justify-center") }>
         <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 md:p-12">
           <div className="flex flex-col items-center text-center gap-6">
             <div className="w-20 h-20 rounded-2xl bg-emerald-50 flex items-center justify-center">
@@ -229,7 +235,7 @@ export function ServiceRequestForm({ onComplete, onBack }: ServiceRequestFormPro
             </div>
             <div className="flex flex-wrap gap-3 justify-center mt-4">
               <button
-                onClick={onBack}
+                onClick={() => onBack?.()}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -274,8 +280,8 @@ export function ServiceRequestForm({ onComplete, onBack }: ServiceRequestFormPro
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb] py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+      <div className={wrapperClasses}>
+        <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">Get Started in Peoria</h1>
           <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
