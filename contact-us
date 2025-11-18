@@ -1,1 +1,65 @@
+<form action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse" method="POST" target="_self" style="max-width: 500px; margin: auto; font-family: system-ui;">
 
+  <h2 style="text-align:center; font-weight:600; margin-bottom:6px;">Check Your Address</h2>
+  <p style="text-align:center; font-size:13px; color:#4b5563; margin-top:0; margin-bottom:20px;">
+    We’ll confirm your route and email you a secure payment link.
+  </p>
+
+  <!-- Full Name -->
+  <label style="font-size:13px; font-weight:600;">Full Name</label>
+  <input name="entry.104280084" type="text" required
+         style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #d1d5db;">
+
+  <!-- Email -->
+  <label style="font-size:13px; font-weight:600;">Email Address</label>
+  <input name="entry.417977469" type="email" required
+         style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #d1d5db;">
+
+  <!-- Address -->
+  <label style="font-size:13px; font-weight:600;">Street Address</label>
+  <input name="entry.2139416814" type="text" required
+         style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #d1d5db;">
+
+  <!-- City -->
+  <label style="font-size:13px; font-weight:600;">City</label>
+  <input name="entry.565605156" type="text" value="Peoria" required
+         style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #d1d5db;">
+
+  <!-- ZIP Code -->
+  <label style="font-size:13px; font-weight:600;">ZIP Code</label>
+  <input name="entry.55232557" type="text" required
+         style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #d1d5db;">
+
+  <!-- Number of Bins -->
+  <label style="font-size:13px; font-weight:600;">How many bins?</label>
+  <select name="entry.1777532498" required
+          style="width:100%; padding:10px; margin-bottom:8px; border-radius:6px; border:1px solid #d1d5db;">
+    <option value="2">2 bins</option>
+    <option value="3">3 bins</option>
+    <option value="4">4 bins</option>
+  </select>
+  <p style="font-size:11px; color:#6b7280; margin-top:0; margin-bottom:15px;">
+    One-time service: $25 for up to 2 bins, +$7 if you have more than 2.
+  </p>
+
+  <!-- Plan -->
+  <label style="font-size:13px; font-weight:600;">Choose Your Plan</label>
+  <select name="entry.707531909" required
+          style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #d1d5db;">
+    <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
+    <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
+    <option value="One-Time Pull – $25 (+$7 for more than 2 bins)">One-Time Pull – $25 (+$7 for more than 2 bins)</option>
+  </select>
+
+  <!-- Hidden Status -->
+  <input type="hidden" name="entry.409104529" value="Pending">
+
+  <button type="submit"
+          style="width:100%; padding:15px; background:#16a34a; color:white; font-size:16px; font-weight:600; border:none; border-radius:999px; cursor:pointer;">
+    Check My Address
+  </button>
+
+  <p style="font-size:11px; color:#6b7280; margin-top:8px; text-align:center;">
+    By submitting, you’re requesting service. We’ll review your address to confirm you’re on our current route.
+  </p>
+</form>
