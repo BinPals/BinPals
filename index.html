@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BinPals Trash Valet | GetBinPals.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="BinPals Trash Valet rolls your trash and recycle bins out and back every pickup day so you never miss trash day again. Serving Vistancia, Trilogy, WestWing, Northpointe & nearby communities." />
+  <style>
+    :root {
+      --green: #16a34a;
+      --green-dark: #15803d;
+      --blue: #2563eb;
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #111827;
+      --text-muted: #4b5563;
+      --border: #e5e7eb;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e0f2fe 0, #f3f4f6 45%, #f9fafb 100%);
+      color: var(--text-main);
+    }
+    header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 20px;
+    }
+    .brand-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: var(--green-dark);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tagline {
+      font-size: 11px;
+      color: #6b7280;
+      text-align: right;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto 40px;
+      padding: 0 16px 40px;
+    }
+    .hero {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+    .hero-copy {
+      padding: 24px 24px 28px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(209,213,219,0.7);
+      box-shadow: 0 20px 45px rgba(15,23,42,0.08);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: var(--green-dark);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    .sub {
+      margin: 0 0 14px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 0;
+      list-style: none;
+      font-size: 11px;
+      color: #374151;
+    }
+    .pill-list li {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+    }
+    .hero-note {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    .form-card {
+      padding: 20px 20px 22px;
+      border-radius: 20px;
+      background: var(--card-bg);
+      border: 1px solid rgba(209,213,219,0.9);
+      box-shadow: 0 16px 38px rgba(15,23,42,0.08);
+    }
+    .form-card h2 {
+      margin: 0 0 4px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .form-card p {
+      margin: 0 0 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    form {
+      font-size: 13px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    input, select {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    select {
+      background: #ffffff;
+    }
+    button {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: none;
+      background: var(--green);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+    button:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+    .tiny {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 6px;
+      text-align: center;
+    }
+    .bins-note {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: -6px;
+      margin-bottom: 10px;
+    }
+    .how {
+      margin-top: 22px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .how strong {
+      color: var(--text-main);
+    }
+    .how ol {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    .how li {
+      margin-bottom: 3px;
+    }
+    footer {
+      padding: 14px 16px 24px;
+      text-align: center;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .tagline {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span>BinPals</span>
+      <span class="brand-pill">Trash Valet</span>
+    </div>
+    <div class="tagline">
+      Serving Vistancia · Trilogy · WestWing · Northpointe & nearby
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Now forming routes in North Peoria
+        </div>
+        <h1>Never miss trash day again.</h1>
+        <p class="sub">
+          BinPals rolls your trash and recycle bins out and back every pickup day, timed to HOA rules, so you never have to think about bin day.
+        </p>
+        <ul class="pill-list">
+          <li>Weekly pull-out & return</li>
+          <li>HOA-timed service</li>
+          <li>Perfect for busy families</li>
+          <li>Great for travelers & snowbirds</li>
+        </ul>
+        <p class="hero-note">
+          Drop your info once. We’ll confirm if your street is on our current route and email you a secure payment link if approved.
+        </p>
+        <div class="how">
+          <strong>How it works</strong>
+          <ol>
+            <li>You submit your address.</li>
+            <li>We confirm you’re on our current route.</li>
+            <li>If approved, you get a payment link to start service.</li>
+            <li>On trash day, we roll your bins out and back for you.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h2>Check Your Address</h2>
+        <p>We’ll review your location and send next steps by email.</p>
+
+        <!-- CUSTOM FORM POSTING INTO YOUR GOOGLE FORM -->
+        <form action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse" method="POST" target="_self">
+
+          <!-- Full Name -->
+          <label>Full Name</label>
+          <input name="entry.104280084" type="text" required>
+
+          <!-- Email -->
+          <label>Email Address</label>
+          <input name="entry.417977469" type="email" required>
+
+          <!-- Street Address -->
+          <label>Street Address</label>
+          <input name="entry.2139416814" type="text" required>
+
+          <!-- City -->
+          <label>City</label>
+          <input name="entry.565605156" type="text" value="Peoria" required>
+
+          <!-- ZIP Code -->
+          <label>ZIP Code</label>
+          <input name="entry.55232557" type="text" required>
+
+          <!-- Number of Bins -->
+          <label>How many bins?</label>
+          <select name="entry.1777532498" required>
+            <option value="2">2 bins</option>
+            <option value="3">3 bins</option>
+            <option value="4">4 bins</option>
+          </select>
+          <div class="bins-note">
+            One-time service: $25 for up to 2 bins, +$7 if you have more than 2.
+          </div>
+
+          <!-- Plan -->
+          <label>Choose Your Plan</label>
+          <select name="entry.707531909" required>
+            <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
+            <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
+            <option value="One-Time Pull – $25 (+$7 for more than 2 bins)">One-Time Pull – $25 (+$7 for more than 2 bins)</option>
+          </select>
+
+          <!-- Hidden Status -->
+          <input type="hidden" name="entry.409104529" value="Pending">
+
+          <button type="submit">Check My Address</button>
+
+          <div class="tiny">
+            By submitting, you’re requesting service. We’ll review your address to confirm you’re on our current route.
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> BinPals Trash Valet · GetBinPals.com
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
