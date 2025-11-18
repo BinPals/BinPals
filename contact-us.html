@@ -124,6 +124,18 @@
       line-height: 1.4;
     }
 
+    .thankyou {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #ecfdf3;
+      color: #166534;
+      font-size: 13px;
+      text-align: center;
+      border: 1px solid #bbf7d0;
+    }
+
     footer {
       text-align: center;
       margin-top: 40px;
@@ -151,9 +163,10 @@
 
   <div class="card">
 
-    <!-- FORM ACTION TO YOUR GOOGLE FORM -->
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse"
-          method="POST" target="_self">
+    <!-- FORM POSTS TO GOOGLE, BUT WE INTERCEPT WITH JS SO USER STAYS ON THIS PAGE -->
+    <form id="estimate-form"
+          action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse"
+          method="POST">
 
       <!-- Full Name -->
       <label>Full Name</label>
@@ -204,6 +217,10 @@
         We’ll review your address and confirm route availability by email.
       </p>
 
+      <div id="thankyou" class="thankyou">
+        Thanks! Your request was received. We’ll review your address and email you shortly.
+      </div>
+
     </form>
   </div>
 </div>
@@ -213,9 +230,32 @@
 </footer>
 
 <script>
+  // Set year
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Submit to Google in the background so user stays on this page
+  const form = document.getElementById('estimate-form');
+  const thankyou = document.getElementById('thankyou');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); // stop normal redirect
+
+    const data = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      mode: 'no-cors', // required because Google doesn't send CORS headers
+      body: data
+    }).then(() => {
+      form.reset();
+      thankyou.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }).catch(() => {
+      // even if there's an error, we won't redirect away
+      thankyou.style.display = 'block';
+    });
+  });
 </script>
 
 </body>
 </html>
-
