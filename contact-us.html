@@ -202,9 +202,14 @@
 
       <input type="hidden" name="entry.409104529" value="Pending" />
 
+      <!-- REQUIRED HIDDEN FIELD FOR GOOGLE TO ACCEPT NON-REDIRECT POSTS -->
+      <input type="hidden" name="submit" value="Submit" />
+
       <button type="submit">Submit Request</button>
 
-      <p class="note">We’ll review your address and confirm route availability by email.</p>
+      <p class="note">
+        We’ll review your address and confirm route availability by email.
+      </p>
 
       <div id="thankyou" class="thankyou">
         Thanks! Your request was received. We’ll review your address and email you shortly.
@@ -226,20 +231,18 @@
   const thankyou = document.getElementById('thankyou');
 
   form.addEventListener('submit', function (e) {
-    e.preventDefault(); // stop normal redirect
+    e.preventDefault();
 
-    // Take all form fields...
     const formData = new FormData(form);
-
-    // ...and convert to URL-encoded format (like a normal HTML form POST)
     const data = new URLSearchParams();
+
     for (const [key, value] of formData.entries()) {
       data.append(key, value);
     }
 
     fetch(form.action, {
       method: 'POST',
-      mode: 'no-cors', // we don't need to read the response
+      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -249,11 +252,13 @@
       thankyou.style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }).catch(() => {
-      // even if there's an error, keep user here
       thankyou.style.display = 'block';
     });
   });
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
