@@ -5,67 +5,172 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Get an Estimate | BinPals Trash Valet</title>
 
+  <!-- Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --green: #166534;
+      --green-soft: #e7f5eb;
+      --border: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #4b5563;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      background: #fff;
+      background: #f3f4f6;
       font-family: "Poppins", sans-serif;
-      padding: 20px;
       display: flex;
       justify-content: center;
+      padding: 32px 16px;
     }
 
     .container {
       width: 100%;
-      max-width: 860px;
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid #e5e7eb;
+      max-width: 960px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 32px 32px 28px;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .top-row {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
     }
 
     .logo {
-      width: 200px;
-      margin-bottom: 10px;
+      width: 190px;
+      margin-bottom: 16px;
+    }
+
+    .headline {
+      flex: 1.3;
     }
 
     h1 {
-      margin: 0;
+      margin: 0 0 8px;
       font-size: 26px;
       font-weight: 700;
+      color: var(--text-main);
     }
 
     p.subtitle {
-      margin-top: 5px;
-      color: #4b5563;
+      margin: 0;
+      color: var(--text-muted);
       font-size: 15px;
-      line-height: 21px;
+      line-height: 1.5;
+    }
+
+    .aside-copy {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text-muted);
+      background: #f9fafb;
+      border-radius: 14px;
+      padding: 14px 16px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .aside-copy strong {
+      display: block;
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .progress-wrapper {
+      margin-top: 24px;
     }
 
     .progress {
       height: 6px;
       background: #e5e7eb;
-      border-radius: 10px;
-      margin: 20px 0;
+      border-radius: 999px;
       overflow: hidden;
+      margin-bottom: 14px;
     }
+
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: #2f855a;
-      transition: width 0.25s;
+      background: var(--green);
+      transition: width 0.25s ease;
+    }
+
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .step-nav-item {
+      flex: 1;
+      text-align: center;
+    }
+
+    .step-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      background: #fff;
+      color: var(--text-muted);
+    }
+
+    .step-label {
+      font-size: 12px;
+    }
+
+    .step-nav-item.active .step-circle,
+    .step-nav-item.completed .step-circle {
+      border-color: var(--green);
+      background: var(--green);
+      color: #ffffff;
+    }
+
+    .step-nav-item.active .step-label {
+      color: var(--green);
+      font-weight: 500;
     }
 
     .step-panel {
       display: none;
-      margin-top: 10px;
+      margin-top: 24px;
     }
+
     .step-panel.active {
       display: block;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .step-helper {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
     }
 
     label {
@@ -73,39 +178,60 @@
       font-size: 14px;
       margin-bottom: 4px;
       font-weight: 500;
+      color: var(--text-main);
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 50px;
+      padding: 11px 16px;
+      border-radius: 999px;
       border: 1px solid #d1d5db;
       font-size: 15px;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
       outline: none;
+      background: #ffffff;
     }
-    input:focus, select:focus {
-      border-color: #2f855a;
-      background: #f0fdf4;
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .field-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .field-row > div {
+      flex: 1;
     }
 
     .buttons {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 16px;
       margin-top: 10px;
     }
 
     button {
       padding: 12px 20px;
-      border-radius: 50px;
+      border-radius: 999px;
       border: none;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
+      font-family: inherit;
     }
 
     .btn-primary {
-      background: #2f855a;
+      background: var(--green);
       color: #fff;
       flex: 1;
       text-align: center;
@@ -114,30 +240,103 @@
     .btn-secondary {
       background: #f3f4f6;
       color: #374151;
+      padding-inline: 20px;
     }
 
     #message {
-      margin-top: 15px;
-      font-size: 15px;
+      margin-top: 12px;
+      font-size: 14px;
       text-align: center;
-      color: #2f855a;
+      color: var(--green);
       min-height: 20px;
     }
 
+    .footer-note {
+      margin-top: 28px;
+      font-size: 12px;
+      text-align: center;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .footer-note strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+
+      .container {
+        padding: 24px 18px 22px;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .top-row {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .logo {
+        width: 170px;
+      }
+
+      .field-row {
+        flex-direction: column;
+      }
+
+      .buttons {
+        flex-direction: row;
+      }
+
+      .btn-secondary {
+        padding-inline: 18px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
+    <div class="top-row">
+      <div class="headline">
+        <img src="binpals-trash-valet-logo.png" class="logo" alt="BinPals Trash Valet" />
+        <h1>Request a BinPals Estimate</h1>
+        <p class="subtitle">
+          Answer a few quick questions. We will review your address and
+          <strong>email you with route details and next steps.</strong>
+        </p>
+      </div>
+      <div class="aside-copy">
+        <strong>Simple, no-pressure request.</strong>
+        No app needed, no payment today. Once you are approved for a route,
+        we will send over your start date and payment options.
+      </div>
+    </div>
 
-    <img src="binpals-trash-valet-logo.png" class="logo" alt="BinPals Trash Valet" />
+    <div class="progress-wrapper">
+      <div class="progress">
+        <div class="progress-fill" id="progress"></div>
+      </div>
 
-    <h1>Request a BinPals Estimate</h1>
-    <p class="subtitle">
-      Answer a few quick questions. We will review your address and email you the next steps.
-    </p>
-
-    <div class="progress"><div class="progress-fill" id="progress"></div></div>
+      <div class="step-nav">
+        <div class="step-nav-item active" data-step-nav="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Your info</div>
+        </div>
+        <div class="step-nav-item" data-step-nav="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Address</div>
+        </div>
+        <div class="step-nav-item" data-step-nav="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Bins &amp; plan</div>
+        </div>
+      </div>
+    </div>
 
     <!-- FORM -->
     <form id="estimateForm" method="POST"
@@ -145,39 +344,54 @@
 
       <!-- Step 1 -->
       <div class="step-panel active" data-step="1">
-        <label>Full Name</label>
-        <input type="text" name="entry.104280084" required placeholder="Your name" />
+        <div class="step-title">Step 1 – Your info</div>
+        <div class="step-helper">So we know who to email.</div>
 
-        <label>Email Address</label>
+        <label>Full name *</label>
+        <input type="text" name="entry.104280084" required placeholder="First and last name" />
+
+        <label>Email address *</label>
         <input type="email" name="entry.417977469" required placeholder="you@example.com" />
       </div>
 
       <!-- Step 2 -->
       <div class="step-panel" data-step="2">
-        <label>Street Address</label>
-        <input type="text" name="entry.2139416814" required />
+        <div class="step-title">Step 2 – Your address</div>
+        <div class="step-helper">So we can check your route.</div>
 
-        <label>City</label>
-        <input type="text" name="entry.565605156" required />
+        <label>Street address *</label>
+        <input type="text" name="entry.2139416814" required placeholder="House number and street" />
 
-        <label>ZIP Code</label>
-        <input type="text" name="entry.55232557" required />
+        <div class="field-row">
+          <div>
+            <label>City *</label>
+            <input type="text" name="entry.565605156" required placeholder="City" />
+          </div>
+          <div>
+            <label>ZIP code *</label>
+            <input type="text" name="entry.55232557" required placeholder="ZIP" />
+          </div>
+        </div>
       </div>
 
       <!-- Step 3 -->
       <div class="step-panel" data-step="3">
-        <label>How many bins?</label>
+        <div class="step-title">Step 3 – Bins &amp; plan</div>
+        <div class="step-helper">So we can price your service.</div>
+
+        <label>How many trash bins? *</label>
         <input type="number" name="entry.1777532498" required min="1" placeholder="Example: 2" />
 
-        <label>Choose a plan</label>
+        <label>Choose a plan *</label>
         <select name="entry.707531909" required>
-          <option value="" disabled selected>Select a plan</option>
+          <option value="" disabled selected>Tap to pick a plan</option>
           <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
-          <option value="Premium+ – $54/mo (3-4 cans)">Premium+ – $54/mo (3–4 cans)</option>
+          <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
           <option value="One Time – $35">One Time – $35</option>
         </select>
       </div>
 
+      <!-- Hidden Google Form fields -->
       <input type="hidden" name="entry.409104529" value="Pending" />
       <input type="hidden" name="submit" value="Submit" />
 
@@ -189,6 +403,10 @@
       <div id="message"></div>
     </form>
 
+    <div class="footer-note">
+      We usually reply within <strong>1–2 business days.</strong><br />
+      If you need help, you can also email us at <strong>Binpalsteam@gmail.com</strong>.
+    </div>
   </div>
 
   <script>
@@ -201,15 +419,34 @@
     const nextBtn = document.getElementById("nextBtn");
     const form = document.getElementById("estimateForm");
     const message = document.getElementById("message");
+    const stepNavItems = document.querySelectorAll(".step-nav-item");
 
     function updateUI() {
+      // show correct panel
       panels.forEach(p => p.classList.remove("active"));
-      document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
+      document
+        .querySelector(`.step-panel[data-step="${step}"]`)
+        .classList.add("active");
 
+      // back button visibility
       backBtn.style.visibility = step === 1 ? "hidden" : "visible";
-      nextBtn.textContent = step === totalSteps ? "Submit" : "Next";
 
-      progress.style.width = ((step - 1) / (totalSteps - 1)) * 100 + "%";
+      // button text
+      nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
+
+      // progress width (1/3, 2/3, full)
+      progress.style.width = (step / totalSteps) * 100 + "%";
+
+      // step nav state
+      stepNavItems.forEach(item => {
+        const s = Number(item.getAttribute("data-step-nav"));
+        item.classList.remove("active", "completed");
+        if (s < step) {
+          item.classList.add("completed");
+        } else if (s === step) {
+          item.classList.add("active");
+        }
+      });
     }
 
     updateUI();
@@ -218,9 +455,11 @@
       if (step < totalSteps) {
         e.preventDefault();
 
-        // validate current step
-        const currentPanel = document.querySelector(`.step-panel[data-step="${step}"]`);
+        const currentPanel = document.querySelector(
+          `.step-panel[data-step="${step}"]`
+        );
         const inputs = currentPanel.querySelectorAll("input, select");
+
         for (let input of inputs) {
           if (!input.checkValidity()) {
             input.reportValidity();
@@ -231,6 +470,7 @@
         step++;
         updateUI();
       }
+      // if step === totalSteps, normal submit will be handled by form listener
     });
 
     backBtn.addEventListener("click", function () {
@@ -250,16 +490,18 @@
         method: "POST",
         mode: "no-cors",
         body: params
-      }).then(() => {
-        message.textContent = "Thank you. We will review your request and email you shortly.";
-        form.reset();
-        step = 1;
-        updateUI();
-      }).catch(() => {
-        message.textContent = "Something went wrong. Please try again.";
-      });
+      })
+        .then(() => {
+          message.textContent =
+            "Thank you. We will review your request and email you shortly.";
+          form.reset();
+          step = 1;
+          updateUI();
+        })
+        .catch(() => {
+          message.textContent = "Something went wrong. Please try again.";
+        });
     });
   </script>
-
 </body>
 </html>
