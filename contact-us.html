@@ -13,7 +13,7 @@
   <style>
     :root {
       --green: #166534;
-      --green-soft: #e7f5eb;
+      --green-bright: #16c33b;
       --border: #e5e7eb;
       --text-main: #111827;
       --text-muted: #4b5563;
@@ -48,41 +48,44 @@
       gap: 24px;
     }
 
-    .header-logo {
-      height: 72px; /* bigger logo */
-      width: auto;
+    .header-logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    .header-logo {
+      height: 70px; /* bigger logo */
+      width: auto;
+      display: block;
     }
 
     .header-nav {
       display: flex;
-      gap: 18px;
+      gap: 20px;
       font-size: 14px;
+      margin-left: auto;
+      margin-right: 24px;
     }
 
     .header-nav a {
       text-decoration: none;
-      color: #4b5563;
-      font-weight: 500;
+      color: #111827;
+      font-weight: 600;
     }
 
     .header-nav a:hover {
-      color: #111827;
+      color: var(--green);
     }
 
     .header-nav a.active {
-      color: #111827;
+      color: var(--green);
     }
 
     .header-cta {
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: var(--green);
+      padding: 11px 24px;
+      border-radius: 2px;
+      background: var(--green-bright);
       color: #ffffff;
       font-size: 14px;
       font-weight: 600;
@@ -90,10 +93,41 @@
       border: none;
       cursor: pointer;
       white-space: nowrap;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
 
     .header-cta:hover {
       opacity: 0.95;
+    }
+
+    /* mobile icon buttons (email + menu) */
+
+    .header-icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 2px;
+      border: none;
+      background: var(--green-bright);
+      display: none; /* only mobile */
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 22px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .header-icon-btn span {
+      line-height: 1;
+    }
+
+    .header-icon-left {
+      margin-right: auto;
+    }
+
+    .header-icon-right {
+      margin-left: auto;
     }
 
     /* MAIN CONTAINER */
@@ -102,7 +136,7 @@
       display: flex;
       justify-content: center;
       padding: 32px 16px 40px;
-      background: #ffffff; /* ensure white around form */
+      background: #ffffff;
     }
 
     .container {
@@ -509,17 +543,20 @@
 
     @media (max-width: 768px) {
       .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
+        gap: 12px;
       }
 
-      .header-right {
-        width: 100%;
-        justify-content: space-between;
+      .header-nav,
+      .header-cta {
+        display: none; /* hide desktop nav/CTA on mobile */
       }
 
-      .header-nav {
-        flex-wrap: wrap;
+      .header-icon-btn {
+        display: inline-flex; /* show email + menu buttons */
+      }
+
+      .header-logo {
+        height: 60px;
       }
 
       .page-main {
@@ -557,50 +594,149 @@
         padding: 30px 20px 26px;
       }
 
+      .footer-top {
+        flex-direction: column;
+        text-align: center;
+        gap: 32px;
+      }
+
+      .footer-column {
+        align-items: center;
+      }
+
       .footer-inner {
         flex-direction: column;
         gap: 10px;
       }
     }
 
-    /* FOOTER */
+    /* FOOTER (Duest-style layout) */
 
     .site-footer {
       width: 100%;
       background: #ffffff;
       border-top: 1px solid #e5e7eb;
-      padding: 18px 20px;
+      padding: 32px 20px 16px;
     }
 
     .footer-inner {
       max-width: 1120px;
       margin: 0 auto;
+    }
+
+    .footer-top {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 18px;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      margin-bottom: 24px;
+    }
+
+    .footer-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .footer-logo {
-      height: 64px; /* bigger logo in footer */
+      height: 110px; /* big footer logo */
       width: auto;
     }
 
-    .footer-cta {
-      padding: 9px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--green);
-      background: #ffffff;
-      color: var(--green);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      white-space: nowrap;
+    .footer-heading {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
-    .footer-cta:hover {
-      background: #f0fdf4;
+    .footer-contact-line {
+      font-size: 14px;
+      color: #f9fafb;
+    }
+
+    .footer-contact-line span {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .footer-btn {
+      margin-top: 12px;
+      padding: 12px 30px;
+      border-radius: 3px;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-service-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .footer-service-list li {
+      margin-bottom: 4px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .footer-social a {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.2);
+      margin-top: 16px;
+      padding-top: 10px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* Give footer green like Duest, but keep inner card white-ish */
+    .site-footer {
+      background: #14532d; /* deep green */
+      color: #ffffff;
+      border-top: none;
+    }
+
+    .footer-service-list li,
+    .footer-heading {
+      color: #ffffff;
+    }
+
+    .footer-contact-text {
+      font-size: 14px;
+    }
+
+    .footer-contact-text span {
+      font-weight: 600;
     }
   </style>
 </head>
@@ -610,17 +746,30 @@
   <!-- HEADER -->
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html">
+      <!-- Mobile email icon -->
+      <a href="mailto:Binpalsteam@gmail.com" class="header-icon-btn header-icon-left">
+        <span>✉</span>
+      </a>
+
+      <!-- Logo -->
+      <a href="index.html" class="header-logo-wrap">
         <img src="binpals-trash-valet-logo.png" class="header-logo" alt="BinPals Trash Valet" />
       </a>
-      <div class="header-right">
-        <nav class="header-nav">
-          <a href="index.html">Home</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="contact-us.html" class="active">Contact</a>
-        </nav>
-        <a href="contact-us.html" class="header-cta">Get Started</a>
-      </div>
+
+      <!-- Desktop nav -->
+      <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="pricing.html">Services</a>
+        <a href="contact-us.html" class="active">Contact</a>
+      </nav>
+
+      <!-- Desktop CTA -->
+      <a href="#estimateForm" class="header-cta">Start Service</a>
+
+      <!-- Mobile menu icon -->
+      <a href="#estimateForm" class="header-icon-btn header-icon-right">
+        <span>☰</span>
+      </a>
     </div>
   </header>
 
@@ -836,11 +985,49 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (Duest-style, no "Licensed & Insured") -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <img src="binpals-trash-valet-logo.png" class="footer-logo" alt="BinPals Trash Valet" />
-      <a href="index.html" class="footer-cta">Back to main site</a>
+      <div class="footer-top">
+        <!-- Left: logo -->
+        <div class="footer-column">
+          <img src="binpals-trash-valet-logo.png" class="footer-logo" alt="BinPals Trash Valet" />
+        </div>
+
+        <!-- Middle: contact -->
+        <div class="footer-column">
+          <div class="footer-heading">CONTACT</div>
+          <div class="footer-contact-text">
+            Phone: <span>(XXX) XXX-XXXX</span>
+          </div>
+          <div class="footer-contact-text">
+            Email: <span>Binpalsteam@gmail.com</span>
+          </div>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Instagram">⌾</a>
+            <a href="#" aria-label="Google">G</a>
+          </div>
+          <a href="#estimateForm" class="footer-btn">Get Estimate</a>
+        </div>
+
+        <!-- Right: service area -->
+        <div class="footer-column">
+          <div class="footer-heading">SERVICE AREA</div>
+          <ul class="footer-service-list">
+            <li>Peoria, AZ</li>
+            <li>North Peoria, AZ</li>
+            <li>Vistancia, AZ</li>
+            <li>Surprise, AZ</li>
+            <li>Glendale, AZ</li>
+          </ul>
+          <a href="#estimateForm" class="footer-btn">Our Routes</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © 2025 BinPals Trash Valet. All Rights Reserved.
+      </div>
     </div>
   </footer>
 
@@ -876,7 +1063,6 @@
       });
     }
 
-    // plan card selection visual state
     if (planGrid) {
       planGrid.addEventListener("change", function (e) {
         if (e.target && e.target.type === "radio") {
