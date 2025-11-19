@@ -4,720 +4,262 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Get an Estimate | BinPals Trash Valet</title>
-  <meta name="description" content="Request a BinPals Trash Valet estimate. Share your address and how many bins you have and we’ll follow up shortly." />
 
-  <!-- Poppins font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bp-green: #2f855a;
-      --bp-green-light: #e6f4ec;
-      --bp-green-dark: #22543d;
-      --bp-border: #e5e7eb;
-      --bp-border-strong: #d1d5db;
-      --bp-text: #111827;
-      --bp-muted: #4b5563;
-      --bp-muted-soft: #9ca3af;
-      --bp-error: #b91c1c;
-      --bp-radius-lg: 18px;
-      --bp-radius-pill: 999px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      min-height: 100vh;
-      background-color: #ffffff; /* entire page white */
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--bp-text);
+      background: #fff;
+      font-family: "Poppins", sans-serif;
+      padding: 20px;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 24px 16px;
     }
 
-    .page-wrap {
+    .container {
       width: 100%;
-      max-width: 860px; /* medium-wide container */
-      margin: 0 auto;
+      max-width: 860px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
     }
 
-    .card {
-      background-color: #ffffff;
-      border-radius: var(--bp-radius-lg);
-      border: 1px solid var(--bp-border);
-      padding: 20px 20px 24px;
-    }
-
-    @media (min-width: 768px) {
-      .card {
-        padding: 22px 28px 26px;
-      }
-    }
-
-    .logo-row {
-      text-align: left;
+    .logo {
+      width: 200px;
       margin-bottom: 10px;
     }
 
-    .logo-row img {
-      max-width: 220px;
-      height: auto;
-    }
-
-    .title {
-      font-size: 1.7rem;
+    h1 {
+      margin: 0;
+      font-size: 26px;
       font-weight: 700;
-      margin: 4px 0 4px;
-      letter-spacing: 0.01em;
     }
 
-    .subtitle {
-      font-size: 0.98rem;
-      color: var(--bp-muted);
-      margin: 0 0 16px;
+    p.subtitle {
+      margin-top: 5px;
+      color: #4b5563;
+      font-size: 15px;
+      line-height: 21px;
     }
 
-    .subtitle strong {
-      color: var(--bp-green-dark);
-      font-weight: 600;
-    }
-
-    @media (min-width: 768px) {
-      .card-header-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 10px;
-      }
-
-      .card-header-text {
-        flex: 1.3;
-      }
-
-      .card-header-secondary {
-        flex: 1;
-        font-size: 0.86rem;
-        color: var(--bp-muted);
-        padding-left: 16px;
-        border-left: 1px solid var(--bp-border);
-      }
-    }
-
-    @media (max-width: 767px) {
-      .card-header-secondary {
-        margin-top: 8px;
-        font-size: 0.86rem;
-        color: var(--bp-muted);
-      }
-    }
-
-    .card-header-secondary strong {
-      color: var(--bp-green-dark);
-    }
-
-    /* Progress bar */
-    .progress-wrap {
-      margin-top: 10px;
-      margin-bottom: 16px;
-    }
-
-    .progress-bar-track {
-      width: 100%;
+    .progress {
       height: 6px;
-      border-radius: 999px;
-      background-color: #f3f4f6;
+      background: #e5e7eb;
+      border-radius: 10px;
+      margin: 20px 0;
       overflow: hidden;
     }
-
-    .progress-bar-fill {
+    .progress-fill {
       height: 100%;
-      width: 0;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--bp-green), var(--bp-green-dark));
-      transition: width 200ms ease-out;
-    }
-
-    .progress-steps {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 6px;
-      font-size: 0.75rem;
-      color: var(--bp-muted-soft);
-    }
-
-    .step-indicator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      flex: 1;
-    }
-
-    .step-circle {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 1px solid var(--bp-border-strong);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      background-color: #ffffff;
-      color: var(--bp-muted-soft);
-    }
-
-    .step-label {
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .step-indicator.active .step-circle {
-      border-color: var(--bp-green-dark);
-      background-color: var(--bp-green-light);
-      color: var(--bp-green-dark);
-    }
-
-    .step-indicator.active .step-label {
-      color: var(--bp-green-dark);
-      font-weight: 600;
-    }
-
-    form {
-      margin-top: 4px;
+      width: 0%;
+      background: #2f855a;
+      transition: width 0.25s;
     }
 
     .step-panel {
       display: none;
+      margin-top: 10px;
     }
-
     .step-panel.active {
       display: block;
     }
 
-    .step-header {
-      font-size: 0.96rem;
-      font-weight: 600;
-      color: var(--bp-green-dark);
-      margin-bottom: 6px;
-    }
-
-    .step-helper {
-      font-size: 0.86rem;
-      color: var(--bp-muted);
-      margin-bottom: 12px;
-    }
-
-    /* Two-column form layout on desktop */
-    .step-body-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px 18px;
-    }
-
-    @media (max-width: 640px) {
-      .step-body-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .form-group {
-      margin-bottom: 0;
-    }
-
-    .form-label {
+    label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 14px;
+      margin-bottom: 4px;
       font-weight: 500;
-      margin-bottom: 3px;
-      color: var(--bp-text);
     }
 
-    .form-label span {
-      color: var(--bp-green-dark);
-    }
-
-    .field,
-    select.field {
+    input, select {
       width: 100%;
-      font-size: 0.96rem;
       padding: 10px 12px;
-      border-radius: var(--bp-radius-pill);
-      border: 1px solid var(--bp-border-strong);
-      background-color: #ffffff;
-      color: var(--bp-text);
+      border-radius: 50px;
+      border: 1px solid #d1d5db;
+      font-size: 15px;
+      margin-bottom: 15px;
       outline: none;
-      transition: border-color 120ms ease-out, background-color 120ms ease-out;
+    }
+    input:focus, select:focus {
+      border-color: #2f855a;
+      background: #f0fdf4;
     }
 
-    .field::placeholder {
-      color: var(--bp-muted-soft);
-    }
-
-    .field:focus {
-      border-color: var(--bp-green-dark);
-      background-color: var(--bp-green-light);
-    }
-
-    select.field {
-      appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #6b7280 50%),
-        linear-gradient(135deg, #6b7280 50%, transparent 50%);
-      background-position:
-        calc(100% - 20px) 55%,
-        calc(100% - 14px) 55%;
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-    }
-
-    .nav-row {
-      margin-top: 16px;
+    .buttons {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      margin-top: 10px;
     }
 
-    .btn {
+    button {
+      padding: 12px 20px;
+      border-radius: 50px;
       border: none;
-      border-radius: var(--bp-radius-pill);
-      padding: 11px 16px;
-      font-size: 0.92rem;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background-color 100ms ease-out, opacity 80ms ease-out, transform 60ms ease-out;
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: default;
-      transform: none;
-    }
-
-    .btn-secondary {
-      background-color: #f3f4f6;
-      color: var(--bp-muted);
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background-color: #e5e7eb;
-      transform: translateY(-1px);
     }
 
     .btn-primary {
-      background-color: var(--bp-green);
-      color: #ffffff;
+      background: #2f855a;
+      color: #fff;
       flex: 1;
-      justify-content: center;
+      text-align: center;
     }
 
-    .btn-primary:hover:not(:disabled) {
-      background-color: var(--bp-green-dark);
-      transform: translateY(-1px);
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
     }
 
-    #submit-btn.loading {
-      opacity: 0.85;
-      cursor: default;
-      transform: none;
-    }
-
-    .btn-spinner {
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      border: 2px solid rgba(248, 250, 252, 0.5);
-      border-top-color: #ffffff;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .btn-text {
-      display: inline-block;
-    }
-
-    .message {
+    #message {
+      margin-top: 15px;
+      font-size: 15px;
+      text-align: center;
+      color: #2f855a;
       min-height: 20px;
-      margin-top: 10px;
-      font-size: 0.9rem;
-      text-align: center;
     }
 
-    .message.success {
-      color: var(--bp-green-dark);
-    }
-
-    .message.error {
-      color: var(--bp-error);
-    }
-
-    .info-text {
-      margin-top: 6px;
-      font-size: 0.82rem;
-      color: var(--bp-muted);
-      text-align: center;
-    }
-
-    .info-text strong {
-      font-weight: 600;
-    }
   </style>
 </head>
+
 <body>
-  <main class="page-wrap">
-    <section class="card" aria-labelledby="estimate-title">
+  <div class="container">
 
-      <div class="logo-row">
-        <!-- Logo file in same folder as this HTML: binpals-trash-valet-logo.png -->
-        <img src="binpals-trash-valet-logo.png" alt="BinPals Trash Valet logo" />
+    <img src="binpals-trash-valet-logo.png" class="logo" alt="BinPals Trash Valet" />
+
+    <h1>Request a BinPals Estimate</h1>
+    <p class="subtitle">
+      Answer a few quick questions. We will review your address and email you the next steps.
+    </p>
+
+    <div class="progress"><div class="progress-fill" id="progress"></div></div>
+
+    <!-- FORM -->
+    <form id="estimateForm" method="POST"
+      action="https://docs.google.com/forms/d/e/1FAIpQLSeehAkGSoRi4TYJ-MJ01aRJ0F_zx_fGnu39NJQg8MW3SAvpPA/formResponse">
+
+      <!-- Step 1 -->
+      <div class="step-panel active" data-step="1">
+        <label>Full Name</label>
+        <input type="text" name="entry.104280084" required placeholder="Your name" />
+
+        <label>Email Address</label>
+        <input type="email" name="entry.417977469" required placeholder="you@example.com" />
       </div>
 
-      <div class="card-header-row">
-        <div class="card-header-text">
-          <h1 id="estimate-title" class="title">Request a BinPals Estimate</h1>
-          <p class="subtitle">
-            Answer a few quick questions. We’ll review your address and
-            <strong>email you with route details and next steps.</strong>
-          </p>
-        </div>
-        <div class="card-header-secondary">
-          Simple, no-pressure request:
-          <br />
-          <strong>No app needed, no payment today.</strong><br />
-          Once you’re approved for a route, we’ll send over your start date and payment options.
-        </div>
+      <!-- Step 2 -->
+      <div class="step-panel" data-step="2">
+        <label>Street Address</label>
+        <input type="text" name="entry.2139416814" required />
+
+        <label>City</label>
+        <input type="text" name="entry.565605156" required />
+
+        <label>ZIP Code</label>
+        <input type="text" name="entry.55232557" required />
       </div>
 
-      <!-- Progress bar + step labels -->
-      <div class="progress-wrap" aria-hidden="true">
-        <div class="progress-bar-track">
-          <div id="progress-fill" class="progress-bar-fill"></div>
-        </div>
-        <div class="progress-steps">
-          <div class="step-indicator" data-step-label="1">
-            <div class="step-circle">1</div>
-            <div class="step-label">Your info</div>
-          </div>
-          <div class="step-indicator" data-step-label="2">
-            <div class="step-circle">2</div>
-            <div class="step-label">Address</div>
-          </div>
-          <div class="step-indicator" data-step-label="3">
-            <div class="step-circle">3</div>
-            <div class="step-label">Bins & plan</div>
-          </div>
-        </div>
+      <!-- Step 3 -->
+      <div class="step-panel" data-step="3">
+        <label>How many bins?</label>
+        <input type="number" name="entry.1777532498" required min="1" placeholder="Example: 2" />
+
+        <label>Choose a plan</label>
+        <select name="entry.707531909" required>
+          <option value="" disabled selected>Select a plan</option>
+          <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
+          <option value="Premium+ – $54/mo (3-4 cans)">Premium+ – $54/mo (3–4 cans)</option>
+          <option value="One Time – $35">One Time – $35</option>
+        </select>
       </div>
 
-      <!-- IMPORTANT: action + method wired directly to Google Form -->
-      <form
-        id="estimate-form"
-        novalidate
-        method="POST"
-        action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse"
-      >
-        <!-- STEP 1 -->
-        <div class="step-panel active" data-step="1" aria-labelledby="step1-title">
-          <div class="step-header" id="step1-title">Step 1 – Your info</div>
-          <div class="step-helper">So we know who to email.</div>
+      <input type="hidden" name="entry.409104529" value="Pending" />
+      <input type="hidden" name="submit" value="Submit" />
 
-          <div class="step-body-grid">
-            <div class="form-group">
-              <label for="fullName" class="form-label">Full name <span>*</span></label>
-              <input
-                id="fullName"
-                name="entry.104280084"
-                class="field"
-                type="text"
-                autocomplete="name"
-                placeholder="First and last name"
-                required
-              />
-            </div>
+      <div class="buttons">
+        <button type="button" class="btn-secondary" id="backBtn">Back</button>
+        <button type="submit" class="btn-primary" id="nextBtn">Next</button>
+      </div>
 
-            <div class="form-group">
-              <label for="email" class="form-label">Email address <span>*</span></label>
-              <input
-                id="email"
-                name="entry.417977469"
-                class="field"
-                type="email"
-                autocomplete="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-          </div>
-        </div>
+      <div id="message"></div>
+    </form>
 
-        <!-- STEP 2 -->
-        <div class="step-panel" data-step="2" aria-labelledby="step2-title">
-          <div class="step-header" id="step2-title">Step 2 – Your address</div>
-          <div class="step-helper">So we can check your route.</div>
-
-          <div class="step-body-grid">
-            <div class="form-group">
-              <label for="street" class="form-label">Street address <span>*</span></label>
-              <input
-                id="street"
-                name="entry.2139416814"
-                class="field"
-                type="text"
-                autocomplete="street-address"
-                placeholder="House number and street"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="city" class="form-label">City <span>*</span></label>
-              <input
-                id="city"
-                name="entry.565605156"
-                class="field"
-                type="text"
-                placeholder="City"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="zip" class="form-label">ZIP code <span>*</span></label>
-              <input
-                id="zip"
-                name="entry.55232557"
-                class="field"
-                type="text"
-                inputmode="numeric"
-                pattern="\d{5}"
-                placeholder="ZIP"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 3 -->
-        <div class="step-panel" data-step="3" aria-labelledby="step3-title">
-          <div class="step-header" id="step3-title">Step 3 – Bins & plan</div>
-          <div class="step-helper">So we can price your service.</div>
-
-          <div class="step-body-grid">
-            <div class="form-group">
-              <label for="bins" class="form-label">How many trash bins? <span>*</span></label>
-              <input
-                id="bins"
-                name="entry.1777532498"
-                class="field"
-                type="number"
-                min="1"
-                max="10"
-                step="1"
-                placeholder="Example: 2"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="plan" class="form-label">Choose a plan <span>*</span></label>
-              <select id="plan" name="entry.707531909" class="field" required>
-                <option value="" disabled selected>Tap to pick a plan</option>
-                <option value="Premium">Premium – weekly set out & return</option>
-                <option value="Premium+">Premium+ – extra flexible service</option>
-                <option value="One-Time">One-time vacation / snowbird service</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hidden fields (status + submit) -->
-        <input type="hidden" name="entry.409104529" value="Pending" />
-        <input type="hidden" name="submit" value="Submit" />
-
-        <!-- Navigation buttons -->
-        <div class="nav-row">
-          <button type="button" id="back-btn" class="btn btn-secondary" disabled>Back</button>
-          <button type="submit" id="submit-btn" class="btn btn-primary">
-            <span class="btn-text">Next</span>
-          </button>
-        </div>
-
-        <p id="form-message" class="message" aria-live="polite"></p>
-
-        <p class="info-text">
-          We usually reply within <strong>1–2 business days.</strong><br />
-          If you need help, you can also email us at <strong>Binpalsteam@gmail.com</strong>.
-        </p>
-      </form>
-    </section>
-  </main>
+  </div>
 
   <script>
-    (function () {
-      const form = document.getElementById("estimate-form");
-      const progressFill = document.getElementById("progress-fill");
-      const stepPanels = Array.from(document.querySelectorAll(".step-panel"));
-      const stepIndicators = Array.from(document.querySelectorAll(".step-indicator"));
-      const backBtn = document.getElementById("back-btn");
-      const submitBtn = document.getElementById("submit-btn");
-      const formMessage = document.getElementById("form-message");
+    let step = 1;
+    const totalSteps = 3;
 
-      if (!form || !progressFill) return;
+    const progress = document.getElementById("progress");
+    const panels = document.querySelectorAll(".step-panel");
+    const backBtn = document.getElementById("backBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const form = document.getElementById("estimateForm");
+    const message = document.getElementById("message");
 
-      const totalSteps = stepPanels.length;
-      let currentStep = 1;
-      let isSubmitting = false;
+    function updateUI() {
+      panels.forEach(p => p.classList.remove("active"));
+      document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
 
-      function updateUI() {
-        stepPanels.forEach(panel => {
-          const step = Number(panel.getAttribute("data-step"));
-          panel.classList.toggle("active", step === currentStep);
-        });
+      backBtn.style.visibility = step === 1 ? "hidden" : "visible";
+      nextBtn.textContent = step === totalSteps ? "Submit" : "Next";
 
-        stepIndicators.forEach(indicator => {
-          const step = Number(indicator.getAttribute("data-step-label"));
-          indicator.classList.toggle("active", step === currentStep);
-        });
+      progress.style.width = ((step - 1) / (totalSteps - 1)) * 100 + "%";
+    }
 
-        const progressPercent = (currentStep - 1) / (totalSteps - 1 || 1) * 100;
-        progressFill.style.width = progressPercent + "%";
+    updateUI();
 
-        backBtn.disabled = currentStep === 1 || isSubmitting;
+    nextBtn.addEventListener("click", function (e) {
+      if (step < totalSteps) {
+        e.preventDefault();
 
-        const btnTextSpan = submitBtn.querySelector(".btn-text");
-        if (btnTextSpan && !isSubmitting) {
-          btnTextSpan.textContent = currentStep === totalSteps ? "Send request" : "Next";
-        }
-      }
-
-      function showMessage(message, isError) {
-        formMessage.textContent = message || "";
-        formMessage.classList.remove("success", "error");
-        if (!message) return;
-        formMessage.classList.add(isError ? "error" : "success");
-      }
-
-      function setSubmitting(state) {
-        isSubmitting = state;
-        submitBtn.classList.toggle("loading", state);
-        submitBtn.disabled = state;
-        backBtn.disabled = state || currentStep === 1;
-
-        let spinner = submitBtn.querySelector(".btn-spinner");
-        const textSpan = submitBtn.querySelector(".btn-text");
-
-        if (state) {
-          if (textSpan) textSpan.textContent = "Sending...";
-          if (!spinner) {
-            spinner = document.createElement("span");
-            spinner.className = "btn-spinner";
-            submitBtn.insertBefore(spinner, submitBtn.firstChild);
-          }
-        } else {
-          if (spinner) spinner.remove();
-          if (textSpan) {
-            textSpan.textContent = currentStep === totalSteps ? "Send request" : "Next";
-          }
-        }
-      }
-
-      function validateCurrentStep() {
-        const panel = stepPanels.find(p => Number(p.getAttribute("data-step")) === currentStep);
-        if (!panel) return true;
-
-        const inputs = panel.querySelectorAll("input, select");
-        for (const input of inputs) {
+        // validate current step
+        const currentPanel = document.querySelector(`.step-panel[data-step="${step}"]`);
+        const inputs = currentPanel.querySelectorAll("input, select");
+        for (let input of inputs) {
           if (!input.checkValidity()) {
             input.reportValidity();
-            return false;
+            return;
           }
         }
-        return true;
+
+        step++;
+        updateUI();
       }
+    });
 
-      backBtn.addEventListener("click", function () {
-        if (isSubmitting) return;
-        if (currentStep > 1) {
-          currentStep -= 1;
-          updateUI();
-          showMessage("");
-        }
+    backBtn.addEventListener("click", function () {
+      if (step > 1) {
+        step--;
+        updateUI();
+      }
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const params = new URLSearchParams(formData);
+
+      fetch(form.action, {
+        method: "POST",
+        mode: "no-cors",
+        body: params
+      }).then(() => {
+        message.textContent = "Thank you. We will review your request and email you shortly.";
+        form.reset();
+        step = 1;
+        updateUI();
+      }).catch(() => {
+        message.textContent = "Something went wrong. Please try again.";
       });
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        showMessage("");
-
-        if (isSubmitting) return;
-
-        // Step wizard: if not last step, just advance
-        if (currentStep < totalSteps) {
-          if (!validateCurrentStep()) return;
-          currentStep += 1;
-          updateUI();
-          return;
-        }
-
-        // Last step: validate and send to Google Form
-        if (!validateCurrentStep()) return;
-
-        setSubmitting(true);
-
-        const formData = new FormData(form);
-        const params = new URLSearchParams();
-
-        for (const [key, value] of formData.entries()) {
-          params.append(key, value.toString());
-        }
-
-        const endpoint = form.getAttribute("action");
-
-        fetch(endpoint, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: params.toString()
-        })
-          .then(function () {
-            form.reset();
-            currentStep = 1;
-            updateUI();
-            showMessage(
-              "Thanks for requesting a BinPals estimate — we’ll review your address and follow up shortly.",
-              false
-            );
-          })
-          .catch(function () {
-            showMessage(
-              "Something went wrong sending your request. Please try again, or email us at Binpalsteam@gmail.com.",
-              true
-            );
-          })
-          .finally(function () {
-            setSubmitting(false);
-          });
-      });
-
-      updateUI();
-    })();
+    });
   </script>
+
 </body>
 </html>
