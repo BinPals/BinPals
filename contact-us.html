@@ -89,7 +89,6 @@
       font-weight: 600;
     }
 
-    /* Layout: on larger screens, form content can breathe */
     @media (min-width: 768px) {
       .card-header-row {
         display: flex;
@@ -216,7 +215,7 @@
       margin-bottom: 12px;
     }
 
-    /* Layout inside steps: use a two-column form layout on desktop */
+    /* Two-column form layout on desktop */
     .step-body-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -230,7 +229,7 @@
     }
 
     .form-group {
-      margin-bottom: 0; /* handled by grid gap */
+      margin-bottom: 0;
     }
 
     .form-label {
@@ -426,7 +425,13 @@
         </div>
       </div>
 
-      <form id="estimate-form" novalidate>
+      <!-- IMPORTANT: action + method wired directly to Google Form -->
+      <form
+        id="estimate-form"
+        novalidate
+        action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse"
+        method="POST"
+      >
         <!-- STEP 1 -->
         <div class="step-panel active" data-step="1" aria-labelledby="step1-title">
           <div class="step-header" id="step1-title">Step 1 – Your info</div>
@@ -565,8 +570,6 @@
 
   <script>
     (function () {
-      const FORM_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse";
-
       const form = document.getElementById("estimate-form");
       const progressFill = document.getElementById("progress-fill");
       const stepPanels = Array.from(document.querySelectorAll(".step-panel"));
@@ -575,33 +578,33 @@
       const submitBtn = document.getElementById("submit-btn");
       const formMessage = document.getElementById("form-message");
 
+      if (!form || !progressFill) return;
+
       const totalSteps = stepPanels.length;
       let currentStep = 1;
       let isSubmitting = false;
 
-      if (!form || !progressFill) return;
+      function getFormEndpoint() {
+        // Always use the form's action attribute
+        return form.getAttribute("action");
+      }
 
       function updateUI() {
-        // Show the current panel
         stepPanels.forEach(panel => {
           const step = Number(panel.getAttribute("data-step"));
           panel.classList.toggle("active", step === currentStep);
         });
 
-        // Update step indicators
         stepIndicators.forEach(indicator => {
           const step = Number(indicator.getAttribute("data-step-label"));
           indicator.classList.toggle("active", step === currentStep);
         });
 
-        // Progress bar width
         const progressPercent = (currentStep - 1) / (totalSteps - 1 || 1) * 100;
         progressFill.style.width = progressPercent + "%";
 
-        // Back button
         backBtn.disabled = currentStep === 1 || isSubmitting;
 
-        // Submit button label
         const btnTextSpan = submitBtn.querySelector(".btn-text");
         if (btnTextSpan && !isSubmitting) {
           btnTextSpan.textContent = currentStep === totalSteps ? "Send request" : "Next";
@@ -640,7 +643,6 @@
       }
 
       function validateCurrentStep() {
-        // Validate only the inputs in the visible panel
         const panel = stepPanels.find(p => Number(p.getAttribute("data-step")) === currentStep);
         if (!panel) return true;
 
@@ -663,7 +665,6 @@
         }
       });
 
-      // Hijack submit: if not last step, just go next
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         showMessage("");
@@ -688,7 +689,9 @@
           params.append(key, value.toString());
         }
 
-        fetch(FORM_ENDPOINT, {
+        const endpoint = getFormEndpoint();
+
+        fetch(endpoint, {
           method: "POST",
           mode: "no-cors",
           headers: {
@@ -716,7 +719,6 @@
           });
       });
 
-      // Initial UI
       updateUI();
     })();
   </script>
