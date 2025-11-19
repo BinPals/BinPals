@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Get an Estimate | BinPals Trash Valet</title>
-  <meta name="description" content="Request a BinPals Trash Valet estimate. Tell us your address, how many bins you have, and the plan you're interested in, and we'll follow up shortly." />
+  <meta name="description" content="Request a BinPals Trash Valet estimate. Share your address and how many bins you have and we’ll follow up shortly." />
 
   <!-- Poppins font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,18 +13,16 @@
 
   <style>
     :root {
-      --bp-bg: #0f172a;
-      --bp-card-bg: #0b1120;
-      --bp-accent: #22c55e;
-      --bp-accent-soft: rgba(34, 197, 94, 0.2);
-      --bp-text: #e5e7eb;
-      --bp-muted: #9ca3af;
-      --bp-border: rgba(148, 163, 184, 0.4);
-      --bp-error: #f97373;
-      --bp-radius-lg: 18px;
-      --bp-radius-xl: 24px;
-      --bp-shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.75);
-      --bp-transition-fast: 150ms ease-out;
+      --bp-green: #2f855a;
+      --bp-green-soft: #e6f4ec;
+      --bp-green-dark: #22543d;
+      --bp-brown: #a66b3b;
+      --bp-bg: #f4f4f4;
+      --bp-text: #111827;
+      --bp-muted: #4b5563;
+      --bp-border: #d1d5db;
+      --bp-error: #b91c1c;
+      --bp-radius: 18px;
     }
 
     * {
@@ -35,243 +33,157 @@
       margin: 0;
       min-height: 100vh;
       font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2933 0, #020617 55%);
+      background-color: var(--bp-bg);
       color: var(--bp-text);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
+      padding: 16px;
     }
 
-    .page-shell {
+    .page-wrap {
       width: 100%;
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
-      gap: 28px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 800px) {
-      .page-shell {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      max-width: 640px;
     }
 
     .card {
-      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.06), #020617 60%);
-      border-radius: var(--bp-radius-xl);
+      background-color: #ffffff;
+      border-radius: var(--bp-radius);
       border: 1px solid var(--bp-border);
-      box-shadow: var(--bp-shadow-soft);
-      padding: 24px 22px;
-      position: relative;
-      overflow: hidden;
+      padding: 24px 20px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.15);
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
       .card {
         padding: 28px 26px;
       }
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -120px;
-      opacity: 0;
-      background: conic-gradient(
-        from 180deg at 50% 50%,
-        rgba(34, 197, 94, 0.16),
-        transparent 40%,
-        rgba(56, 189, 248, 0.2),
-        transparent 80%
-      );
-      animation: cardGlow 8s linear infinite;
-      pointer-events: none;
+    .logo-row {
+      text-align: center;
+      margin-bottom: 12px;
     }
 
-    @keyframes cardGlow {
-      0%, 100% {
-        opacity: 0;
-        transform: translate3d(0, 0, 0) rotate(0deg);
-      }
-      18%, 66% {
-        opacity: 1;
-      }
-      50% {
-        transform: translate3d(-12px, -6px, 0) rotate(2deg);
-      }
+    .logo-row img {
+      max-width: 220px;
+      height: auto;
+      display: inline-block;
     }
 
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .headline {
+    .title {
+      text-align: center;
       font-size: 1.6rem;
-      line-height: 1.2;
       font-weight: 700;
-      letter-spacing: 0.01em;
-      margin: 0 0 4px;
+      margin: 10px 0 4px;
     }
 
-    @media (min-width: 768px) {
-      .headline {
-        font-size: 1.9rem;
-      }
-    }
-
-    .subheadline {
+    .subtitle {
+      text-align: center;
+      font-size: 0.98rem;
+      color: var(--bp-muted);
       margin: 0 0 18px;
-      font-size: 0.95rem;
-      color: var(--bp-muted);
     }
 
-    .subheadline span {
-      color: var(--bp-accent);
-      font-weight: 500;
+    .subtitle strong {
+      color: var(--bp-green-dark);
+      font-weight: 600;
     }
 
-    .pill-row {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .pill {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.85);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--bp-muted);
-      white-space: nowrap;
-    }
-
-    .pill-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--bp-accent);
-      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.28);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px 16px;
-    }
-
-    @media (max-width: 640px) {
-      .form-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    form {
+      margin-top: 8px;
     }
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      margin-bottom: 14px;
     }
 
     .form-label {
-      font-size: 0.8rem;
+      display: block;
+      font-size: 0.95rem;
       font-weight: 500;
-      color: var(--bp-muted);
+      margin-bottom: 4px;
+      color: var(--bp-text);
     }
 
     .form-label span {
-      color: var(--bp-accent);
+      color: var(--bp-green-dark);
     }
 
     .field,
     select.field {
       width: 100%;
+      font-size: 1rem;
+      padding: 11px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--bp-border);
+      background-color: #ffffff;
       color: var(--bp-text);
-      font-size: 0.9rem;
-      padding: 10px 14px;
       outline: none;
-      transition: border-color var(--bp-transition-fast), box-shadow var(--bp-transition-fast), background 120ms ease-out;
-      appearance: none;
+      transition: border-color 120ms ease-out, box-shadow 120ms ease-out, background-color 120ms ease-out;
     }
 
     .field::placeholder {
-      color: #6b7280;
+      color: #9ca3af;
     }
 
     .field:focus {
-      border-color: var(--bp-accent);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4), 0 0 0 10px rgba(34, 197, 94, 0.08);
-      background: #020617;
+      border-color: var(--bp-green-dark);
+      box-shadow: 0 0 0 3px var(--bp-green-soft);
+      background-color: #ffffff;
     }
 
     select.field {
-      background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%), 
-                        linear-gradient(135deg, #9ca3af 50%, transparent 50%);
-      background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #6b7280 50%),
+        linear-gradient(135deg, #6b7280 50%, transparent 50%);
+      background-position:
+        calc(100% - 20px) 55%,
+        calc(100% - 14px) 55%;
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
     }
 
-    .field[readonly],
-    .field[disabled] {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .form-footer {
-      margin-top: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .btn-row {
+      margin-top: 14px;
     }
 
     .btn-primary {
+      width: 100%;
       border: none;
       border-radius: 999px;
-      padding: 11px 20px;
-      font-size: 0.95rem;
+      padding: 12px 16px;
+      font-size: 1rem;
       font-weight: 600;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       cursor: pointer;
+      background-color: var(--bp-green);
+      color: #ffffff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      background: radial-gradient(circle at top left, #22c55e, #16a34a 45%, #15803d 100%);
-      color: #022c22;
-      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.45);
-      transition: transform 120ms ease-out, box-shadow 120ms ease-out, filter 100ms ease-out, opacity 100ms ease-out;
+      box-shadow: 0 8px 22px rgba(47, 133, 90, 0.45);
+      transition: background-color 100ms ease-out, box-shadow 100ms ease-out, transform 80ms ease-out, opacity 80ms ease-out;
     }
 
     .btn-primary:hover:not(.loading):not(:disabled) {
+      background-color: var(--bp-green-dark);
+      box-shadow: 0 10px 26px rgba(34, 85, 61, 0.5);
       transform: translateY(-1px);
-      box-shadow: 0 18px 40px rgba(34, 197, 94, 0.55);
-      filter: brightness(1.03);
     }
 
     .btn-primary:active:not(.loading):not(:disabled) {
       transform: translateY(0);
-      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.45);
-      filter: brightness(0.97);
+      box-shadow: 0 6px 18px rgba(34, 85, 61, 0.45);
     }
 
     .btn-primary.loading,
     .btn-primary:disabled {
-      cursor: wait;
-      opacity: 0.75;
+      opacity: 0.8;
+      cursor: default;
       box-shadow: none;
       transform: none;
     }
@@ -280,10 +192,9 @@
       width: 18px;
       height: 18px;
       border-radius: 999px;
-      border: 2px solid rgba(15, 23, 42, 0.1);
-      border-top-color: rgba(15, 23, 42, 0.9);
-      border-right-color: rgba(15, 23, 42, 0.9);
-      animation: spin 700ms linear infinite;
+      border: 2px solid rgba(248, 250, 252, 0.4);
+      border-top-color: #ffffff;
+      animation: spin 0.75s linear infinite;
     }
 
     @keyframes spin {
@@ -292,401 +203,162 @@
       }
     }
 
-    .btn-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .btn-text {
+      display: inline-block;
     }
 
-    .btn-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .meta-text {
-      font-size: 0.78rem;
+    .info-text {
+      margin-top: 10px;
+      font-size: 0.9rem;
       color: var(--bp-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+      text-align: center;
     }
 
-    .meta-pill {
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .meta-highlight {
-      color: var(--bp-accent);
-      font-weight: 500;
-    }
-
-    .form-message {
-      font-size: 0.85rem;
-      margin-top: 4px;
-      min-height: 18px;
-    }
-
-    .form-message.success {
-      color: #4ade80;
-    }
-
-    .form-message.error {
-      color: var(--bp-error);
-    }
-
-    /* Right side card (status / vibe) */
-    .side-card {
-      background: linear-gradient(145deg, #020617, #020617 55%, #064e3b 100%);
-      border-radius: var(--bp-radius-xl);
-      border: 1px solid rgba(34, 197, 94, 0.25);
-      box-shadow: var(--bp-shadow-soft);
-      padding: 22px 22px 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    @media (max-width: 800px) {
-      .side-card {
-        order: -1;
-      }
-    }
-
-    .side-card::before {
-      content: "";
-      position: absolute;
-      width: 220px;
-      height: 220px;
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(34, 197, 94, 0.25), transparent 60%);
-      top: -40px;
-      right: -80px;
-      opacity: 0.8;
-      filter: blur(1px);
-    }
-
-    .side-card-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .side-title {
-      font-size: 1.1rem;
+    .info-text strong {
+      color: var(--bp-brown);
       font-weight: 600;
-      margin: 0 0 6px;
     }
 
-    .side-text {
-      font-size: 0.88rem;
-      color: var(--bp-muted);
-      margin: 0 0 14px;
+    .message {
+      min-height: 20px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      text-align: center;
     }
 
-    .progress-shell {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(15, 23, 42, 0.9);
-      margin-bottom: 16px;
+    .message.success {
+      color: var(--bp-green-dark);
     }
 
-    .progress-bar-outer {
-      flex: 1;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      overflow: hidden;
-    }
-
-    .progress-bar-inner {
-      height: 100%;
-      width: 30%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #22c55e, #4ade80, #a7f3d0);
-      transform-origin: left center;
-      transform: scaleX(0);
-      transition: transform 260ms ease-out;
-    }
-
-    .progress-shell.active .progress-bar-inner {
-      transform: scaleX(1);
-    }
-
-    .progress-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--bp-muted);
-      white-space: nowrap;
-    }
-
-    .steps-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 10px;
-      display: grid;
-      gap: 8px;
-      font-size: 0.82rem;
-    }
-
-    .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      color: var(--bp-muted);
-    }
-
-    .step-badge {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.72rem;
-      color: var(--bp-accent);
-      background: rgba(15, 23, 42, 0.9);
-      flex-shrink: 0;
-    }
-
-    .step-strong {
-      color: #e5e7eb;
-      font-weight: 500;
-    }
-
-    .side-footer {
-      font-size: 0.78rem;
-      color: var(--bp-muted);
-      margin-top: 6px;
-    }
-
-    .side-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 4px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(34, 197, 94, 0.5);
-      font-size: 0.75rem;
-      color: var(--bp-accent);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .side-tag-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--bp-accent);
-    }
-
-    .side-tag-sub {
-      font-size: 0.72rem;
-      color: var(--bp-muted);
-      margin-top: 4px;
-    }
-
-    .hidden {
-      display: none !important;
+    .message.error {
+      color: var(--bp-error);
     }
   </style>
 </head>
 <body>
-  <main class="page-shell">
-    <!-- Left: Form card -->
+  <main class="page-wrap">
     <section class="card" aria-labelledby="estimate-title">
-      <div class="card-inner">
-        <header>
-          <div class="pill-row">
-            <div class="pill">
-              <span class="pill-dot" aria-hidden="true"></span>
-              <span>Instant estimate request</span>
-            </div>
-            <div class="pill">
-              <span>Peoria, AZ & nearby</span>
-            </div>
-          </div>
-          <h1 id="estimate-title" class="headline">Get your BinPals estimate</h1>
-          <p class="subheadline">
-            Drop in your address, how many bins you have, and the plan you’re interested in. 
-            <span>We’ll review your route and follow up shortly.</span>
-          </p>
-        </header>
-
-        <form id="estimate-form" novalidate>
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="fullName" class="form-label">Full name <span>*</span></label>
-              <input
-                id="fullName"
-                name="entry.104280084"
-                class="field"
-                type="text"
-                autocomplete="name"
-                placeholder="First & last name"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="email" class="form-label">Email address <span>*</span></label>
-              <input
-                id="email"
-                name="entry.417977469"
-                class="field"
-                type="email"
-                autocomplete="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="street" class="form-label">Street address <span>*</span></label>
-              <input
-                id="street"
-                name="entry.2139416814"
-                class="field"
-                type="text"
-                autocomplete="street-address"
-                placeholder="1234 W Peoria Ave"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="city" class="form-label">City <span>*</span></label>
-              <input
-                id="city"
-                name="entry.565605156"
-                class="field"
-                type="text"
-                placeholder="Peoria"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="zip" class="form-label">ZIP code <span>*</span></label>
-              <input
-                id="zip"
-                name="entry.55232557"
-                class="field"
-                type="text"
-                inputmode="numeric"
-                pattern="\d{5}"
-                placeholder="85345"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="bins" class="form-label">How many bins? <span>*</span></label>
-              <input
-                id="bins"
-                name="entry.1777532498"
-                class="field"
-                type="number"
-                min="1"
-                max="10"
-                step="1"
-                placeholder="2"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="plan" class="form-label">Plan <span>*</span></label>
-              <select id="plan" name="entry.707531909" class="field" required>
-                <option value="" disabled selected>Select a plan</option>
-                <option value="Premium">Premium (weekly set-out & return)</option>
-                <option value="Premium+">Premium+ (extra flexible service)</option>
-                <option value="One-Time">One-time vacation / snowbird service</option>
-              </select>
-            </div>
-
-            <!-- Hidden status column (Pending by default) -->
-            <input type="hidden" name="entry.409104529" value="Pending" />
-            <!-- Hidden submit value (mimic native form submit) -->
-            <input type="hidden" name="submit" value="Submit" />
-          </div>
-
-          <div class="form-footer">
-            <button id="submit-btn" type="submit" class="btn-primary">
-              <span class="btn-label">
-                <span class="btn-dot" aria-hidden="true"></span>
-                <span class="btn-text">Send estimate request</span>
-              </span>
-            </button>
-
-            <p id="form-message" class="form-message" aria-live="polite"></p>
-
-            <div class="meta-text">
-              <span class="meta-pill">No app needed</span>
-              <span>We’ll email you within 1–2 business days.</span>
-              <span class="meta-highlight">You’re not locked into anything.</span>
-            </div>
-          </div>
-        </form>
+      <div class="logo-row">
+        <!-- Update the src path to wherever your logo file lives -->
+        <img src="images/binpals-logo.png" alt="BinPals Trash Valet logo" />
       </div>
-    </section>
 
-    <!-- Right: App-like loader / experience card -->
-    <aside class="side-card" aria-hidden="true">
-      <div class="side-card-inner">
-        <h2 class="side-title">Feels like an app, runs in your browser.</h2>
-        <p class="side-text">
-          While we review your address, your request drops straight into our BinPals route sheet – ready
-          for mapping, skips, and future app features.
+      <h1 id="estimate-title" class="title">Request a BinPals Estimate</h1>
+      <p class="subtitle">
+        Please fill out this simple form. We’ll look at your address and
+        <strong>email you back with next steps.</strong>
+      </p>
+
+      <form id="estimate-form" novalidate>
+        <div class="form-group">
+          <label for="fullName" class="form-label">Full name <span>*</span></label>
+          <input
+            id="fullName"
+            name="entry.104280084"
+            class="field"
+            type="text"
+            autocomplete="name"
+            placeholder="First and last name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email address <span>*</span></label>
+          <input
+            id="email"
+            name="entry.417977469"
+            class="field"
+            type="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="street" class="form-label">Street address <span>*</span></label>
+          <input
+            id="street"
+            name="entry.2139416814"
+            class="field"
+            type="text"
+            autocomplete="street-address"
+            placeholder="House number and street"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="city" class="form-label">City <span>*</span></label>
+          <input
+            id="city"
+            name="entry.565605156"
+            class="field"
+            type="text"
+            placeholder="City"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="zip" class="form-label">ZIP code <span>*</span></label>
+          <input
+            id="zip"
+            name="entry.55232557"
+            class="field"
+            type="text"
+            inputmode="numeric"
+            pattern="\d{5}"
+            placeholder="ZIP code"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="bins" class="form-label">How many trash bins? <span>*</span></label>
+          <input
+            id="bins"
+            name="entry.1777532498"
+            class="field"
+            type="number"
+            min="1"
+            max="10"
+            step="1"
+            placeholder="Example: 2"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="plan" class="form-label">Choose a plan <span>*</span></label>
+          <select id="plan" name="entry.707531909" class="field" required>
+            <option value="" disabled selected>Tap to pick a plan</option>
+            <option value="Premium">Premium – weekly set out & return</option>
+            <option value="Premium+">Premium+ – extra flexible service</option>
+            <option value="One-Time">One-time vacation / snowbird service</option>
+          </select>
+        </div>
+
+        <!-- Hidden status field -->
+        <input type="hidden" name="entry.409104529" value="Pending" />
+        <!-- Hidden submit field -->
+        <input type="hidden" name="submit" value="Submit" />
+
+        <div class="btn-row">
+          <button id="submit-btn" type="submit" class="btn-primary">
+            <span class="btn-text">Send estimate request</span>
+          </button>
+        </div>
+
+        <p id="form-message" class="message" aria-live="polite"></p>
+
+        <p class="info-text">
+          We usually reply within <strong>1–2 business days.</strong>  
+          If you need help, you can also email us at <strong>Binpalsteam@gmail.com</strong>.
         </p>
-
-        <div id="progress-shell" class="progress-shell">
-          <div class="progress-bar-outer">
-            <div id="progress-bar" class="progress-bar-inner"></div>
-          </div>
-          <div class="progress-label">Sending to BinPals…</div>
-        </div>
-
-        <ul class="steps-list">
-          <li class="step-item">
-            <span class="step-badge">1</span>
-            <span><span class="step-strong">You submit your address.</span> We capture your bins and plan.</span>
-          </li>
-          <li class="step-item">
-            <span class="step-badge">2</span>
-            <span><span class="step-strong">Google Sheet updates in real time.</span> Every row is a potential route stop.</span>
-          </li>
-          <li class="step-item">
-            <span class="step-badge">3</span>
-            <span><span class="step-strong">You get instant email confirmation.</span> We follow up with route approval and payment.</span>
-          </li>
-        </ul>
-
-        <div class="side-footer">
-          Future vision:
-          <div class="side-tag">
-            <span class="side-tag-dot"></span>
-            <span>Map-ready route sheet</span>
-          </div>
-          <div class="side-tag-sub">
-            Use this same sheet later for your route dashboard, skip weeks, and a map that feels like Uber.
-          </div>
-        </div>
-      </div>
-    </aside>
+      </form>
+    </section>
   </main>
 
   <script>
@@ -696,8 +368,6 @@
       const form = document.getElementById("estimate-form");
       const submitBtn = document.getElementById("submit-btn");
       const formMessage = document.getElementById("form-message");
-      const progressShell = document.getElementById("progress-shell");
-      const progressBar = document.getElementById("progress-bar");
 
       if (!form) return;
 
@@ -705,10 +375,9 @@
         if (isLoading) {
           submitBtn.classList.add("loading");
           submitBtn.disabled = true;
-          const textSpan = submitBtn.querySelector(".btn-text");
-          if (textSpan) {
-            textSpan.textContent = "Sending…";
-          }
+
+          const text = submitBtn.querySelector(".btn-text");
+          if (text) text.textContent = "Sending...";
 
           let spinner = submitBtn.querySelector(".btn-spinner");
           if (!spinner) {
@@ -716,20 +385,15 @@
             spinner.className = "btn-spinner";
             submitBtn.insertBefore(spinner, submitBtn.firstChild);
           }
-
-          progressShell.classList.add("active");
         } else {
           submitBtn.classList.remove("loading");
           submitBtn.disabled = false;
-          const textSpan = submitBtn.querySelector(".btn-text");
-          if (textSpan) {
-            textSpan.textContent = "Send estimate request";
-          }
+
+          const text = submitBtn.querySelector(".btn-text");
+          if (text) text.textContent = "Send estimate request";
+
           const spinner = submitBtn.querySelector(".btn-spinner");
-          if (spinner) {
-            spinner.remove();
-          }
-          progressShell.classList.remove("active");
+          if (spinner) spinner.remove();
         }
       }
 
@@ -766,11 +430,9 @@
         })
           .then(function () {
             form.reset();
-            // reset select placeholder manually
             const planSelect = document.getElementById("plan");
-            if (planSelect) {
-              planSelect.selectedIndex = 0;
-            }
+            if (planSelect) planSelect.selectedIndex = 0;
+
             showMessage(
               "Thanks for requesting a BinPals estimate — we’ll review your address and follow up shortly.",
               false
@@ -778,7 +440,7 @@
           })
           .catch(function () {
             showMessage(
-              "Something went wrong sending your request. Please try again, or email us directly at Binpalsteam@gmail.com.",
+              "Something went wrong sending your request. Please try again, or email us at Binpalsteam@gmail.com.",
               true
             );
           })
