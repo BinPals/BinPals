@@ -167,6 +167,13 @@
       margin-bottom: 18px;
     }
 
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 4px;
+    }
+
     input, select {
       width: 100%;
       padding: 14px 18px;
@@ -185,6 +192,7 @@
       background: #f0fdf4;
     }
 
+    /* two-column rows on desktop */
     .field-row {
       display: flex;
       gap: 16px;
@@ -261,6 +269,7 @@
 
       .logo { width: 150px; }
 
+      /* stack fields on mobile */
       .field-row {
         flex-direction: column;
       }
@@ -325,11 +334,16 @@
         <div class="step-title">Step 1 – Your info</div>
         <div class="step-helper">So we know who to email.</div>
 
-        <label>Full name *</label>
-        <input type="text" name="entry.104280084" required placeholder="First and last name" />
-
-        <label>Email address *</label>
-        <input type="email" name="entry.417977469" required placeholder="you@example.com" />
+        <div class="field-row">
+          <div>
+            <label>Full name *</label>
+            <input type="text" name="entry.104280084" required placeholder="First and last name" />
+          </div>
+          <div>
+            <label>Email address *</label>
+            <input type="email" name="entry.417977469" required placeholder="you@example.com" />
+          </div>
+        </div>
       </div>
 
       <!-- Step 2 -->
@@ -358,16 +372,22 @@
         <div class="step-title">Step 3 – Bins & plan</div>
         <div class="step-helper">So we can price your service.</div>
 
-        <label>How many trash bins? *</label>
-        <input type="number" name="entry.1777532498" required min="1" placeholder="Example: 2" />
+        <div class="field-row">
+          <div>
+            <label>How many trash bins? *</label>
+            <input type="number" name="entry.1777532498" required min="1" placeholder="Example: 2" />
+          </div>
 
-        <label>Choose a plan *</label>
-        <select name="entry.707531909" required>
-          <option value="" disabled selected>Tap to pick a plan</option>
-          <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
-          <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
-          <option value="One Time – $35">One Time – $35</option>
-        </select>
+          <div>
+            <label>Choose a plan *</label>
+            <select name="entry.707531909" required>
+              <option value="" disabled selected>Tap to pick a plan</option>
+              <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
+              <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
+              <option value="One Time – $35">One Time – $35</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- Hidden Google Form fields -->
