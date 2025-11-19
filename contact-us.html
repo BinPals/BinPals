@@ -429,8 +429,8 @@
       <form
         id="estimate-form"
         novalidate
-        action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse"
         method="POST"
+        action="https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse"
       >
         <!-- STEP 1 -->
         <div class="step-panel active" data-step="1" aria-labelledby="step1-title">
@@ -546,7 +546,7 @@
           </div>
         </div>
 
-        <!-- Hidden fields -->
+        <!-- Hidden fields (status + submit) -->
         <input type="hidden" name="entry.409104529" value="Pending" />
         <input type="hidden" name="submit" value="Submit" />
 
@@ -583,11 +583,6 @@
       const totalSteps = stepPanels.length;
       let currentStep = 1;
       let isSubmitting = false;
-
-      function getFormEndpoint() {
-        // Always use the form's action attribute
-        return form.getAttribute("action");
-      }
 
       function updateUI() {
         stepPanels.forEach(panel => {
@@ -671,6 +666,7 @@
 
         if (isSubmitting) return;
 
+        // Step wizard: if not last step, just advance
         if (currentStep < totalSteps) {
           if (!validateCurrentStep()) return;
           currentStep += 1;
@@ -678,26 +674,20 @@
           return;
         }
 
-        // Last step: validate and send
+        // Last step: validate and send to Google Form
         if (!validateCurrentStep()) return;
 
         setSubmitting(true);
 
         const formData = new FormData(form);
-        const params = new URLSearchParams();
-        for (const [key, value] of formData.entries()) {
-          params.append(key, value.toString());
-        }
+        const params = new URLSearchParams(formData); // browser sets correct headers for URLSearchParams
 
-        const endpoint = getFormEndpoint();
+        const endpoint = form.getAttribute("action");
 
         fetch(endpoint, {
           method: "POST",
           mode: "no-cors",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: params.toString()
+          body: params
         })
           .then(function () {
             form.reset();
