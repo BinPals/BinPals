@@ -81,6 +81,7 @@
       padding: 16px 20px;
       border: 1px solid #e5e7eb;
     }
+
     .aside-copy strong {
       display: block;
       margin-bottom: 4px;
@@ -140,6 +141,7 @@
       border-color: var(--green);
       color: #ffffff;
     }
+
     .step-nav-item.active .step-label {
       color: var(--green);
       font-weight: 600;
@@ -184,9 +186,11 @@
       margin-bottom: 18px;
       outline: none;
     }
+
     input::placeholder {
       color: #9ca3af;
     }
+
     input:focus, select:focus {
       border-color: var(--green);
       background: #f0fdf4;
@@ -197,6 +201,7 @@
       display: flex;
       gap: 16px;
     }
+
     .field-row > div {
       flex: 1;
     }
@@ -414,7 +419,7 @@
           </div>
           <div class="step-nav-item" data-step-nav="3">
             <div class="step-circle">3</div>
-            <div class="step-label">Bins & plan</div>
+            <div class="step-label">Bins, plan & trash day</div>
           </div>
         </div>
       </div>
@@ -463,8 +468,8 @@
 
         <!-- Step 3 -->
         <div class="step-panel" data-step="3">
-          <div class="step-title">Step 3 – Bins & plan</div>
-          <div class="step-helper">So we can price your service.</div>
+          <div class="step-title">Step 3 – Bins, plan & trash day</div>
+          <div class="step-helper">So we can price your service and route you correctly.</div>
 
           <div class="field-row">
             <div>
@@ -479,6 +484,20 @@
                 <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
                 <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
                 <option value="One Time – $35">One Time – $35</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <label>Trash day *</label>
+              <select name="entry.12034793" required>
+                <option value="" disabled selected>Pick your trash day</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
               </select>
             </div>
           </div>
