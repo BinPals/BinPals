@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Get an Estimate | BinPals Trash Valet</title>
+  <title>Get Started With BinPals Trash Valet</title>
 
   <!-- Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -206,6 +206,97 @@
       flex: 1;
     }
 
+    /* consent box */
+    .consent-box {
+      margin-top: 8px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 12px;
+      color: #4b5563;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .consent-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      margin-bottom: 0;
+    }
+
+    .consent-text {
+      line-height: 1.5;
+    }
+
+    .consent-text strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    /* pricing cards */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .plan-card {
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      padding: 16px 16px 14px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .plan-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .plan-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .plan-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .plan-detail {
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .plan-tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #166534;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .plan-card.selected {
+      border-color: var(--green);
+      box-shadow: 0 12px 24px rgba(22, 101, 52, 0.18);
+      transform: translateY(-1px);
+    }
+
     /* BUTTONS (Next centered, longer) */
     .buttons {
       margin-top: 24px;
@@ -338,6 +429,12 @@
       to { stroke-dashoffset: 0; }
     }
 
+    @media (max-width: 900px) {
+      .plan-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 768px) {
       body { padding: 0; }
 
@@ -390,7 +487,7 @@
       <div class="top-row">
         <div class="headline">
           <img src="binpals-trash-valet-logo.png" class="logo" alt="BinPals Trash Valet" />
-          <h1>Request a BinPals Estimate</h1>
+          <h1>Get Started With BinPals Trash Valet</h1>
           <p class="subtitle">
             Answer a few quick questions. We will review your address and
             <strong>email you with route details and next steps.</strong>
@@ -419,7 +516,11 @@
           </div>
           <div class="step-nav-item" data-step-nav="3">
             <div class="step-circle">3</div>
-            <div class="step-label">Bins, plan & trash day</div>
+            <div class="step-label">Bins & trash day</div>
+          </div>
+          <div class="step-nav-item" data-step-nav="4">
+            <div class="step-circle">4</div>
+            <div class="step-label">Plan & pricing</div>
           </div>
         </div>
       </div>
@@ -431,7 +532,7 @@
         <!-- Step 1 -->
         <div class="step-panel active" data-step="1">
           <div class="step-title">Step 1 – Your info</div>
-          <div class="step-helper">So we know who to email.</div>
+          <div class="step-helper">So we know who to email and text.</div>
 
           <div class="field-row">
             <div>
@@ -441,6 +542,16 @@
             <div>
               <label>Email address *</label>
               <input type="email" name="entry.417977469" required placeholder="you@example.com" />
+            </div>
+          </div>
+
+          <div class="consent-box">
+            <input type="checkbox" id="smsConsent" name="sms_consent" required />
+            <div class="consent-text">
+              <strong>SMS consent *</strong><br />
+              By checking this box, I agree to share my information with BinPals Trash Valet and receive SMS messages
+              related to service requests, appointments, and promotions from Bells Turf LLC. You can reply OPT-OUT at any time.
+              Message and data rates may apply.
             </div>
           </div>
         </div>
@@ -468,7 +579,7 @@
 
         <!-- Step 3 -->
         <div class="step-panel" data-step="3">
-          <div class="step-title">Step 3 – Bins, plan & trash day</div>
+          <div class="step-title">Step 3 – Bins & trash day</div>
           <div class="step-helper">So we can price your service and route you correctly.</div>
 
           <div class="field-row">
@@ -477,18 +588,6 @@
               <input type="number" name="entry.1777532498" required min="1" placeholder="Example: 2" />
             </div>
 
-            <div>
-              <label>Choose a plan *</label>
-              <select name="entry.707531909" required>
-                <option value="" disabled selected>Tap to pick a plan</option>
-                <option value="Premium – $45/mo (up to 2 cans)">Premium – $45/mo (up to 2 cans)</option>
-                <option value="Premium+ – $54/mo (3–4 cans)">Premium+ – $54/mo (3–4 cans)</option>
-                <option value="One Time – $35">One Time – $35</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field-row">
             <div>
               <label>Trash day *</label>
               <select name="entry.12034793" required>
@@ -500,6 +599,56 @@
                 <option value="Friday">Friday</option>
               </select>
             </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-panel" data-step="4">
+          <div class="step-title">Step 4 – Pick your plan</div>
+          <div class="step-helper">
+            Choose the option that fits your number of bins or select a one-time service.
+          </div>
+
+          <div class="plan-grid" id="planGrid">
+            <!-- Plan 1 -->
+            <label class="plan-card">
+              <input
+                type="radio"
+                name="entry.707531909"
+                value="Premium – $45/mo (up to 2 cans)"
+                required
+              />
+              <div class="plan-name">Premium</div>
+              <div class="plan-price">$45/mo</div>
+              <div class="plan-detail">Up to 2 trash bins, each pickup day</div>
+              <span class="plan-tag">Most popular for small homes</span>
+            </label>
+
+            <!-- Plan 2 -->
+            <label class="plan-card">
+              <input
+                type="radio"
+                name="entry.707531909"
+                value="Premium+ – $54/mo (3–4 cans)"
+              />
+              <div class="plan-name">Premium+</div>
+              <div class="plan-price">$54/mo</div>
+              <div class="plan-detail">3–4 trash bins, each pickup day</div>
+              <span class="plan-tag">Best for busy or corner lots</span>
+            </label>
+
+            <!-- Plan 3 -->
+            <label class="plan-card">
+              <input
+                type="radio"
+                name="entry.707531909"
+                value="One Time – $35"
+              />
+              <div class="plan-name">One Time Service</div>
+              <div class="plan-price">$35</div>
+              <div class="plan-detail">One-time visit for up to 4 bins</div>
+              <span class="plan-tag">Perfect for testing BinPals</span>
+            </label>
           </div>
         </div>
 
@@ -545,7 +694,7 @@
 
   <script>
     let step = 1;
-    const totalSteps = 3;
+    const totalSteps = 4;
 
     const progress = document.getElementById("progress");
     const panels = document.querySelectorAll(".step-panel");
@@ -556,6 +705,7 @@
     const stepNav = document.querySelectorAll(".step-nav-item");
     const formWrapper = document.getElementById("formWrapper");
     const successScreen = document.getElementById("successScreen");
+    const planGrid = document.getElementById("planGrid");
 
     function updateUI() {
       panels.forEach(p => p.classList.remove("active"));
@@ -571,6 +721,18 @@
         item.classList.remove("active", "completed");
         if (s < step) item.classList.add("completed");
         else if (s === step) item.classList.add("active");
+      });
+    }
+
+    // plan card selection visual state
+    if (planGrid) {
+      planGrid.addEventListener("change", function (e) {
+        if (e.target && e.target.type === "radio") {
+          const cards = planGrid.querySelectorAll(".plan-card");
+          cards.forEach(card => card.classList.remove("selected"));
+          const selectedCard = e.target.closest(".plan-card");
+          if (selectedCard) selectedCard.classList.add("selected");
+        }
       });
     }
 
