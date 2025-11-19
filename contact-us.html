@@ -680,14 +680,21 @@
         setSubmitting(true);
 
         const formData = new FormData(form);
-        const params = new URLSearchParams(formData); // browser sets correct headers for URLSearchParams
+        const params = new URLSearchParams();
+
+        for (const [key, value] of formData.entries()) {
+          params.append(key, value.toString());
+        }
 
         const endpoint = form.getAttribute("action");
 
         fetch(endpoint, {
           method: "POST",
           mode: "no-cors",
-          body: params
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params.toString()
         })
           .then(function () {
             form.reset();
