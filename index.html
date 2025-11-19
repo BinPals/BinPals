@@ -7,8 +7,8 @@
   <meta name="description" content="BinPals Trash Valet rolls your trash and recycle bins out and back every pickup day so you never miss trash day again. Serving Vistancia, Trilogy, WestWing, Northpointe & nearby communities." />
   <style>
     :root {
-      --green: #16a34a;
-      --green-dark: #15803d;
+      --green: #166534;
+      --green-dark: #0f3c22;
       --blue: #2563eb;
       --bg: #f3f4f6;
       --card-bg: #ffffff;
@@ -125,15 +125,19 @@
     /* BUTTON */
     .cta-btn {
       display: inline-block;
-      padding: 14px 22px;
+      padding: 16px 44px;
       background: var(--green);
       color: #fff;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 17px;
+      font-weight: 600;
       border-radius: 999px;
       text-decoration: none;
       margin-top: 16px;
-      transition: 0.2s ease;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      border: none;
+      min-width: 260px;
+      text-align: center;
+      box-shadow: 0 10px 22px rgba(15, 60, 34, 0.15);
     }
     .cta-btn:hover {
       background: var(--green-dark);
