@@ -14,11 +14,8 @@
   <style>
     :root {
       --bp-green: #2f855a;
-      --bp-green-soft: #e6f4ec;
+      --bp-green-light: #e6f4ec;
       --bp-green-dark: #22543d;
-      --bp-brown: #b7791f;
-      --bp-bg: #f5f5f4;
-      --bp-card-bg: #ffffff;
       --bp-border: #e5e7eb;
       --bp-border-strong: #d1d5db;
       --bp-text: #111827;
@@ -36,8 +33,8 @@
     body {
       margin: 0;
       min-height: 100vh;
+      background-color: #ffffff; /* full page white */
       font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-color: var(--bp-bg);
       color: var(--bp-text);
       display: flex;
       align-items: center;
@@ -47,35 +44,35 @@
 
     .page-wrap {
       width: 100%;
-      max-width: 760px;
+      max-width: 480px;
     }
 
     .card {
-      background-color: var(--bp-card-bg);
+      background-color: #ffffff;
       border-radius: var(--bp-radius-lg);
       border: 1px solid var(--bp-border);
-      padding: 18px 18px 22px;
+      padding: 20px 18px 22px;
     }
 
     @media (min-width: 640px) {
       .card {
-        padding: 22px 26px 26px;
+        padding: 22px 24px 26px;
       }
     }
 
     .logo-row {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .logo-row img {
-      max-width: 230px;
+      max-width: 220px;
       height: auto;
     }
 
     .title {
       text-align: center;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       font-weight: 700;
       margin: 8px 0 4px;
       letter-spacing: 0.01em;
@@ -83,9 +80,9 @@
 
     .subtitle {
       text-align: center;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       color: var(--bp-muted);
-      margin: 0 0 18px;
+      margin: 0 0 14px;
     }
 
     .subtitle strong {
@@ -93,83 +90,95 @@
       font-weight: 600;
     }
 
-    /* Step progress bar (simple & flat) */
+    /* Progress bar */
+    .progress-wrap {
+      margin-bottom: 14px;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background-color: #f3f4f6;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--bp-green), var(--bp-green-dark));
+      transition: width 200ms ease-out;
+    }
+
     .progress-steps {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 6px;
-      margin-bottom: 18px;
-    }
-
-    .step-pill {
-      border-radius: var(--bp-radius-pill);
-      border: 1px solid var(--bp-border);
-      padding: 7px 10px;
       display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      color: var(--bp-muted);
-      background-color: #fafafa;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--bp-muted-soft);
     }
 
-    .step-pill span.step-number {
-      display: inline-flex;
+    .step-indicator {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .step-circle {
       width: 18px;
       height: 18px;
       border-radius: 50%;
       border: 1px solid var(--bp-border-strong);
-      font-size: 0.76rem;
-      color: var(--bp-green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
       background-color: #ffffff;
+      color: var(--bp-muted-soft);
     }
 
-    .step-pill.active {
+    .step-label {
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .step-indicator.active .step-circle {
       border-color: var(--bp-green-dark);
-      background-color: var(--bp-green-soft);
+      background-color: var(--bp-green-light);
       color: var(--bp-green-dark);
     }
 
-    .step-pill.active span.step-number {
-      border-color: var(--bp-green-dark);
-      background-color: #ffffff;
+    .step-indicator.active .step-label {
+      color: var(--bp-green-dark);
+      font-weight: 600;
     }
 
     form {
       margin-top: 4px;
     }
 
-    .step-section {
-      border-radius: 14px;
-      border: 1px solid var(--bp-border);
-      padding: 14px 12px 12px;
-      margin-bottom: 12px;
+    .step-panel {
+      display: none;
     }
 
-    @media (min-width: 640px) {
-      .step-section {
-        padding: 16px 16px 14px;
-      }
+    .step-panel.active {
+      display: block;
     }
 
     .step-header {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .step-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--bp-green-dark);
+      margin-bottom: 6px;
     }
 
     .step-helper {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--bp-muted);
+      margin-bottom: 10px;
     }
 
     .form-group {
@@ -178,7 +187,7 @@
 
     .form-label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 500;
       margin-bottom: 3px;
       color: var(--bp-text);
@@ -191,7 +200,7 @@
     .field,
     select.field {
       width: 100%;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       padding: 10px 12px;
       border-radius: var(--bp-radius-pill);
       border: 1px solid var(--bp-border-strong);
@@ -207,7 +216,7 @@
 
     .field:focus {
       border-color: var(--bp-green-dark);
-      background-color: var(--bp-green-soft);
+      background-color: var(--bp-green-light);
     }
 
     select.field {
@@ -222,60 +231,77 @@
       background-repeat: no-repeat;
     }
 
-    .field-row-inline {
+    .inline-row {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
       gap: 8px;
     }
 
-    @media (max-width: 520px) {
-      .field-row-inline {
+    @media (max-width: 480px) {
+      .inline-row {
         grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    .btn-row {
+    .nav-row {
       margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
     }
 
-    .btn-primary {
-      width: 100%;
+    .btn {
       border: none;
       border-radius: var(--bp-radius-pill);
-      padding: 12px 16px;
-      font-size: 1rem;
+      padding: 10px 14px;
+      font-size: 0.9rem;
       font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
       cursor: pointer;
-      background-color: var(--bp-green);
-      color: #ffffff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      transition: background-color 100ms ease-out, transform 60ms ease-out, opacity 80ms ease-out;
+      gap: 6px;
+      transition: background-color 100ms ease-out, opacity 80ms ease-out, transform 60ms ease-out;
     }
 
-    .btn-primary:hover:not(.loading):not(:disabled) {
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background-color: #f3f4f6;
+      color: var(--bp-muted);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background-color: var(--bp-green);
+      color: #ffffff;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-primary:hover:not(:disabled) {
       background-color: var(--bp-green-dark);
       transform: translateY(-1px);
     }
 
-    .btn-primary:active:not(.loading):not(:disabled) {
-      transform: translateY(0);
-    }
-
-    .btn-primary.loading,
-    .btn-primary:disabled {
+    /* Submit button shares id submit-btn */
+    #submit-btn.loading {
       opacity: 0.85;
       cursor: default;
       transform: none;
     }
 
     .btn-spinner {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 999px;
       border: 2px solid rgba(248, 250, 252, 0.5);
       border-top-color: #ffffff;
@@ -288,14 +314,10 @@
       }
     }
 
-    .btn-text {
-      display: inline-block;
-    }
-
     .message {
       min-height: 20px;
       margin-top: 10px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       text-align: center;
     }
 
@@ -308,56 +330,20 @@
     }
 
     .info-text {
-      margin-top: 8px;
-      font-size: 0.85rem;
+      margin-top: 6px;
+      font-size: 0.8rem;
       color: var(--bp-muted);
       text-align: center;
     }
 
     .info-text strong {
-      color: var(--bp-brown);
       font-weight: 600;
-    }
-
-    /* Simple top strip that "lights up" while sending */
-    .sending-strip {
-      width: 100%;
-      height: 4px;
-      border-radius: 999px;
-      background-color: #f3f4f6;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-
-    .sending-strip-inner {
-      width: 35%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--bp-green), var(--bp-green-dark));
-      transform: translateX(-100%);
-      transition: transform 0.4s ease-out;
-    }
-
-    .sending-strip-inner.active {
-      animation: slide 1s ease-in-out infinite;
-    }
-
-    @keyframes slide {
-      0% {
-        transform: translateX(-100%);
-      }
-      50% {
-        transform: translateX(40%);
-      }
-      100% {
-        transform: translateX(120%);
-      }
     }
   </style>
 </head>
 <body>
   <main class="page-wrap">
     <section class="card" aria-labelledby="estimate-title">
-
       <div class="logo-row">
         <!-- Put this image file in /images/Binpals-Trash-Valet-logo.png in your repo -->
         <img src="images/Binpals-Trash-Valet-logo.png" alt="Binpals Trash Valet logo" />
@@ -365,38 +351,36 @@
 
       <h1 id="estimate-title" class="title">Request a BinPals Estimate</h1>
       <p class="subtitle">
-        Follow the <strong>three quick steps</strong> below. We’ll look at your address and
-        email you with route details and next steps.
+        Answer a few quick questions. We’ll review your address and
+        <strong>email you with route details and next steps.</strong>
       </p>
 
-      <!-- sending strip -->
-      <div class="sending-strip">
-        <div id="sending-strip-inner" class="sending-strip-inner"></div>
-      </div>
-
-      <!-- Step pills -->
-      <div class="progress-steps" aria-hidden="true">
-        <div class="step-pill active">
-          <span class="step-number">1</span>
-          <span>Your info</span>
+      <!-- Progress bar + step labels -->
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-bar-track">
+          <div id="progress-fill" class="progress-bar-fill"></div>
         </div>
-        <div class="step-pill">
-          <span class="step-number">2</span>
-          <span>Address</span>
-        </div>
-        <div class="step-pill">
-          <span class="step-number">3</span>
-          <span>Bins & plan</span>
+        <div class="progress-steps">
+          <div class="step-indicator" data-step-label="1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Your info</div>
+          </div>
+          <div class="step-indicator" data-step-label="2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Address</div>
+          </div>
+          <div class="step-indicator" data-step-label="3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Bins & plan</div>
+          </div>
         </div>
       </div>
 
       <form id="estimate-form" novalidate>
-        <!-- Step 1 -->
-        <div class="step-section" aria-labelledby="step1-title">
-          <div class="step-header">
-            <div class="step-title" id="step1-title">Step 1 – Your info</div>
-            <div class="step-helper">So we know who to email</div>
-          </div>
+        <!-- STEP 1 -->
+        <div class="step-panel active" data-step="1" aria-labelledby="step1-title">
+          <div class="step-header" id="step1-title">Step 1 – Your info</div>
+          <div class="step-helper">So we know who to email.</div>
 
           <div class="form-group">
             <label for="fullName" class="form-label">Full name <span>*</span></label>
@@ -425,12 +409,10 @@
           </div>
         </div>
 
-        <!-- Step 2 -->
-        <div class="step-section" aria-labelledby="step2-title">
-          <div class="step-header">
-            <div class="step-title" id="step2-title">Step 2 – Your address</div>
-            <div class="step-helper">So we can check your route</div>
-          </div>
+        <!-- STEP 2 -->
+        <div class="step-panel" data-step="2" aria-labelledby="step2-title">
+          <div class="step-header" id="step2-title">Step 2 – Your address</div>
+          <div class="step-helper">So we can check your route.</div>
 
           <div class="form-group">
             <label for="street" class="form-label">Street address <span>*</span></label>
@@ -445,8 +427,8 @@
             />
           </div>
 
-          <div class="form-group field-row-inline">
-            <div>
+          <div class="inline-row">
+            <div class="form-group">
               <label for="city" class="form-label">City <span>*</span></label>
               <input
                 id="city"
@@ -457,7 +439,7 @@
                 required
               />
             </div>
-            <div>
+            <div class="form-group">
               <label for="zip" class="form-label">ZIP code <span>*</span></label>
               <input
                 id="zip"
@@ -473,12 +455,10 @@
           </div>
         </div>
 
-        <!-- Step 3 -->
-        <div class="step-section" aria-labelledby="step3-title">
-          <div class="step-header">
-            <div class="step-title" id="step3-title">Step 3 – Bins & plan</div>
-            <div class="step-helper">So we can price your service</div>
-          </div>
+        <!-- STEP 3 -->
+        <div class="step-panel" data-step="3" aria-labelledby="step3-title">
+          <div class="step-header" id="step3-title">Step 3 – Bins & plan</div>
+          <div class="step-helper">So we can price your service.</div>
 
           <div class="form-group">
             <label for="bins" class="form-label">How many trash bins? <span>*</span></label>
@@ -506,14 +486,17 @@
           </div>
         </div>
 
-        <!-- Hidden status field -->
+        <!-- Hidden fields -->
         <input type="hidden" name="entry.409104529" value="Pending" />
-        <!-- Hidden submit field -->
         <input type="hidden" name="submit" value="Submit" />
 
-        <div class="btn-row">
-          <button id="submit-btn" type="submit" class="btn-primary">
-            <span class="btn-text">Send estimate request</span>
+        <!-- Navigation buttons -->
+        <div class="nav-row">
+          <button type="button" id="back-btn" class="btn btn-secondary" disabled>Back</button>
+
+          <!-- This is the real submit button (only used on last step) -->
+          <button type="submit" id="submit-btn" class="btn btn-primary">
+            <span class="btn-text">Next</span>
           </button>
         </div>
 
@@ -532,43 +515,43 @@
       const FORM_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSdcKdqxRDDSZKcBA2nPZ3aR1M0uU6TwfYTPLy7unE0xWKKSLQ/formResponse";
 
       const form = document.getElementById("estimate-form");
+      const progressFill = document.getElementById("progress-fill");
+      const stepPanels = Array.from(document.querySelectorAll(".step-panel"));
+      const stepIndicators = Array.from(document.querySelectorAll(".step-indicator"));
+      const backBtn = document.getElementById("back-btn");
       const submitBtn = document.getElementById("submit-btn");
       const formMessage = document.getElementById("form-message");
-      const sendingStripInner = document.getElementById("sending-strip-inner");
 
-      if (!form) return;
+      const totalSteps = stepPanels.length;
+      let currentStep = 1;
+      let isSubmitting = false;
 
-      function setLoading(isLoading) {
-        if (isLoading) {
-          submitBtn.classList.add("loading");
-          submitBtn.disabled = true;
+      if (!form || !progressFill) return;
 
-          const text = submitBtn.querySelector(".btn-text");
-          if (text) text.textContent = "Sending...";
+      function updateUI() {
+        // Show the current panel
+        stepPanels.forEach(panel => {
+          const step = Number(panel.getAttribute("data-step"));
+          panel.classList.toggle("active", step === currentStep);
+        });
 
-          let spinner = submitBtn.querySelector(".btn-spinner");
-          if (!spinner) {
-            spinner = document.createElement("span");
-            spinner.className = "btn-spinner";
-            submitBtn.insertBefore(spinner, submitBtn.firstChild);
-          }
+        // Update step indicators
+        stepIndicators.forEach(indicator => {
+          const step = Number(indicator.getAttribute("data-step-label"));
+          indicator.classList.toggle("active", step === currentStep);
+        });
 
-          if (sendingStripInner) {
-            sendingStripInner.classList.add("active");
-          }
-        } else {
-          submitBtn.classList.remove("loading");
-          submitBtn.disabled = false;
+        // Progress bar width
+        const progressPercent = (currentStep - 1) / (totalSteps - 1 || 1) * 100;
+        progressFill.style.width = progressPercent + "%";
 
-          const text = submitBtn.querySelector(".btn-text");
-          if (text) text.textContent = "Send estimate request";
+        // Back button
+        backBtn.disabled = currentStep === 1 || isSubmitting;
 
-          const spinner = submitBtn.querySelector(".btn-spinner");
-          if (spinner) spinner.remove();
-
-          if (sendingStripInner) {
-            sendingStripInner.classList.remove("active");
-          }
+        // Submit button label
+        const btnTextSpan = submitBtn.querySelector(".btn-text");
+        if (btnTextSpan && !isSubmitting) {
+          btnTextSpan.textContent = currentStep === totalSteps ? "Send request" : "Next";
         }
       }
 
@@ -579,21 +562,78 @@
         formMessage.classList.add(isError ? "error" : "success");
       }
 
-      function buildBodyFromForm(formElement) {
-        const formData = new FormData(formElement);
+      function setSubmitting(state) {
+        isSubmitting = state;
+        submitBtn.classList.toggle("loading", state);
+        submitBtn.disabled = state;
+        backBtn.disabled = state || currentStep === 1;
+
+        let spinner = submitBtn.querySelector(".btn-spinner");
+        const textSpan = submitBtn.querySelector(".btn-text");
+
+        if (state) {
+          if (textSpan) textSpan.textContent = "Sending...";
+          if (!spinner) {
+            spinner = document.createElement("span");
+            spinner.className = "btn-spinner";
+            submitBtn.insertBefore(spinner, submitBtn.firstChild);
+          }
+        } else {
+          if (spinner) spinner.remove();
+          if (textSpan) {
+            textSpan.textContent = currentStep === totalSteps ? "Send request" : "Next";
+          }
+        }
+      }
+
+      function validateCurrentStep() {
+        // Validate only the inputs in the visible panel
+        const panel = stepPanels.find(p => Number(p.getAttribute("data-step")) === currentStep);
+        if (!panel) return true;
+
+        const inputs = panel.querySelectorAll("input, select");
+        for (const input of inputs) {
+          if (!input.checkValidity()) {
+            input.reportValidity();
+            return false;
+          }
+        }
+        return true;
+      }
+
+      backBtn.addEventListener("click", function () {
+        if (isSubmitting) return;
+        if (currentStep > 1) {
+          currentStep -= 1;
+          updateUI();
+          showMessage("");
+        }
+      });
+
+      // We hijack submit: if not on last step, just go next
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        showMessage("");
+
+        if (isSubmitting) return;
+
+        if (currentStep < totalSteps) {
+          if (!validateCurrentStep()) return;
+          currentStep += 1;
+          updateUI();
+          return;
+        }
+
+        // Last step: validate and send
+        if (!validateCurrentStep()) return;
+
+        setSubmitting(true);
+
+        const formData = new FormData(form);
         const params = new URLSearchParams();
         for (const [key, value] of formData.entries()) {
           params.append(key, value.toString());
         }
-        return params.toString();
-      }
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        showMessage("");
-        setLoading(true);
-
-        const body = buildBodyFromForm(form);
 
         fetch(FORM_ENDPOINT, {
           method: "POST",
@@ -601,13 +641,12 @@
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
-          body: body
+          body: params.toString()
         })
           .then(function () {
             form.reset();
-            const planSelect = document.getElementById("plan");
-            if (planSelect) planSelect.selectedIndex = 0;
-
+            currentStep = 1;
+            updateUI();
             showMessage(
               "Thanks for requesting a BinPals estimate — we’ll review your address and follow up shortly.",
               false
@@ -620,9 +659,12 @@
             );
           })
           .finally(function () {
-            setLoading(false);
+            setSubmitting(false);
           });
       });
+
+      // Initial UI
+      updateUI();
     })();
   </script>
 </body>
