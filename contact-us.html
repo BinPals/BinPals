@@ -26,7 +26,7 @@
 
     body {
       margin: 0;
-      background: #f3f4f6;
+      background: #ffffff; /* whole page white */
       font-family: "Poppins", sans-serif;
     }
 
@@ -49,13 +49,19 @@
     }
 
     .header-logo {
-      height: 52px;
+      height: 72px; /* bigger logo */
       width: auto;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
     .header-nav {
       display: flex;
-      gap: 20px;
+      gap: 18px;
       font-size: 14px;
     }
 
@@ -73,12 +79,30 @@
       color: #111827;
     }
 
+    .header-cta {
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .header-cta:hover {
+      opacity: 0.95;
+    }
+
     /* MAIN CONTAINER */
 
     .page-main {
       display: flex;
       justify-content: center;
       padding: 32px 16px 40px;
+      background: #ffffff; /* ensure white around form */
     }
 
     .container {
@@ -241,7 +265,6 @@
       background: #f0fdf4;
     }
 
-    /* two-column rows on desktop */
     .field-row {
       display: flex;
       gap: 16px;
@@ -490,6 +513,11 @@
         align-items: flex-start;
       }
 
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
       .header-nav {
         flex-wrap: wrap;
       }
@@ -528,6 +556,11 @@
         border-radius: 18px;
         padding: 30px 20px 26px;
       }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
 
     /* FOOTER */
@@ -545,11 +578,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 18px;
     }
 
     .footer-logo {
-      height: 46px;
+      height: 64px; /* bigger logo in footer */
       width: auto;
+    }
+
+    .footer-cta {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--green);
+      background: #ffffff;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .footer-cta:hover {
+      background: #f0fdf4;
     }
   </style>
 </head>
@@ -562,11 +613,14 @@
       <a href="index.html">
         <img src="binpals-trash-valet-logo.png" class="header-logo" alt="BinPals Trash Valet" />
       </a>
-      <nav class="header-nav">
-        <a href="index.html">Home</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="contact-us.html" class="active">Contact</a>
-      </nav>
+      <div class="header-right">
+        <nav class="header-nav">
+          <a href="index.html">Home</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="contact-us.html" class="active">Contact</a>
+        </nav>
+        <a href="contact-us.html" class="header-cta">Get Started</a>
+      </div>
     </div>
   </header>
 
@@ -574,7 +628,6 @@
   <main class="page-main">
     <div class="container">
 
-      <!-- Everything up to now (form flow) is wrapped so we can hide it on success -->
       <div id="formWrapper">
         <div class="top-row">
           <div class="headline">
@@ -787,6 +840,7 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <img src="binpals-trash-valet-logo.png" class="footer-logo" alt="BinPals Trash Valet" />
+      <a href="index.html" class="footer-cta">Back to main site</a>
     </div>
   </footer>
 
