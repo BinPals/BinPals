@@ -16,13 +16,17 @@
       --bp-green: #2f855a;
       --bp-green-soft: #e6f4ec;
       --bp-green-dark: #22543d;
-      --bp-brown: #a66b3b;
-      --bp-bg: #f4f4f4;
+      --bp-brown: #b7791f;
+      --bp-bg: #f5f5f4;
+      --bp-card-bg: #ffffff;
+      --bp-border: #e5e7eb;
+      --bp-border-strong: #d1d5db;
       --bp-text: #111827;
       --bp-muted: #4b5563;
-      --bp-border: #d1d5db;
+      --bp-muted-soft: #9ca3af;
       --bp-error: #b91c1c;
-      --bp-radius: 18px;
+      --bp-radius-lg: 18px;
+      --bp-radius-pill: 999px;
     }
 
     * {
@@ -38,44 +42,43 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 20px 12px;
     }
 
     .page-wrap {
       width: 100%;
-      max-width: 640px;
+      max-width: 760px;
     }
 
     .card {
-      background-color: #ffffff;
-      border-radius: var(--bp-radius);
+      background-color: var(--bp-card-bg);
+      border-radius: var(--bp-radius-lg);
       border: 1px solid var(--bp-border);
-      padding: 24px 20px;
-      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.15);
+      padding: 18px 18px 22px;
     }
 
     @media (min-width: 640px) {
       .card {
-        padding: 28px 26px;
+        padding: 22px 26px 26px;
       }
     }
 
     .logo-row {
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .logo-row img {
-      max-width: 220px;
+      max-width: 230px;
       height: auto;
-      display: inline-block;
     }
 
     .title {
       text-align: center;
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       font-weight: 700;
-      margin: 10px 0 4px;
+      margin: 8px 0 4px;
+      letter-spacing: 0.01em;
     }
 
     .subtitle {
@@ -90,19 +93,94 @@
       font-weight: 600;
     }
 
+    /* Step progress bar (simple & flat) */
+    .progress-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .step-pill {
+      border-radius: var(--bp-radius-pill);
+      border: 1px solid var(--bp-border);
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--bp-muted);
+      background-color: #fafafa;
+    }
+
+    .step-pill span.step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid var(--bp-border-strong);
+      font-size: 0.76rem;
+      color: var(--bp-green-dark);
+      background-color: #ffffff;
+    }
+
+    .step-pill.active {
+      border-color: var(--bp-green-dark);
+      background-color: var(--bp-green-soft);
+      color: var(--bp-green-dark);
+    }
+
+    .step-pill.active span.step-number {
+      border-color: var(--bp-green-dark);
+      background-color: #ffffff;
+    }
+
     form {
-      margin-top: 8px;
+      margin-top: 4px;
+    }
+
+    .step-section {
+      border-radius: 14px;
+      border: 1px solid var(--bp-border);
+      padding: 14px 12px 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .step-section {
+        padding: 16px 16px 14px;
+      }
+    }
+
+    .step-header {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--bp-green-dark);
+    }
+
+    .step-helper {
+      font-size: 0.85rem;
+      color: var(--bp-muted);
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 500;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       color: var(--bp-text);
     }
 
@@ -113,24 +191,23 @@
     .field,
     select.field {
       width: 100%;
-      font-size: 1rem;
-      padding: 11px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--bp-border);
+      font-size: 0.98rem;
+      padding: 10px 12px;
+      border-radius: var(--bp-radius-pill);
+      border: 1px solid var(--bp-border-strong);
       background-color: #ffffff;
       color: var(--bp-text);
       outline: none;
-      transition: border-color 120ms ease-out, box-shadow 120ms ease-out, background-color 120ms ease-out;
+      transition: border-color 120ms ease-out, background-color 120ms ease-out;
     }
 
     .field::placeholder {
-      color: #9ca3af;
+      color: var(--bp-muted-soft);
     }
 
     .field:focus {
       border-color: var(--bp-green-dark);
-      box-shadow: 0 0 0 3px var(--bp-green-soft);
-      background-color: #ffffff;
+      background-color: var(--bp-green-soft);
     }
 
     select.field {
@@ -145,6 +222,18 @@
       background-repeat: no-repeat;
     }
 
+    .field-row-inline {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 520px) {
+      .field-row-inline {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
     .btn-row {
       margin-top: 14px;
     }
@@ -152,7 +241,7 @@
     .btn-primary {
       width: 100%;
       border: none;
-      border-radius: 999px;
+      border-radius: var(--bp-radius-pill);
       padding: 12px 16px;
       font-size: 1rem;
       font-weight: 600;
@@ -165,26 +254,22 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 8px 22px rgba(47, 133, 90, 0.45);
-      transition: background-color 100ms ease-out, box-shadow 100ms ease-out, transform 80ms ease-out, opacity 80ms ease-out;
+      transition: background-color 100ms ease-out, transform 60ms ease-out, opacity 80ms ease-out;
     }
 
     .btn-primary:hover:not(.loading):not(:disabled) {
       background-color: var(--bp-green-dark);
-      box-shadow: 0 10px 26px rgba(34, 85, 61, 0.5);
       transform: translateY(-1px);
     }
 
     .btn-primary:active:not(.loading):not(:disabled) {
       transform: translateY(0);
-      box-shadow: 0 6px 18px rgba(34, 85, 61, 0.45);
     }
 
     .btn-primary.loading,
     .btn-primary:disabled {
-      opacity: 0.8;
+      opacity: 0.85;
       cursor: default;
-      box-shadow: none;
       transform: none;
     }
 
@@ -192,9 +277,9 @@
       width: 18px;
       height: 18px;
       border-radius: 999px;
-      border: 2px solid rgba(248, 250, 252, 0.4);
+      border: 2px solid rgba(248, 250, 252, 0.5);
       border-top-color: #ffffff;
-      animation: spin 0.75s linear infinite;
+      animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
@@ -205,18 +290,6 @@
 
     .btn-text {
       display: inline-block;
-    }
-
-    .info-text {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: var(--bp-muted);
-      text-align: center;
-    }
-
-    .info-text strong {
-      color: var(--bp-brown);
-      font-weight: 600;
     }
 
     .message {
@@ -233,111 +306,204 @@
     .message.error {
       color: var(--bp-error);
     }
+
+    .info-text {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--bp-muted);
+      text-align: center;
+    }
+
+    .info-text strong {
+      color: var(--bp-brown);
+      font-weight: 600;
+    }
+
+    /* Simple top strip that "lights up" while sending */
+    .sending-strip {
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background-color: #f3f4f6;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .sending-strip-inner {
+      width: 35%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--bp-green), var(--bp-green-dark));
+      transform: translateX(-100%);
+      transition: transform 0.4s ease-out;
+    }
+
+    .sending-strip-inner.active {
+      animation: slide 1s ease-in-out infinite;
+    }
+
+    @keyframes slide {
+      0% {
+        transform: translateX(-100%);
+      }
+      50% {
+        transform: translateX(40%);
+      }
+      100% {
+        transform: translateX(120%);
+      }
+    }
   </style>
 </head>
 <body>
   <main class="page-wrap">
     <section class="card" aria-labelledby="estimate-title">
+
       <div class="logo-row">
-        <!-- Update the src path to wherever your logo file lives -->
-        <img src="images/binpals-logo.png" alt="BinPals Trash Valet logo" />
+        <!-- Put this image file in /images/Binpals-Trash-Valet-logo.png in your repo -->
+        <img src="images/Binpals-Trash-Valet-logo.png" alt="Binpals Trash Valet logo" />
       </div>
 
       <h1 id="estimate-title" class="title">Request a BinPals Estimate</h1>
       <p class="subtitle">
-        Please fill out this simple form. We’ll look at your address and
-        <strong>email you back with next steps.</strong>
+        Follow the <strong>three quick steps</strong> below. We’ll look at your address and
+        email you with route details and next steps.
       </p>
 
+      <!-- sending strip -->
+      <div class="sending-strip">
+        <div id="sending-strip-inner" class="sending-strip-inner"></div>
+      </div>
+
+      <!-- Step pills -->
+      <div class="progress-steps" aria-hidden="true">
+        <div class="step-pill active">
+          <span class="step-number">1</span>
+          <span>Your info</span>
+        </div>
+        <div class="step-pill">
+          <span class="step-number">2</span>
+          <span>Address</span>
+        </div>
+        <div class="step-pill">
+          <span class="step-number">3</span>
+          <span>Bins & plan</span>
+        </div>
+      </div>
+
       <form id="estimate-form" novalidate>
-        <div class="form-group">
-          <label for="fullName" class="form-label">Full name <span>*</span></label>
-          <input
-            id="fullName"
-            name="entry.104280084"
-            class="field"
-            type="text"
-            autocomplete="name"
-            placeholder="First and last name"
-            required
-          />
+        <!-- Step 1 -->
+        <div class="step-section" aria-labelledby="step1-title">
+          <div class="step-header">
+            <div class="step-title" id="step1-title">Step 1 – Your info</div>
+            <div class="step-helper">So we know who to email</div>
+          </div>
+
+          <div class="form-group">
+            <label for="fullName" class="form-label">Full name <span>*</span></label>
+            <input
+              id="fullName"
+              name="entry.104280084"
+              class="field"
+              type="text"
+              autocomplete="name"
+              placeholder="First and last name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email address <span>*</span></label>
+            <input
+              id="email"
+              name="entry.417977469"
+              class="field"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="email" class="form-label">Email address <span>*</span></label>
-          <input
-            id="email"
-            name="entry.417977469"
-            class="field"
-            type="email"
-            autocomplete="email"
-            placeholder="you@example.com"
-            required
-          />
+        <!-- Step 2 -->
+        <div class="step-section" aria-labelledby="step2-title">
+          <div class="step-header">
+            <div class="step-title" id="step2-title">Step 2 – Your address</div>
+            <div class="step-helper">So we can check your route</div>
+          </div>
+
+          <div class="form-group">
+            <label for="street" class="form-label">Street address <span>*</span></label>
+            <input
+              id="street"
+              name="entry.2139416814"
+              class="field"
+              type="text"
+              autocomplete="street-address"
+              placeholder="House number and street"
+              required
+            />
+          </div>
+
+          <div class="form-group field-row-inline">
+            <div>
+              <label for="city" class="form-label">City <span>*</span></label>
+              <input
+                id="city"
+                name="entry.565605156"
+                class="field"
+                type="text"
+                placeholder="City"
+                required
+              />
+            </div>
+            <div>
+              <label for="zip" class="form-label">ZIP code <span>*</span></label>
+              <input
+                id="zip"
+                name="entry.55232557"
+                class="field"
+                type="text"
+                inputmode="numeric"
+                pattern="\d{5}"
+                placeholder="ZIP"
+                required
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="street" class="form-label">Street address <span>*</span></label>
-          <input
-            id="street"
-            name="entry.2139416814"
-            class="field"
-            type="text"
-            autocomplete="street-address"
-            placeholder="House number and street"
-            required
-          />
-        </div>
+        <!-- Step 3 -->
+        <div class="step-section" aria-labelledby="step3-title">
+          <div class="step-header">
+            <div class="step-title" id="step3-title">Step 3 – Bins & plan</div>
+            <div class="step-helper">So we can price your service</div>
+          </div>
 
-        <div class="form-group">
-          <label for="city" class="form-label">City <span>*</span></label>
-          <input
-            id="city"
-            name="entry.565605156"
-            class="field"
-            type="text"
-            placeholder="City"
-            required
-          />
-        </div>
+          <div class="form-group">
+            <label for="bins" class="form-label">How many trash bins? <span>*</span></label>
+            <input
+              id="bins"
+              name="entry.1777532498"
+              class="field"
+              type="number"
+              min="1"
+              max="10"
+              step="1"
+              placeholder="Example: 2"
+              required
+            />
+          </div>
 
-        <div class="form-group">
-          <label for="zip" class="form-label">ZIP code <span>*</span></label>
-          <input
-            id="zip"
-            name="entry.55232557"
-            class="field"
-            type="text"
-            inputmode="numeric"
-            pattern="\d{5}"
-            placeholder="ZIP code"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="bins" class="form-label">How many trash bins? <span>*</span></label>
-          <input
-            id="bins"
-            name="entry.1777532498"
-            class="field"
-            type="number"
-            min="1"
-            max="10"
-            step="1"
-            placeholder="Example: 2"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="plan" class="form-label">Choose a plan <span>*</span></label>
-          <select id="plan" name="entry.707531909" class="field" required>
-            <option value="" disabled selected>Tap to pick a plan</option>
-            <option value="Premium">Premium – weekly set out & return</option>
-            <option value="Premium+">Premium+ – extra flexible service</option>
-            <option value="One-Time">One-time vacation / snowbird service</option>
-          </select>
+          <div class="form-group">
+            <label for="plan" class="form-label">Choose a plan <span>*</span></label>
+            <select id="plan" name="entry.707531909" class="field" required>
+              <option value="" disabled selected>Tap to pick a plan</option>
+              <option value="Premium">Premium – weekly set out & return</option>
+              <option value="Premium+">Premium+ – extra flexible service</option>
+              <option value="One-Time">One-time vacation / snowbird service</option>
+            </select>
+          </div>
         </div>
 
         <!-- Hidden status field -->
@@ -354,7 +520,7 @@
         <p id="form-message" class="message" aria-live="polite"></p>
 
         <p class="info-text">
-          We usually reply within <strong>1–2 business days.</strong>  
+          We usually reply within <strong>1–2 business days.</strong><br />
           If you need help, you can also email us at <strong>Binpalsteam@gmail.com</strong>.
         </p>
       </form>
@@ -368,6 +534,7 @@
       const form = document.getElementById("estimate-form");
       const submitBtn = document.getElementById("submit-btn");
       const formMessage = document.getElementById("form-message");
+      const sendingStripInner = document.getElementById("sending-strip-inner");
 
       if (!form) return;
 
@@ -385,6 +552,10 @@
             spinner.className = "btn-spinner";
             submitBtn.insertBefore(spinner, submitBtn.firstChild);
           }
+
+          if (sendingStripInner) {
+            sendingStripInner.classList.add("active");
+          }
         } else {
           submitBtn.classList.remove("loading");
           submitBtn.disabled = false;
@@ -394,6 +565,10 @@
 
           const spinner = submitBtn.querySelector(".btn-spinner");
           if (spinner) spinner.remove();
+
+          if (sendingStripInner) {
+            sendingStripInner.classList.remove("active");
+          }
         }
       }
 
