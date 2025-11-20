@@ -43,6 +43,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
+      position: relative;
     }
 
     .header-logo-wrap {
@@ -59,12 +60,17 @@
       object-fit: contain;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-left: auto;
+    }
+
     .header-nav {
       display: flex;
       gap: 22px;
       font-size: 14px;
-      margin-left: auto;
-      margin-right: 26px;
       align-items: center;
     }
 
@@ -104,37 +110,39 @@
       background: var(--green-dark);
     }
 
-    /* mobile icon buttons (email + menu) */
-    .header-icon-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      border: none;
-      background: var(--green);
+    .menu-toggle {
       display: none;
+      margin-left: auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: none;
+      background: #eb5757;
+      color: #ffffff;
+      cursor: pointer;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      font-size: 22px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.2s ease;
+      padding: 0;
+      box-shadow: 0 10px 20px rgba(235, 87, 87, 0.18);
+      transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
-    .header-icon-btn:hover {
-      background: var(--green-dark);
+    .menu-toggle:hover { background: #d54444; }
+    .menu-toggle:active { transform: translateY(1px); }
+
+    .menu-icon {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 22px;
     }
 
-    .header-icon-btn span {
-      line-height: 1;
-    }
-
-    .header-icon-left {
-      margin-right: auto;
-    }
-
-    .header-icon-right {
-      margin-left: auto;
+    .menu-icon span {
+      display: block;
+      height: 3px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 999px;
     }
     main {
       max-width: 1080px;
@@ -534,12 +542,53 @@
       color: #6b7280;
     }
 
+    @media (max-width: 1024px) {
+      .header-inner {
+        gap: 14px;
+        padding: 14px 16px;
+      }
+
+      .header-logo { max-height: 82px; }
+
+      .header-actions {
+        display: none;
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        box-shadow: 0 14px 40px rgba(17, 24, 39, 0.14);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 18px 18px;
+        gap: 14px;
+        z-index: 1001;
+      }
+
+      .header-nav {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+      }
+
+      .header-nav a { font-size: 15px; }
+
+      .header-cta {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .menu-toggle { display: inline-flex; }
+
+      .site-header.menu-open .header-actions { display: flex; }
+    }
+
     @media (max-width: 768px) {
       .hero { grid-template-columns: minmax(0,1fr); }
-      .header-nav { display: none; }
-      .header-cta { display: none; }
-      .header-icon-btn { display: inline-flex; }
-      .header-logo { max-height: 90px; }
+      .header-logo { max-height: 78px; }
       .footer-top {
         flex-direction: column;
         text-align: center;
