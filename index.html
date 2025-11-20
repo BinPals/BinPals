@@ -5,6 +5,9 @@
   <title>BinPals Trash Valet | GetBinPals.com</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="BinPals Trash Valet rolls your trash and recycle bins out and back every pickup day so you never miss trash day again. Serving Vistancia, Trilogy, WestWing, Northpointe & nearby communities." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --green: #166534;
@@ -19,35 +22,109 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #e0f2fe 0, #f3f4f6 45%, #f9fafb 100%);
       color: var(--text-main);
     }
-    header {
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      background: #f3f4f6;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+    .header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
       padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 24px;
     }
-    .brand {
-      display: flex;
+    .header-logo-wrap {
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      font-weight: 800;
-      font-size: 20px;
+      justify-content: center;
     }
-    .brand-pill {
-      padding: 4px 10px;
+    .header-logo {
+      max-height: 120px;
+      height: auto;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .header-nav {
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      margin-left: auto;
+      margin-right: 26px;
+      align-items: center;
+    }
+    .header-nav a {
+      text-decoration: none;
+      color: #111827;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .header-nav a:hover {
+      color: #374151;
+    }
+    .header-nav a.active {
+      color: #0f172a;
+      border-bottom: 2px solid #16c33b;
+      padding-bottom: 4px;
+    }
+    .header-cta {
+      padding: 14px 32px;
       border-radius: 999px;
-      background: #ecfdf3;
-      color: var(--green-dark);
-      font-size: 11px;
+      background: var(--green);
+      color: #ffffff;
+      font-size: 16px;
       font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      box-shadow: 0 10px 22px rgba(15, 60, 34, 0.15);
+      transition: background-color 0.2s ease, transform 0.2s ease;
     }
-    .tagline {
-      font-size: 11px;
-      color: #6b7280;
-      text-align: right;
+    .header-cta:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+    .header-icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: none;
+      background: var(--green);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 22px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 10px 22px rgba(15, 60, 34, 0.15);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .header-icon-btn:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+    .header-icon-btn span {
+      line-height: 1;
+    }
+    .header-icon-left {
+      margin-right: auto;
+    }
+    .header-icon-right {
+      margin-left: auto;
     }
     main {
       max-width: 960px;
@@ -144,33 +221,136 @@
       transform: translateY(-2px);
     }
 
-    footer {
-      padding: 14px 16px 24px;
+    .site-footer {
+      margin-top: 40px;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      padding: 32px 16px 28px;
+    }
+    .footer-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .footer-column {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+    }
+    .footer-logo {
+      max-width: 220px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    .footer-heading {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: 0.04em;
+    }
+    .footer-brand-sub {
+      font-size: 13px;
+      color: #4b5563;
+    }
+    .footer-contact-text {
+      font-size: 13px;
+      color: #111827;
+      line-height: 1.6;
+    }
+    .footer-contact-text span {
+      display: block;
+      font-weight: 700;
+      color: #166534;
+    }
+    .footer-contact-text a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .footer-contact-text a:hover {
+      color: #0f3c22;
+    }
+    .footer-btn {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
       text-align: center;
-      font-size: 11px;
-      color: #9ca3af;
+      box-shadow: 0 10px 22px rgba(15, 60, 34, 0.15);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .footer-btn:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+    .footer-service-list {
+      list-style: disc;
+      padding-left: 18px;
+      margin: 0;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+    .footer-service-list li {
+      margin-bottom: 4px;
+    }
+    .footer-bottom {
+      border-top: 1px solid #d1d5db;
+      padding-top: 12px;
+      font-size: 12px;
+      text-align: center;
+      color: #6b7280;
     }
 
     @media (max-width: 768px) {
       .hero { grid-template-columns: minmax(0,1fr); }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-      .tagline { text-align: left; }
+      .header-nav { display: none; }
+      .header-cta { display: none; }
+      .header-icon-btn { display: inline-flex; }
+      .header-logo { max-height: 90px; }
+      .footer-top { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="brand">
-      <span>BinPals</span>
-      <span class="brand-pill">Trash Valet</span>
-    </div>
-    <div class="tagline">
-      Serving Vistancia · Trilogy · WestWing · Northpointe & nearby
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="mailto:Binpalsteam@gmail.com" class="header-icon-btn header-icon-left">
+        <span>✉</span>
+      </a>
+
+      <a href="index.html" class="header-logo-wrap">
+        <img src="binpals-trash-valet-logo.png" class="header-logo" alt="BinPals Trash Valet" />
+      </a>
+
+      <nav class="header-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact-us.html">Contact</a>
+      </nav>
+
+      <a href="contact-us.html" class="header-cta">Start Service</a>
+
+      <a href="contact-us.html" class="header-icon-btn header-icon-right">
+        <span>☰</span>
+      </a>
     </div>
   </header>
 
@@ -229,8 +409,39 @@
     </section>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> BinPals Trash Valet · GetBinPals.com
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-column">
+          <img src="binpals-trash-valet-logo.png" class="footer-logo" alt="BinPals Trash Valet" />
+          <div class="footer-brand-sub">Weekly pull-out & return for your bins.</div>
+          <a href="contact-us.html" class="footer-btn">Get Estimate</a>
+        </div>
+
+        <div class="footer-column">
+          <div class="footer-heading">CONTACT</div>
+          <div class="footer-contact-text">
+            Email: <span><a href="mailto:Binpalsteam@gmail.com">Binpalsteam@gmail.com</a></span>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <div class="footer-heading">SERVICE AREA</div>
+          <ul class="footer-service-list">
+            <li>Peoria, AZ</li>
+            <li>North Peoria, AZ</li>
+            <li>Vistancia, AZ</li>
+            <li>Surprise, AZ</li>
+            <li>Glendale, AZ</li>
+          </ul>
+          <a href="contact-us.html" class="footer-btn">Our Routes</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © <span id="year"></span> BinPals Trash Valet. All Rights Reserved.
+      </div>
+    </div>
   </footer>
 
   <script>
