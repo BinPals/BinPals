@@ -75,7 +75,6 @@
       <div class="footer-column">
         <img src="binpals-trash-valet-logo.png" class="footer-logo" alt="BinPals Trash Valet" />
         <div class="footer-brand-sub">Weekly pull-out & return for your bins.</div>
-        <a href="${ctaHref}" class="footer-btn">Get Estimate</a>
       </div>
 
       <div class="footer-column">
@@ -83,6 +82,7 @@
         <div class="footer-contact-text">
           Email: <span><a href="mailto:Binpalsteam@gmail.com">Binpalsteam@gmail.com</a></span>
         </div>
+        <a href="${ctaHref}" class="footer-btn">Get Started</a>
       </div>
 
       <div class="footer-column">
@@ -92,7 +92,6 @@
           <li>North Peoria, AZ</li>
           <li>Vistancia, AZ</li>
         </ul>
-        <a href="${ctaHref}" class="footer-btn">Our Routes</a>
       </div>
     </div>
 
