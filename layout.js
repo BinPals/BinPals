@@ -61,8 +61,6 @@
           <li>Peoria, AZ</li>
           <li>North Peoria, AZ</li>
           <li>Vistancia, AZ</li>
-          <li>Surprise, AZ</li>
-          <li>Glendale, AZ</li>
         </ul>
         <a href="${ctaHref}" class="footer-btn">Our Routes</a>
       </div>
