@@ -11,27 +11,57 @@
     headerTarget.innerHTML = `
 <header class="site-header">
   <div class="header-inner">
-    <a href="mailto:Binpalsteam@gmail.com" class="header-icon-btn header-icon-left">
-      <span>✉</span>
-    </a>
-
     <a href="index.html" class="header-logo-wrap">
       <img src="binpals-trash-valet-logo.png" class="header-logo" alt="BinPals Trash Valet" />
     </a>
 
-    <nav class="header-nav">
-      <a href="index.html"${navLink("home")}>Home</a>
-      <a href="pricing.html"${navLink("pricing")}>Pricing</a>
-      <a href="contact-us.html"${navLink("contact")}>Contact</a>
-    </nav>
+    <div class="header-actions">
+      <nav class="header-nav">
+        <a href="index.html"${navLink("home")}>Home</a>
+        <a href="pricing.html"${navLink("pricing")}>Pricing</a>
+        <a href="contact-us.html"${navLink("contact")}>Contact</a>
+      </nav>
 
-    <a href="${ctaHref}" class="header-cta">Start Service</a>
+      <a href="${ctaHref}" class="header-cta">Start Service</a>
+    </div>
 
-    <a href="${ctaHref}" class="header-icon-btn header-icon-right">
-      <span>☰</span>
-    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-label="Toggle menu">
+      <span class="menu-icon" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
   </div>
 </header>`;
+
+    const siteHeader = headerTarget.querySelector(".site-header");
+    const menuToggle = headerTarget.querySelector(".menu-toggle");
+    const closeMenu = () => {
+      siteHeader.classList.remove("menu-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    };
+
+    menuToggle.addEventListener("click", () => {
+      const willOpen = !siteHeader.classList.contains("menu-open");
+      siteHeader.classList.toggle("menu-open", willOpen);
+      menuToggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    });
+
+    const menuLinks = headerTarget.querySelectorAll(".header-nav a, .header-cta");
+    menuLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 1024) {
+          closeMenu();
+        }
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1024) {
+        closeMenu();
+      }
+    });
   }
 
   const footerTarget = document.querySelector('[data-component="site-footer"]');
