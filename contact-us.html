@@ -1057,7 +1057,7 @@
           <!-- Buttons -->
           <div class="buttons">
             <button type="button" class="btn-secondary" id="backBtn">Back</button>
-            <button type="submit" class="btn-primary" id="nextBtn">Next</button>
+            <button type="button" class="btn-primary" id="nextBtn">Next</button>
           </div>
 
           <div id="message"></div>
@@ -1102,95 +1102,104 @@
   <script src="layout.js"></script>
 
   <script>
-    let step = 1;
-    const totalSteps = 4;
+    document.addEventListener("DOMContentLoaded", () => {
+      let step = 1;
+      const totalSteps = 4;
 
-    const progress = document.getElementById("progress");
-    const panels = document.querySelectorAll(".step-panel");
-    const backBtn = document.getElementById("backBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const form = document.getElementById("estimateForm");
-    const message = document.getElementById("message");
-    const stepNav = document.querySelectorAll(".step-nav-item");
-    const formWrapper = document.getElementById("formWrapper");
-    const successScreen = document.getElementById("successScreen");
-    const planGrid = document.getElementById("planGrid");
+      const progress = document.getElementById("progress");
+      const panels = document.querySelectorAll(".step-panel");
+      const backBtn = document.getElementById("backBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const form = document.getElementById("estimateForm");
+      const message = document.getElementById("message");
+      const stepNav = document.querySelectorAll(".step-nav-item");
+      const formWrapper = document.getElementById("formWrapper");
+      const successScreen = document.getElementById("successScreen");
+      const planGrid = document.getElementById("planGrid");
 
-    function updateUI() {
-      panels.forEach(p => p.classList.remove("active"));
-      document.querySelector(\`.step-panel[data-step="\${step}"]\`).classList.add("active");
+      function updateUI() {
+        panels.forEach(p => p.classList.remove("active"));
+        document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
 
-      backBtn.style.visibility = step === 1 ? "hidden" : "visible";
-      nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
+        backBtn.style.visibility = step === 1 ? "hidden" : "visible";
+        nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
 
-      progress.style.width = (step / totalSteps) * 100 + "%";
+        progress.style.width = (step / totalSteps) * 100 + "%";
 
-      stepNav.forEach(item => {
-        const s = Number(item.getAttribute("data-step-nav"));
-        item.classList.remove("active", "completed");
-        if (s < step) item.classList.add("completed");
-        else if (s === step) item.classList.add("active");
-      });
-    }
-
-    if (planGrid) {
-      planGrid.addEventListener("change", function (e) {
-        if (e.target && e.target.type === "radio") {
-          const cards = planGrid.querySelectorAll(".plan-card");
-          cards.forEach(card => card.classList.remove("selected"));
-          const selectedCard = e.target.closest(".plan-card");
-          if (selectedCard) selectedCard.classList.add("selected");
-        }
-      });
-    }
-
-    updateUI();
-
-    nextBtn.addEventListener("click", function (e) {
-      if (step < totalSteps) {
-        e.preventDefault();
-        const currentPanel = document.querySelector(\`.step-panel[data-step="\${step}"]\`);
-        const inputs = currentPanel.querySelectorAll("input, select");
-
-        for (let i of inputs) {
-          if (!i.checkValidity()) {
-            i.reportValidity();
-            return;
-          }
-        }
-
-        step++;
-        updateUI();
-      }
-    });
-
-    backBtn.addEventListener("click", function () {
-      if (step > 1) {
-        step--;
-        updateUI();
-      }
-    });
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      message.textContent = "";
-
-      const formData = new FormData(form);
-      const params = new URLSearchParams(formData);
-
-      fetch(form.action, { method: "POST", mode: "no-cors", body: params })
-        .then(() => {
-          formWrapper.style.display = "none";
-          successScreen.style.display = "flex";
-          window.scrollTo(0, 0);
-
-          form.reset();
-          step = 1;
-          updateUI();
-        })
-        .catch(() => {
-          message.textContent = "Something went wrong. Please try again.";
+        stepNav.forEach(item => {
+          const s = Number(item.getAttribute("data-step-nav"));
+          item.classList.remove("active", "completed");
+          if (s < step) item.classList.add("completed");
+          else if (s === step) item.classList.add("active");
         });
+      }
+
+      if (planGrid) {
+        planGrid.addEventListener("change", function (e) {
+          if (e.target && e.target.type === "radio") {
+            const cards = planGrid.querySelectorAll(".plan-card");
+            cards.forEach(card => card.classList.remove("selected"));
+            const selectedCard = e.target.closest(".plan-card");
+            if (selectedCard) selectedCard.classList.add("selected");
+          }
+        });
+      }
+
+      updateUI();
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function () {
+          if (step < totalSteps) {
+            const currentPanel = document.querySelector(`.step-panel[data-step="${step}"]`);
+            const inputs = currentPanel.querySelectorAll("input, select");
+
+            for (let i of inputs) {
+              if (!i.checkValidity()) {
+                i.reportValidity();
+                return;
+              }
+            }
+
+            step++;
+            updateUI();
+          } else if (form) {
+            form.requestSubmit();
+          }
+        });
+      }
+
+      if (backBtn) {
+        backBtn.addEventListener("click", function () {
+          if (step > 1) {
+            step--;
+            updateUI();
+          }
+        });
+      }
+
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          message.textContent = "";
+
+          const formData = new FormData(form);
+          const params = new URLSearchParams(formData);
+
+          fetch(form.action, { method: "POST", mode: "no-cors", body: params })
+            .then(() => {
+              formWrapper.style.display = "none";
+              successScreen.style.display = "flex";
+              window.scrollTo(0, 0);
+
+              form.reset();
+              step = 1;
+              updateUI();
+            })
+            .catch(() => {
+              message.textContent = "Something went wrong. Please try again.";
+            });
+        });
+      }
     });
   </script>
 </body>
