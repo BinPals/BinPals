@@ -340,15 +340,15 @@
 
     .consent-box {
       margin-top: 8px;
-      padding: 12px 14px;
+      padding: 14px 16px;
       border-radius: 14px;
       border: 1px solid #e5e7eb;
       background: #f9fafb;
-      font-size: 12px;
-      color: #4b5563;
+      font-size: 13px;
+      color: #374151;
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      gap: 12px;
     }
 
     .consent-box input[type="checkbox"] {
@@ -359,12 +359,38 @@
     }
 
     .consent-text {
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .consent-text strong {
       font-weight: 600;
-      color: #111827;
+      color: #0f172a;
+    }
+
+    .consent-note {
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .legal-links {
+      margin: 14px 0 0;
+      font-size: 13px;
+      color: #6b7280;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .legal-links a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .legal-links a:hover {
+      text-decoration: underline;
     }
 
     /* pricing cards */
@@ -881,11 +907,11 @@
             </div>
 
             <div class="consent-box">
-              <input type="checkbox" id="smsConsent" name="sms_consent" required />
+              <input type="checkbox" id="smsConsent" name="sms_opt_in" value="true" required />
               <div class="consent-text">
-                By checking this box, I agree to share my information with <strong>BinPals Trash Valet</strong> and receive SMS messages
-                related to service requests, appointments, and promotional updates. I can reply <strong>OPT-OUT</strong> at any time.
-                Message and data rates may apply.
+                <strong>I agree to receive service updates, payment notifications, and pickup reminders from BinPals at the number provided.</strong>
+                Message &amp; data rates may apply. Reply STOP to unsubscribe.
+                <div class="consent-note">You may receive 1–4 service-related messages per week, depending on your pickup schedule.</div>
               </div>
             </div>
           </div>
@@ -997,6 +1023,11 @@
           </div>
 
           <div id="message"></div>
+
+          <div class="legal-links">
+            <a href="https://getbinpals.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>
+            <a href="https://getbinpals.com/terms" target="_blank" rel="noopener">Terms &amp; Conditions</a>
+          </div>
         </form>
 
         <div class="footer-note">
