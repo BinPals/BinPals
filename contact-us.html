@@ -27,7 +27,7 @@
 
     body {
       margin: 0;
-      background: #ffffff; /* whole page white */
+      background: #ffffff;
       font-family: "Poppins", sans-serif;
     }
 
@@ -920,7 +920,7 @@
                 <label>Phone number *</label>
                 <input
                   type="tel"
-                  name="entry.1509026125"
+                  name="entry.902938994"
                   inputmode="tel"
                   required
                   placeholder="(555) 123-4567"
@@ -934,7 +934,13 @@
             </div>
 
             <div class="consent-box">
-              <input type="checkbox" id="smsConsent" name="sms_opt_in" value="true" required />
+              <input
+                type="checkbox"
+                id="smsConsent"
+                name="entry.1763188541"
+                value="Yes"
+                required
+              />
               <div class="consent-text">
                 <strong>I agree to receive service updates, payment notifications, and pickup reminders from BinPals at the number provided.</strong>
                 Message &amp; data rates may apply. Reply STOP to unsubscribe.
@@ -955,6 +961,11 @@
               <div>
                 <label>City *</label>
                 <input type="text" name="entry.565605156" required placeholder="City" />
+              </div>
+
+              <div>
+                <label>Gate code or special instructions (optional)</label>
+                <input type="text" name="entry.2058220492" placeholder="Gate code, community name, etc." />
               </div>
 
               <div>
@@ -1085,7 +1096,7 @@
     </div>
   </main>
 
-  <!-- FOOTER (Duest-style, no "Licensed & Insured") -->
+  <!-- FOOTER -->
   <div data-component="site-footer"></div>
 
   <script src="layout.js"></script>
@@ -1107,7 +1118,7 @@
 
     function updateUI() {
       panels.forEach(p => p.classList.remove("active"));
-      document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
+      document.querySelector(\`.step-panel[data-step="\${step}"]\`).classList.add("active");
 
       backBtn.style.visibility = step === 1 ? "hidden" : "visible";
       nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
@@ -1138,7 +1149,7 @@
     nextBtn.addEventListener("click", function (e) {
       if (step < totalSteps) {
         e.preventDefault();
-        const currentPanel = document.querySelector(`.step-panel[data-step="${step}"]`);
+        const currentPanel = document.querySelector(\`.step-panel[data-step="\${step}"]\`);
         const inputs = currentPanel.querySelectorAll("input, select");
 
         for (let i of inputs) {
