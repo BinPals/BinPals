@@ -913,7 +913,9 @@
         </div>
 
         <!-- FORM -->
-        <form id="estimateForm" method="POST"
+        <form
+          id="estimateForm"
+          method="POST"
           action="https://docs.google.com/forms/d/e/1FAIpQLSeehAkGSoRi4TYJ-MJ01aRJ0F_zx_fGnu39NJQg8MW3SAvpPA/formResponse">
 
           <!-- Step 1 -->
@@ -924,10 +926,12 @@
             <div class="field-row">
               <div>
                 <label>Full name *</label>
+                <!-- Full name -->
                 <input type="text" name="entry.104280084" required placeholder="First and last name" />
               </div>
               <div>
                 <label>Phone number *</label>
+                <!-- Phone -->
                 <input
                   type="tel"
                   name="entry.902938994"
@@ -940,10 +944,12 @@
 
             <div>
               <label>Email address *</label>
+              <!-- Email -->
               <input type="email" name="entry.417977469" required placeholder="you@example.com" />
             </div>
 
             <div class="consent-box">
+              <!-- SMS consent -->
               <input
                 type="checkbox"
                 id="smsConsent"
@@ -965,16 +971,19 @@
             <div class="step-helper">So we can check your route.</div>
 
             <label>Street address *</label>
+            <!-- Street -->
             <input type="text" name="entry.2139416814" required placeholder="House number and street" />
 
             <div class="field-row">
               <div>
                 <label>City *</label>
+                <!-- City -->
                 <input type="text" name="entry.565605156" required placeholder="City" />
               </div>
 
               <div>
                 <label>State *</label>
+                <!-- State (dropdown) -->
                 <select name="entry.303272276" required>
                   <option value="" disabled selected>Select state</option>
                   <option value="AL">Alabama</option>
@@ -1032,13 +1041,22 @@
 
               <div>
                 <label>ZIP code *</label>
-                <input type="text" name="entry.55232557" required inputmode="numeric" pattern="\d{5}" placeholder="ZIP" />
+                <!-- ZIP -->
+                <input
+                  type="text"
+                  name="entry.55232557"
+                  required
+                  inputmode="numeric"
+                  pattern="\d{5}"
+                  placeholder="ZIP"
+                />
               </div>
             </div>
 
             <div class="field-row">
               <div>
                 <label>Gate access?</label>
+                <!-- Gate access -->
                 <select name="entry.2058220492">
                   <option value="" disabled selected>Select an option</option>
                   <option value="Yes">Yes</option>
@@ -1047,6 +1065,7 @@
               </div>
               <div>
                 <label>Gate code or special instructions (optional)</label>
+                <!-- Gate code / notes -->
                 <input type="text" name="entry.1964565697" placeholder="Gate code, community name, etc." />
               </div>
             </div>
@@ -1060,11 +1079,19 @@
             <div class="field-row">
               <div>
                 <label>How many trash bins? *</label>
-                <input type="number" name="entry.1777532498" required min="1" placeholder="Example: 2" />
+                <!-- Number of bins -->
+                <input
+                  type="number"
+                  name="entry.1777532498"
+                  required
+                  min="1"
+                  placeholder="Example: 2"
+                />
               </div>
 
               <div>
                 <label>Trash day *</label>
+                <!-- Trash day -->
                 <select name="entry.12034793" required>
                   <option value="" disabled selected>Pick your trash day</option>
                   <option value="Monday">Monday</option>
@@ -1128,6 +1155,7 @@
           </div>
 
           <!-- Hidden Google Form fields -->
+          <!-- Status: Pending -->
           <input type="hidden" name="entry.409104529" value="Pending" />
           <input type="hidden" name="submit" value="Submit" />
 
@@ -1199,7 +1227,7 @@
 
       function updateUI() {
         panels.forEach(p => p.classList.remove("active"));
-        document.querySelector(\`.step-panel[data-step="\${step}"]\`).classList.add("active");
+        document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
 
         backBtn.style.visibility = step === 1 ? "hidden" : "visible";
         nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
@@ -1249,6 +1277,7 @@
         const selectedCard = selectedRadio?.closest(".plan-card");
         const selectedPlan = selectedCard?.dataset.plan;
 
+        // reset
         setPlanDisabled(premiumCard, false);
         setPlanDisabled(premiumPlusCard, false);
 
@@ -1290,7 +1319,7 @@
       if (nextBtn) {
         nextBtn.addEventListener("click", function () {
           if (step < totalSteps) {
-            const currentPanel = document.querySelector(\`.step-panel[data-step="\${step}"]\`);
+            const currentPanel = document.querySelector(`.step-panel[data-step="${step}"]`);
             const inputs = currentPanel.querySelectorAll("input, select");
 
             for (let i of inputs) {
