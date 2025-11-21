@@ -318,6 +318,22 @@
       outline: none;
     }
 
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image:
+        linear-gradient(#d1d5db, #d1d5db),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M8 6 5 3h6L8 6Z' fill='%23166534'/%3E%3Cpath d='M8 10 5 13h6L8 10Z' fill='%23166534'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: calc(100% - 44px) 50%, calc(100% - 18px) 50%;
+      background-size: 1px 24px, 14px 14px;
+      padding-right: 58px;
+      cursor: pointer;
+    }
+
+    select::-ms-expand { display: none; }
+
     input::placeholder {
       color: #9ca3af;
     }
@@ -901,9 +917,20 @@
                 <input type="text" name="entry.104280084" required placeholder="First and last name" />
               </div>
               <div>
-                <label>Email address *</label>
-                <input type="email" name="entry.417977469" required placeholder="you@example.com" />
+                <label>Phone number *</label>
+                <input
+                  type="tel"
+                  name="entry.1509026125"
+                  inputmode="tel"
+                  required
+                  placeholder="(555) 123-4567"
+                />
               </div>
+            </div>
+
+            <div>
+              <label>Email address *</label>
+              <input type="email" name="entry.417977469" required placeholder="you@example.com" />
             </div>
 
             <div class="consent-box">
