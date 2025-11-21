@@ -915,7 +915,7 @@
             </div>
 
             <div class="consent-box">
-              <!-- SMS consent (local only, not sent to Google as an entry) -->
+              <!-- SMS consent (local only, not sent to Google as entry) -->
               <input
                 type="checkbox"
                 id="smsConsent"
@@ -1173,48 +1173,61 @@
   <script src="layout.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      let step = 1;
-      const totalSteps = 4;
+    document.addEventListener("DOMContentLoaded", function () {
+      var step = 1;
+      var totalSteps = 4;
 
-      const progress = document.getElementById("progress");
-      const panels = document.querySelectorAll(".step-panel");
-      const backBtn = document.getElementById("backBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      const form = document.getElementById("estimateForm");
-      const message = document.getElementById("message");
-      const stepNav = document.querySelectorAll(".step-nav-item");
-      const formWrapper = document.getElementById("formWrapper");
-      const successScreen = document.getElementById("successScreen");
-      const planGrid = document.getElementById("planGrid");
-      const binCountInput = form?.querySelector('input[name="entry.1777532498"]');
-      const premiumCard = planGrid?.querySelector('[data-plan="premium"]');
-      const premiumPlusCard = planGrid?.querySelector('[data-plan="premiumPlus"]');
+      var progress      = document.getElementById("progress");
+      var panels        = document.querySelectorAll(".step-panel");
+      var backBtn       = document.getElementById("backBtn");
+      var nextBtn       = document.getElementById("nextBtn");
+      var form          = document.getElementById("estimateForm");
+      var message       = document.getElementById("message");
+      var stepNav       = document.querySelectorAll(".step-nav-item");
+      var formWrapper   = document.getElementById("formWrapper");
+      var successScreen = document.getElementById("successScreen");
+      var planGrid      = document.getElementById("planGrid");
+
+      var binCountInput   = form ? form.querySelector('input[name="entry.1777532498"]') : null;
+      var premiumCard     = planGrid ? planGrid.querySelector('[data-plan="premium"]') : null;
+      var premiumPlusCard = planGrid ? planGrid.querySelector('[data-plan="premiumPlus"]') : null;
 
       function updateUI() {
-        panels.forEach(p => p.classList.remove("active"));
-        document.querySelector(\`.step-panel[data-step="\${step}"]\`).classList.add("active");
+        // show active panel
+        for (var i = 0; i < panels.length; i++) {
+          panels[i].classList.remove("active");
+        }
+        var currentPanel = document.querySelector('.step-panel[data-step="' + step + '"]');
+        if (currentPanel) currentPanel.classList.add("active");
 
-        backBtn.style.visibility = step === 1 ? "hidden" : "visible";
-        nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
+        // back button visibility
+        if (backBtn) backBtn.style.visibility = step === 1 ? "hidden" : "visible";
 
-        progress.style.width = (step / totalSteps) * 100 + "%";
+        // next button text
+        if (nextBtn) nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
 
-        stepNav.forEach(item => {
-          const s = Number(item.getAttribute("data-step-nav"));
+        // progress bar
+        if (progress) progress.style.width = (step / totalSteps) * 100 + "%";
+
+        // step nav
+        for (var j = 0; j < stepNav.length; j++) {
+          var item = stepNav[j];
+          var s = Number(item.getAttribute("data-step-nav"));
           item.classList.remove("active", "completed");
           if (s < step) item.classList.add("completed");
           else if (s === step) item.classList.add("active");
-        });
+        }
       }
 
       function markSelectedCard(card) {
         if (!planGrid || !card) return;
-        const radio = card.querySelector('input[type="radio"]');
+        var radio = card.querySelector('input[type="radio"]');
         if (!radio || radio.disabled) return;
 
-        const cards = planGrid.querySelectorAll(".plan-card");
-        cards.forEach(c => c.classList.remove("selected"));
+        var cards = planGrid.querySelectorAll(".plan-card");
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].classList.remove("selected");
+        }
 
         radio.checked = true;
         card.classList.add("selected");
@@ -1222,10 +1235,10 @@
 
       function setPlanDisabled(card, disabled) {
         if (!card) return;
-        const radio = card.querySelector('input[type="radio"]');
-        card.classList.toggle("disabled", Boolean(disabled));
+        var radio = card.querySelector('input[type="radio"]');
+        card.classList.toggle("disabled", !!disabled);
         if (radio) {
-          radio.disabled = Boolean(disabled);
+          radio.disabled = !!disabled;
           if (disabled) {
             radio.checked = false;
           }
@@ -1237,11 +1250,11 @@
 
       function updatePlansForBins() {
         if (!planGrid || !binCountInput) return;
-        const binCount = parseInt(binCountInput.value, 10);
-        const hasNumber = !Number.isNaN(binCount);
-        const selectedRadio = planGrid.querySelector('.plan-card input[type="radio"]:checked');
-        const selectedCard = selectedRadio?.closest(".plan-card");
-        const selectedPlan = selectedCard?.dataset.plan;
+        var binCount = parseInt(binCountInput.value, 10);
+        var hasNumber = !isNaN(binCount);
+        var selectedRadio = planGrid.querySelector('.plan-card input[type="radio"]:checked');
+        var selectedCard = selectedRadio ? selectedRadio.closest(".plan-card") : null;
+        var selectedPlan = selectedCard ? selectedCard.getAttribute("data-plan") : null;
 
         // reset
         setPlanDisabled(premiumCard, false);
@@ -1264,12 +1277,33 @@
         }
       }
 
+      function validateCurrentStep() {
+        var currentPanel = document.querySelector('.step-panel[data-step="' + step + '"]');
+        if (!currentPanel) return true;
+
+        var inputs = currentPanel.querySelectorAll("input, select");
+        for (var i = 0; i < inputs.length; i++) {
+          var el = inputs[i];
+
+          // ignore hidden / disabled
+          if (el.type === "hidden" || el.disabled) continue;
+
+          if (!el.checkValidity()) {
+            el.reportValidity();
+            return false;
+          }
+        }
+        return true;
+      }
+
       if (planGrid) {
         planGrid.addEventListener("change", function (e) {
           if (e.target && e.target.type === "radio") {
-            const cards = planGrid.querySelectorAll(".plan-card");
-            cards.forEach(card => card.classList.remove("selected"));
-            const selectedCard = e.target.closest(".plan-card");
+            var cards = planGrid.querySelectorAll(".plan-card");
+            for (var i = 0; i < cards.length; i++) {
+              cards[i].classList.remove("selected");
+            }
+            var selectedCard = e.target.closest(".plan-card");
             if (selectedCard) selectedCard.classList.add("selected");
           }
         });
@@ -1284,20 +1318,24 @@
 
       if (nextBtn) {
         nextBtn.addEventListener("click", function () {
+          if (message) message.textContent = "";
+
           if (step < totalSteps) {
-            const currentPanel = document.querySelector(\`.step-panel[data-step="\${step}"]\`);
-            const inputs = currentPanel.querySelectorAll("input, select");
-
-            for (let i of inputs) {
-              if (!i.checkValidity()) {
-                i.reportValidity();
-                return;
+            if (!validateCurrentStep()) {
+              if (message) {
+                message.textContent = "Please complete all required fields on this step.";
               }
+              return;
             }
-
             step++;
             updateUI();
           } else if (form) {
+            if (!validateCurrentStep()) {
+              if (message) {
+                message.textContent = "Please complete all required fields.";
+              }
+              return;
+            }
             form.requestSubmit();
           }
         });
@@ -1315,23 +1353,25 @@
       if (form) {
         form.addEventListener("submit", function (e) {
           e.preventDefault();
-          message.textContent = "";
+          if (message) message.textContent = "";
 
-          const formData = new FormData(form);
-          const params = new URLSearchParams(formData);
+          var formData = new FormData(form);
+          var params = new URLSearchParams(formData);
 
           fetch(form.action, { method: "POST", mode: "no-cors", body: params })
-            .then(() => {
-              formWrapper.style.display = "none";
-              successScreen.style.display = "flex";
+            .then(function () {
+              if (formWrapper) formWrapper.style.display = "none";
+              if (successScreen) successScreen.style.display = "flex";
               window.scrollTo(0, 0);
 
               form.reset();
               step = 1;
               updateUI();
             })
-            .catch(() => {
-              message.textContent = "Something went wrong. Please try again.";
+            .catch(function () {
+              if (message) {
+                message.textContent = "Something went wrong. Please try again.";
+              }
             });
         });
       }
@@ -1339,3 +1379,4 @@
   </script>
 </body>
 </html>
+
