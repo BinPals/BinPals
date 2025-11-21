@@ -975,7 +975,7 @@
 
               <div>
                 <label>State *</label>
-                <select name="entry.1018040509" required>
+                <select name="entry.303272276" required>
                   <option value="" disabled selected>Select state</option>
                   <option value="AL">Alabama</option>
                   <option value="AK">Alaska</option>
@@ -1199,7 +1199,7 @@
 
       function updateUI() {
         panels.forEach(p => p.classList.remove("active"));
-        document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
+        document.querySelector(\`.step-panel[data-step="\${step}"]\`).classList.add("active");
 
         backBtn.style.visibility = step === 1 ? "hidden" : "visible";
         nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
@@ -1290,7 +1290,7 @@
       if (nextBtn) {
         nextBtn.addEventListener("click", function () {
           if (step < totalSteps) {
-            const currentPanel = document.querySelector(`.step-panel[data-step="${step}"]`);
+            const currentPanel = document.querySelector(\`.step-panel[data-step="\${step}"]\`);
             const inputs = currentPanel.querySelectorAll("input, select");
 
             for (let i of inputs) {
