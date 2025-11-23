@@ -380,65 +380,78 @@
 
     .map-panel {
       margin-top: 8px;
-      margin-bottom: 16px;
-      border-radius: 18px;
+      margin-bottom: 0;
+      border-radius: 24px 24px 0 0;
       border: 1px solid var(--border);
-      background: linear-gradient(145deg, #f9fafb, #ffffff);
-      padding: 14px 16px 16px;
+      border-bottom: none;
+      background: #f9fafb;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
     }
 
     .map-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      gap: 12px;
+      padding: 12px 16px 8px;
     }
 
     .map-canvas {
       position: relative;
-      border-radius: 14px;
-      background:
-        radial-gradient(circle at 30% 20%, rgba(22,101,52,0.08), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(37,99,235,0.08), transparent 55%),
-        #e5e7eb;
-      height: 260px;
-      overflow: hidden;
+      height: 360px;
+      background: #e5e7eb;
     }
 
-    .map-pin {
+    .loc-btn {
       position: absolute;
-      width: 22px;
-      height: 22px;
+      right: 16px;
+      bottom: 16px;
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      background: #166534;
-      border: 2px solid #bbf7d0;
-      box-shadow: 0 6px 14px rgba(22, 101, 52, 0.4);
+      border: none;
+      background: #ffffff;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.25);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: #ffffff;
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
     }
 
-    .map-pin.selected {
-      transform: scale(1.18);
-      background: #16a34a;
-      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.5);
+    .loc-btn span {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 2px solid #111827;
+      position: relative;
     }
 
-    /* ===== “Next stop” detail card ===== */
+    .loc-btn span::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: #111827;
+    }
+
+    /* ===== “Bottom sheet” next-stop card ===== */
 
     .next-stop-card {
-      margin-top: -12px;
-      margin-bottom: 20px;
-      border-radius: 18px;
+      margin-top: -16px;
+      margin-bottom: 16px;
+      border-radius: 24px 24px 16px 16px;
       border: 1px solid var(--border);
+      border-top: 1px solid #e5e7eb;
       background: #ffffff;
-      padding: 16px 18px 14px;
-      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+      padding: 18px 20px 16px;
+      box-shadow: 0 -6px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    .next-stop-card::before {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 4px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      margin: 0 auto 10px;
     }
 
     .next-stop-header {
@@ -787,7 +800,7 @@
       .stops-grid {
         grid-template-columns: minmax(0, 1fr);
       }
-      .map-canvas { height: 220px; }
+      .map-canvas { height: 420px; }
     }
   </style>
 </head>
@@ -874,21 +887,23 @@
         <div class="map-panel">
           <div class="map-header">
             <div>
-              <div class="tiny-label">Route map (visual)</div>
+              <div class="tiny-label">Route map</div>
               <div class="muted" style="font-size:13px;">
-                Tap a pin or card to focus a house. A live map can plug in here later.
+                Drag and zoom like Uber. Tap a pin to focus a house.
               </div>
             </div>
           </div>
-          <div class="map-canvas" id="mapCanvas">
-            <!-- Pins injected here -->
-          </div>
+
+          <div class="map-canvas" id="mapCanvas"></div>
+
+          <!-- Uber-style "center on me" button -->
+          <button type="button" class="loc-btn" id="locBtn" aria-label="Center on my location">
+            <span></span>
+          </button>
         </div>
 
-        <!-- NEXT STOP DETAIL CARD -->
-        <div class="next-stop-card" id="nextStopCard">
-          <!-- Filled by JS -->
-        </div>
+        <!-- NEXT STOP DETAIL CARD (bottom sheet style) -->
+        <div class="next-stop-card" id="nextStopCard"></div>
 
         <!-- LIST OF HOUSES -->
         <h2 class="stops-section-title">Today’s houses</h2>
@@ -911,51 +926,124 @@
   <script src="layout.js"></script>
 
   <script>
-    // Demo credentials - change these when ready.
+    // Uber-like light map style
+    const UBER_MAP_STYLE = [
+      { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
+      { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
+      {
+        featureType: "administrative.land_parcel",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#bdbdbd" }]
+      },
+      {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [{ color: "#eeeeee" }]
+      },
+      {
+        featureType: "poi",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#757575" }]
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [{ color: "#e5e5e5" }]
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#9e9e9e" }]
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "#ffffff" }]
+      },
+      {
+        featureType: "road.arterial",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#757575" }]
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry",
+        stylers: [{ color: "#dadada" }]
+      },
+      {
+        featureType: "road.highway",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#616161" }]
+      },
+      {
+        featureType: "road.local",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#9e9e9e" }]
+      },
+      {
+        featureType: "transit.line",
+        elementType: "geometry",
+        stylers: [{ color: "#e5e5e5" }]
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#e0e0e0" }]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#9e9e9e" }]
+      }
+    ];
+
+    // Demo credentials - update when ready
     const ALLOWED_USERS = [
       { email: "operator@getbinpals.com", password: "route123" }
     ];
 
-    // Example stops (you can replace with real data later)
+    // Example stops (replace with real data later)
     const STOPS = [
       {
         id: 1,
         customerRow: 5,
         name: "Garcia Family",
         fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
-        plan: "Premium – $45/mo",
+        plan: "Premium \u2013 $45/mo",
         phone: "555-555-0001",
         email: "garcia@example.com",
         day: "Tuesday",
         binStatus: "Pending",
-        mapX: 25,
-        mapY: 40
+        lat: 33.7405,
+        lng: -112.2691
       },
       {
         id: 2,
         customerRow: 8,
         name: "Lopez Home",
         fullAddress: "9876 W Binpals Way, Peoria AZ",
-        plan: "Basic – $35/mo",
+        plan: "Basic \u2013 $35/mo",
         phone: "",
         email: "lopez@example.com",
         day: "Tuesday",
         binStatus: "Pending",
-        mapX: 60,
-        mapY: 55
+        lat: 33.7442,
+        lng: -112.2635
       },
       {
         id: 3,
         customerRow: 12,
         name: "Taylor Household",
         fullAddress: "5555 W Route Runner Rd, Peoria AZ",
-        plan: "Premium – $45/mo",
+        plan: "Premium \u2013 $45/mo",
         phone: "555-555-0002",
         email: "taylor@example.com",
         day: "Wednesday",
         binStatus: "Done",
-        mapX: 77,
-        mapY: 28
+        lat: 33.7471,
+        lng: -112.2743
       }
     ];
 
@@ -972,6 +1060,7 @@
     const nextStopCard = document.getElementById("nextStopCard");
     const stopsGrid = document.getElementById("stopsGrid");
     const noStopsMessage = document.getElementById("noStopsMessage");
+    const locBtn = document.getElementById("locBtn");
 
     const toast = document.getElementById("toast");
     const toastText = document.getElementById("toastText");
@@ -982,6 +1071,11 @@
     let stopsState = STOPS.map(stop => ({ ...stop }));
     let selectedStopId = null;
     let lastAction = null; // { stopId, previousStatus }
+
+    // Google Maps
+    let map = null;
+    let markers = [];
+    let userMarker = null;
 
     function getTodayName() {
       const now = new Date();
@@ -1042,24 +1136,60 @@
     }
 
     function renderMap(stops) {
-      mapCanvas.innerHTML = "";
-      if (stops.length === 0) return;
+      if (!window.google || !map) return;
+
+      // Clear old markers
+      markers.forEach(marker => marker.setMap(null));
+      markers = [];
+
+      if (!stops.length) return;
+
+      const bounds = new google.maps.LatLngBounds();
 
       stops.forEach((stop, index) => {
-        const pin = document.createElement("button");
-        pin.type = "button";
-        pin.className = "map-pin" + (stop.id === selectedStopId ? " selected" : "");
-        pin.style.left = (stop.mapX || (20 + index * 20)) + "%";
-        pin.style.top = (stop.mapY || (30 + index * 10)) + "%";
-        pin.textContent = index + 1;
-        pin.dataset.id = stop.id;
-        pin.title = stop.fullAddress;
-        pin.addEventListener("click", () => {
+        if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
+
+        const position = { lat: stop.lat, lng: stop.lng };
+        const isSelected = stop.id === selectedStopId;
+
+        // Color by status (Uber-ish)
+        let color = "#000000"; // Pending
+        if (stop.binStatus === "Done") color = "#6b7280";     // grey
+        if (stop.binStatus === "Skipped") color = "#b91c1c";  // red
+
+        const icon = {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: isSelected ? 9 : 7,
+          fillColor: color,
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 2
+        };
+
+        const marker = new google.maps.Marker({
+          position,
+          map,
+          icon,
+          label: {
+            text: String(index + 1),
+            color: "#ffffff",
+            fontSize: "11px",
+            fontWeight: "700"
+          }
+        });
+
+        marker.addListener("click", () => {
           setSelectedStop(stop.id);
           scrollStopIntoView(stop.id);
         });
-        mapCanvas.appendChild(pin);
+
+        markers.push(marker);
+        bounds.extend(position);
       });
+
+      if (!bounds.isEmpty()) {
+        map.fitBounds(bounds);
+      }
     }
 
     function renderNextStopCard(filteredStops) {
@@ -1169,6 +1299,7 @@
       renderMap(filtered);
       renderNextStopCard(filtered);
       renderStopsList(filtered);
+      updateStats();
     }
 
     function scrollStopIntoView(stopId) {
@@ -1238,11 +1369,63 @@
       alert(`Contact ${stop.name || "customer"} at ${stop.email || "their saved email"} (future: auto text/email).`);
     }
 
-    // Placeholder function for future integration (no Twilio yet)
+    // Placeholder for future email/SMS integration
     function sendNotification(stop, status) {
-      // Later: send email/text like:
+      // Later: send email/text like
       // "Your trash cans are out front, we’ll be back tomorrow."
-      // For now, this does nothing.
+    }
+
+    // Google Maps init (callback)
+    function initMap() {
+      const canvas = document.getElementById("mapCanvas");
+      if (!canvas) return;
+
+      const center = { lat: 33.7405, lng: -112.2691 }; // Default center
+
+      map = new google.maps.Map(canvas, {
+        center,
+        zoom: 13,
+        styles: UBER_MAP_STYLE,
+        mapTypeControl: false,
+        fullscreenControl: false,
+        streetViewControl: false,
+      });
+
+      renderView();
+    }
+
+    function centerOnUser() {
+      if (!map || !navigator.geolocation) return;
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+
+          map.setCenter(coords);
+          map.setZoom(15);
+
+          if (userMarker) userMarker.setMap(null);
+          userMarker = new google.maps.Marker({
+            position: coords,
+            map,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 7,
+              fillColor: "#2563eb",
+              fillOpacity: 1,
+              strokeColor: "#ffffff",
+              strokeWeight: 2
+            },
+            zIndex: 999
+          });
+        },
+        () => {
+          // user denied or error – ignore for now
+        }
+      );
     }
 
     // ===== Event handlers =====
@@ -1261,12 +1444,10 @@
     });
 
     dayFilter.addEventListener("change", () => {
-      // Reset selection so we pick the right next stop for the new filter
       selectedStopId = null;
       renderView();
     });
 
-    // Main next-stop buttons
     nextStopCard.addEventListener("click", (event) => {
       const btn = event.target.closest("button[data-action]");
       if (!btn) return;
@@ -1280,6 +1461,16 @@
         handleContact(stopId);
       }
     });
+
+    if (locBtn) {
+      locBtn.addEventListener("click", centerOnUser);
+    }
   </script>
+
+  <!-- Google Maps (replace YOUR_GOOGLE_MAPS_API_KEY) -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"
+    async
+    defer></script>
 </body>
 </html>
