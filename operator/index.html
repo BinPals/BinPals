@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>BinPals Operator Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BinPals operator dashboard with today’s route, map view, and simple Done / Skipped / Contact actions.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BinPals Operator – route tools for field teams.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,13 +12,12 @@
     :root {
       --green: #166534;
       --green-dark: #0f3c22;
-      --bg: #f5f5f5;
-      --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #4b5563;
       --border: #e5e7eb;
-      --pill-gray: #e5e7eb;
-      --pill-text: #4b5563;
+      --pill-gray-bg: #f3f4f6;
+      --pill-gray-border: #e5e7eb;
+      --pill-gray-text: #4b5563;
       --pill-green-bg: #ecfdf3;
       --pill-green-border: #bbf7d0;
       --pill-green-text: #166534;
@@ -29,37 +28,64 @@
 
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text-main);
-    }
-
-    /* Top bar */
-    .top-bar {
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px;
-      background: #ffffff;
-    }
-
-    .top-inner {
-      max-width: 1080px;
-      margin: 0 auto;
+      padding: 0;
+      height: 100%;
       width: 100%;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      overflow: hidden; /* map hits all edges */
+    }
+
+    body {
+      position: relative;
+      background: #f5f5f5;
+    }
+
+    .hidden { display: none !important; }
+
+    /* FULLSCREEN MAP */
+    #map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .map-frame {
+      border: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Floating header (Uber style) */
+    .operator-header {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      z-index: 20;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      pointer-events: none; /* map can still drag */
+    }
+
+    .operator-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      color: var(--text-main);
+      gap: 10px;
     }
 
     .brand-mark {
@@ -68,170 +94,75 @@
       border-radius: 14px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--green), #8bffb0);
+      background: radial-gradient(circle at 30% 20%, #4ade80, #22c55e);
       color: #052e16;
       font-weight: 800;
-      box-shadow: 0 16px 26px rgba(22, 101, 52, 0.35);
       font-size: 14px;
+      box-shadow: 0 16px 30px rgba(22, 101, 52, 0.35);
     }
 
-    .muted { color: var(--text-muted); }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border: 1px solid var(--pill-gray);
-      background: #f9fafb;
-      color: var(--pill-text);
+    .brand-text-title {
+      font-weight: 700;
+      font-size: 15px;
     }
 
-    .pill.success {
-      background: var(--pill-green-bg);
-      border-color: var(--pill-green-border);
-      color: var(--pill-green-text);
-    }
-
-    /* Layout */
-    .page-main {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 24px 20px 40px;
-    }
-
-    .app-shell {
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: #ffffff;
-      padding: 24px 24px 22px;
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
-    }
-
-    .hidden { display: none !important; }
-
-    /* Login */
-    .auth-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
-      gap: 32px;
-      align-items: center;
-    }
-
-    .login-card {
-      background: #ffffff;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      padding: 20px 20px 18px;
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.04);
-    }
-
-    .login-card h2 {
-      margin: 0 0 6px;
-      font-size: 20px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin: 12px 0;
-    }
-
-    label {
-      font-size: 13px;
+    .brand-text-sub {
+      font-size: 12px;
       color: var(--text-muted);
     }
 
-    input {
-      width: 100%;
-      padding: 11px 14px;
+    .status-pill {
+      pointer-events: auto;
+      background: #ecfdf3;
+      color: #15803d;
+      padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f9fafb;
-      color: var(--text-main);
-      font-size: 14px;
-    }
-
-    input:focus {
-      outline: 2px solid rgba(22, 101, 52, 0.35);
-      border-color: transparent;
-      background: #ffffff;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 11px 18px;
-      border-radius: 999px;
-      border: none;
-      background: var(--green);
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 12px 24px rgba(22, 101, 52, 0.30);
-      transition: background-color 0.15s ease, transform 0.06s ease, box-shadow 0.15s ease;
-    }
-
-    .btn:hover { background: var(--green-dark); }
-    .btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(22, 101, 52, 0.24); }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-      box-shadow: none;
-    }
-
-    .btn-secondary:hover { background: #d1d5db; }
-
-    .btn-ghost {
-      border: 1px solid #e5e7eb;
-      background: #ffffff;
-      box-shadow: none;
-      color: #4b5563;
-    }
-    .btn-ghost:hover {
-      background: #f9fafb;
-      color: #111827;
-    }
-
-    .error-box {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: #fef2f2;
-      color: #b91c1c;
+      font-size: 12px;
       font-weight: 600;
-      border: 1px solid #fecaca;
-      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid #bbf7d0;
     }
 
-    /* Dashboard layout – Uber-like */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      gap: 24px;
-      min-height: 500px;
-      margin-top: 4px;
-    }
-
-    .side-panel {
+    /* BOTTOM SHEET */
+    .bottom-sheet {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
       background: #ffffff;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      padding: 16px 16px 14px;
+      border-top-left-radius: 26px;
+      border-top-right-radius: 26px;
+      padding: 18px 18px 26px;
+      box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.2);
+      z-index: 21;
+      transform: translateY(0);
+      transition: transform 0.25s ease-out;
+      max-height: 70%;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
+      gap: 12px;
+    }
+
+    .bottom-sheet.sheet-collapsed {
+      transform: translateY(55%);
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      border-radius: 999px;
+      background: #d1d5db;
+      margin: 0 auto 12px;
+      cursor: pointer;
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
       gap: 10px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.04);
     }
 
     .tiny-label {
@@ -241,21 +172,44 @@
       color: var(--text-muted);
     }
 
-    .side-heading {
-      margin: 4px 0 8px;
-      font-size: 18px;
+    .sheet-title {
+      margin: 2px 0 4px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .stats-pill {
+      background: var(--pill-gray-bg);
+      border-radius: 999px;
+      padding: 8px 12px;
+      border: 1px solid var(--pill-gray-border);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      align-self: flex-start;
+      color: var(--pill-gray-text);
+    }
+
+    .stats-pill.success {
+      background: var(--pill-green-bg);
+      border-color: var(--pill-green-border);
+      color: var(--pill-green-text);
     }
 
     .filter-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 10px;
-      margin-bottom: 4px;
     }
 
-    select {
-      padding: 7px 14px;
+    .filter-row label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    #dayFilter {
+      padding: 7px 12px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: #f9fafb;
@@ -264,17 +218,12 @@
       color: var(--text-main);
     }
 
-    .stats-pill {
-      font-size: 10px;
-      padding: 6px 12px;
-    }
-
-    /* Current stop card – like Uber’s bottom sheet */
+    /* Current house card */
     .current-stop-card {
       border-radius: 20px;
       border: 1px solid var(--border);
       background: #f9fafb;
-      padding: 14px 14px 12px;
+      padding: 12px 14px 12px;
     }
 
     .current-stop-title {
@@ -283,25 +232,25 @@
       font-weight: 600;
     }
 
-    .status-pill {
-      padding: 5px 12px;
+    .status-pill-small {
+      background: var(--pill-gray-bg);
       border-radius: 999px;
-      border: 1px solid var(--pill-gray);
-      background: #f3f4f6;
-      color: #4b5563;
+      padding: 7px 14px;
+      border: 1px solid var(--pill-gray-border);
       font-size: 11px;
       font-weight: 600;
-      text-transform: uppercase;
       letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pill-gray-text);
     }
 
-    .status-pill.done {
+    .status-pill-small.done {
       background: var(--pill-green-bg);
       border-color: var(--pill-green-border);
       color: var(--pill-green-text);
     }
 
-    .status-pill.skipped {
+    .status-pill-small.skipped {
       background: var(--pill-red-bg);
       border-color: var(--pill-red-border);
       color: var(--pill-red-text);
@@ -323,117 +272,104 @@
       flex-wrap: wrap;
     }
 
-    .current-actions .btn {
-      flex: 1 1 90px;
-      box-shadow: none;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: none;
       font-size: 12px;
-      padding-block: 9px;
-      min-height: 38px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.15s ease, transform 0.07s ease, box-shadow 0.15s ease;
     }
 
-    /* List of houses */
-    .stops-list {
-      margin-top: 8px;
+    .btn-primary {
+      background: var(--green);
+      color: #ffffff;
+      box-shadow: 0 10px 18px rgba(22, 101, 52, 0.35);
+    }
+
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-primary:active { transform: translateY(1px); box-shadow: 0 6px 12px rgba(22, 101, 52, 0.28); }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn-secondary:hover { background: #d1d5db; }
+
+    .btn-ghost {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      color: #4b5563;
+    }
+    .btn-ghost:hover {
+      background: #f9fafb;
+      color: #111827;
+    }
+
+    .list-label { margin-top: 2px; }
+
+    .house-list {
+      margin-top: 4px;
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      max-height: 250px;
-      overflow: auto;
-      padding-right: 4px;
     }
 
-    .stop-row {
+    .house-row {
       border-radius: 999px;
-      padding: 8px 12px;
-      background: #f3f4f6;
-      font-size: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
       border: 1px solid transparent;
+      background: #f3f4f6;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      cursor: pointer;
       transition: background-color 0.12s ease, transform 0.06s ease, border-color 0.12s ease;
     }
 
-    .stop-row:hover {
+    .house-row:hover {
       background: #e5e7eb;
       transform: translateY(-1px);
     }
 
-    .stop-row.selected {
+    .house-row.selected {
       background: #ecfdf3;
       border-color: #bbf7d0;
     }
 
-    .stop-row-main {
+    .house-row-main {
       display: flex;
       flex-direction: column;
       gap: 2px;
       text-align: left;
     }
 
-    .stop-row-address {
+    .house-row-address {
       font-weight: 600;
       color: var(--text-main);
     }
 
-    .stop-row-sub {
-      color: var(--text-muted);
-      font-size: 11px;
-    }
-
-    /* Map side */
-    .map-wrapper {
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      position: relative;
-      background: #e5e7eb;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.04);
-    }
-
-    .map-canvas {
-      width: 100%;
-      height: 100%;
-      min-height: 420px;
-    }
-
-    .loc-btn {
-      position: absolute;
-      right: 20px;
-      bottom: 20px;
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      border: none;
-      background: #ffffff;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 18px 30px rgba(15, 23, 42, 0.35);
-      cursor: pointer;
-    }
-
-    .loc-btn span {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      border: 2px solid #111827;
-      position: relative;
-    }
-
-    .loc-btn span::after {
-      content: "";
-      position: absolute;
-      inset: 4px;
-      border-radius: 999px;
-      background: #111827;
-    }
-
-    .small-muted {
+    .house-row-sub {
       font-size: 11px;
       color: var(--text-muted);
-      margin-top: 4px;
+    }
+
+    .house-row-status {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
     }
 
     .no-stops {
@@ -442,169 +378,213 @@
       margin-top: 4px;
     }
 
-    /* Responsive tweaks */
-    @media (max-width: 900px) {
-      .auth-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 20px;
+    /* LOGIN OVERLAY */
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-panel {
+      width: min(480px, 100%);
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: 0 26px 60px rgba(15, 23, 42, 0.18);
+      padding: 22px 24px 20px;
+    }
+
+    .login-panel h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+
+    .login-panel p {
+      margin: 0 0 14px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .login-field label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .login-field input {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .login-field input:focus {
+      outline: 2px solid rgba(22, 101, 52, 0.35);
+      border-color: transparent;
+      background: #ffffff;
+    }
+
+    .login-error {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid #fecaca;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 4px;
+      padding-block: 11px;
+    }
+
+    /* Responsive */
+    @media (min-width: 900px) {
+      .bottom-sheet {
+        left: 50%;
+        width: 420px;
+        transform: translate(0, 0);
+        translate: -50% 0;
+        border-radius: 24px;
+        bottom: 22px;
+        max-height: 60%;
       }
 
-      .dashboard-grid {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: auto auto;
-        gap: 16px;
+      .bottom-sheet.sheet-collapsed {
+        transform: translate(-50%, 40%);
       }
 
-      .map-wrapper {
-        order: 1;
-        min-height: 340px;
-        height: 55vh;
-      }
-
-      .side-panel {
-        order: 2;
+      .operator-header {
+        left: 50%;
+        translate: -50% 0;
+        max-width: 960px;
       }
     }
 
     @media (max-width: 640px) {
-      .page-main {
-        padding-inline: 14px;
+      .operator-header {
+        top: 14px;
+        left: 14px;
+        right: 14px;
       }
-      .app-shell {
-        padding: 18px 16px 16px;
-        border-radius: 18px;
-      }
-      .map-wrapper {
-        border-radius: 18px;
-      }
-      .login-card {
-        border-radius: 18px;
+
+      .bottom-sheet {
+        padding-inline: 16px;
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- simple brand bar -->
-  <div class="top-bar">
-    <div class="top-inner">
+
+  <!-- Uber-style header -->
+  <header class="operator-header">
+    <div class="operator-header-inner">
       <div class="brand">
         <div class="brand-mark">BP</div>
         <div>
-          <div>BinPals Operator</div>
-          <div class="muted" style="font-size:13px;">Route tools for field teams</div>
+          <div class="brand-text-title">BinPals Operator</div>
+          <div class="brand-text-sub">Route tools for field teams</div>
         </div>
       </div>
-      <div id="userBadge" class="pill success hidden">Logged in</div>
+    </div>
+    <div id="userBadge" class="status-pill hidden">Logged in</div>
+  </header>
+
+  <!-- FULLSCREEN MAP (your My Map embed) -->
+  <div id="map">
+    <iframe
+      class="map-frame"
+      src="https://www.google.com/maps/d/embed?mid=1tsQ261TBSD6vD471LMMBVzrEt40zuyw&ehbc=2E312F"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- BOTTOM SHEET -->
+  <section class="bottom-sheet sheet-collapsed" id="bottomSheet">
+    <div class="sheet-handle" id="sheetHandle"></div>
+
+    <div class="sheet-header">
+      <div>
+        <div class="tiny-label" id="todayLabel">Today · Sunday</div>
+        <h2 class="sheet-title">Today’s route</h2>
+      </div>
+      <div id="statsPill" class="stats-pill">0 left today / 0 total</div>
+    </div>
+
+    <div class="filter-row">
+      <label for="dayFilter">Trash day</label>
+      <select id="dayFilter">
+        <option value="today">Today only</option>
+        <option value="all">All days</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+      </select>
+    </div>
+
+    <div id="currentStopCard" class="current-stop-card"></div>
+
+    <div class="list-label tiny-label">Houses</div>
+    <div id="houseList" class="house-list"></div>
+    <p id="noStopsMessage" class="no-stops" style="display:none;">No houses for this filter.</p>
+  </section>
+
+  <!-- LOGIN OVERLAY -->
+  <div id="loginOverlay">
+    <div class="login-panel">
+      <h1>Operator login</h1>
+      <p>Use your BinPals operator credentials to access today’s route.</p>
+      <form id="loginForm" novalidate>
+        <div class="login-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email"
+                 placeholder="operator@getbinpals.com"
+                 autocomplete="username" required>
+        </div>
+        <div class="login-field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password"
+                 placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary login-btn">Login</button>
+        <div id="loginError" class="login-error hidden">
+          Incorrect email or password.
+        </div>
+      </form>
     </div>
   </div>
 
-  <main class="page-main">
-    <div class="app-shell">
-      <!-- LOGIN -->
-      <section id="loginView">
-        <div class="auth-grid">
-          <div>
-            <h1 style="margin:0 0 10px;">Welcome back</h1>
-            <p class="muted" style="max-width:520px; font-size:14px;">
-              Log in, see just today’s houses, view them on a simple route map,
-              and tap one button for Done, Skipped, or Contact.
-            </p>
-          </div>
-          <div class="login-card">
-            <h2>Operator Login</h2>
-            <p class="muted" style="margin:0 0 10px; font-size:13px;">For BinPals field teams only.</p>
-            <form id="loginForm" novalidate>
-              <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email"
-                  placeholder="operator@getbinpals.com"
-                  autocomplete="username" required>
-              </div>
-              <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password"
-                  placeholder="••••••••" autocomplete="current-password" required>
-              </div>
-              <button type="submit" class="btn" style="width:100%;">Login</button>
-              <div id="error" class="error-box hidden">
-                Incorrect email or password.
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- DASHBOARD -->
-      <section id="dashboardView" class="hidden">
-        <div class="dashboard-grid">
-          <!-- Left panel -->
-          <aside class="side-panel">
-            <div class="filter-row">
-              <div>
-                <div class="tiny-label" id="todayLabel">Today</div>
-                <h2 class="side-heading">Today’s route</h2>
-              </div>
-            </div>
-
-            <div class="filter-row">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="tiny-label" style="letter-spacing:0.05em;">Trash day</span>
-                <select id="dayFilter" aria-label="Filter houses by trash day">
-                  <option value="today">Today only</option>
-                  <option value="all">All days</option>
-                  <option>Monday</option>
-                  <option>Tuesday</option>
-                  <option>Wednesday</option>
-                  <option>Thursday</option>
-                  <option>Friday</option>
-                  <option>Saturday</option>
-                </select>
-              </div>
-              <span id="statsPill" class="pill stats-pill">0 left / 0 total</span>
-            </div>
-
-            <div class="current-stop-card" id="currentStopCard">
-              <!-- JS fills -->
-            </div>
-            <p class="small-muted">
-              Tap a house below or click a pin on the map to focus it.
-            </p>
-
-            <div class="stops-list" id="stopsList"></div>
-            <p class="no-stops" id="noStopsMessage" style="display:none;">
-              No houses for this filter. Try switching the trash day.
-            </p>
-          </aside>
-
-          <!-- Map -->
-          <div class="map-wrapper">
-            <div id="mapCanvas" class="map-canvas"></div>
-            <button type="button" class="loc-btn" id="locBtn" aria-label="Center on my location">
-              <span></span>
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
-
   <script>
-    const UBER_MAP_STYLE = [
-      { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
-      { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-      { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-      { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
-      { featureType: "poi", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
-      { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
-      { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-      { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#dadada" }] },
-      { featureType: "water", elementType: "geometry", stylers: [{ color: "#e0e0e0" }] }
-    ];
-
+    /***********************
+     * SIMPLE STATE + DATA
+     ***********************/
     const ALLOWED_USERS = [
       { email: "operator@getbinpals.com", password: "route123" }
     ];
 
+    // Replace this with data from your sheet later
     const STOPS = [
       {
         id: 1,
@@ -614,10 +594,8 @@
         plan: "Premium – $45/mo",
         phone: "555-555-0001",
         email: "garcia@example.com",
-        day: "Tuesday",
-        binStatus: "Pending",
-        lat: 33.7405,
-        lng: -112.2691
+        day: "Sunday",
+        binStatus: "Pending"
       },
       {
         id: 2,
@@ -627,10 +605,8 @@
         plan: "Basic – $35/mo",
         phone: "",
         email: "lopez@example.com",
-        day: "Tuesday",
-        binStatus: "Pending",
-        lat: 33.7442,
-        lng: -112.2635
+        day: "Sunday",
+        binStatus: "Pending"
       },
       {
         id: 3,
@@ -640,35 +616,38 @@
         plan: "Premium – $45/mo",
         phone: "555-555-0002",
         email: "taylor@example.com",
-        day: "Wednesday",
-        binStatus: "Done",
-        lat: 33.7471,
-        lng: -112.2743
+        day: "Monday",
+        binStatus: "Done"
       }
     ];
 
-    const loginForm = document.getElementById("loginForm");
-    const loginView = document.getElementById("loginView");
-    const dashboardView = document.getElementById("dashboardView");
-    const errorBox = document.getElementById("error");
-    const userBadge = document.getElementById("userBadge");
-    const todayLabel = document.getElementById("todayLabel");
-    const dayFilter = document.getElementById("dayFilter");
-    const statsPill = document.getElementById("statsPill");
-    const currentStopCard = document.getElementById("currentStopCard");
-    const stopsList = document.getElementById("stopsList");
-    const noStopsMessage = document.getElementById("noStopsMessage");
-    const locBtn = document.getElementById("locBtn");
-
-    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const weekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
     let stopsState = STOPS.map(s => ({ ...s }));
     let selectedStopId = null;
 
-    let map = null;
-    let markers = [];
-    let userMarker = null;
+    /***********************
+     * DOM
+     ***********************/
+    const loginForm      = document.getElementById("loginForm");
+    const loginOverlay   = document.getElementById("loginOverlay");
+    const loginError     = document.getElementById("loginError");
+    const userBadge      = document.getElementById("userBadge");
 
+    const todayLabel     = document.getElementById("todayLabel");
+    const dayFilter      = document.getElementById("dayFilter");
+    const statsPill      = document.getElementById("statsPill");
+
+    const currentStopCard = document.getElementById("currentStopCard");
+    const houseList       = document.getElementById("houseList");
+    const noStopsMessage  = document.getElementById("noStopsMessage");
+
+    const bottomSheet   = document.getElementById("bottomSheet");
+    const sheetHandle   = document.getElementById("sheetHandle");
+
+    /***********************
+     * HELPERS
+     ***********************/
     function getTodayName() {
       const now = new Date();
       return weekdayNames[now.getDay()];
@@ -686,14 +665,6 @@
       return ALLOWED_USERS.some(
         u => u.email.toLowerCase() === cleaned && u.password === password
       );
-    }
-
-    function showDashboard() {
-      loginView.classList.add("hidden");
-      dashboardView.classList.remove("hidden");
-      userBadge.classList.remove("hidden");
-      setInitialDayFilter();
-      renderView();
     }
 
     function getFilteredStops() {
@@ -715,68 +686,20 @@
       return stops.find(s => s.binStatus === "Pending") || stops[0] || null;
     }
 
+    /***********************
+     * RENDER
+     ***********************/
     function renderView() {
       const filtered = getFilteredStops();
+
       if (!selectedStopId) {
         const next = getNextPendingStop(filtered);
         selectedStopId = next ? next.id : null;
       }
-      renderMap(filtered);
+
       renderCurrentStop(filtered);
-      renderStopsList(filtered);
+      renderHouseList(filtered);
       updateStats();
-    }
-
-    function renderMap(stops) {
-      if (!window.google || !map) return;
-
-      markers.forEach(m => m.setMap(null));
-      markers = [];
-
-      if (!stops.length) return;
-
-      const bounds = new google.maps.LatLngBounds();
-
-      stops.forEach((stop, index) => {
-        if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
-
-        const pos = { lat: stop.lat, lng: stop.lng };
-        const isSelected = stop.id === selectedStopId;
-
-        let color = "#000000";
-        if (stop.binStatus === "Done") color = "#6b7280";
-        if (stop.binStatus === "Skipped") color = "#b91c1c";
-
-        const icon = {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: isSelected ? 9 : 7,
-          fillColor: color,
-          fillOpacity: 1,
-          strokeColor: "#ffffff",
-          strokeWeight: 2
-        };
-
-        const marker = new google.maps.Marker({
-          position: pos,
-          map,
-          icon,
-          label: {
-            text: String(index + 1),
-            color: "#ffffff",
-            fontSize: "11px",
-            fontWeight: "700"
-          }
-        });
-
-        marker.addListener("click", () => setSelectedStop(stop.id));
-
-        markers.push(marker);
-        bounds.extend(pos);
-      });
-
-      if (!bounds.isEmpty()) {
-        map.fitBounds(bounds);
-      }
     }
 
     function renderCurrentStop(filteredStops) {
@@ -806,11 +729,11 @@
           <div>
             <div class="tiny-label">Current house</div>
             <p class="current-stop-title">${current.fullAddress}</p>
-            <p class="muted" style="font-size:12px; margin:2px 0 0;">
+            <p class="brand-text-sub" style="margin:2px 0 0; font-size:12px;">
               ${current.name || "Customer"}
             </p>
           </div>
-          <span class="status-pill ${statusClass}">${current.binStatus}</span>
+          <span class="status-pill-small ${statusClass}">${current.binStatus}</span>
         </div>
         <div class="current-stop-meta">
           <div><strong>Plan:</strong> ${current.plan}</div>
@@ -819,50 +742,49 @@
           <div><strong>Row:</strong> ${current.customerRow}</div>
         </div>
         <div class="current-actions">
-          <button class="btn" data-action="done" data-id="${current.id}">Done</button>
+          <button class="btn btn-primary" data-action="done" data-id="${current.id}">Done</button>
           <button class="btn btn-secondary" data-action="skipped" data-id="${current.id}">Skipped</button>
           <button class="btn btn-ghost" data-action="contact" data-id="${current.id}">Contact</button>
         </div>
       `;
     }
 
-    function renderStopsList(stops) {
-      stopsList.innerHTML = "";
+    function renderHouseList(stops) {
+      houseList.innerHTML = "";
       noStopsMessage.style.display = stops.length ? "none" : "block";
 
       stops.forEach((stop, index) => {
         const row = document.createElement("button");
         row.type = "button";
-        row.className = "stop-row" + (stop.id === selectedStopId ? " selected" : "");
+        row.className = "house-row" + (stop.id === selectedStopId ? " selected" : "");
         row.dataset.id = stop.id;
 
         row.innerHTML = `
-          <div class="stop-row-main">
-            <span class="stop-row-address">${index + 1}. ${stop.fullAddress}</span>
-            <span class="stop-row-sub">${stop.plan} · ${stop.day} · Row ${stop.customerRow}</span>
+          <div class="house-row-main">
+            <span class="house-row-address">${index + 1}. ${stop.fullAddress}</span>
+            <span class="house-row-sub">${stop.plan} · ${stop.day} · Row ${stop.customerRow}</span>
           </div>
-          <span class="tiny-label" style="font-size:10px;">${stop.binStatus}</span>
+          <span class="house-row-status">${stop.binStatus}</span>
         `;
 
         row.addEventListener("click", () => setSelectedStop(stop.id));
-        stopsList.appendChild(row);
+        houseList.appendChild(row);
       });
     }
 
     function updateStats() {
       const today = getTodayStopsOnly();
-      const left = today.filter(s => s.binStatus === "Pending").length;
+      const left  = today.filter(s => s.binStatus === "Pending").length;
       const total = today.length;
       statsPill.textContent = `${left} left today / ${total} total`;
-      statsPill.className = left === 0 && total > 0 ? "pill stats-pill success" : "pill stats-pill";
+      statsPill.className = left === 0 && total > 0 ? "stats-pill success" : "stats-pill";
     }
 
     function setSelectedStop(id) {
       selectedStopId = id;
       const filtered = getFilteredStops();
-      renderMap(filtered);
       renderCurrentStop(filtered);
-      renderStopsList(filtered);
+      renderHouseList(filtered);
       updateStats();
     }
 
@@ -870,7 +792,7 @@
       const stop = stopsState.find(s => s.id === stopId);
       if (!stop) return;
       stop.binStatus = newStatus;
-      // future: sendNotification(stop, newStatus);
+      // FUTURE: Twilio / email trigger goes here
       renderView();
     }
 
@@ -888,95 +810,52 @@
       alert(`Contact ${stop.name || "customer"} at ${stop.email || "saved email"}.`);
     }
 
-    function sendNotification(stop, status) {
-      // hook Apps Script / Twilio here later
-    }
-
-    function initMap() {
-      const canvas = document.getElementById("mapCanvas");
-      if (!canvas) return;
-
-      const center = { lat: 33.7405, lng: -112.2691 };
-
-      map = new google.maps.Map(canvas, {
-        center,
-        zoom: 13,
-        styles: UBER_MAP_STYLE,
-        mapTypeControl: false,
-        fullscreenControl: false,
-        streetViewControl: false
-      });
-
-      renderView();
-    }
-
-    function centerOnUser() {
-      if (!map || !navigator.geolocation) return;
-
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          const coords = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude
-          };
-          map.setCenter(coords);
-          map.setZoom(15);
-
-          if (userMarker) userMarker.setMap(null);
-          userMarker = new google.maps.Marker({
-            position: coords,
-            map,
-            icon: {
-              path: google.maps.SymbolPath.CIRCLE,
-              scale: 7,
-              fillColor: "#2563eb",
-              fillOpacity: 1,
-              strokeColor: "#ffffff",
-              strokeWeight: 2
-            },
-            zIndex: 999
-          });
-        },
-        () => {}
-      );
-    }
-
+    /***********************
+     * EVENTS
+     ***********************/
+    // Login
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const email = loginForm.email.value;
       const password = loginForm.password.value;
 
       if (authenticate(email, password)) {
-        errorBox.classList.add("hidden");
-        showDashboard();
+        loginError.classList.add("hidden");
+        loginOverlay.classList.add("hidden");
+        userBadge.classList.remove("hidden");
       } else {
-        errorBox.classList.remove("hidden");
+        loginError.classList.remove("hidden");
       }
     });
 
+    // Filter change
     dayFilter.addEventListener("change", () => {
       selectedStopId = null;
       renderView();
     });
 
+    // Current house buttons
     currentStopCard.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-action]");
       if (!btn) return;
       const stopId = Number(btn.dataset.id);
       const action = btn.dataset.action;
-      if (action === "done") handleStatusChange(stopId, "Done");
+
+      if (action === "done")    handleStatusChange(stopId, "Done");
       if (action === "skipped") handleStatusChange(stopId, "Skipped");
       if (action === "contact") handleContact(stopId);
     });
 
-    if (locBtn) {
-      locBtn.addEventListener("click", centerOnUser);
-    }
+    // Sheet collapse / expand
+    sheetHandle.addEventListener("click", () => {
+      bottomSheet.classList.toggle("sheet-collapsed");
+    });
 
-    window.initMap = initMap;
+    /***********************
+     * INIT
+     ***********************/
+    setInitialDayFilter();
+    renderView();
   </script>
-
-  <!-- Replace YOUR_GOOGLE_MAPS_API_KEY -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
