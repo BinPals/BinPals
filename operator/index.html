@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Operator Dashboard | BinPals Trash Valet</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BinPals operator dashboard with today’s houses, simple status buttons and a route map for field teams.">
+  <meta name="description" content="BinPals operator dashboard with today’s houses, route map, and simple Done / Skipped / Contact actions for field teams.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
       color: var(--text-main);
     }
 
-    /* Shared header/footer skeleton (layout.js will fill) */
+    /* ===== Shared header skeleton (layout.js fills it) ===== */
 
     .site-header {
       position: sticky;
@@ -157,7 +157,7 @@
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    /* Main layout */
+    /* ===== Page layout ===== */
 
     .page-main {
       max-width: 1080px;
@@ -228,13 +228,7 @@
       color: var(--pill-green-text);
     }
 
-    .pill.error {
-      background: var(--pill-red-bg);
-      border-color: var(--pill-red-border);
-      color: var(--pill-red-text);
-    }
-
-    /* Login */
+    /* ===== Login ===== */
 
     .auth-grid {
       display: grid;
@@ -343,7 +337,7 @@
       font-size: 13px;
     }
 
-    /* Dashboard */
+    /* ===== Dashboard header ===== */
 
     .dashboard-header-row {
       display: flex;
@@ -382,11 +376,11 @@
       font-size: 13px;
     }
 
-    /* Map panel */
+    /* ===== Map panel ===== */
 
     .map-panel {
       margin-top: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       border-radius: 18px;
       border: 1px solid var(--border);
       background: linear-gradient(145deg, #f9fafb, #ffffff);
@@ -404,17 +398,18 @@
     .map-canvas {
       position: relative;
       border-radius: 14px;
-      background: radial-gradient(circle at 30% 20%, rgba(22,101,52,0.08), transparent 55%),
-                  radial-gradient(circle at 80% 80%, rgba(37,99,235,0.08), transparent 55%),
-                  #e5e7eb;
-      height: 220px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(22,101,52,0.08), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(37,99,235,0.08), transparent 55%),
+        #e5e7eb;
+      height: 260px;
       overflow: hidden;
     }
 
     .map-pin {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 999px;
       background: #166534;
       border: 2px solid #bbf7d0;
@@ -434,7 +429,83 @@
       box-shadow: 0 10px 24px rgba(22, 163, 74, 0.5);
     }
 
-    /* Stops list */
+    /* ===== “Next stop” detail card ===== */
+
+    .next-stop-card {
+      margin-top: -12px;
+      margin-bottom: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      padding: 16px 18px 14px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .next-stop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .next-stop-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--pill-gray);
+      background: #f3f4f6;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .status-pill.done {
+      background: var(--pill-green-bg);
+      border-color: var(--pill-green-border);
+      color: var(--pill-green-text);
+    }
+
+    .status-pill.skipped {
+      background: var(--pill-red-bg);
+      border-color: var(--pill-red-border);
+      color: var(--pill-red-text);
+    }
+
+    .next-stop-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .next-stop-meta div { margin-bottom: 2px; }
+    .next-stop-meta strong { color: var(--text-main); }
+
+    .next-stop-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .next-stop-actions .btn {
+      flex: 1 1 120px;
+      box-shadow: none;
+    }
+
+    .next-stop-actions .btn-ghost {
+      flex: 0 0 auto;
+    }
+
+    /* ===== List of all today’s houses ===== */
 
     .stops-section-title {
       margin: 0 0 8px;
@@ -443,19 +514,19 @@
 
     .stops-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
       margin-top: 4px;
     }
 
     .stop-card {
       background: #f9fafb;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px 16px 14px;
+      border-radius: 14px;
+      padding: 12px 14px 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
       cursor: pointer;
       transition: box-shadow 0.12s ease, transform 0.08s ease, border-color 0.12s ease, background-color 0.12s ease;
     }
@@ -483,59 +554,19 @@
       margin: 0;
       font-weight: 700;
       letter-spacing: 0.01em;
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-main);
     }
 
-    .status-pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      border: 1px solid var(--pill-gray);
-      background: #f3f4f6;
-      color: #4b5563;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .status-pill.done {
-      background: var(--pill-green-bg);
-      border-color: var(--pill-green-border);
-      color: var(--pill-green-text);
-    }
-
-    .status-pill.skipped {
-      background: var(--pill-red-bg);
-      border-color: var(--pill-red-border);
-      color: var(--pill-red-text);
-    }
-
-    .stop-meta {
-      font-size: 13px;
+    .stop-meta-small {
+      font-size: 12px;
       color: var(--text-muted);
-      line-height: 1.6;
+      line-height: 1.4;
     }
 
-    .stop-meta div { margin-bottom: 2px; }
-    .stop-meta strong { color: var(--text-main); }
+    .stop-meta-small strong { color: var(--text-main); }
 
-    .stop-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .stop-actions .btn {
-      flex: 1 1 90px;
-      min-width: 90px;
-      box-shadow: none;
-    }
-
-    .stop-actions .btn-contact {
-      flex: 0 0 auto;
-    }
+    /* ===== Toast ===== */
 
     .toast {
       position: fixed;
@@ -563,7 +594,7 @@
       font-weight: 500;
     }
 
-    /* Footer skeleton */
+    /* ===== Footer skeleton ===== */
 
     .site-footer {
       width: 100%;
@@ -678,7 +709,7 @@
       color: #6b7280;
     }
 
-    /* Responsive */
+    /* ===== Responsive ===== */
 
     @media (max-width: 1024px) {
       .header-inner {
@@ -756,6 +787,7 @@
       .stops-grid {
         grid-template-columns: minmax(0, 1fr);
       }
+      .map-canvas { height: 220px; }
     }
   </style>
 </head>
@@ -776,7 +808,7 @@
         <div id="userBadge" class="pill success hidden">Logged in</div>
       </div>
 
-      <!-- Login screen -->
+      <!-- LOGIN VIEW -->
       <section id="loginView">
         <div class="auth-grid">
           <div>
@@ -816,7 +848,7 @@
         </div>
       </section>
 
-      <!-- Dashboard screen -->
+      <!-- DASHBOARD VIEW -->
       <section id="dashboardView" class="hidden">
         <div class="dashboard-header-row">
           <div>
@@ -838,25 +870,30 @@
           <div id="statsPill" class="pill">0 left today / 0 total</div>
         </div>
 
-        <!-- Map panel -->
+        <!-- MAP -->
         <div class="map-panel">
           <div class="map-header">
             <div>
               <div class="tiny-label">Route map (visual)</div>
               <div class="muted" style="font-size:13px;">
-                Tap a pin or card to focus a house. A real map can plug in here later.
+                Tap a pin or card to focus a house. A live map can plug in here later.
               </div>
             </div>
           </div>
           <div class="map-canvas" id="mapCanvas">
-            <!-- pins injected by JS -->
+            <!-- Pins injected here -->
           </div>
         </div>
 
-        <!-- Houses list -->
+        <!-- NEXT STOP DETAIL CARD -->
+        <div class="next-stop-card" id="nextStopCard">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- LIST OF HOUSES -->
         <h2 class="stops-section-title">Today’s houses</h2>
         <p class="muted" id="noStopsMessage" style="display:none; font-size:13px;">
-          No houses found for today. Try switching the trash day filter above.
+          No houses found for this day. Try switching the trash day filter above.
         </p>
         <div class="stops-grid" id="stopsGrid"></div>
       </section>
@@ -865,7 +902,7 @@
 
   <div data-component="site-footer"></div>
 
-  <!-- Toast for quick feedback -->
+  <!-- Toast -->
   <div class="toast" id="toast">
     <span id="toastText"></span>
     <a id="toastUndo">Undo</a>
@@ -874,12 +911,12 @@
   <script src="layout.js"></script>
 
   <script>
-    // Demo credentials (change later)
+    // Demo credentials - change these when ready.
     const ALLOWED_USERS = [
       { email: "operator@getbinpals.com", password: "route123" }
     ];
 
-    // Example stops data – add name/email so Contact can be useful
+    // Example stops (you can replace with real data later)
     const STOPS = [
       {
         id: 1,
@@ -891,7 +928,6 @@
         email: "garcia@example.com",
         day: "Tuesday",
         binStatus: "Pending",
-        // pseudo positions on the placeholder map (0–100 = %)
         mapX: 25,
         mapY: 40
       },
@@ -928,21 +964,24 @@
     const dashboardView = document.getElementById("dashboardView");
     const errorBox = document.getElementById("error");
     const userBadge = document.getElementById("userBadge");
+
     const dayFilter = document.getElementById("dayFilter");
     const todayLabel = document.getElementById("todayLabel");
     const statsPill = document.getElementById("statsPill");
     const mapCanvas = document.getElementById("mapCanvas");
+    const nextStopCard = document.getElementById("nextStopCard");
     const stopsGrid = document.getElementById("stopsGrid");
     const noStopsMessage = document.getElementById("noStopsMessage");
+
     const toast = document.getElementById("toast");
     const toastText = document.getElementById("toastText");
     const toastUndo = document.getElementById("toastUndo");
 
-    // Internal state
+    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
     let stopsState = STOPS.map(stop => ({ ...stop }));
     let selectedStopId = null;
     let lastAction = null; // { stopId, previousStatus }
-    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     function getTodayName() {
       const now = new Date();
@@ -952,7 +991,6 @@
     function setInitialDayFilter() {
       const todayName = getTodayName();
       todayLabel.textContent = `Today · ${todayName}`;
-      // set dropdown to "today" (special value), but we still need actual name for filtering
       dayFilter.value = "today";
       dayFilter.dataset.today = todayName;
     }
@@ -982,11 +1020,25 @@
       return stopsState.filter(stop => stop.day === value);
     }
 
+    function getTodayStopsOnly() {
+      const todayName = dayFilter.dataset.today || getTodayName();
+      return stopsState.filter(stop => stop.day === todayName);
+    }
+
+    function getNextPendingStop(stops) {
+      return stops.find(s => s.binStatus === "Pending") || stops[0] || null;
+    }
+
     function renderView() {
       const filtered = getFilteredStops();
+      if (!selectedStopId) {
+        const next = getNextPendingStop(filtered);
+        selectedStopId = next ? next.id : null;
+      }
       renderMap(filtered);
+      renderNextStopCard(filtered);
       renderStopsList(filtered);
-      updateStats(filtered);
+      updateStats();
     }
 
     function renderMap(stops) {
@@ -1010,13 +1062,66 @@
       });
     }
 
+    function renderNextStopCard(filteredStops) {
+      const current = selectedStopId
+        ? stopsState.find(s => s.id === selectedStopId)
+        : getNextPendingStop(filteredStops);
+
+      if (!current) {
+        nextStopCard.innerHTML = `
+          <div class="tiny-label">Next stop</div>
+          <p class="muted" style="margin-top:4px;">No houses for this filter.</p>
+        `;
+        return;
+      }
+
+      selectedStopId = current.id;
+
+      const statusClass =
+        current.binStatus === "Done"
+          ? "done"
+          : current.binStatus === "Skipped"
+            ? "skipped"
+            : "";
+
+      nextStopCard.innerHTML = `
+        <div class="next-stop-header">
+          <div>
+            <div class="tiny-label">Next stop</div>
+            <p class="next-stop-title">${current.fullAddress}</p>
+            <p class="muted" style="font-size:13px; margin-top:2px;">
+              ${current.name || "Customer"}
+            </p>
+          </div>
+          <span class="status-pill ${statusClass}">${current.binStatus}</span>
+        </div>
+        <div class="next-stop-meta">
+          <div><strong>Plan:</strong> ${current.plan}</div>
+          <div><strong>Phone:</strong> ${current.phone || "—"}</div>
+          <div><strong>Trash day:</strong> ${current.day}</div>
+          <div><strong>Customer row:</strong> ${current.customerRow}</div>
+        </div>
+        <div class="next-stop-actions">
+          <button type="button" class="btn" data-action="done-main" data-id="${current.id}">
+            Done
+          </button>
+          <button type="button" class="btn btn-secondary" data-action="skipped-main" data-id="${current.id}">
+            Skipped
+          </button>
+          <button type="button" class="btn btn-ghost" data-action="contact-main" data-id="${current.id}">
+            Contact
+          </button>
+        </div>
+      `;
+    }
+
     function renderStopsList(stops) {
       stopsGrid.innerHTML = "";
       noStopsMessage.style.display = stops.length === 0 ? "block" : "none";
 
       stops.forEach((stop, index) => {
-        const card = document.createElement("article");
         const isSelected = stop.id === selectedStopId;
+        const card = document.createElement("article");
         card.className = "stop-card" + (isSelected ? " selected" : "");
         card.dataset.id = stop.id;
 
@@ -1029,72 +1134,46 @@
 
         card.innerHTML = `
           <div class="stop-head-row">
-            <div>
-              <p class="address">${index + 1}. ${stop.fullAddress}</p>
-              <div class="muted" style="font-size:13px; margin-top:2px;">
-                ${stop.name || "Customer"}
-              </div>
-            </div>
-            <span class="status-pill ${statusClass}">${stop.binStatus}</span>
+            <p class="address">${index + 1}. ${stop.fullAddress}</p>
+            <span class="status-pill ${statusClass}" style="font-size:10px;">
+              ${stop.binStatus}
+            </span>
           </div>
-          <div class="stop-meta">
-            <div><strong>Plan:</strong> ${stop.plan}</div>
-            <div><strong>Phone:</strong> ${stop.phone || "—"}</div>
-            <div><strong>Trash day:</strong> ${stop.day}</div>
-            <div><strong>Customer row:</strong> ${stop.customerRow}</div>
-          </div>
-          <div class="stop-actions">
-            <button type="button" class="btn btn-primary" data-action="done" data-id="${stop.id}">
-              Done
-            </button>
-            <button type="button" class="btn btn-secondary" data-action="skipped" data-id="${stop.id}">
-              Skipped
-            </button>
-            <button type="button" class="btn btn-ghost btn-contact" data-action="contact" data-id="${stop.id}">
-              Contact
-            </button>
+          <div class="stop-meta-small">
+            <div><strong>${stop.name || "Customer"}</strong></div>
+            <div>${stop.plan}</div>
+            <div>Row ${stop.customerRow} · ${stop.day}</div>
           </div>
         `;
 
-        card.addEventListener("click", (event) => {
-          // Avoid firing when clicking on inner buttons
-          if (event.target.closest("button")) return;
+        card.addEventListener("click", () => {
           setSelectedStop(stop.id);
+          renderView();
         });
 
         stopsGrid.appendChild(card);
       });
     }
 
-    function updateStats(filtered) {
-      const todayOnly = getFilteredStopsForToday();
-      const leftToday = todayOnly.filter(s => s.binStatus === "Pending").length;
-      const totalToday = todayOnly.length;
+    function updateStats() {
+      const todayStops = getTodayStopsOnly();
+      const leftToday = todayStops.filter(s => s.binStatus === "Pending").length;
+      const totalToday = todayStops.length;
       statsPill.textContent = `${leftToday} left today / ${totalToday} total`;
-      if (leftToday === 0 && totalToday > 0) {
-        statsPill.className = "pill success";
-      } else {
-        statsPill.className = "pill";
-      }
-    }
-
-    function getFilteredStopsForToday() {
-      const todayName = dayFilter.dataset.today || getTodayName();
-      return stopsState.filter(stop => stop.day === todayName);
+      statsPill.className = leftToday === 0 && totalToday > 0 ? "pill success" : "pill";
     }
 
     function setSelectedStop(stopId) {
       selectedStopId = stopId;
       const filtered = getFilteredStops();
       renderMap(filtered);
+      renderNextStopCard(filtered);
       renderStopsList(filtered);
     }
 
     function scrollStopIntoView(stopId) {
       const card = stopsGrid.querySelector(`.stop-card[data-id="${stopId}"]`);
-      if (card) {
-        card.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     function showToast(message, onUndo) {
@@ -1118,14 +1197,16 @@
       if (!stop) return;
       const previousStatus = stop.binStatus;
       stop.binStatus = newStatus;
+
       const filtered = getFilteredStops();
       renderMap(filtered);
+      renderNextStopCard(filtered);
       renderStopsList(filtered);
-      updateStats(filtered);
+      updateStats();
 
       const msg =
         newStatus === "Done"
-          ? "Marked as Done. A ‘trash cans are out front’ message will be sent in the future."
+          ? "Marked as Done. (Future: send bins-out message.)"
           : newStatus === "Skipped"
             ? "Marked as Skipped."
             : `Status changed to ${newStatus}.`;
@@ -1134,11 +1215,13 @@
         stop.binStatus = previousStatus;
         const again = getFilteredStops();
         renderMap(again);
+        renderNextStopCard(again);
         renderStopsList(again);
-        updateStats(again);
+        updateStats();
       });
 
-      // Placeholder for future: trigger email/text here
+      // FUTURE HOOK:
+      // When you're ready with Apps Script/Twilio/etc, call:
       // sendNotification(stop, newStatus);
     }
 
@@ -1146,13 +1229,23 @@
       const stop = stopsState.find(s => s.id === stopId);
       if (!stop) return;
       if (stop.phone) {
-        window.location.href = `tel:${stop.phone.replace(/[^0-9]/g, "")}`;
-      } else {
-        alert(`Contact ${stop.name || "customer"} at ${stop.email || "their saved contact"} (coming soon: automatic text/email).`);
+        const cleaned = stop.phone.replace(/[^0-9]/g, "");
+        if (cleaned) {
+          window.location.href = `tel:${cleaned}`;
+          return;
+        }
       }
+      alert(`Contact ${stop.name || "customer"} at ${stop.email || "their saved email"} (future: auto text/email).`);
     }
 
-    // EVENT BINDINGS
+    // Placeholder function for future integration (no Twilio yet)
+    function sendNotification(stop, status) {
+      // Later: send email/text like:
+      // "Your trash cans are out front, we’ll be back tomorrow."
+      // For now, this does nothing.
+    }
+
+    // ===== Event handlers =====
 
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -1168,20 +1261,22 @@
     });
 
     dayFilter.addEventListener("change", () => {
+      // Reset selection so we pick the right next stop for the new filter
+      selectedStopId = null;
       renderView();
     });
 
-    stopsGrid.addEventListener("click", (event) => {
+    // Main next-stop buttons
+    nextStopCard.addEventListener("click", (event) => {
       const btn = event.target.closest("button[data-action]");
       if (!btn) return;
       const stopId = Number(btn.dataset.id);
       const action = btn.dataset.action;
-
-      if (action === "done") {
+      if (action === "done-main") {
         handleStatusChange(stopId, "Done");
-      } else if (action === "skipped") {
+      } else if (action === "skipped-main") {
         handleStatusChange(stopId, "Skipped");
-      } else if (action === "contact") {
+      } else if (action === "contact-main") {
         handleContact(stopId);
       }
     });
