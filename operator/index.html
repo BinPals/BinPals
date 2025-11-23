@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BinPals Operator Dashboard | BinPals Trash Valet</title>
+  <title>Operator Dashboard | BinPals Trash Valet</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Secure BinPals operator dashboard for viewing stops by trash day and marking bins as completed. Optimized for quick tap-to-complete workflows.">
+  <meta name="description" content="BinPals operator dashboard with today’s houses, simple status buttons and a route map for field teams.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,6 +18,14 @@
       --text-main: #0f172a;
       --text-muted: #4b5563;
       --border: #e5e7eb;
+      --pill-gray: #e5e7eb;
+      --pill-text: #4b5563;
+      --pill-green-bg: #ecfdf3;
+      --pill-green-border: #bbf7d0;
+      --pill-green-text: #166534;
+      --pill-red-bg: #fef2f2;
+      --pill-red-border: #fecaca;
+      --pill-red-text: #b91c1c;
     }
 
     * { box-sizing: border-box; }
@@ -29,7 +37,7 @@
       color: var(--text-main);
     }
 
-    /* ==== SITE HEADER (shared with other pages) ==== */
+    /* Shared header/footer skeleton (layout.js will fill) */
 
     .site-header {
       position: sticky;
@@ -149,7 +157,7 @@
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    /* ==== PAGE LAYOUT ==== */
+    /* Main layout */
 
     .page-main {
       max-width: 1080px;
@@ -160,19 +168,14 @@
     .app-shell {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 24px 20px 26px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
-    }
-
-    .muted {
-      color: var(--text-muted);
-      font-size: 14px;
+      border-radius: 24px;
+      padding: 24px 22px 28px;
+      box-shadow: 0 16px 45px rgba(15, 23, 42, 0.06);
     }
 
     .hidden { display: none !important; }
+    .muted { color: var(--text-muted); font-size: 14px; }
 
-    /* Internal app header (scoped so it doesn't touch site header) */
     .app-header {
       display: flex;
       align-items: center;
@@ -203,7 +206,35 @@
       font-size: 14px;
     }
 
-    /* Login / Auth */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border: 1px solid var(--pill-gray);
+      background: #f9fafb;
+      color: var(--pill-text);
+    }
+
+    .pill.success {
+      background: var(--pill-green-bg);
+      border-color: var(--pill-green-border);
+      color: var(--pill-green-text);
+    }
+
+    .pill.error {
+      background: var(--pill-red-bg);
+      border-color: var(--pill-red-border);
+      color: var(--pill-red-text);
+    }
+
+    /* Login */
 
     .auth-grid {
       display: grid;
@@ -215,7 +246,7 @@
     .login-card {
       background: #f9fafb;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 22px 18px 18px;
     }
 
@@ -257,9 +288,8 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      width: 100%;
       padding: 12px 14px;
-      border-radius: 12px;
+      border-radius: 999px;
       border: none;
       background: var(--green);
       color: #ffffff;
@@ -268,6 +298,8 @@
       cursor: pointer;
       transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease;
       box-shadow: 0 8px 18px rgba(22, 101, 52, 0.32);
+      font-size: 14px;
+      min-width: 120px;
     }
 
     .btn:hover { background: var(--green-dark); }
@@ -280,7 +312,27 @@
       color: #f9fafb;
     }
 
-    .error {
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover { background: #d1d5db; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      box-shadow: none;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-ghost:hover {
+      background: #f9fafb;
+      color: var(--text-main);
+    }
+
+    .error-box {
       margin-top: 8px;
       padding: 10px 12px;
       border-radius: 10px;
@@ -293,14 +345,13 @@
 
     /* Dashboard */
 
-    .dashboard-top {
+    .dashboard-header-row {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 16px;
-      margin-top: 8px;
     }
 
     .tiny-label {
@@ -310,105 +361,209 @@
       color: var(--text-muted);
     }
 
-    .pill {
+    .filter-chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 10px;
+      padding: 8px 10px;
       border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
-    .pill.pending {
-      background: #f3f4f6;
-      border: 1px solid #d1d5db;
-      color: #4b5563;
-    }
-
-    .pill.moved {
-      background: #ecfdf3;
-      border: 1px solid #bbf7d0;
-      color: #166534;
-    }
-
-    .filter-group {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
       background: #f9fafb;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      font-size: 12px;
     }
 
     select {
-      padding: 8px 10px;
-      border-radius: 10px;
+      padding: 6px 8px;
+      border-radius: 999px;
       border: 1px solid var(--border);
       background: #ffffff;
       color: var(--text-main);
       font-weight: 500;
-      min-width: 160px;
-      font-size: 14px;
+      font-size: 13px;
+    }
+
+    /* Map panel */
+
+    .map-panel {
+      margin-top: 8px;
+      margin-bottom: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, #f9fafb, #ffffff);
+      padding: 14px 16px 16px;
+    }
+
+    .map-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .map-canvas {
+      position: relative;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 20%, rgba(22,101,52,0.08), transparent 55%),
+                  radial-gradient(circle at 80% 80%, rgba(37,99,235,0.08), transparent 55%),
+                  #e5e7eb;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .map-pin {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #166534;
+      border: 2px solid #bbf7d0;
+      box-shadow: 0 6px 14px rgba(22, 101, 52, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #ffffff;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    }
+
+    .map-pin.selected {
+      transform: scale(1.18);
+      background: #16a34a;
+      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.5);
+    }
+
+    /* Stops list */
+
+    .stops-section-title {
+      margin: 0 0 8px;
+      font-size: 18px;
     }
 
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 14px;
-      margin-top: 12px;
+      margin-top: 4px;
     }
 
     .stop-card {
       background: #f9fafb;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: 16px 16px 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      cursor: pointer;
+      transition: box-shadow 0.12s ease, transform 0.08s ease, border-color 0.12s ease, background-color 0.12s ease;
     }
 
-    .stop-head {
+    .stop-card:hover {
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
+      border-color: #d1d5db;
+    }
+
+    .stop-card.selected {
+      border-color: #16a34a;
+      background: #f0fdf4;
+      box-shadow: 0 12px 28px rgba(22, 163, 74, 0.18);
+    }
+
+    .stop-head-row {
       display: flex;
+      justify-content: space-between;
       align-items: flex-start;
       gap: 10px;
-      justify-content: space-between;
     }
 
     .address {
+      margin: 0;
       font-weight: 700;
       letter-spacing: 0.01em;
-      margin: 0;
       font-size: 15px;
       color: var(--text-main);
     }
 
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--pill-gray);
+      background: #f3f4f6;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .status-pill.done {
+      background: var(--pill-green-bg);
+      border-color: var(--pill-green-border);
+      color: var(--pill-green-text);
+    }
+
+    .status-pill.skipped {
+      background: var(--pill-red-bg);
+      border-color: var(--pill-red-border);
+      color: var(--pill-red-text);
+    }
+
     .stop-meta {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-muted);
       line-height: 1.6;
     }
 
-    .stop-meta strong {
-      color: var(--text-main);
-      font-weight: 600;
-    }
+    .stop-meta div { margin-bottom: 2px; }
+    .stop-meta strong { color: var(--text-main); }
 
     .stop-actions {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
       flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
     }
 
-    /* ==== FOOTER (shared) ==== */
+    .stop-actions .btn {
+      flex: 1 1 90px;
+      min-width: 90px;
+      box-shadow: none;
+    }
+
+    .stop-actions .btn-contact {
+      flex: 0 0 auto;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #f9fafb;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.4);
+      z-index: 1200;
+    }
+
+    .toast.show { display: inline-flex; }
+
+    .toast a {
+      color: #a7f3d0;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Footer skeleton */
 
     .site-footer {
       width: 100%;
@@ -483,9 +638,7 @@
       text-decoration: none;
     }
 
-    .footer-contact-text a:hover {
-      text-decoration: underline;
-    }
+    .footer-contact-text a:hover { text-decoration: underline; }
 
     .footer-btn {
       margin-top: 10px;
@@ -525,7 +678,7 @@
       color: #6b7280;
     }
 
-    /* ==== RESPONSIVE ==== */
+    /* Responsive */
 
     @media (max-width: 1024px) {
       .header-inner {
@@ -587,27 +740,21 @@
       }
     }
 
-    @media (max-width: 640px) {
-      .page-main { padding: 24px 16px 48px; }
-      .app-shell { padding: 20px 16px 22px; }
-      .dashboard-top { flex-direction: column; align-items: flex-start; }
-      .stop-actions { flex-direction: column; align-items: stretch; }
-      .btn { width: 100%; }
-    }
-
     @media (max-width: 768px) {
+      .page-main { padding: 24px 16px 48px; }
+      .app-shell { padding: 20px 16px 24px; border-radius: 18px; }
       .header-logo { max-height: 78px; }
       .footer-top {
         flex-direction: column;
         text-align: center;
         gap: 32px;
       }
-
-      .footer-column { align-items: center; }
-
       .footer-inner {
         flex-direction: column;
         gap: 10px;
+      }
+      .stops-grid {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
   </style>
@@ -623,47 +770,61 @@
           <div class="brand-mark">BP</div>
           <div>
             <div>BinPals Operator</div>
-            <div class="muted">Route tools for field teams</div>
+            <div class="muted" style="font-size:13px;">Route tools for field teams</div>
           </div>
         </div>
-        <div id="userBadge" class="pill moved hidden">Logged in</div>
+        <div id="userBadge" class="pill success hidden">Logged in</div>
       </div>
 
+      <!-- Login screen -->
       <section id="loginView">
         <div class="auth-grid">
           <div>
             <h1 style="margin:0 0 10px;">Welcome back</h1>
             <p class="muted" style="max-width:520px;">
-              Securely access the operator dashboard to filter stops by trash day
-              and update bin status on the go. Optimized for phones for quick
-              tap-to-complete workflows.
+              Log in to see just today’s houses, view them on a simple route map,
+              and quickly mark each stop as Done, Skipped, or Contact.
+            </p>
+            <p class="muted" style="margin-top:12px; font-size:12px;">
+              For BinPals field teams only.
             </p>
           </div>
+
           <div class="login-card">
             <h2>Operator Login</h2>
             <p class="muted" style="margin:0 0 12px;">Use your BinPals operator credentials.</p>
             <form id="loginForm" novalidate>
               <div class="field">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" autocomplete="username" placeholder="operator@example.com" required />
+                <input type="email" id="email" name="email"
+                       autocomplete="username"
+                       placeholder="operator@getbinpals.com"
+                       required />
               </div>
               <div class="field">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" required />
+                <input type="password" id="password" name="password"
+                       autocomplete="current-password"
+                       placeholder="••••••••" required />
               </div>
-              <button type="submit" class="btn">Login</button>
-              <div id="error" class="error hidden">Incorrect email or password.</div>
+              <button type="submit" class="btn" style="width:100%;">Login</button>
+              <div id="error" class="error-box hidden">
+                Incorrect email or password.
+              </div>
             </form>
           </div>
         </div>
       </section>
 
+      <!-- Dashboard screen -->
       <section id="dashboardView" class="hidden">
-        <div class="dashboard-top">
+        <div class="dashboard-header-row">
           <div>
-            <div class="tiny-label">Trash day filter</div>
-            <div class="filter-group">
-              <select id="dayFilter" aria-label="Filter stops by trash day">
+            <div class="tiny-label" id="todayLabel">Today</div>
+            <div class="filter-chip">
+              <span>Trash day:</span>
+              <select id="dayFilter" aria-label="Filter houses by trash day">
+                <option value="today">Today only</option>
                 <option value="all">All days</option>
                 <option>Monday</option>
                 <option>Tuesday</option>
@@ -674,9 +835,29 @@
               </select>
             </div>
           </div>
-          <div class="pill pending" id="statsPill">0 pending / 0 total</div>
+          <div id="statsPill" class="pill">0 left today / 0 total</div>
         </div>
 
+        <!-- Map panel -->
+        <div class="map-panel">
+          <div class="map-header">
+            <div>
+              <div class="tiny-label">Route map (visual)</div>
+              <div class="muted" style="font-size:13px;">
+                Tap a pin or card to focus a house. A real map can plug in here later.
+              </div>
+            </div>
+          </div>
+          <div class="map-canvas" id="mapCanvas">
+            <!-- pins injected by JS -->
+          </div>
+        </div>
+
+        <!-- Houses list -->
+        <h2 class="stops-section-title">Today’s houses</h2>
+        <p class="muted" id="noStopsMessage" style="display:none; font-size:13px;">
+          No houses found for today. Try switching the trash day filter above.
+        </p>
         <div class="stops-grid" id="stopsGrid"></div>
       </section>
     </div>
@@ -684,37 +865,61 @@
 
   <div data-component="site-footer"></div>
 
+  <!-- Toast for quick feedback -->
+  <div class="toast" id="toast">
+    <span id="toastText"></span>
+    <a id="toastUndo">Undo</a>
+  </div>
+
   <script src="layout.js"></script>
 
   <script>
+    // Demo credentials (change later)
     const ALLOWED_USERS = [
-      { email: "operator@example.com", password: "route123" }
+      { email: "operator@getbinpals.com", password: "route123" }
     ];
 
+    // Example stops data – add name/email so Contact can be useful
     const STOPS = [
       {
+        id: 1,
         customerRow: 5,
+        name: "Garcia Family",
         fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
         plan: "Premium – $45/mo",
         phone: "555-555-0001",
+        email: "garcia@example.com",
         day: "Tuesday",
-        binStatus: "Pending"
+        binStatus: "Pending",
+        // pseudo positions on the placeholder map (0–100 = %)
+        mapX: 25,
+        mapY: 40
       },
       {
+        id: 2,
         customerRow: 8,
+        name: "Lopez Home",
         fullAddress: "9876 W Binpals Way, Peoria AZ",
         plan: "Basic – $35/mo",
         phone: "",
+        email: "lopez@example.com",
         day: "Tuesday",
-        binStatus: "Pending"
+        binStatus: "Pending",
+        mapX: 60,
+        mapY: 55
       },
       {
+        id: 3,
         customerRow: 12,
+        name: "Taylor Household",
         fullAddress: "5555 W Route Runner Rd, Peoria AZ",
         plan: "Premium – $45/mo",
         phone: "555-555-0002",
+        email: "taylor@example.com",
         day: "Wednesday",
-        binStatus: "Moved"
+        binStatus: "Done",
+        mapX: 77,
+        mapY: 28
       }
     ];
 
@@ -723,11 +928,34 @@
     const dashboardView = document.getElementById("dashboardView");
     const errorBox = document.getElementById("error");
     const userBadge = document.getElementById("userBadge");
-    const stopsGrid = document.getElementById("stopsGrid");
     const dayFilter = document.getElementById("dayFilter");
+    const todayLabel = document.getElementById("todayLabel");
     const statsPill = document.getElementById("statsPill");
+    const mapCanvas = document.getElementById("mapCanvas");
+    const stopsGrid = document.getElementById("stopsGrid");
+    const noStopsMessage = document.getElementById("noStopsMessage");
+    const toast = document.getElementById("toast");
+    const toastText = document.getElementById("toastText");
+    const toastUndo = document.getElementById("toastUndo");
 
-    const stopsState = STOPS.map((stop, index) => ({ ...stop, id: index }));
+    // Internal state
+    let stopsState = STOPS.map(stop => ({ ...stop }));
+    let selectedStopId = null;
+    let lastAction = null; // { stopId, previousStatus }
+    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    function getTodayName() {
+      const now = new Date();
+      return weekdayNames[now.getDay()];
+    }
+
+    function setInitialDayFilter() {
+      const todayName = getTodayName();
+      todayLabel.textContent = `Today · ${todayName}`;
+      // set dropdown to "today" (special value), but we still need actual name for filtering
+      dayFilter.value = "today";
+      dayFilter.dataset.today = todayName;
+    }
 
     function authenticate(email, password) {
       const cleanedEmail = email.trim().toLowerCase();
@@ -740,27 +968,74 @@
       loginView.classList.add("hidden");
       dashboardView.classList.remove("hidden");
       userBadge.classList.remove("hidden");
-      renderStops();
+      setInitialDayFilter();
+      renderView();
     }
 
-    function renderStops() {
-      const selectedDay = dayFilter.value;
-      const filtered =
-        selectedDay === "all"
-          ? stopsState
-          : stopsState.filter(stop => stop.day === selectedDay);
+    function getFilteredStops() {
+      const value = dayFilter.value;
+      if (value === "today") {
+        const todayName = dayFilter.dataset.today || getTodayName();
+        return stopsState.filter(stop => stop.day === todayName);
+      }
+      if (value === "all") return stopsState;
+      return stopsState.filter(stop => stop.day === value);
+    }
 
+    function renderView() {
+      const filtered = getFilteredStops();
+      renderMap(filtered);
+      renderStopsList(filtered);
+      updateStats(filtered);
+    }
+
+    function renderMap(stops) {
+      mapCanvas.innerHTML = "";
+      if (stops.length === 0) return;
+
+      stops.forEach((stop, index) => {
+        const pin = document.createElement("button");
+        pin.type = "button";
+        pin.className = "map-pin" + (stop.id === selectedStopId ? " selected" : "");
+        pin.style.left = (stop.mapX || (20 + index * 20)) + "%";
+        pin.style.top = (stop.mapY || (30 + index * 10)) + "%";
+        pin.textContent = index + 1;
+        pin.dataset.id = stop.id;
+        pin.title = stop.fullAddress;
+        pin.addEventListener("click", () => {
+          setSelectedStop(stop.id);
+          scrollStopIntoView(stop.id);
+        });
+        mapCanvas.appendChild(pin);
+      });
+    }
+
+    function renderStopsList(stops) {
       stopsGrid.innerHTML = "";
+      noStopsMessage.style.display = stops.length === 0 ? "block" : "none";
 
-      filtered.forEach(stop => {
+      stops.forEach((stop, index) => {
         const card = document.createElement("article");
-        card.className = "stop-card";
+        const isSelected = stop.id === selectedStopId;
+        card.className = "stop-card" + (isSelected ? " selected" : "");
+        card.dataset.id = stop.id;
+
+        const statusClass =
+          stop.binStatus === "Done"
+            ? "done"
+            : stop.binStatus === "Skipped"
+              ? "skipped"
+              : "";
+
         card.innerHTML = `
-          <div class="stop-head">
-            <p class="address">${stop.fullAddress}</p>
-            <span class="pill ${stop.binStatus === "Moved" ? "moved" : "pending"}">
-              ${stop.binStatus}
-            </span>
+          <div class="stop-head-row">
+            <div>
+              <p class="address">${index + 1}. ${stop.fullAddress}</p>
+              <div class="muted" style="font-size:13px; margin-top:2px;">
+                ${stop.name || "Customer"}
+              </div>
+            </div>
+            <span class="status-pill ${statusClass}">${stop.binStatus}</span>
           </div>
           <div class="stop-meta">
             <div><strong>Plan:</strong> ${stop.plan}</div>
@@ -769,36 +1044,117 @@
             <div><strong>Customer row:</strong> ${stop.customerRow}</div>
           </div>
           <div class="stop-actions">
-            <div class="tiny-label">Bin Status</div>
-            <button class="btn" data-id="${stop.id}" ${stop.binStatus === "Moved" ? "disabled" : ""}>
-              ${stop.binStatus === "Moved" ? "Done" : "Mark Done"}
+            <button type="button" class="btn btn-primary" data-action="done" data-id="${stop.id}">
+              Done
+            </button>
+            <button type="button" class="btn btn-secondary" data-action="skipped" data-id="${stop.id}">
+              Skipped
+            </button>
+            <button type="button" class="btn btn-ghost btn-contact" data-action="contact" data-id="${stop.id}">
+              Contact
             </button>
           </div>
         `;
+
+        card.addEventListener("click", (event) => {
+          // Avoid firing when clicking on inner buttons
+          if (event.target.closest("button")) return;
+          setSelectedStop(stop.id);
+        });
+
         stopsGrid.appendChild(card);
       });
-
-      updateStats();
     }
 
-    function updateStats() {
-      const total = stopsState.length;
-      const pending = stopsState.filter(stop => stop.binStatus === "Pending").length;
-      statsPill.textContent = `${pending} pending / ${total} total`;
-      statsPill.className = `pill ${pending === 0 ? "moved" : "pending"}`;
+    function updateStats(filtered) {
+      const todayOnly = getFilteredStopsForToday();
+      const leftToday = todayOnly.filter(s => s.binStatus === "Pending").length;
+      const totalToday = todayOnly.length;
+      statsPill.textContent = `${leftToday} left today / ${totalToday} total`;
+      if (leftToday === 0 && totalToday > 0) {
+        statsPill.className = "pill success";
+      } else {
+        statsPill.className = "pill";
+      }
     }
 
-    function handleMarkDone(event) {
-      const btn = event.target;
-      if (btn.tagName !== "BUTTON" || !btn.dataset.id) return;
-      const stopId = Number(btn.dataset.id);
+    function getFilteredStopsForToday() {
+      const todayName = dayFilter.dataset.today || getTodayName();
+      return stopsState.filter(stop => stop.day === todayName);
+    }
+
+    function setSelectedStop(stopId) {
+      selectedStopId = stopId;
+      const filtered = getFilteredStops();
+      renderMap(filtered);
+      renderStopsList(filtered);
+    }
+
+    function scrollStopIntoView(stopId) {
+      const card = stopsGrid.querySelector(`.stop-card[data-id="${stopId}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
+    function showToast(message, onUndo) {
+      toastText.textContent = message;
+      toast.classList.add("show");
+      lastAction = onUndo || null;
+      toastUndo.style.display = lastAction ? "inline" : "none";
+      if (!lastAction) {
+        setTimeout(() => toast.classList.remove("show"), 2200);
+      }
+    }
+
+    toastUndo.addEventListener("click", () => {
+      if (lastAction) lastAction();
+      toast.classList.remove("show");
+      lastAction = null;
+    });
+
+    function handleStatusChange(stopId, newStatus) {
       const stop = stopsState.find(s => s.id === stopId);
-      if (!stop || stop.binStatus === "Moved") return;
-      stop.binStatus = "Moved";
-      renderStops();
+      if (!stop) return;
+      const previousStatus = stop.binStatus;
+      stop.binStatus = newStatus;
+      const filtered = getFilteredStops();
+      renderMap(filtered);
+      renderStopsList(filtered);
+      updateStats(filtered);
+
+      const msg =
+        newStatus === "Done"
+          ? "Marked as Done. A ‘trash cans are out front’ message will be sent in the future."
+          : newStatus === "Skipped"
+            ? "Marked as Skipped."
+            : `Status changed to ${newStatus}.`;
+
+      showToast(msg, () => {
+        stop.binStatus = previousStatus;
+        const again = getFilteredStops();
+        renderMap(again);
+        renderStopsList(again);
+        updateStats(again);
+      });
+
+      // Placeholder for future: trigger email/text here
+      // sendNotification(stop, newStatus);
     }
 
-    loginForm.addEventListener("submit", event => {
+    function handleContact(stopId) {
+      const stop = stopsState.find(s => s.id === stopId);
+      if (!stop) return;
+      if (stop.phone) {
+        window.location.href = `tel:${stop.phone.replace(/[^0-9]/g, "")}`;
+      } else {
+        alert(`Contact ${stop.name || "customer"} at ${stop.email || "their saved contact"} (coming soon: automatic text/email).`);
+      }
+    }
+
+    // EVENT BINDINGS
+
+    loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const email = loginForm.email.value;
       const password = loginForm.password.value;
@@ -811,8 +1167,24 @@
       }
     });
 
-    dayFilter.addEventListener("change", renderStops);
-    stopsGrid.addEventListener("click", handleMarkDone);
+    dayFilter.addEventListener("change", () => {
+      renderView();
+    });
+
+    stopsGrid.addEventListener("click", (event) => {
+      const btn = event.target.closest("button[data-action]");
+      if (!btn) return;
+      const stopId = Number(btn.dataset.id);
+      const action = btn.dataset.action;
+
+      if (action === "done") {
+        handleStatusChange(stopId, "Done");
+      } else if (action === "skipped") {
+        handleStatusChange(stopId, "Skipped");
+      } else if (action === "contact") {
+        handleContact(stopId);
+      }
+    });
   </script>
 </body>
 </html>
