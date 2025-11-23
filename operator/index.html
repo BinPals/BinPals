@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Operator Dashboard | BinPals Trash Valet</title>
+  <title>BinPals Operator Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BinPals operator dashboard with today’s houses, route map, and simple Done / Skipped / Contact actions for field teams.">
+  <meta name="description" content="BinPals operator dashboard with today’s route, map view, and simple Done / Skipped / Contact actions.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --green: #166534;
@@ -37,151 +36,22 @@
       color: var(--text-main);
     }
 
-    /* ===== Shared header skeleton (layout.js fills it) ===== */
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      width: 100%;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .header-inner {
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 16px 20px;
+    /* Top brand bar (simple, not full site header) */
+    .top-bar {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      position: relative;
-    }
-
-    .header-logo-wrap {
-      display: inline-flex;
       align-items: center;
       justify-content: center;
     }
 
-    .header-logo {
-      max-height: 120px;
-      height: auto;
-      width: auto;
-      display: block;
-      object-fit: contain;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      margin-left: auto;
-    }
-
-    .header-nav {
-      display: flex;
-      gap: 22px;
-      font-size: 14px;
-      align-items: center;
-    }
-
-    .header-nav a {
-      text-decoration: none;
-      color: #111827;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    .header-nav a:hover { color: #374151; }
-
-    .header-nav a.active {
-      color: #0f172a;
-      border-bottom: 2px solid #16c33b;
-      padding-bottom: 4px;
-    }
-
-    .header-cta {
-      padding: 14px 32px;
-      border-radius: 999px;
-      background: var(--green);
-      color: #ffffff;
-      font-size: 16px;
-      font-weight: 600;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      white-space: nowrap;
-      letter-spacing: 0.01em;
-      transition: background-color 0.2s ease;
-    }
-
-    .header-cta:hover { background: var(--green-dark); }
-
-    .menu-toggle {
-      display: none;
-      margin-left: auto;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      border: none;
-      background: var(--green);
-      color: #ffffff;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      position: relative;
-      z-index: 1002;
-      box-shadow: 0 10px 20px rgba(22, 101, 52, 0.18);
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .menu-toggle:hover { background: var(--green-dark); }
-    .menu-toggle:active { transform: translateY(1px); }
-
-    .menu-icon {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 6px;
-      width: 22px;
-    }
-
-    .menu-icon span {
-      display: block;
-      height: 3px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 999px;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    /* ===== Page layout ===== */
-
-    .page-main {
+    .top-inner {
       max-width: 1080px;
-      margin: 0 auto;
-      padding: 32px 20px 64px;
-    }
-
-    .app-shell {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 24px 22px 28px;
-      box-shadow: 0 16px 45px rgba(15, 23, 42, 0.06);
-    }
-
-    .hidden { display: none !important; }
-    .muted { color: var(--text-muted); font-size: 14px; }
-
-    .app-header {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 18px;
     }
 
     .brand {
@@ -202,9 +72,11 @@
       background: linear-gradient(135deg, var(--green), #8bffb0);
       color: #052e16;
       font-weight: 800;
-      box-shadow: 0 10px 25px rgba(22, 101, 52, 0.35);
+      box-shadow: 0 10px 20px rgba(22, 101, 52, 0.3);
       font-size: 14px;
     }
+
+    .muted { color: var(--text-muted); }
 
     .pill {
       display: inline-flex;
@@ -228,8 +100,24 @@
       color: var(--pill-green-text);
     }
 
-    /* ===== Login ===== */
+    /* Layout */
+    .page-main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
 
+    .app-shell {
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      padding: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .hidden { display: none !important; }
+
+    /* Login */
     .auth-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -238,16 +126,15 @@
     }
 
     .login-card {
-      background: #f9fafb;
+      background: #ffffff;
+      border-radius: 18px;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px 18px 18px;
+      padding: 20px 18px 18px;
     }
 
     .login-card h2 {
       margin: 0 0 6px;
       font-size: 20px;
-      letter-spacing: 0.01em;
     }
 
     .field {
@@ -264,47 +151,38 @@
 
     input {
       width: 100%;
-      padding: 12px 12px;
-      border-radius: 10px;
+      padding: 11px 12px;
+      border-radius: 999px;
       border: 1px solid var(--border);
-      background: #ffffff;
+      background: #f9fafb;
       color: var(--text-main);
-      font-size: 15px;
+      font-size: 14px;
     }
 
     input:focus {
-      outline: 2px solid rgba(22, 101, 52, 0.3);
+      outline: 2px solid rgba(22, 101, 52, 0.35);
       border-color: transparent;
+      background: #ffffff;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 12px 14px;
+      padding: 12px 16px;
       border-radius: 999px;
       border: none;
       background: var(--green);
       color: #ffffff;
       font-weight: 700;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-      box-shadow: 0 8px 18px rgba(22, 101, 52, 0.32);
       font-size: 14px;
-      min-width: 120px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(22, 101, 52, 0.32);
+      transition: background-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
     }
 
     .btn:hover { background: var(--green-dark); }
-    .btn:active { transform: translateY(1px); }
-    .btn:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-      box-shadow: none;
-      background: #9ca3af;
-      color: #f9fafb;
-    }
+    .btn:active { transform: translateY(1px); box-shadow: 0 4px 10px rgba(22, 101, 52, 0.25); }
 
     .btn-secondary {
       background: #e5e7eb;
@@ -315,15 +193,15 @@
     .btn-secondary:hover { background: #d1d5db; }
 
     .btn-ghost {
-      background: transparent;
-      color: var(--text-muted);
-      box-shadow: none;
       border: 1px solid #e5e7eb;
+      background: transparent;
+      box-shadow: none;
+      color: #4b5563;
     }
 
     .btn-ghost:hover {
       background: #f9fafb;
-      color: var(--text-main);
+      color: #111827;
     }
 
     .error-box {
@@ -337,15 +215,22 @@
       font-size: 13px;
     }
 
-    /* ===== Dashboard header ===== */
+    /* Dashboard layout: Uber web vibe */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 20px;
+      min-height: 480px;
+    }
 
-    .dashboard-header-row {
+    .side-panel {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 18px 16px 16px;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 12px;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
     }
 
     .tiny-label {
@@ -355,49 +240,157 @@
       color: var(--text-muted);
     }
 
-    .filter-chip {
-      display: inline-flex;
+    .side-heading {
+      margin: 4px 0 8px;
+      font-size: 18px;
+    }
+
+    .filter-row {
+      display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: #f9fafb;
-      border: 1px solid var(--border);
-      font-size: 12px;
+      margin-bottom: 6px;
     }
 
     select {
-      padding: 6px 8px;
+      padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: #ffffff;
-      color: var(--text-main);
-      font-weight: 500;
-      font-size: 13px;
-    }
-
-    /* ===== Map panel ===== */
-
-    .map-panel {
-      margin-top: 8px;
-      margin-bottom: 0;
-      border-radius: 24px 24px 0 0;
-      border: 1px solid var(--border);
-      border-bottom: none;
       background: #f9fafb;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
     }
 
-    .map-header {
-      padding: 12px 16px 8px;
+    .stats-pill {
+      font-size: 11px;
+      padding-inline: 10px;
+    }
+
+    /* Current stop box (like “set your destination” card) */
+    .current-stop-card {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      padding: 12px 12px 10px;
+    }
+
+    .current-stop-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .status-pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--pill-gray);
+      background: #f3f4f6;
+      color: #4b5563;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .status-pill.done {
+      background: var(--pill-green-bg);
+      border-color: var(--pill-green-border);
+      color: var(--pill-green-text);
+    }
+
+    .status-pill.skipped {
+      background: var(--pill-red-bg);
+      border-color: var(--pill-red-border);
+      color: var(--pill-red-text);
+    }
+
+    .current-stop-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 4px 0 8px;
+    }
+
+    .current-stop-meta div { margin-bottom: 2px; }
+    .current-stop-meta strong { color: var(--text-main); }
+
+    .current-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .current-actions .btn {
+      flex: 1 1 90px;
+      box-shadow: none;
+      font-size: 12px;
+      padding-block: 9px;
+    }
+
+    /* List of houses */
+    .stops-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .stop-row {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: #f3f4f6;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.12s ease, transform 0.06s ease;
+    }
+
+    .stop-row:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .stop-row.selected {
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+    }
+
+    .stop-row-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stop-row-address {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .stop-row-sub {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* Map side */
+    .map-wrapper {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+      background: #e5e7eb;
     }
 
     .map-canvas {
-      position: relative;
-      height: 360px;
-      background: #e5e7eb;
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
     }
 
     .loc-btn {
@@ -431,426 +424,90 @@
       background: #111827;
     }
 
-    /* ===== “Bottom sheet” next-stop card ===== */
-
-    .next-stop-card {
-      margin-top: -16px;
-      margin-bottom: 16px;
-      border-radius: 24px 24px 16px 16px;
-      border: 1px solid var(--border);
-      border-top: 1px solid #e5e7eb;
-      background: #ffffff;
-      padding: 18px 20px 16px;
-      box-shadow: 0 -6px 30px rgba(15, 23, 42, 0.12);
-    }
-
-    .next-stop-card::before {
-      content: "";
-      display: block;
-      width: 40px;
-      height: 4px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      margin: 0 auto 10px;
-    }
-
-    .next-stop-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .next-stop-title {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .status-pill {
-      padding: 4px 10px;
-      border-radius: 999px;
+    .small-muted {
       font-size: 11px;
-      font-weight: 600;
-      border: 1px solid var(--pill-gray);
-      background: #f3f4f6;
-      color: #4b5563;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .status-pill.done {
-      background: var(--pill-green-bg);
-      border-color: var(--pill-green-border);
-      color: var(--pill-green-text);
-    }
-
-    .status-pill.skipped {
-      background: var(--pill-red-bg);
-      border-color: var(--pill-red-border);
-      color: var(--pill-red-text);
-    }
-
-    .next-stop-meta {
-      font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 8px;
-    }
-
-    .next-stop-meta div { margin-bottom: 2px; }
-    .next-stop-meta strong { color: var(--text-main); }
-
-    .next-stop-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
       margin-top: 4px;
     }
 
-    .next-stop-actions .btn {
-      flex: 1 1 120px;
-      box-shadow: none;
-    }
-
-    .next-stop-actions .btn-ghost {
-      flex: 0 0 auto;
-    }
-
-    /* ===== List of all today’s houses ===== */
-
-    .stops-section-title {
-      margin: 0 0 8px;
-      font-size: 18px;
-    }
-
-    .stops-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 12px;
+    .no-stops {
+      font-size: 12px;
+      color: var(--text-muted);
       margin-top: 4px;
     }
 
-    .stop-card {
-      background: #f9fafb;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 14px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-      transition: box-shadow 0.12s ease, transform 0.08s ease, border-color 0.12s ease, background-color 0.12s ease;
-    }
-
-    .stop-card:hover {
-      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
-      transform: translateY(-1px);
-      border-color: #d1d5db;
-    }
-
-    .stop-card.selected {
-      border-color: #16a34a;
-      background: #f0fdf4;
-      box-shadow: 0 12px 28px rgba(22, 163, 74, 0.18);
-    }
-
-    .stop-head-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .address {
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      font-size: 14px;
-      color: var(--text-main);
-    }
-
-    .stop-meta-small {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .stop-meta-small strong { color: var(--text-main); }
-
-    /* ===== Toast ===== */
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%);
-      background: #111827;
-      color: #f9fafb;
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 13px;
-      display: none;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.4);
-      z-index: 1200;
-    }
-
-    .toast.show { display: inline-flex; }
-
-    .toast a {
-      color: #a7f3d0;
-      text-decoration: underline;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    /* ===== Footer skeleton ===== */
-
-    .site-footer {
-      width: 100%;
-      background: #ffffff;
-      color: #111827;
-      padding: 48px 20px 24px;
-      border-top: 1px solid #e5e7eb;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1140px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      align-items: center;
-    }
-
-    .footer-top {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 36px;
-      flex-wrap: wrap;
-      text-align: center;
-    }
-
-    .footer-column {
-      flex: 1;
-      min-width: 220px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      text-align: center;
-    }
-
-    .footer-logo {
-      max-height: 120px;
-      height: auto;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .footer-heading {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      color: #111827;
-    }
-
-    .footer-brand-sub {
-      color: #374151;
-      font-size: 14px;
-    }
-
-    .footer-contact-text {
-      font-size: 14px;
-      color: #4b5563;
-      line-height: 1.6;
-    }
-
-    .footer-contact-text span {
-      font-weight: 700;
-      color: #111827;
-    }
-
-    .footer-contact-text a {
-      color: inherit;
-      font-weight: inherit;
-      text-decoration: none;
-    }
-
-    .footer-contact-text a:hover { text-decoration: underline; }
-
-    .footer-btn {
-      margin-top: 10px;
-      padding: 12px 32px;
-      border-radius: 999px;
-      border: none;
-      background: var(--green);
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.2s ease;
-    }
-
-    .footer-btn:hover { background: var(--green-dark); }
-
-    .footer-service-list {
-      list-style: none;
-      padding: 0;
-      margin: 8px 0 0;
-      font-size: 14px;
-      color: #4b5563;
-      line-height: 1.6;
-    }
-
-    .footer-service-list li { margin-bottom: 4px; }
-
-    .footer-bottom {
-      border-top: 1px solid #d1d5db;
-      padding-top: 12px;
-      font-size: 12px;
-      text-align: center;
-      color: #6b7280;
-    }
-
-    /* ===== Responsive ===== */
-
-    @media (max-width: 1024px) {
-      .header-inner {
-        gap: 14px;
-        padding: 14px 16px;
-      }
-
-      .header-logo { max-height: 82px; }
-
-      .header-actions {
-        display: none;
-        position: fixed;
-        inset: 0;
-        padding: 110px 28px 32px;
-        background: #ffffff;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 18px;
-        z-index: 1001;
-        overflow-y: auto;
-        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.2);
-      }
-
-      .header-nav {
-        flex-direction: column;
-        width: 100%;
-        gap: 18px;
-      }
-
-      .header-nav a {
-        font-size: 18px;
-        letter-spacing: 0.01em;
-      }
-
-      .header-cta {
-        display: inline-flex;
-        width: 100%;
-        justify-content: center;
-        padding: 16px 28px;
-        border-radius: 14px;
-        box-shadow: 0 12px 26px rgba(22, 101, 52, 0.22);
-      }
-
-      .menu-toggle { display: inline-flex; }
-
-      .site-header.menu-open .header-actions { display: flex; }
-      .site-header.menu-open .menu-toggle {
-        background: var(--green-dark);
-        box-shadow: 0 12px 26px rgba(15, 60, 34, 0.3);
-      }
-      .site-header.menu-open .menu-icon span:nth-child(1) {
-        transform: translateY(9px) rotate(45deg);
-      }
-      .site-header.menu-open .menu-icon span:nth-child(2) {
-        opacity: 0;
-      }
-      .site-header.menu-open .menu-icon span:nth-child(3) {
-        transform: translateY(-9px) rotate(-45deg);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .page-main { padding: 24px 16px 48px; }
-      .app-shell { padding: 20px 16px 24px; border-radius: 18px; }
-      .header-logo { max-height: 78px; }
-      .footer-top {
-        flex-direction: column;
-        text-align: center;
-        gap: 32px;
-      }
-      .footer-inner {
-        flex-direction: column;
-        gap: 10px;
-      }
-      .stops-grid {
+    /* Responsive */
+    @media (max-width: 900px) {
+      .dashboard-grid {
         grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto;
       }
-      .map-canvas { height: 420px; }
+      .map-wrapper {
+        order: 1;
+        min-height: 300px;
+        height: 55vh;
+      }
+      .side-panel {
+        order: 2;
+        margin-top: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-main {
+        padding-inline: 14px;
+      }
+      .app-shell {
+        padding: 16px;
+        border-radius: 18px;
+      }
+      .map-wrapper {
+        border-radius: 18px;
+      }
     }
   </style>
 </head>
-
-<body data-page="operator">
-  <div data-component="site-header"></div>
+<body>
+  <!-- simple brand bar -->
+  <div class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-mark">BP</div>
+        <div>
+          <div>BinPals Operator</div>
+          <div class="muted" style="font-size:13px;">Route tools for field teams</div>
+        </div>
+      </div>
+      <div id="userBadge" class="pill success hidden">Logged in</div>
+    </div>
+  </div>
 
   <main class="page-main">
-    <div class="app-shell" id="app">
-      <div class="app-header">
-        <div class="brand">
-          <div class="brand-mark">BP</div>
-          <div>
-            <div>BinPals Operator</div>
-            <div class="muted" style="font-size:13px;">Route tools for field teams</div>
-          </div>
-        </div>
-        <div id="userBadge" class="pill success hidden">Logged in</div>
-      </div>
-
-      <!-- LOGIN VIEW -->
+    <div class="app-shell">
+      <!-- LOGIN -->
       <section id="loginView">
         <div class="auth-grid">
           <div>
             <h1 style="margin:0 0 10px;">Welcome back</h1>
-            <p class="muted" style="max-width:520px;">
-              Log in to see just today’s houses, view them on a simple route map,
-              and quickly mark each stop as Done, Skipped, or Contact.
-            </p>
-            <p class="muted" style="margin-top:12px; font-size:12px;">
-              For BinPals field teams only.
+            <p class="muted" style="max-width:520px; font-size:14px;">
+              Log in, see just today’s houses, view them on a simple route map,
+              and tap one button for Done, Skipped, or Contact.
             </p>
           </div>
-
           <div class="login-card">
             <h2>Operator Login</h2>
-            <p class="muted" style="margin:0 0 12px;">Use your BinPals operator credentials.</p>
+            <p class="muted" style="margin:0 0 10px; font-size:13px;">For BinPals field teams only.</p>
             <form id="loginForm" novalidate>
               <div class="field">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email"
-                       autocomplete="username"
-                       placeholder="operator@getbinpals.com"
-                       required />
+                  placeholder="operator@getbinpals.com"
+                  autocomplete="username" required>
               </div>
               <div class="field">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
-                       autocomplete="current-password"
-                       placeholder="••••••••" required />
+                  placeholder="••••••••" autocomplete="current-password" required>
               </div>
               <button type="submit" class="btn" style="width:100%;">Login</button>
               <div id="error" class="error-box hidden">
@@ -861,101 +518,76 @@
         </div>
       </section>
 
-      <!-- DASHBOARD VIEW -->
+      <!-- DASHBOARD -->
       <section id="dashboardView" class="hidden">
-        <div class="dashboard-header-row">
-          <div>
-            <div class="tiny-label" id="todayLabel">Today</div>
-            <div class="filter-chip">
-              <span>Trash day:</span>
-              <select id="dayFilter" aria-label="Filter houses by trash day">
-                <option value="today">Today only</option>
-                <option value="all">All days</option>
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-              </select>
-            </div>
-          </div>
-          <div id="statsPill" class="pill">0 left today / 0 total</div>
-        </div>
-
-        <!-- MAP -->
-        <div class="map-panel">
-          <div class="map-header">
-            <div>
-              <div class="tiny-label">Route map</div>
-              <div class="muted" style="font-size:13px;">
-                Drag and zoom like Uber. Tap a pin to focus a house.
+        <div class="dashboard-grid">
+          <!-- Left: control panel -->
+          <aside class="side-panel">
+            <div class="filter-row">
+              <div>
+                <div class="tiny-label" id="todayLabel">Today</div>
+                <h2 class="side-heading">Today’s route</h2>
               </div>
             </div>
+
+            <div class="filter-row">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span class="tiny-label" style="letter-spacing:0.05em;">Trash day</span>
+                <select id="dayFilter" aria-label="Filter houses by trash day">
+                  <option value="today">Today only</option>
+                  <option value="all">All days</option>
+                  <option>Monday</option>
+                  <option>Tuesday</option>
+                  <option>Wednesday</option>
+                  <option>Thursday</option>
+                  <option>Friday</option>
+                  <option>Saturday</option>
+                </select>
+              </div>
+              <span id="statsPill" class="pill stats-pill">0 left / 0 total</span>
+            </div>
+
+            <div class="current-stop-card" id="currentStopCard">
+              <!-- filled by JS -->
+            </div>
+            <p class="small-muted">
+              Tap a house above or click a pin on the map to focus it.
+            </p>
+
+            <div class="stops-list" id="stopsList"></div>
+            <p class="no-stops" id="noStopsMessage" style="display:none;">
+              No houses for this filter. Try switching the trash day.
+            </p>
+          </aside>
+
+          <!-- Right: map -->
+          <div class="map-wrapper">
+            <div id="mapCanvas" class="map-canvas"></div>
+            <button type="button" class="loc-btn" id="locBtn" aria-label="Center on my location">
+              <span></span>
+            </button>
           </div>
-
-          <div class="map-canvas" id="mapCanvas"></div>
-
-          <!-- Uber-style "center on me" button -->
-          <button type="button" class="loc-btn" id="locBtn" aria-label="Center on my location">
-            <span></span>
-          </button>
         </div>
-
-        <!-- NEXT STOP DETAIL CARD (bottom sheet style) -->
-        <div class="next-stop-card" id="nextStopCard"></div>
-
-        <!-- LIST OF HOUSES -->
-        <h2 class="stops-section-title">Today’s houses</h2>
-        <p class="muted" id="noStopsMessage" style="display:none; font-size:13px;">
-          No houses found for this day. Try switching the trash day filter above.
-        </p>
-        <div class="stops-grid" id="stopsGrid"></div>
       </section>
     </div>
   </main>
 
-  <div data-component="site-footer"></div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">
-    <span id="toastText"></span>
-    <a id="toastUndo">Undo</a>
-  </div>
-
-  <script src="layout.js"></script>
-
   <script>
-    // Uber-like light map style
+    // Light Uber-like map style
     const UBER_MAP_STYLE = [
       { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
       { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
       { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
       { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
       {
-        featureType: "administrative.land_parcel",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#bdbdbd" }]
-      },
-      {
         featureType: "poi",
         elementType: "geometry",
         stylers: [{ color: "#eeeeee" }]
       },
       {
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#757575" }]
-      },
-      {
         featureType: "poi.park",
         elementType: "geometry",
         stylers: [{ color: "#e5e5e5" }]
-      },
-      {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#9e9e9e" }]
       },
       {
         featureType: "road",
@@ -963,55 +595,30 @@
         stylers: [{ color: "#ffffff" }]
       },
       {
-        featureType: "road.arterial",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#757575" }]
-      },
-      {
         featureType: "road.highway",
         elementType: "geometry",
         stylers: [{ color: "#dadada" }]
       },
       {
-        featureType: "road.highway",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#616161" }]
-      },
-      {
-        featureType: "road.local",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#9e9e9e" }]
-      },
-      {
-        featureType: "transit.line",
-        elementType: "geometry",
-        stylers: [{ color: "#e5e5e5" }]
-      },
-      {
         featureType: "water",
         elementType: "geometry",
         stylers: [{ color: "#e0e0e0" }]
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#9e9e9e" }]
       }
     ];
 
-    // Demo credentials - update when ready
+    // Demo login (change as needed)
     const ALLOWED_USERS = [
       { email: "operator@getbinpals.com", password: "route123" }
     ];
 
-    // Example stops (replace with real data later)
+    // Example stops (swap with real data later)
     const STOPS = [
       {
         id: 1,
         customerRow: 5,
         name: "Garcia Family",
         fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
-        plan: "Premium \u2013 $45/mo",
+        plan: "Premium – $45/mo",
         phone: "555-555-0001",
         email: "garcia@example.com",
         day: "Tuesday",
@@ -1024,7 +631,7 @@
         customerRow: 8,
         name: "Lopez Home",
         fullAddress: "9876 W Binpals Way, Peoria AZ",
-        plan: "Basic \u2013 $35/mo",
+        plan: "Basic – $35/mo",
         phone: "",
         email: "lopez@example.com",
         day: "Tuesday",
@@ -1037,7 +644,7 @@
         customerRow: 12,
         name: "Taylor Household",
         fullAddress: "5555 W Route Runner Rd, Peoria AZ",
-        plan: "Premium \u2013 $45/mo",
+        plan: "Premium – $45/mo",
         phone: "555-555-0002",
         email: "taylor@example.com",
         day: "Wednesday",
@@ -1053,26 +660,20 @@
     const errorBox = document.getElementById("error");
     const userBadge = document.getElementById("userBadge");
 
-    const dayFilter = document.getElementById("dayFilter");
     const todayLabel = document.getElementById("todayLabel");
+    const dayFilter = document.getElementById("dayFilter");
     const statsPill = document.getElementById("statsPill");
-    const mapCanvas = document.getElementById("mapCanvas");
-    const nextStopCard = document.getElementById("nextStopCard");
-    const stopsGrid = document.getElementById("stopsGrid");
+    const currentStopCard = document.getElementById("currentStopCard");
+    const stopsList = document.getElementById("stopsList");
     const noStopsMessage = document.getElementById("noStopsMessage");
     const locBtn = document.getElementById("locBtn");
 
-    const toast = document.getElementById("toast");
-    const toastText = document.getElementById("toastText");
-    const toastUndo = document.getElementById("toastUndo");
-
     const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    let stopsState = STOPS.map(stop => ({ ...stop }));
+    let stopsState = STOPS.map(s => ({ ...s }));
     let selectedStopId = null;
-    let lastAction = null; // { stopId, previousStatus }
 
-    // Google Maps
+    // Map globals
     let map = null;
     let markers = [];
     let userMarker = null;
@@ -1090,9 +691,9 @@
     }
 
     function authenticate(email, password) {
-      const cleanedEmail = email.trim().toLowerCase();
+      const cleaned = email.trim().toLowerCase();
       return ALLOWED_USERS.some(
-        user => user.email.toLowerCase() === cleanedEmail && user.password === password
+        u => u.email.toLowerCase() === cleaned && u.password === password
       );
     }
 
@@ -1108,15 +709,15 @@
       const value = dayFilter.value;
       if (value === "today") {
         const todayName = dayFilter.dataset.today || getTodayName();
-        return stopsState.filter(stop => stop.day === todayName);
+        return stopsState.filter(s => s.day === todayName);
       }
       if (value === "all") return stopsState;
-      return stopsState.filter(stop => stop.day === value);
+      return stopsState.filter(s => s.day === value);
     }
 
     function getTodayStopsOnly() {
       const todayName = dayFilter.dataset.today || getTodayName();
-      return stopsState.filter(stop => stop.day === todayName);
+      return stopsState.filter(s => s.day === todayName);
     }
 
     function getNextPendingStop(stops) {
@@ -1129,8 +730,9 @@
         const next = getNextPendingStop(filtered);
         selectedStopId = next ? next.id : null;
       }
+
       renderMap(filtered);
-      renderNextStopCard(filtered);
+      renderCurrentStop(filtered);
       renderStopsList(filtered);
       updateStats();
     }
@@ -1138,8 +740,7 @@
     function renderMap(stops) {
       if (!window.google || !map) return;
 
-      // Clear old markers
-      markers.forEach(marker => marker.setMap(null));
+      markers.forEach(m => m.setMap(null));
       markers = [];
 
       if (!stops.length) return;
@@ -1149,13 +750,12 @@
       stops.forEach((stop, index) => {
         if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
 
-        const position = { lat: stop.lat, lng: stop.lng };
+        const pos = { lat: stop.lat, lng: stop.lng };
         const isSelected = stop.id === selectedStopId;
 
-        // Color by status (Uber-ish)
         let color = "#000000"; // Pending
-        if (stop.binStatus === "Done") color = "#6b7280";     // grey
-        if (stop.binStatus === "Skipped") color = "#b91c1c";  // red
+        if (stop.binStatus === "Done") color = "#6b7280";
+        if (stop.binStatus === "Skipped") color = "#b91c1c";
 
         const icon = {
           path: google.maps.SymbolPath.CIRCLE,
@@ -1167,7 +767,7 @@
         };
 
         const marker = new google.maps.Marker({
-          position,
+          position: pos,
           map,
           icon,
           label: {
@@ -1180,11 +780,10 @@
 
         marker.addListener("click", () => {
           setSelectedStop(stop.id);
-          scrollStopIntoView(stop.id);
         });
 
         markers.push(marker);
-        bounds.extend(position);
+        bounds.extend(pos);
       });
 
       if (!bounds.isEmpty()) {
@@ -1192,15 +791,15 @@
       }
     }
 
-    function renderNextStopCard(filteredStops) {
+    function renderCurrentStop(filteredStops) {
       const current = selectedStopId
         ? stopsState.find(s => s.id === selectedStopId)
         : getNextPendingStop(filteredStops);
 
       if (!current) {
-        nextStopCard.innerHTML = `
-          <div class="tiny-label">Next stop</div>
-          <p class="muted" style="margin-top:4px;">No houses for this filter.</p>
+        currentStopCard.innerHTML = `
+          <div class="tiny-label">Current house</div>
+          <p class="no-stops">No houses for this filter.</p>
         `;
         return;
       }
@@ -1211,154 +810,92 @@
         current.binStatus === "Done"
           ? "done"
           : current.binStatus === "Skipped"
-            ? "skipped"
-            : "";
+          ? "skipped"
+          : "";
 
-      nextStopCard.innerHTML = `
-        <div class="next-stop-header">
+      currentStopCard.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
           <div>
-            <div class="tiny-label">Next stop</div>
-            <p class="next-stop-title">${current.fullAddress}</p>
-            <p class="muted" style="font-size:13px; margin-top:2px;">
+            <div class="tiny-label">Current house</div>
+            <p class="current-stop-title">${current.fullAddress}</p>
+            <p class="muted" style="font-size:12px; margin:2px 0 0;">
               ${current.name || "Customer"}
             </p>
           </div>
           <span class="status-pill ${statusClass}">${current.binStatus}</span>
         </div>
-        <div class="next-stop-meta">
+        <div class="current-stop-meta">
           <div><strong>Plan:</strong> ${current.plan}</div>
           <div><strong>Phone:</strong> ${current.phone || "—"}</div>
           <div><strong>Trash day:</strong> ${current.day}</div>
-          <div><strong>Customer row:</strong> ${current.customerRow}</div>
+          <div><strong>Row:</strong> ${current.customerRow}</div>
         </div>
-        <div class="next-stop-actions">
-          <button type="button" class="btn" data-action="done-main" data-id="${current.id}">
-            Done
-          </button>
-          <button type="button" class="btn btn-secondary" data-action="skipped-main" data-id="${current.id}">
-            Skipped
-          </button>
-          <button type="button" class="btn btn-ghost" data-action="contact-main" data-id="${current.id}">
-            Contact
-          </button>
+        <div class="current-actions">
+          <button class="btn" data-action="done" data-id="${current.id}">Done</button>
+          <button class="btn btn-secondary" data-action="skipped" data-id="${current.id}">Skipped</button>
+          <button class="btn btn-ghost" data-action="contact" data-id="${current.id}">Contact</button>
         </div>
       `;
     }
 
     function renderStopsList(stops) {
-      stopsGrid.innerHTML = "";
-      noStopsMessage.style.display = stops.length === 0 ? "block" : "none";
+      stopsList.innerHTML = "";
+      noStopsMessage.style.display = stops.length ? "none" : "block";
 
       stops.forEach((stop, index) => {
-        const isSelected = stop.id === selectedStopId;
-        const card = document.createElement("article");
-        card.className = "stop-card" + (isSelected ? " selected" : "");
-        card.dataset.id = stop.id;
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = "stop-row" + (stop.id === selectedStopId ? " selected" : "");
+        row.dataset.id = stop.id;
 
-        const statusClass =
-          stop.binStatus === "Done"
-            ? "done"
-            : stop.binStatus === "Skipped"
-              ? "skipped"
-              : "";
-
-        card.innerHTML = `
-          <div class="stop-head-row">
-            <p class="address">${index + 1}. ${stop.fullAddress}</p>
-            <span class="status-pill ${statusClass}" style="font-size:10px;">
-              ${stop.binStatus}
-            </span>
+        row.innerHTML = `
+          <div class="stop-row-main">
+            <span class="stop-row-address">${index + 1}. ${stop.fullAddress}</span>
+            <span class="stop-row-sub">${stop.plan} · ${stop.day} · Row ${stop.customerRow}</span>
           </div>
-          <div class="stop-meta-small">
-            <div><strong>${stop.name || "Customer"}</strong></div>
-            <div>${stop.plan}</div>
-            <div>Row ${stop.customerRow} · ${stop.day}</div>
-          </div>
+          <span class="tiny-label" style="font-size:10px;">${stop.binStatus}</span>
         `;
 
-        card.addEventListener("click", () => {
+        row.addEventListener("click", () => {
           setSelectedStop(stop.id);
-          renderView();
         });
 
-        stopsGrid.appendChild(card);
+        stopsList.appendChild(row);
       });
     }
 
     function updateStats() {
-      const todayStops = getTodayStopsOnly();
-      const leftToday = todayStops.filter(s => s.binStatus === "Pending").length;
-      const totalToday = todayStops.length;
-      statsPill.textContent = `${leftToday} left today / ${totalToday} total`;
-      statsPill.className = leftToday === 0 && totalToday > 0 ? "pill success" : "pill";
+      const today = getTodayStopsOnly();
+      const left = today.filter(s => s.binStatus === "Pending").length;
+      const total = today.length;
+      statsPill.textContent = `${left} left today / ${total} total`;
+      statsPill.className = left === 0 && total > 0 ? "pill stats-pill success" : "pill stats-pill";
     }
 
-    function setSelectedStop(stopId) {
-      selectedStopId = stopId;
+    function setSelectedStop(id) {
+      selectedStopId = id;
       const filtered = getFilteredStops();
       renderMap(filtered);
-      renderNextStopCard(filtered);
+      renderCurrentStop(filtered);
       renderStopsList(filtered);
       updateStats();
     }
-
-    function scrollStopIntoView(stopId) {
-      const card = stopsGrid.querySelector(`.stop-card[data-id="${stopId}"]`);
-      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-
-    function showToast(message, onUndo) {
-      toastText.textContent = message;
-      toast.classList.add("show");
-      lastAction = onUndo || null;
-      toastUndo.style.display = lastAction ? "inline" : "none";
-      if (!lastAction) {
-        setTimeout(() => toast.classList.remove("show"), 2200);
-      }
-    }
-
-    toastUndo.addEventListener("click", () => {
-      if (lastAction) lastAction();
-      toast.classList.remove("show");
-      lastAction = null;
-    });
 
     function handleStatusChange(stopId, newStatus) {
       const stop = stopsState.find(s => s.id === stopId);
       if (!stop) return;
-      const previousStatus = stop.binStatus;
       stop.binStatus = newStatus;
 
-      const filtered = getFilteredStops();
-      renderMap(filtered);
-      renderNextStopCard(filtered);
-      renderStopsList(filtered);
-      updateStats();
-
-      const msg =
-        newStatus === "Done"
-          ? "Marked as Done. (Future: send bins-out message.)"
-          : newStatus === "Skipped"
-            ? "Marked as Skipped."
-            : `Status changed to ${newStatus}.`;
-
-      showToast(msg, () => {
-        stop.binStatus = previousStatus;
-        const again = getFilteredStops();
-        renderMap(again);
-        renderNextStopCard(again);
-        renderStopsList(again);
-        updateStats();
-      });
-
-      // FUTURE HOOK:
-      // When you're ready with Apps Script/Twilio/etc, call:
+      // FUTURE: send notification here when ready (email/text)
       // sendNotification(stop, newStatus);
+
+      renderView();
     }
 
     function handleContact(stopId) {
       const stop = stopsState.find(s => s.id === stopId);
       if (!stop) return;
+
       if (stop.phone) {
         const cleaned = stop.phone.replace(/[^0-9]/g, "");
         if (cleaned) {
@@ -1366,21 +903,20 @@
           return;
         }
       }
-      alert(`Contact ${stop.name || "customer"} at ${stop.email || "their saved email"} (future: auto text/email).`);
+      alert(`Contact ${stop.name || "customer"} at ${stop.email || "saved email"}.`);
     }
 
-    // Placeholder for future email/SMS integration
+    // Placeholder for future integration
     function sendNotification(stop, status) {
-      // Later: send email/text like
-      // "Your trash cans are out front, we’ll be back tomorrow."
+      // When you’re ready, hook Apps Script/Twilio/etc here
     }
 
-    // Google Maps init (callback)
+    // Google Maps init callback
     function initMap() {
       const canvas = document.getElementById("mapCanvas");
       if (!canvas) return;
 
-      const center = { lat: 33.7405, lng: -112.2691 }; // Default center
+      const center = { lat: 33.7405, lng: -112.2691 };
 
       map = new google.maps.Map(canvas, {
         center,
@@ -1388,7 +924,7 @@
         styles: UBER_MAP_STYLE,
         mapTypeControl: false,
         fullscreenControl: false,
-        streetViewControl: false,
+        streetViewControl: false
       });
 
       renderView();
@@ -1398,12 +934,11 @@
       if (!map || !navigator.geolocation) return;
 
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
+        pos => {
           const coords = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude
           };
-
           map.setCenter(coords);
           map.setZoom(15);
 
@@ -1422,16 +957,14 @@
             zIndex: 999
           });
         },
-        () => {
-          // user denied or error – ignore for now
-        }
+        () => {}
       );
     }
 
-    // ===== Event handlers =====
+    /* Events */
 
-    loginForm.addEventListener("submit", (event) => {
-      event.preventDefault();
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
       const email = loginForm.email.value;
       const password = loginForm.password.value;
 
@@ -1448,29 +981,25 @@
       renderView();
     });
 
-    nextStopCard.addEventListener("click", (event) => {
-      const btn = event.target.closest("button[data-action]");
+    currentStopCard.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
       if (!btn) return;
       const stopId = Number(btn.dataset.id);
       const action = btn.dataset.action;
-      if (action === "done-main") {
-        handleStatusChange(stopId, "Done");
-      } else if (action === "skipped-main") {
-        handleStatusChange(stopId, "Skipped");
-      } else if (action === "contact-main") {
-        handleContact(stopId);
-      }
+      if (action === "done") handleStatusChange(stopId, "Done");
+      if (action === "skipped") handleStatusChange(stopId, "Skipped");
+      if (action === "contact") handleContact(stopId);
     });
 
     if (locBtn) {
       locBtn.addEventListener("click", centerOnUser);
     }
+
+    // Expose initMap to global (for Google callback)
+    window.initMap = initMap;
   </script>
 
-  <!-- Google Maps (replace YOUR_GOOGLE_MAPS_API_KEY) -->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"
-    async
-    defer></script>
+  <!-- Google Maps: replace YOUR_GOOGLE_MAPS_API_KEY -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
