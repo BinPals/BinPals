@@ -12,7 +12,7 @@
     :root {
       --green: #166534;
       --green-dark: #0f3c22;
-      --bg: #ffffff;
+      --bg: #f5f5f5;
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #4b5563;
@@ -36,17 +36,16 @@
       color: var(--text-main);
     }
 
-    /* Top brand bar (simple, not full site header) */
+    /* Top bar */
     .top-bar {
       border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 16px 20px;
+      background: #ffffff;
     }
 
     .top-inner {
       max-width: 1080px;
+      margin: 0 auto;
       width: 100%;
       display: flex;
       align-items: center;
@@ -66,13 +65,13 @@
     .brand-mark {
       width: 40px;
       height: 40px;
-      border-radius: 12px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, var(--green), #8bffb0);
       color: #052e16;
       font-weight: 800;
-      box-shadow: 0 10px 20px rgba(22, 101, 52, 0.3);
+      box-shadow: 0 16px 26px rgba(22, 101, 52, 0.35);
       font-size: 14px;
     }
 
@@ -83,11 +82,11 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       border: 1px solid var(--pill-gray);
       background: #f9fafb;
@@ -108,11 +107,11 @@
     }
 
     .app-shell {
-      border-radius: 24px;
+      border-radius: 20px;
       border: 1px solid var(--border);
-      background: #f9fafb;
-      padding: 20px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+      background: #ffffff;
+      padding: 24px 24px 22px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
     }
 
     .hidden { display: none !important; }
@@ -120,16 +119,17 @@
     /* Login */
     .auth-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+      gap: 32px;
       align-items: center;
     }
 
     .login-card {
       background: #ffffff;
-      border-radius: 18px;
+      border-radius: 20px;
       border: 1px solid var(--border);
-      padding: 20px 18px 18px;
+      padding: 20px 20px 18px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.04);
     }
 
     .login-card h2 {
@@ -151,7 +151,7 @@
 
     input {
       width: 100%;
-      padding: 11px 12px;
+      padding: 11px 14px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: #f9fafb;
@@ -169,7 +169,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 16px;
+      padding: 11px 18px;
       border-radius: 999px;
       border: none;
       background: var(--green);
@@ -177,12 +177,12 @@
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 8px 18px rgba(22, 101, 52, 0.32);
-      transition: background-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+      box-shadow: 0 12px 24px rgba(22, 101, 52, 0.30);
+      transition: background-color 0.15s ease, transform 0.06s ease, box-shadow 0.15s ease;
     }
 
     .btn:hover { background: var(--green-dark); }
-    .btn:active { transform: translateY(1px); box-shadow: 0 4px 10px rgba(22, 101, 52, 0.25); }
+    .btn:active { transform: translateY(1px); box-shadow: 0 6px 14px rgba(22, 101, 52, 0.24); }
 
     .btn-secondary {
       background: #e5e7eb;
@@ -194,20 +194,19 @@
 
     .btn-ghost {
       border: 1px solid #e5e7eb;
-      background: transparent;
+      background: #ffffff;
       box-shadow: none;
       color: #4b5563;
     }
-
     .btn-ghost:hover {
       background: #f9fafb;
       color: #111827;
     }
 
     .error-box {
-      margin-top: 8px;
+      margin-top: 10px;
       padding: 10px 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #fef2f2;
       color: #b91c1c;
       font-weight: 600;
@@ -215,22 +214,24 @@
       font-size: 13px;
     }
 
-    /* Dashboard layout: Uber web vibe */
+    /* Dashboard layout – Uber-like */
     .dashboard-grid {
       display: grid;
       grid-template-columns: 320px minmax(0, 1fr);
-      gap: 20px;
-      min-height: 480px;
+      gap: 24px;
+      min-height: 500px;
+      margin-top: 4px;
     }
 
     .side-panel {
       background: #ffffff;
-      border-radius: 18px;
+      border-radius: 20px;
       border: 1px solid var(--border);
-      padding: 18px 16px 16px;
+      padding: 16px 16px 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.04);
     }
 
     .tiny-label {
@@ -249,12 +250,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
+      gap: 10px;
+      margin-bottom: 4px;
     }
 
     select {
-      padding: 6px 10px;
+      padding: 7px 14px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: #f9fafb;
@@ -264,16 +265,16 @@
     }
 
     .stats-pill {
-      font-size: 11px;
-      padding-inline: 10px;
+      font-size: 10px;
+      padding: 6px 12px;
     }
 
-    /* Current stop box (like “set your destination” card) */
+    /* Current stop card – like Uber’s bottom sheet */
     .current-stop-card {
-      border-radius: 16px;
+      border-radius: 20px;
       border: 1px solid var(--border);
       background: #f9fafb;
-      padding: 12px 12px 10px;
+      padding: 14px 14px 12px;
     }
 
     .current-stop-title {
@@ -283,7 +284,7 @@
     }
 
     .status-pill {
-      padding: 3px 10px;
+      padding: 5px 12px;
       border-radius: 999px;
       border: 1px solid var(--pill-gray);
       background: #f3f4f6;
@@ -310,7 +311,7 @@
       font-size: 12px;
       color: var(--text-muted);
       line-height: 1.5;
-      margin: 4px 0 8px;
+      margin: 6px 0 10px;
     }
 
     .current-stop-meta div { margin-bottom: 2px; }
@@ -318,7 +319,7 @@
 
     .current-actions {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -327,6 +328,7 @@
       box-shadow: none;
       font-size: 12px;
       padding-block: 9px;
+      min-height: 38px;
     }
 
     /* List of houses */
@@ -335,13 +337,14 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      max-height: 260px;
+      max-height: 250px;
       overflow: auto;
+      padding-right: 4px;
     }
 
     .stop-row {
       border-radius: 999px;
-      padding: 7px 10px;
+      padding: 8px 12px;
       background: #f3f4f6;
       font-size: 12px;
       display: flex;
@@ -349,7 +352,8 @@
       align-items: center;
       gap: 8px;
       cursor: pointer;
-      transition: background-color 0.12s ease, transform 0.06s ease;
+      border: 1px solid transparent;
+      transition: background-color 0.12s ease, transform 0.06s ease, border-color 0.12s ease;
     }
 
     .stop-row:hover {
@@ -359,13 +363,14 @@
 
     .stop-row.selected {
       background: #ecfdf3;
-      border: 1px solid #bbf7d0;
+      border-color: #bbf7d0;
     }
 
     .stop-row-main {
       display: flex;
       flex-direction: column;
       gap: 2px;
+      text-align: left;
     }
 
     .stop-row-address {
@@ -380,31 +385,32 @@
 
     /* Map side */
     .map-wrapper {
-      border-radius: 18px;
+      border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--border);
       position: relative;
       background: #e5e7eb;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.04);
     }
 
     .map-canvas {
       width: 100%;
       height: 100%;
-      min-height: 360px;
+      min-height: 420px;
     }
 
     .loc-btn {
       position: absolute;
-      right: 16px;
-      bottom: 16px;
-      width: 40px;
-      height: 40px;
+      right: 20px;
+      bottom: 20px;
+      width: 42px;
+      height: 42px;
       border-radius: 999px;
       border: none;
       background: #ffffff;
       display: grid;
       place-items: center;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.25);
+      box-shadow: 0 18px 30px rgba(15, 23, 42, 0.35);
       cursor: pointer;
     }
 
@@ -436,20 +442,27 @@
       margin-top: 4px;
     }
 
-    /* Responsive */
+    /* Responsive tweaks */
     @media (max-width: 900px) {
+      .auth-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+      }
+
       .dashboard-grid {
         grid-template-columns: minmax(0, 1fr);
         grid-template-rows: auto auto;
+        gap: 16px;
       }
+
       .map-wrapper {
         order: 1;
-        min-height: 300px;
+        min-height: 340px;
         height: 55vh;
       }
+
       .side-panel {
         order: 2;
-        margin-top: 12px;
       }
     }
 
@@ -458,10 +471,13 @@
         padding-inline: 14px;
       }
       .app-shell {
-        padding: 16px;
+        padding: 18px 16px 16px;
         border-radius: 18px;
       }
       .map-wrapper {
+        border-radius: 18px;
+      }
+      .login-card {
         border-radius: 18px;
       }
     }
@@ -521,7 +537,7 @@
       <!-- DASHBOARD -->
       <section id="dashboardView" class="hidden">
         <div class="dashboard-grid">
-          <!-- Left: control panel -->
+          <!-- Left panel -->
           <aside class="side-panel">
             <div class="filter-row">
               <div>
@@ -531,7 +547,7 @@
             </div>
 
             <div class="filter-row">
-              <div style="display:flex; align-items:center; gap:6px;">
+              <div style="display:flex; align-items:center; gap:8px;">
                 <span class="tiny-label" style="letter-spacing:0.05em;">Trash day</span>
                 <select id="dayFilter" aria-label="Filter houses by trash day">
                   <option value="today">Today only</option>
@@ -548,10 +564,10 @@
             </div>
 
             <div class="current-stop-card" id="currentStopCard">
-              <!-- filled by JS -->
+              <!-- JS fills -->
             </div>
             <p class="small-muted">
-              Tap a house above or click a pin on the map to focus it.
+              Tap a house below or click a pin on the map to focus it.
             </p>
 
             <div class="stops-list" id="stopsList"></div>
@@ -560,7 +576,7 @@
             </p>
           </aside>
 
-          <!-- Right: map -->
+          <!-- Map -->
           <div class="map-wrapper">
             <div id="mapCanvas" class="map-canvas"></div>
             <button type="button" class="loc-btn" id="locBtn" aria-label="Center on my location">
@@ -573,45 +589,22 @@
   </main>
 
   <script>
-    // Light Uber-like map style
     const UBER_MAP_STYLE = [
       { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
       { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
       { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
       { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
-      {
-        featureType: "poi",
-        elementType: "geometry",
-        stylers: [{ color: "#eeeeee" }]
-      },
-      {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [{ color: "#e5e5e5" }]
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [{ color: "#ffffff" }]
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [{ color: "#dadada" }]
-      },
-      {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [{ color: "#e0e0e0" }]
-      }
+      { featureType: "poi", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
+      { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+      { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#dadada" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#e0e0e0" }] }
     ];
 
-    // Demo login (change as needed)
     const ALLOWED_USERS = [
       { email: "operator@getbinpals.com", password: "route123" }
     ];
 
-    // Example stops (swap with real data later)
     const STOPS = [
       {
         id: 1,
@@ -659,7 +652,6 @@
     const dashboardView = document.getElementById("dashboardView");
     const errorBox = document.getElementById("error");
     const userBadge = document.getElementById("userBadge");
-
     const todayLabel = document.getElementById("todayLabel");
     const dayFilter = document.getElementById("dayFilter");
     const statsPill = document.getElementById("statsPill");
@@ -673,7 +665,6 @@
     let stopsState = STOPS.map(s => ({ ...s }));
     let selectedStopId = null;
 
-    // Map globals
     let map = null;
     let markers = [];
     let userMarker = null;
@@ -730,7 +721,6 @@
         const next = getNextPendingStop(filtered);
         selectedStopId = next ? next.id : null;
       }
-
       renderMap(filtered);
       renderCurrentStop(filtered);
       renderStopsList(filtered);
@@ -753,7 +743,7 @@
         const pos = { lat: stop.lat, lng: stop.lng };
         const isSelected = stop.id === selectedStopId;
 
-        let color = "#000000"; // Pending
+        let color = "#000000";
         if (stop.binStatus === "Done") color = "#6b7280";
         if (stop.binStatus === "Skipped") color = "#b91c1c";
 
@@ -778,9 +768,7 @@
           }
         });
 
-        marker.addListener("click", () => {
-          setSelectedStop(stop.id);
-        });
+        marker.addListener("click", () => setSelectedStop(stop.id));
 
         markers.push(marker);
         bounds.extend(pos);
@@ -814,7 +802,7 @@
           : "";
 
       currentStopCard.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
           <div>
             <div class="tiny-label">Current house</div>
             <p class="current-stop-title">${current.fullAddress}</p>
@@ -856,10 +844,7 @@
           <span class="tiny-label" style="font-size:10px;">${stop.binStatus}</span>
         `;
 
-        row.addEventListener("click", () => {
-          setSelectedStop(stop.id);
-        });
-
+        row.addEventListener("click", () => setSelectedStop(stop.id));
         stopsList.appendChild(row);
       });
     }
@@ -885,10 +870,7 @@
       const stop = stopsState.find(s => s.id === stopId);
       if (!stop) return;
       stop.binStatus = newStatus;
-
-      // FUTURE: send notification here when ready (email/text)
-      // sendNotification(stop, newStatus);
-
+      // future: sendNotification(stop, newStatus);
       renderView();
     }
 
@@ -906,12 +888,10 @@
       alert(`Contact ${stop.name || "customer"} at ${stop.email || "saved email"}.`);
     }
 
-    // Placeholder for future integration
     function sendNotification(stop, status) {
-      // When you’re ready, hook Apps Script/Twilio/etc here
+      // hook Apps Script / Twilio here later
     }
 
-    // Google Maps init callback
     function initMap() {
       const canvas = document.getElementById("mapCanvas");
       if (!canvas) return;
@@ -961,8 +941,6 @@
       );
     }
 
-    /* Events */
-
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const email = loginForm.email.value;
@@ -995,11 +973,10 @@
       locBtn.addEventListener("click", centerOnUser);
     }
 
-    // Expose initMap to global (for Google callback)
     window.initMap = initMap;
   </script>
 
-  <!-- Google Maps: replace YOUR_GOOGLE_MAPS_API_KEY -->
+  <!-- Replace YOUR_GOOGLE_MAPS_API_KEY -->
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
