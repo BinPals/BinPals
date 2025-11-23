@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BinPals Operator Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b1220;
+      --navy-2: #121b2e;
+      --card: #16233b;
+      --border: #1f2d45;
+      --text: #e5ecff;
+      --muted: #9fb5d1;
+      --green: #16c33b;
+      --green-dark: #0f8c2a;
+      --pending: #505b70;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(22,195,59,0.12), transparent 25%),
+                  radial-gradient(circle at 80% 0%, rgba(22,195,59,0.08), transparent 30%),
+                  var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 48px;
+    }
+
+    .app-shell {
+      width: min(1080px, 100%);
+      background: linear-gradient(145deg, var(--navy-2), var(--card));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--green), #8bffb0);
+      color: var(--navy-2);
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(22, 195, 59, 0.35);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Login */
+    .auth-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      align-items: center;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 18px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .login-card h2 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: 0.01em;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 12px 0;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid rgba(22,195,59,0.5);
+      border-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: none;
+      background: var(--green);
+      color: #03120c;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      box-shadow: 0 12px 24px rgba(22, 195, 59, 0.35);
+    }
+
+    .btn:hover { background: #19d243; }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      box-shadow: none;
+      background: var(--pending);
+      color: #cbd5e0;
+    }
+
+    .error {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255, 71, 87, 0.1);
+      color: #ff7182;
+      font-weight: 600;
+      border: 1px solid rgba(255, 113, 130, 0.4);
+    }
+
+    /* Dashboard */
+    .dashboard-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .pill.pending {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--pending);
+      color: var(--muted);
+    }
+
+    .pill.moved {
+      background: rgba(22, 195, 59, 0.12);
+      border: 1px solid rgba(22, 195, 59, 0.6);
+      color: #93f3aa;
+    }
+
+    .filter-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    select {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-weight: 600;
+      min-width: 160px;
+    }
+
+    .stops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .stop-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .stop-meta {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .stop-meta strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .stop-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .address {
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+
+    .stop-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tiny-label {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 12px 8px 28px; }
+      .app-shell { padding: 20px 16px; border-radius: 16px; }
+      .dashboard-top { flex-direction: column; align-items: flex-start; }
+      .stop-actions { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">BP</div>
+        <div>
+          <div>BinPals Operator</div>
+          <div class="muted">Route tools for field teams</div>
+        </div>
+      </div>
+      <div id="userBadge" class="pill moved hidden">Logged in</div>
+    </header>
+
+    <section id="loginView">
+      <div class="auth-grid">
+        <div>
+          <h1 style="margin:0 0 10px;">Welcome back</h1>
+          <p class="muted" style="max-width:520px;">Securely access the operator dashboard to filter stops by trash day and update bin status on the go. Optimized for phones for quick tap-to-complete workflows.</p>
+        </div>
+        <div class="login-card">
+          <h2>Operator Login</h2>
+          <p class="muted" style="margin:0 0 12px;">Use your BinPals operator credentials.</p>
+          <form id="loginForm" novalidate>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="username" placeholder="operator@example.com" required />
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" required />
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <div id="error" class="error hidden">Incorrect email or password.</div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboardView" class="hidden">
+      <div class="dashboard-top">
+        <div>
+          <div class="tiny-label">Trash day filter</div>
+          <div class="filter-group">
+            <select id="dayFilter" aria-label="Filter stops by trash day">
+              <option value="all">All days</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </div>
+        </div>
+        <div class="pill pending" id="statsPill">0 pending / 0 total</div>
+      </div>
+
+      <div class="stops-grid" id="stopsGrid"></div>
+    </section>
+  </div>
+
+  <script>
+    const ALLOWED_USERS = [
+      { email: "operator@example.com", password: "route123" }
+    ];
+
+    const STOPS = [
+      {
+        customerRow: 5,
+        fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
+        plan: "Premium – $45/mo",
+        phone: "555-555-0001",
+        day: "Tuesday",
+        binStatus: "Pending"
+      },
+      {
+        customerRow: 8,
+        fullAddress: "9876 W Binpals Way, Peoria AZ",
+        plan: "Basic – $35/mo",
+        phone: "",
+        day: "Tuesday",
+        binStatus: "Pending"
+      },
+      {
+        customerRow: 12,
+        fullAddress: "5555 W Route Runner Rd, Peoria AZ",
+        plan: "Premium – $45/mo",
+        phone: "555-555-0002",
+        day: "Wednesday",
+        binStatus: "Moved"
+      }
+    ];
+
+    const loginForm = document.getElementById("loginForm");
+    const loginView = document.getElementById("loginView");
+    const dashboardView = document.getElementById("dashboardView");
+    const errorBox = document.getElementById("error");
+    const userBadge = document.getElementById("userBadge");
+    const stopsGrid = document.getElementById("stopsGrid");
+    const dayFilter = document.getElementById("dayFilter");
+    const statsPill = document.getElementById("statsPill");
+
+    const stopsState = STOPS.map((stop, index) => ({ ...stop, id: index }));
+
+    function authenticate(email, password) {
+      const cleanedEmail = email.trim().toLowerCase();
+      return ALLOWED_USERS.some(user => user.email.toLowerCase() === cleanedEmail && user.password === password);
+    }
+
+    function showDashboard() {
+      loginView.classList.add("hidden");
+      dashboardView.classList.remove("hidden");
+      userBadge.classList.remove("hidden");
+      renderStops();
+    }
+
+    function renderStops() {
+      const selectedDay = dayFilter.value;
+      const filtered = selectedDay === "all" ? stopsState : stopsState.filter(stop => stop.day === selectedDay);
+
+      stopsGrid.innerHTML = "";
+
+      filtered.forEach(stop => {
+        const card = document.createElement("article");
+        card.className = "stop-card";
+        card.innerHTML = `
+          <div class="stop-head">
+            <p class="address">${stop.fullAddress}</p>
+            <span class="pill ${stop.binStatus === "Moved" ? "moved" : "pending"}">${stop.binStatus}</span>
+          </div>
+          <div class="stop-meta">
+            <div><strong>Plan:</strong> ${stop.plan}</div>
+            <div><strong>Phone:</strong> ${stop.phone || "—"}</div>
+            <div><strong>Trash day:</strong> ${stop.day}</div>
+            <div><strong>Customer row:</strong> ${stop.customerRow}</div>
+          </div>
+          <div class="stop-actions">
+            <div class="tiny-label">Bin Status</div>
+            <button class="btn" data-id="${stop.id}" ${stop.binStatus === "Moved" ? "disabled" : ""}>${stop.binStatus === "Moved" ? "Done" : "Mark Done"}</button>
+          </div>
+        `;
+        stopsGrid.appendChild(card);
+      });
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const total = stopsState.length;
+      const pending = stopsState.filter(stop => stop.binStatus === "Pending").length;
+      statsPill.textContent = `${pending} pending / ${total} total`;
+      statsPill.className = `pill ${pending === 0 ? "moved" : "pending"}`;
+    }
+
+    function handleMarkDone(event) {
+      const btn = event.target;
+      if (btn.tagName !== "BUTTON" || !btn.dataset.id) return;
+      const stopId = Number(btn.dataset.id);
+      const stop = stopsState.find(s => s.id === stopId);
+      if (!stop || stop.binStatus === "Moved") return;
+      stop.binStatus = "Moved";
+      renderStops();
+    }
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const email = loginForm.email.value;
+      const password = loginForm.password.value;
+
+      if (authenticate(email, password)) {
+        errorBox.classList.add("hidden");
+        showDashboard();
+      } else {
+        errorBox.classList.remove("hidden");
+      }
+    });
+
+    dayFilter.addEventListener("change", renderStops);
+    stopsGrid.addEventListener("click", handleMarkDone);
+  </script>
+</body>
+</html>
