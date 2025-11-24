@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --green: #166534;
@@ -35,51 +36,39 @@
       width: 100%;
       font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text-main);
-      overflow: hidden; /* map hits all edges */
-    }
-
-    body {
-      position: relative;
+      overflow: hidden;
       background: #f5f5f5;
     }
 
     .hidden { display: none !important; }
 
-    /* FULLSCREEN MAP */
-    #map {
-      position: absolute;
-      inset: 0;
-      width: 100%;
+    /* MAIN LAYOUT (after login) */
+    .app-layout {
       height: 100%;
-      z-index: 1;
+      width: 100%;
+      display: flex;
     }
 
-    .map-frame {
-      border: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
+    /* LEFT: ROUTE PANEL (desktop) / BOTTOM SHEET (mobile) */
+    .route-panel {
+      background: #ffffff;
+      border-right: 1px solid var(--border);
+      width: 420px;
+      max-width: 100%;
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 2;
+      overflow-y: auto;
     }
 
-    /* Floating header (Uber style) */
-    .operator-header {
-      position: absolute;
-      top: 18px;
-      left: 18px;
-      right: 18px;
-      z-index: 20;
+    .route-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      pointer-events: none; /* map can still drag */
-    }
-
-    .operator-header-inner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      pointer-events: auto;
+      margin-bottom: 4px;
     }
 
     .brand {
@@ -112,7 +101,6 @@
     }
 
     .status-pill {
-      pointer-events: auto;
       background: #ecfdf3;
       color: #15803d;
       padding: 8px 16px;
@@ -122,47 +110,6 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       border: 1px solid #bbf7d0;
-    }
-
-    /* BOTTOM SHEET */
-    .bottom-sheet {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      background: #ffffff;
-      border-top-left-radius: 26px;
-      border-top-right-radius: 26px;
-      padding: 18px 18px 26px;
-      box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.2);
-      z-index: 21;
-      transform: translateY(0);
-      transition: transform 0.25s ease-out;
-      max-height: 70%;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .bottom-sheet.sheet-collapsed {
-      transform: translateY(55%);
-    }
-
-    .sheet-handle {
-      width: 40px;
-      height: 5px;
-      border-radius: 999px;
-      background: #d1d5db;
-      margin: 0 auto 12px;
-      cursor: pointer;
-    }
-
-    .sheet-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
     }
 
     .tiny-label {
@@ -176,6 +123,13 @@
       margin: 2px 0 4px;
       font-size: 20px;
       font-weight: 700;
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     .stats-pill {
@@ -218,7 +172,6 @@
       color: var(--text-main);
     }
 
-    /* Current house card */
     .current-stop-card {
       border-radius: 20px;
       border: 1px solid var(--border);
@@ -283,7 +236,9 @@
       font-weight: 600;
       cursor: pointer;
       outline: none;
-      transition: background-color 0.15s ease, transform 0.07s ease, box-shadow 0.15s ease;
+      transition: background-color 0.15s ease,
+                  transform 0.07s ease,
+                  box-shadow 0.15s ease;
     }
 
     .btn-primary {
@@ -293,13 +248,15 @@
     }
 
     .btn-primary:hover { background: var(--green-dark); }
-    .btn-primary:active { transform: translateY(1px); box-shadow: 0 6px 12px rgba(22, 101, 52, 0.28); }
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 12px rgba(22, 101, 52, 0.28);
+    }
 
     .btn-secondary {
       background: #e5e7eb;
       color: #111827;
     }
-
     .btn-secondary:hover { background: #d1d5db; }
 
     .btn-ghost {
@@ -312,7 +269,7 @@
       color: #111827;
     }
 
-    .list-label { margin-top: 2px; }
+    .house-list-label { margin-top: 2px; }
 
     .house-list {
       margin-top: 4px;
@@ -335,7 +292,9 @@
       gap: 8px;
       font-size: 12px;
       cursor: pointer;
-      transition: background-color 0.12s ease, transform 0.06s ease, border-color 0.12s ease;
+      transition: background-color 0.12s ease,
+                  transform 0.06s ease,
+                  border-color 0.12s ease;
     }
 
     .house-row:hover {
@@ -376,6 +335,66 @@
       font-size: 12px;
       color: var(--text-muted);
       margin-top: 4px;
+    }
+
+    /* RIGHT: MAP (full bleed, no rounded corners, fills screen) */
+    .map-panel {
+      position: relative;
+      flex: 1;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* MOBILE BOTTOM SHEET */
+    .sheet-handle {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout {
+        display: block;
+      }
+
+      .map-panel {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+      }
+
+      .route-panel {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 65%;
+        max-height: 80%;
+        border-right: none;
+        border-top-left-radius: 26px;
+        border-top-right-radius: 26px;
+        box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.25);
+        padding: 12px 18px 20px;
+        transform: translateY(55%);
+        transition: transform 0.25s ease-out;
+        z-index: 2;
+      }
+
+      .route-panel.expanded {
+        transform: translateY(0%);
+      }
+
+      .sheet-handle {
+        display: block;
+        width: 40px;
+        height: 5px;
+        border-radius: 999px;
+        background: #d1d5db;
+        margin: 6px auto 10px;
+      }
     }
 
     /* LOGIN OVERLAY */
@@ -454,104 +473,10 @@
       margin-top: 4px;
       padding-block: 11px;
     }
-
-    /* Responsive */
-    @media (min-width: 900px) {
-      .bottom-sheet {
-        left: 50%;
-        width: 420px;
-        transform: translate(0, 0);
-        translate: -50% 0;
-        border-radius: 24px;
-        bottom: 22px;
-        max-height: 60%;
-      }
-
-      .bottom-sheet.sheet-collapsed {
-        transform: translate(-50%, 40%);
-      }
-
-      .operator-header {
-        left: 50%;
-        translate: -50% 0;
-        max-width: 960px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .operator-header {
-        top: 14px;
-        left: 14px;
-        right: 14px;
-      }
-
-      .bottom-sheet {
-        padding-inline: 16px;
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
-      }
-    }
   </style>
 </head>
 <body>
-
-  <!-- Uber-style header -->
-  <header class="operator-header">
-    <div class="operator-header-inner">
-      <div class="brand">
-        <div class="brand-mark">BP</div>
-        <div>
-          <div class="brand-text-title">BinPals Operator</div>
-          <div class="brand-text-sub">Route tools for field teams</div>
-        </div>
-      </div>
-    </div>
-    <div id="userBadge" class="status-pill hidden">Logged in</div>
-  </header>
-
-  <!-- FULLSCREEN MAP (your My Map embed) -->
-  <div id="map">
-    <iframe
-      class="map-frame"
-      src="https://www.google.com/maps/d/embed?mid=1tsQ261TBSD6vD471LMMBVzrEt40zuyw&ehbc=2E312F"
-      loading="lazy">
-    </iframe>
-  </div>
-
-  <!-- BOTTOM SHEET -->
-  <section class="bottom-sheet sheet-collapsed" id="bottomSheet">
-    <div class="sheet-handle" id="sheetHandle"></div>
-
-    <div class="sheet-header">
-      <div>
-        <div class="tiny-label" id="todayLabel">Today · Sunday</div>
-        <h2 class="sheet-title">Today’s route</h2>
-      </div>
-      <div id="statsPill" class="stats-pill">0 left today / 0 total</div>
-    </div>
-
-    <div class="filter-row">
-      <label for="dayFilter">Trash day</label>
-      <select id="dayFilter">
-        <option value="today">Today only</option>
-        <option value="all">All days</option>
-        <option>Monday</option>
-        <option>Tuesday</option>
-        <option>Wednesday</option>
-        <option>Thursday</option>
-        <option>Friday</option>
-        <option>Saturday</option>
-      </select>
-    </div>
-
-    <div id="currentStopCard" class="current-stop-card"></div>
-
-    <div class="list-label tiny-label">Houses</div>
-    <div id="houseList" class="house-list"></div>
-    <p id="noStopsMessage" class="no-stops" style="display:none;">No houses for this filter.</p>
-  </section>
-
-  <!-- LOGIN OVERLAY -->
+  <!-- LOGIN -->
   <div id="loginOverlay">
     <div class="login-panel">
       <h1>Operator login</h1>
@@ -576,78 +501,93 @@
     </div>
   </div>
 
+  <!-- APP -->
+  <div class="app-layout hidden" id="appLayout">
+    <section class="route-panel" id="routePanel">
+      <div class="sheet-handle" id="sheetHandle"></div>
+
+      <header class="route-header">
+        <div class="brand">
+          <div class="brand-mark">BP</div>
+          <div>
+            <div class="brand-text-title">BinPals Operator</div>
+            <div class="brand-text-sub">Route tools for field teams</div>
+          </div>
+        </div>
+        <div id="userBadge" class="status-pill hidden">Logged in</div>
+      </header>
+
+      <div class="sheet-header">
+        <div>
+          <div class="tiny-label" id="todayLabel">Today · Sunday</div>
+          <h2 class="sheet-title">Today’s route</h2>
+        </div>
+        <div id="statsPill" class="stats-pill">0 left today / 0 total</div>
+      </div>
+
+      <div class="filter-row">
+        <label for="dayFilter">Trash day</label>
+        <select id="dayFilter">
+          <option value="today">Today only</option>
+          <option value="all">All days</option>
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+        </select>
+      </div>
+
+      <div id="currentStopCard" class="current-stop-card"></div>
+
+      <div class="house-list-label tiny-label">Houses</div>
+      <div id="houseList" class="house-list"></div>
+      <p id="noStopsMessage" class="no-stops" style="display:none;">No houses for this filter.</p>
+    </section>
+
+    <section class="map-panel">
+      <div id="map"></div>
+    </section>
+  </div>
+
   <script>
-    /***********************
-     * SIMPLE STATE + DATA
-     ***********************/
+    /*************
+     * CONFIG
+     *************/
+    // Your deployed Apps Script Web App URL
+    const STOPS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+
     const ALLOWED_USERS = [
       { email: "operator@getbinpals.com", password: "route123" }
     ];
 
-    // Replace this with data from your sheet later
-    const STOPS = [
-      {
-        id: 1,
-        customerRow: 5,
-        name: "Garcia Family",
-        fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
-        plan: "Premium – $45/mo",
-        phone: "555-555-0001",
-        email: "garcia@example.com",
-        day: "Sunday",
-        binStatus: "Pending"
-      },
-      {
-        id: 2,
-        customerRow: 8,
-        name: "Lopez Home",
-        fullAddress: "9876 W Binpals Way, Peoria AZ",
-        plan: "Basic – $35/mo",
-        phone: "",
-        email: "lopez@example.com",
-        day: "Sunday",
-        binStatus: "Pending"
-      },
-      {
-        id: 3,
-        customerRow: 12,
-        name: "Taylor Household",
-        fullAddress: "5555 W Route Runner Rd, Peoria AZ",
-        plan: "Premium – $45/mo",
-        phone: "555-555-0002",
-        email: "taylor@example.com",
-        day: "Monday",
-        binStatus: "Done"
-      }
-    ];
-
     const weekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-    let stopsState = STOPS.map(s => ({ ...s }));
+    let map;
+    let geocoder;
+    const markers = {};
+    let stopsState = [];         // filled from sheet
     let selectedStopId = null;
 
-    /***********************
-     * DOM
-     ***********************/
+    /* DOM REFS */
     const loginForm      = document.getElementById("loginForm");
     const loginOverlay   = document.getElementById("loginOverlay");
     const loginError     = document.getElementById("loginError");
     const userBadge      = document.getElementById("userBadge");
+    const appLayout      = document.getElementById("appLayout");
 
     const todayLabel     = document.getElementById("todayLabel");
     const dayFilter      = document.getElementById("dayFilter");
     const statsPill      = document.getElementById("statsPill");
+    const currentStopCard= document.getElementById("currentStopCard");
+    const houseList      = document.getElementById("houseList");
+    const noStopsMessage = document.getElementById("noStopsMessage");
 
-    const currentStopCard = document.getElementById("currentStopCard");
-    const houseList       = document.getElementById("houseList");
-    const noStopsMessage  = document.getElementById("noStopsMessage");
+    const routePanel     = document.getElementById("routePanel");
+    const sheetHandle    = document.getElementById("sheetHandle");
 
-    const bottomSheet   = document.getElementById("bottomSheet");
-    const sheetHandle   = document.getElementById("sheetHandle");
-
-    /***********************
-     * HELPERS
-     ***********************/
+    /* HELPERS */
     function getTodayName() {
       const now = new Date();
       return weekdayNames[now.getDay()];
@@ -686,9 +626,143 @@
       return stops.find(s => s.binStatus === "Pending") || stops[0] || null;
     }
 
-    /***********************
-     * RENDER
-     ***********************/
+    /* MAP + GEOCODING */
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 33.752, lng: -112.27 },
+        zoom: 14,
+        disableDefaultUI: true,
+        zoomControl: true,
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#ebeef3" }] },
+          { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#374151" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#f9fafb" }] },
+          {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#ffffff" }]
+          },
+          {
+            featureType: "road",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#e5e7eb" }]
+          },
+          {
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#dbeafe" }]
+          },
+          {
+            featureType: "poi.park",
+            elementType: "geometry",
+            stylers: [{ color: "#e0f2fe" }]
+          }
+        ]
+      });
+
+      geocoder = new google.maps.Geocoder();
+      loadStopsFromSheet();
+    }
+
+    async function loadStopsFromSheet() {
+      try {
+        const resp = await fetch(STOPS_ENDPOINT);
+        if (!resp.ok) throw new Error('Network error loading stops');
+        const data = await resp.json();
+
+        // Expecting data like:
+        // { id, customerRow, name, fullAddress, plan, phone, email, day, binStatus }
+        stopsState = data.map(s => ({ ...s }));
+
+        clearMarkers();
+        geocodeAndCreateMarkers();
+        selectedStopId = null;
+        renderView();
+      } catch (err) {
+        console.error('Failed to load stops from sheet', err);
+      }
+    }
+
+    function clearMarkers() {
+      Object.values(markers).forEach(m => m.setMap(null));
+      for (const id in markers) {
+        delete markers[id];
+      }
+    }
+
+    function placeMarker(stop, bounds) {
+      const marker = new google.maps.Marker({
+        position: { lat: stop.lat, lng: stop.lng },
+        map,
+        title: stop.fullAddress,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 7,
+          fillColor: "#166534",
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 2
+        }
+      });
+
+      marker.addListener("click", () => {
+        setSelectedStop(stop.id);
+        if (window.innerWidth <= 900) {
+          routePanel.classList.add("expanded");
+        }
+      });
+
+      markers[stop.id] = marker;
+      if (bounds && stop.lat && stop.lng) {
+        bounds.extend({ lat: stop.lat, lng: stop.lng });
+      }
+    }
+
+    function geocodeAndCreateMarkers() {
+      if (!geocoder || !map || !stopsState.length) return;
+
+      const bounds = new google.maps.LatLngBounds();
+      let anyValid = false;
+
+      stopsState.forEach((stop) => {
+        // If already geocoded in memory
+        if (typeof stop.lat === "number" && typeof stop.lng === "number") {
+          placeMarker(stop, bounds);
+          anyValid = true;
+          return;
+        }
+
+        if (!stop.fullAddress) return;
+
+        geocoder.geocode({ address: stop.fullAddress }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            const loc = results[0].geometry.location;
+            stop.lat = loc.lat();
+            stop.lng = loc.lng();
+            placeMarker(stop, bounds);
+            anyValid = true;
+            map.fitBounds(bounds);
+          } else {
+            console.warn("Geocode failed for", stop.fullAddress, status);
+          }
+        });
+      });
+
+      if (anyValid) {
+        map.fitBounds(bounds);
+      }
+    }
+
+    function focusMarker(stopId) {
+      const marker = markers[stopId];
+      if (marker && map) {
+        map.panTo(marker.getPosition());
+        if (map.getZoom() < 15) map.setZoom(15);
+      }
+    }
+
+    /* RENDER */
     function renderView() {
       const filtered = getFilteredStops();
 
@@ -736,10 +810,10 @@
           <span class="status-pill-small ${statusClass}">${current.binStatus}</span>
         </div>
         <div class="current-stop-meta">
-          <div><strong>Plan:</strong> ${current.plan}</div>
+          <div><strong>Plan:</strong> ${current.plan || "—"}</div>
           <div><strong>Phone:</strong> ${current.phone || "—"}</div>
-          <div><strong>Trash day:</strong> ${current.day}</div>
-          <div><strong>Row:</strong> ${current.customerRow}</div>
+          <div><strong>Trash day:</strong> ${current.day || "—"}</div>
+          <div><strong>Row:</strong> ${current.customerRow || "—"}</div>
         </div>
         <div class="current-actions">
           <button class="btn btn-primary" data-action="done" data-id="${current.id}">Done</button>
@@ -747,6 +821,8 @@
           <button class="btn btn-ghost" data-action="contact" data-id="${current.id}">Contact</button>
         </div>
       `;
+
+      focusMarker(current.id);
     }
 
     function renderHouseList(stops) {
@@ -762,9 +838,11 @@
         row.innerHTML = `
           <div class="house-row-main">
             <span class="house-row-address">${index + 1}. ${stop.fullAddress}</span>
-            <span class="house-row-sub">${stop.plan} · ${stop.day} · Row ${stop.customerRow}</span>
+            <span class="house-row-sub">
+              ${(stop.plan || "Plan not set")} · ${(stop.day || "Day not set")} · Row ${(stop.customerRow || "—")}
+            </span>
           </div>
-          <span class="house-row-status">${stop.binStatus}</span>
+          <span class="house-row-status">${stop.binStatus || "Pending"}</span>
         `;
 
         row.addEventListener("click", () => setSelectedStop(stop.id));
@@ -792,7 +870,7 @@
       const stop = stopsState.find(s => s.id === stopId);
       if (!stop) return;
       stop.binStatus = newStatus;
-      // FUTURE: Twilio / email trigger goes here
+      // FUTURE: send update back to sheet + Twilio SMS
       renderView();
     }
 
@@ -807,12 +885,12 @@
           return;
         }
       }
+
       alert(`Contact ${stop.name || "customer"} at ${stop.email || "saved email"}.`);
     }
 
-    /***********************
-     * EVENTS
-     ***********************/
+    /* EVENTS */
+
     // Login
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -822,6 +900,7 @@
       if (authenticate(email, password)) {
         loginError.classList.add("hidden");
         loginOverlay.classList.add("hidden");
+        appLayout.classList.remove("hidden");
         userBadge.classList.remove("hidden");
       } else {
         loginError.classList.remove("hidden");
@@ -834,7 +913,7 @@
       renderView();
     });
 
-    // Current house buttons
+    // Current house actions
     currentStopCard.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-action]");
       if (!btn) return;
@@ -846,16 +925,19 @@
       if (action === "contact") handleContact(stopId);
     });
 
-    // Sheet collapse / expand
+    // Bottom sheet toggle (mobile)
     sheetHandle.addEventListener("click", () => {
-      bottomSheet.classList.toggle("sheet-collapsed");
+      routePanel.classList.toggle("expanded");
     });
 
-    /***********************
-     * INIT
-     ***********************/
+    /* INIT (non-map) */
     setInitialDayFilter();
-    renderView();
   </script>
+
+  <!-- GOOGLE MAPS: plug your real key here -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap"
+    async
+    defer></script>
 </body>
 </html>
