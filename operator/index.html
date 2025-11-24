@@ -632,10 +632,7 @@
     let routeStart = null;
     let routeFinished = false;
 
-    const houseIcon = {
-      url: "https://img.icons8.com/ios-filled/50/16a34a/home.png",
-      scaledSize: new google.maps.Size(32, 32)
-    };
+    let houseIcon;
 
     // DOM refs
     const sheetEl = document.getElementById("routeSheet");
@@ -739,6 +736,11 @@
           }
         ]
       });
+
+      houseIcon = {
+        url: "https://img.icons8.com/ios-filled/50/16a34a/home.png",
+        scaledSize: new google.maps.Size(32, 32)
+      };
 
       geocoder = new google.maps.Geocoder();
       bounds = new google.maps.LatLngBounds();
