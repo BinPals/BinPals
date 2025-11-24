@@ -524,6 +524,7 @@
               <h1 class="route-title">Today’s route</h1>
             </div>
             <div class="stats-pill" id="statsPill">0 left today / 0 total</div>
+            <div id="routeTimer" style="font-size:11px;color:#6b7280;"></div>
           </div>
 
           <div class="field-row">
@@ -559,6 +560,9 @@
               <button class="btn-pill btn-main" id="btnDone">Mark done</button>
               <button class="btn-pill btn-ghost" id="btnSkip">Skip</button>
               <button class="btn-pill btn-ghost" id="btnContact">Contact</button>
+            </div>
+            <div class="button-row" style="margin-top:8px;">
+              <button class="btn-pill btn-ghost" id="btnOpenNav" type="button">Start route &amp; Open in Maps</button>
             </div>
           </div>
 
@@ -624,6 +628,14 @@
     let selectedIndex = 0;
     let bounds;
     let geocoder;
+    let routePolyline = null;
+    let routeStart = null;
+    let routeFinished = false;
+
+    const houseIcon = {
+      url: "https://img.icons8.com/ios-filled/50/16a34a/home.png",
+      scaledSize: new google.maps.Size(32, 32)
+    };
 
     // DOM refs
     const sheetEl = document.getElementById("routeSheet");
@@ -642,6 +654,8 @@
     const btnContactEl = document.getElementById("btnContact");
     const locBtnEl = document.getElementById("locBtn");
     const routeDayLabelEl = document.getElementById("routeDayLabel");
+    const btnOpenNavEl = document.getElementById("btnOpenNav");
+    const routeTimerEl = document.getElementById("routeTimer");
 
     // Helper: get weekday label
     function getTodayLabel() {
@@ -734,16 +748,25 @@
         const resp = await fetch(GOOGLE_SHEETS_API_URL);
         if (resp.ok) {
           const data = await resp.json();
-          if (Array.isArray(data) && data.length > 0) {
-            stops = data;
-          } else {
-            stops = MOCK_STOPS;
-          }
+          stops = data.map((item) => ({
+            ...item,
+            fullAddress: item.fullAddress || "",
+            name: item.name || "",
+            plan: item.plan || "",
+            bins: item.bins || "",
+            trashDay: item.trashDay || "",
+            phone: item.phone || "",
+            status: ["Pending", "Skipped", "Done"].includes(item.status) ? item.status : "Pending",
+            hasLatLng: typeof item.lat === "number" && typeof item.lng === "number"
+          }));
+          console.log("Sheets endpoint entry:", stops[0]);
+          stops = MOCK_STOPS;
         } else {
+          console.log("Sheets unavailable, fallback to mock");
           stops = MOCK_STOPS;
         }
       } catch (err) {
-        console.log("Error loading sheets data, using mock:", err);
+        console.log("Sheets unavailable, fallback to mock (err):", err);
         stops = MOCK_STOPS;
       }
 
@@ -770,6 +793,13 @@
         } else {
           alert("No contact info on file for this house yet.");
         }
+      });
+
+      btnOpenNavEl.addEventListener("click", () => {
+        if (!filteredStops.length) return;
+        const stop = filteredStops[0];
+        startRouteIfNeeded();
+        openNavigationTo(stop.fullAddress);
       });
     }
 
@@ -813,14 +843,7 @@
           position: { lat: stop.lat, lng: stop.lng },
           map,
           title: stop.fullAddress,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 8,
-            fillColor: "#111827",
-            fillOpacity: 1,
-            strokeColor: "#ffffff",
-            strokeWeight: 2
-          }
+          icon: houseIcon
         });
 
         marker.addListener("click", () => {
@@ -867,6 +890,28 @@
       renderCurrentHouse();
       highlightActiveHouseRow();
       updateStatsPill();
+      drawRoutePolyline();
+    }
+
+    function drawRoutePolyline() {
+      if (routePolyline) {
+        routePolyline.setMap(null);
+        routePolyline = null;
+      }
+
+      const path = filteredStops
+        .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
+        .map((s) => ({ lat: s.lat, lng: s.lng }));
+
+      if (!path.length) return;
+
+      routePolyline = new google.maps.Polyline({
+        path,
+        map,
+        strokeColor: "#16a34a",
+        strokeOpacity: 0.9,
+        strokeWeight: 4
+      });
     }
 
     function updateStatsPill() {
@@ -986,7 +1031,37 @@
       renderCurrentHouse();
       highlightActiveHouseRow();
       updateStatsPill();
+      if (filteredStops.every((s) => (s.status || "") === "Done")) finishRouteIfNeeded();
       // TODO: later - send status back to Google Sheet via Apps Script
+    }
+
+    function startRouteIfNeeded() {
+      if (routeFinished || routeStart) return;
+      routeStart = new Date();
+      routeTimerEl.textContent = "Started: " + routeStart.toLocaleTimeString();
+    }
+
+    function finishRouteIfNeeded() {
+      if (routeFinished || !routeStart) return;
+
+      const now = new Date();
+      const durationMs = now - routeStart;
+      const durationMins = Math.round(durationMs / 60000);
+      routeFinished = true;
+      routeTimerEl.textContent = `Finished · ${formatDuration(durationMins)}`;
+    }
+
+    function openNavigationTo(address) {
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+      window.open(url, "_blank");
+    }
+
+    function formatDuration(totalMins) {
+      const hours = Math.floor(totalMins / 60);
+      const mins = totalMins % 60;
+      if (hours && mins) return `${hours}h ${mins}m`;
+      if (hours) return `${hours}h`;
+      return `${mins}m`;
     }
   </script>
 
