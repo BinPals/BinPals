@@ -1,642 +1,679 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>BinPals Operator Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="BinPals Operator – route tools for field teams.">
+  <meta charset="utf-8" />
+  <title>BinPals Operator | Today's Route</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --green: #166534;
-      --green-dark: #0f3c22;
-      --text-main: #0f172a;
-      --text-muted: #4b5563;
-      --border: #e5e7eb;
-      --pill-gray-bg: #f3f4f6;
-      --pill-gray-border: #e5e7eb;
-      --pill-gray-text: #4b5563;
-      --pill-green-bg: #ecfdf3;
-      --pill-green-border: #bbf7d0;
-      --pill-green-text: #166534;
-      --pill-red-bg: #fef2f2;
-      --pill-red-border: #fecaca;
-      --pill-red-text: #b91c1c;
+      --green-soft: #ecfdf3;
+      --green-border: #bbf7d0;
+      --green-pill: #22c55e;
+      --red-pill: #f97316;
+      --gray-bg: #f3f4f6;
+      --gray-soft: #f9fafb;
+      --gray-border: #e5e7eb;
+      --gray-text: #4b5563;
+      --gray-muted: #6b7280;
+      --navy: #0f172a;
+      --white: #ffffff;
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.16);
+      --radius-xl: 24px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
       font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text-main);
-      overflow: hidden;
-      background: #f5f5f5;
+      background: #f3f4f6;
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
     }
 
-    .hidden { display: none !important; }
-
-    /* MAIN LAYOUT (after login) */
-    .app-layout {
-      height: 100%;
-      width: 100%;
-      display: flex;
-    }
-
-    /* LEFT: ROUTE PANEL (desktop) / BOTTOM SHEET (mobile) */
-    .route-panel {
-      background: #ffffff;
-      border-right: 1px solid var(--border);
-      width: 420px;
-      max-width: 100%;
-      padding: 18px 18px 20px;
+    .op-shell {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      z-index: 2;
-      overflow-y: auto;
+      background: #f3f4f6;
     }
 
-    .route-header {
+    /* HEADER ---------------------------------------------------- */
+    .op-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 4px;
+      padding: 16px 20px;
+      gap: 16px;
     }
 
-    .brand {
-      display: flex;
+    .brand-wrap {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .brand-mark {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
       display: grid;
       place-items: center;
-      background: radial-gradient(circle at 30% 20%, #4ade80, #22c55e);
-      color: #052e16;
+      background: radial-gradient(circle at 20% 10%, #86efac, #22c55e);
+      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.35);
+      color: #022c22;
       font-weight: 800;
-      font-size: 14px;
-      box-shadow: 0 16px 30px rgba(22, 101, 52, 0.35);
+      font-size: 18px;
     }
 
-    .brand-text-title {
-      font-weight: 700;
-      font-size: 15px;
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .brand-text-sub {
-      font-size: 12px;
-      color: var(--text-muted);
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      color: var(--gray-muted);
     }
 
     .status-pill {
-      background: #ecfdf3;
-      color: #15803d;
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
       border: 1px solid #bbf7d0;
-    }
-
-    .tiny-label {
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .sheet-title {
-      margin: 2px 0 4px;
-      font-size: 20px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 13px;
       font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
-    .sheet-header {
+    /* LAYOUT ---------------------------------------------------- */
+    .op-main {
+      flex: 1;
+      position: relative;
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .map-panel {
+      position: relative;
+      flex: 1;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .loc-btn {
+      position: absolute;
+      right: 16px;
+      bottom: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: var(--white);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.26);
+      border: none;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .loc-inner {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 2px solid #020617;
+      display: grid;
+      place-items: center;
+    }
+
+    .loc-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #020617;
+    }
+
+    /* ROUTE SHEET (mobile bottom sheet) ------------------------- */
+    .route-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 90vh;
+      background: var(--white);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      box-shadow: var(--shadow-soft);
+      transform: translateY(calc(90vh - 220px));
+      transition: transform 0.22s ease-out;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .route-sheet[data-state="full"] {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      padding-top: 8px;
+      padding-bottom: 6px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .sheet-handle-bar {
+      width: 68px;
+      height: 4px;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .route-inner {
+      padding: 12px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .route-meta-top {
+      display: flex;
       justify-content: space-between;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .route-kicker {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gray-muted);
+    }
+
+    .route-title {
+      margin: 2px 0 0;
+      font-size: 22px;
+      font-weight: 800;
     }
 
     .stats-pill {
-      background: var(--pill-gray-bg);
+      padding: 8px 18px;
       border-radius: 999px;
-      padding: 8px 12px;
-      border: 1px solid var(--pill-gray-border);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      align-self: flex-start;
-      color: var(--pill-gray-text);
-    }
-
-    .stats-pill.success {
-      background: var(--pill-green-bg);
-      border-color: var(--pill-green-border);
-      color: var(--pill-green-text);
-    }
-
-    .filter-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .filter-row label {
+      border: 1px solid var(--gray-border);
+      background: var(--gray-soft);
       font-size: 12px;
-      color: var(--text-muted);
+      font-weight: 600;
+      color: var(--gray-muted);
+      white-space: nowrap;
     }
 
-    #dayFilter {
-      padding: 7px 12px;
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--gray-muted);
+    }
+
+    .field-label {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 11px;
+      color: var(--gray-muted);
+    }
+
+    .filter-select {
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f9fafb;
+      border: 1px solid var(--gray-border);
+      background: var(--gray-soft);
+      padding: 8px 28px 8px 12px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--text-main);
+      color: var(--navy);
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8L10 12L14 8' stroke='%236b7280' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 9px center;
+      background-size: 14px;
     }
 
-    .current-stop-card {
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: #f9fafb;
-      padding: 12px 14px 12px;
+    /* CARDS ----------------------------------------------------- */
+    .card {
+      border-radius: 18px;
+      border: 1px solid var(--gray-border);
+      background: var(--white);
+      padding: 16px 16px 14px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.04);
     }
 
-    .current-stop-title {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 600;
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
-    .status-pill-small {
-      background: var(--pill-gray-bg);
-      border-radius: 999px;
-      padding: 7px 14px;
-      border: 1px solid var(--pill-gray-border);
+    .card-eyebrow {
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--pill-gray-text);
+      letter-spacing: 0.16em;
+      color: var(--gray-muted);
+      margin-bottom: 4px;
     }
 
-    .status-pill-small.done {
-      background: var(--pill-green-bg);
-      border-color: var(--pill-green-border);
-      color: var(--pill-green-text);
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+      color: #9ca3af;
     }
 
-    .status-pill-small.skipped {
-      background: var(--pill-red-bg);
-      border-color: var(--pill-red-border);
-      color: var(--pill-red-text);
+    .addr-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--navy);
     }
 
-    .current-stop-meta {
+    .addr-sub {
+      font-size: 13px;
+      color: var(--gray-muted);
+      margin: 2px 0 0;
+    }
+
+    .status-tag {
+      padding: 6px 14px;
+      border-radius: 999px;
       font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin: 6px 0 10px;
+      font-weight: 600;
+      border: 1px solid var(--gray-border);
+      background: var(--gray-soft);
+      color: var(--gray-muted);
+      white-space: nowrap;
     }
 
-    .current-stop-meta div { margin-bottom: 2px; }
-    .current-stop-meta strong { color: var(--text-main); }
+    .status-tag.pending {
+      background: #fef3c7;
+      border-color: #fde68a;
+      color: #92400e;
+    }
 
-    .current-actions {
+    .status-tag.done {
+      background: #dcfce7;
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .status-tag.skipped {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    .meta-list {
+      margin: 8px 0 10px;
+      padding: 0;
+      list-style: none;
+      font-size: 13px;
+      color: var(--gray-text);
+      display: grid;
+      gap: 3px;
+    }
+
+    .meta-list span {
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gray-muted);
+    }
+
+    .button-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 9px 14px;
+    .btn-pill {
+      flex: 1;
+      padding: 10px 14px;
       border-radius: 999px;
       border: none;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      outline: none;
-      transition: background-color 0.15s ease,
-                  transform 0.07s ease,
-                  box-shadow 0.15s ease;
+      text-align: center;
     }
 
-    .btn-primary {
+    .btn-main {
       background: var(--green);
-      color: #ffffff;
-      box-shadow: 0 10px 18px rgba(22, 101, 52, 0.35);
+      color: var(--white);
     }
 
-    .btn-primary:hover { background: var(--green-dark); }
-    .btn-primary:active {
-      transform: translateY(1px);
-      box-shadow: 0 6px 12px rgba(22, 101, 52, 0.28);
+    .btn-main:disabled {
+      background: #d1d5db;
+      color: #9ca3af;
+      cursor: default;
     }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-    .btn-secondary:hover { background: #d1d5db; }
 
     .btn-ghost {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      color: #4b5563;
-    }
-    .btn-ghost:hover {
       background: #f9fafb;
-      color: #111827;
+      color: var(--navy);
+      border: 1px solid var(--gray-border);
     }
 
-    .house-list-label { margin-top: 2px; }
-
-    .house-list {
+    .houses-title {
       margin-top: 4px;
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gray-muted);
+    }
+
+    .houses-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
+      margin-top: 6px;
     }
 
     .house-row {
-      border-radius: 999px;
-      border: 1px solid transparent;
-      background: #f3f4f6;
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--gray-border);
+      background: var(--gray-soft);
+      padding: 10px 12px;
+      font-size: 13px;
       cursor: pointer;
-      transition: background-color 0.12s ease,
-                  transform 0.06s ease,
-                  border-color 0.12s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
     }
 
-    .house-row:hover {
-      background: #e5e7eb;
-      transform: translateY(-1px);
-    }
-
-    .house-row.selected {
-      background: #ecfdf3;
-      border-color: #bbf7d0;
+    .house-row.active {
+      border-color: var(--green-border);
+      background: var(--green-soft);
     }
 
     .house-row-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-    }
-
-    .house-row-address {
       font-weight: 600;
-      color: var(--text-main);
+      color: var(--navy);
     }
 
     .house-row-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .house-row-status {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-    }
-
-    .no-stops {
       font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
+      color: var(--gray-muted);
     }
 
-    /* RIGHT: MAP (full bleed, no rounded corners, fills screen) */
-    .map-panel {
-      position: relative;
-      flex: 1;
+    .empty-text {
+      font-size: 13px;
+      color: var(--gray-muted);
+      margin-top: 6px;
     }
 
-    #map {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* MOBILE BOTTOM SHEET */
-    .sheet-handle {
-      display: none;
-    }
-
-    @media (max-width: 900px) {
-      .app-layout {
-        display: block;
+    /* DESKTOP SPLIT LAYOUT ------------------------------------- */
+    @media (min-width: 900px) {
+      .op-main {
+        flex-direction: row;
       }
 
       .map-panel {
-        position: fixed;
-        inset: 0;
-        z-index: 1;
+        order: 2;
+        height: calc(100vh - 72px);
       }
 
-      .route-panel {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 65%;
-        max-height: 80%;
-        border-right: none;
-        border-top-left-radius: 26px;
-        border-top-right-radius: 26px;
-        box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.25);
-        padding: 12px 18px 20px;
-        transform: translateY(55%);
-        transition: transform 0.25s ease-out;
-        z-index: 2;
-      }
-
-      .route-panel.expanded {
-        transform: translateY(0%);
+      .route-sheet {
+        position: relative;
+        order: 1;
+        height: calc(100vh - 72px);
+        width: 420px;
+        max-width: 460px;
+        border-radius: 0 24px 0 0;
+        box-shadow: none;
+        transform: translateY(0) !important;
       }
 
       .sheet-handle {
-        display: block;
-        width: 40px;
-        height: 5px;
-        border-radius: 999px;
-        background: #d1d5db;
-        margin: 6px auto 10px;
+        display: none;
       }
-    }
 
-    /* LOGIN OVERLAY */
-    #loginOverlay {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: #f9fafb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .login-panel {
-      width: min(480px, 100%);
-      background: #ffffff;
-      border-radius: 24px;
-      border: 1px solid var(--border);
-      box-shadow: 0 26px 60px rgba(15, 23, 42, 0.18);
-      padding: 22px 24px 20px;
-    }
-
-    .login-panel h1 {
-      margin: 0 0 6px;
-      font-size: 22px;
-    }
-
-    .login-panel p {
-      margin: 0 0 14px;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .login-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .login-field label {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .login-field input {
-      width: 100%;
-      padding: 11px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f9fafb;
-      font-size: 14px;
-      color: var(--text-main);
-    }
-
-    .login-field input:focus {
-      outline: 2px solid rgba(22, 101, 52, 0.35);
-      border-color: transparent;
-      background: #ffffff;
-    }
-
-    .login-error {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: #fef2f2;
-      color: #b91c1c;
-      font-size: 13px;
-      font-weight: 600;
-      border: 1px solid #fecaca;
-    }
-
-    .login-btn {
-      width: 100%;
-      margin-top: 4px;
-      padding-block: 11px;
+      .route-inner {
+        padding: 18px 20px 18px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- LOGIN -->
-  <div id="loginOverlay">
-    <div class="login-panel">
-      <h1>Operator login</h1>
-      <p>Use your BinPals operator credentials to access today’s route.</p>
-      <form id="loginForm" novalidate>
-        <div class="login-field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email"
-                 placeholder="operator@getbinpals.com"
-                 autocomplete="username" required>
+  <div class="op-shell">
+    <header class="op-header">
+      <div class="brand-wrap">
+        <div class="brand-mark">BP</div>
+        <div class="brand-text">
+          <div class="brand-title">BinPals Operator</div>
+          <div class="brand-sub">Route tools for field teams</div>
         </div>
-        <div class="login-field">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password"
-                 placeholder="••••••••" autocomplete="current-password" required>
-        </div>
-        <button type="submit" class="btn btn-primary login-btn">Login</button>
-        <div id="loginError" class="login-error hidden">
-          Incorrect email or password.
-        </div>
-      </form>
-    </div>
-  </div>
+      </div>
+      <div class="status-pill">LOGGED IN</div>
+    </header>
 
-  <!-- APP -->
-  <div class="app-layout hidden" id="appLayout">
-    <section class="route-panel" id="routePanel">
-      <div class="sheet-handle" id="sheetHandle"></div>
+    <main class="op-main">
+      <!-- MAP -->
+      <div class="map-panel">
+        <div id="map"></div>
+        <button class="loc-btn" id="locBtn" type="button" aria-label="Recenter on route">
+          <div class="loc-inner">
+            <div class="loc-dot"></div>
+          </div>
+        </button>
+      </div>
 
-      <header class="route-header">
-        <div class="brand">
-          <div class="brand-mark">BP</div>
+      <!-- ROUTE SHEET -->
+      <section class="route-sheet" id="routeSheet" data-state="peek">
+        <div class="sheet-handle" id="sheetHandle">
+          <div class="sheet-handle-bar"></div>
+        </div>
+        <div class="route-inner">
+          <div class="route-meta-top">
+            <div>
+              <div class="route-kicker" id="routeDayLabel">TODAY</div>
+              <h1 class="route-title">Today’s route</h1>
+            </div>
+            <div class="stats-pill" id="statsPill">0 left today / 0 total</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-label">Trash day</div>
+            <select id="dayFilter" class="filter-select">
+              <option value="today">Today only</option>
+              <option value="all">All days</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+            </select>
+          </div>
+
+          <div class="card" id="currentCard">
+            <div class="card-eyebrow">Current house</div>
+            <div class="card-header-row">
+              <div>
+                <p class="addr-title" id="currentAddress">No houses for this filter.</p>
+                <p class="addr-sub" id="currentName"></p>
+              </div>
+              <div class="status-tag" id="currentStatusTag">—</div>
+            </div>
+            <ul class="meta-list" id="currentMeta"></ul>
+
+            <div class="label-row">
+              <span>Bin status</span>
+              <span id="currentIndexLabel"></span>
+            </div>
+            <div class="button-row">
+              <button class="btn-pill btn-main" id="btnDone">Mark done</button>
+              <button class="btn-pill btn-ghost" id="btnSkip">Skip</button>
+              <button class="btn-pill btn-ghost" id="btnContact">Contact</button>
+            </div>
+          </div>
+
           <div>
-            <div class="brand-text-title">BinPals Operator</div>
-            <div class="brand-text-sub">Route tools for field teams</div>
+            <div class="houses-title">Houses</div>
+            <div class="houses-list" id="housesList"></div>
+            <p class="empty-text" id="emptyText">No houses for this filter.</p>
           </div>
         </div>
-        <div id="userBadge" class="status-pill hidden">Logged in</div>
-      </header>
-
-      <div class="sheet-header">
-        <div>
-          <div class="tiny-label" id="todayLabel">Today · Sunday</div>
-          <h2 class="sheet-title">Today’s route</h2>
-        </div>
-        <div id="statsPill" class="stats-pill">0 left today / 0 total</div>
-      </div>
-
-      <div class="filter-row">
-        <label for="dayFilter">Trash day</label>
-        <select id="dayFilter">
-          <option value="today">Today only</option>
-          <option value="all">All days</option>
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
-          <option>Saturday</option>
-        </select>
-      </div>
-
-      <div id="currentStopCard" class="current-stop-card"></div>
-
-      <div class="house-list-label tiny-label">Houses</div>
-      <div id="houseList" class="house-list"></div>
-      <p id="noStopsMessage" class="no-stops" style="display:none;">No houses for this filter.</p>
-    </section>
-
-    <section class="map-panel">
-      <div id="map"></div>
-    </section>
+      </section>
+    </main>
   </div>
 
   <script>
-    /*************
-     * CONFIG
-     *************/
-    // Your deployed Apps Script Web App URL
-    const STOPS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+    // ===== CONFIG =====
+    const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+    const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
 
-    const ALLOWED_USERS = [
-      { email: "operator@getbinpals.com", password: "route123" }
+    // Fallback mock data so the UI works even if the sheet endpoint isn't ready
+    const MOCK_STOPS = [
+      {
+        id: 1,
+        fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
+        name: "Garcia Family",
+        plan: "Premium – $45/mo",
+        phone: "555-555-0001",
+        trashDay: "Tuesday",
+        bins: "2",
+        status: "Pending",
+        lat: 33.7423,
+        lng: -112.3001
+      },
+      {
+        id: 2,
+        fullAddress: "9876 W Binpals Way, Peoria AZ",
+        name: "Nguyen Family",
+        plan: "Premium+ – $54/mo",
+        phone: "",
+        trashDay: "Tuesday",
+        bins: "4",
+        status: "Pending",
+        lat: 33.7449,
+        lng: -112.2935
+      },
+      {
+        id: 3,
+        fullAddress: "5555 W Route Runner Rd, Peoria AZ",
+        name: "Jones Family",
+        plan: "Premium – $45/mo",
+        phone: "555-555-0002",
+        trashDay: "Wednesday",
+        bins: "2",
+        status: "Done",
+        lat: 33.7482,
+        lng: -112.3059
+      }
     ];
 
-    const weekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
     let map;
+    let markers = [];
+    let stops = [];
+    let filteredStops = [];
+    let selectedIndex = 0;
+    let bounds;
     let geocoder;
-    const markers = {};
-    let stopsState = [];         // filled from sheet
-    let selectedStopId = null;
 
-    /* DOM REFS */
-    const loginForm      = document.getElementById("loginForm");
-    const loginOverlay   = document.getElementById("loginOverlay");
-    const loginError     = document.getElementById("loginError");
-    const userBadge      = document.getElementById("userBadge");
-    const appLayout      = document.getElementById("appLayout");
+    // DOM refs
+    const sheetEl = document.getElementById("routeSheet");
+    const handleEl = document.getElementById("sheetHandle");
+    const dayFilterEl = document.getElementById("dayFilter");
+    const statsPillEl = document.getElementById("statsPill");
+    const housesListEl = document.getElementById("housesList");
+    const emptyTextEl = document.getElementById("emptyText");
+    const currentAddressEl = document.getElementById("currentAddress");
+    const currentNameEl = document.getElementById("currentName");
+    const currentMetaEl = document.getElementById("currentMeta");
+    const currentStatusTagEl = document.getElementById("currentStatusTag");
+    const currentIndexLabelEl = document.getElementById("currentIndexLabel");
+    const btnDoneEl = document.getElementById("btnDone");
+    const btnSkipEl = document.getElementById("btnSkip");
+    const btnContactEl = document.getElementById("btnContact");
+    const locBtnEl = document.getElementById("locBtn");
+    const routeDayLabelEl = document.getElementById("routeDayLabel");
 
-    const todayLabel     = document.getElementById("todayLabel");
-    const dayFilter      = document.getElementById("dayFilter");
-    const statsPill      = document.getElementById("statsPill");
-    const currentStopCard= document.getElementById("currentStopCard");
-    const houseList      = document.getElementById("houseList");
-    const noStopsMessage = document.getElementById("noStopsMessage");
-
-    const routePanel     = document.getElementById("routePanel");
-    const sheetHandle    = document.getElementById("sheetHandle");
-
-    /* HELPERS */
-    function getTodayName() {
+    // Helper: get weekday label
+    function getTodayLabel() {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const now = new Date();
-      return weekdayNames[now.getDay()];
+      return `TODAY · ${days[now.getDay()].toUpperCase()}`;
     }
 
-    function setInitialDayFilter() {
-      const todayName = getTodayName();
-      todayLabel.textContent = `Today · ${todayName}`;
-      dayFilter.value = "today";
-      dayFilter.dataset.today = todayName;
+    function isDesktop() {
+      return window.innerWidth >= 900;
     }
 
-    function authenticate(email, password) {
-      const cleaned = email.trim().toLowerCase();
-      return ALLOWED_USERS.some(
-        u => u.email.toLowerCase() === cleaned && u.password === password
-      );
+    function setSheetState(state) {
+      if (isDesktop()) return; // static on desktop
+      sheetEl.dataset.state = state;
     }
 
-    function getFilteredStops() {
-      const value = dayFilter.value;
-      if (value === "today") {
-        const todayName = dayFilter.dataset.today || getTodayName();
-        return stopsState.filter(s => s.day === todayName);
+    function toggleSheetState() {
+      if (isDesktop()) return;
+      const current = sheetEl.dataset.state || "peek";
+      setSheetState(current === "peek" ? "full" : "peek");
+    }
+
+    handleEl.addEventListener("click", toggleSheetState);
+
+    window.addEventListener("resize", () => {
+      if (isDesktop()) {
+        sheetEl.dataset.state = "full";
+      } else {
+        sheetEl.dataset.state = "peek";
       }
-      if (value === "all") return stopsState;
-      return stopsState.filter(s => s.day === value);
-    }
+    });
 
-    function getTodayStopsOnly() {
-      const todayName = dayFilter.dataset.today || getTodayName();
-      return stopsState.filter(s => s.day === todayName);
-    }
+    // ===== MAP INIT (called by Google script) =====
+    async function initMap() {
+      routeDayLabelEl.textContent = getTodayLabel();
 
-    function getNextPendingStop(stops) {
-      return stops.find(s => s.binStatus === "Pending") || stops[0] || null;
-    }
-
-    /* MAP + GEOCODING */
-    function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 33.752, lng: -112.27 },
+        center: CITY_CENTER,
         zoom: 14,
         disableDefaultUI: true,
-        zoomControl: true,
         styles: [
-          { elementType: "geometry", stylers: [{ color: "#ebeef3" }] },
-          { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-          { elementType: "labels.text.fill", stylers: [{ color: "#374151" }] },
+          { elementType: "geometry", stylers: [{ color: "#ebeef2" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#4b5563" }] },
           { elementType: "labels.text.stroke", stylers: [{ color: "#f9fafb" }] },
           {
             featureType: "road",
@@ -649,295 +686,282 @@
             stylers: [{ color: "#e5e7eb" }]
           },
           {
+            featureType: "poi",
+            elementType: "geometry",
+            stylers: [{ color: "#e5e7eb" }]
+          },
+          {
             featureType: "water",
             elementType: "geometry",
             stylers: [{ color: "#dbeafe" }]
-          },
-          {
-            featureType: "poi.park",
-            elementType: "geometry",
-            stylers: [{ color: "#e0f2fe" }]
           }
         ]
       });
 
       geocoder = new google.maps.Geocoder();
-      loadStopsFromSheet();
-    }
+      bounds = new google.maps.LatLngBounds();
 
-    async function loadStopsFromSheet() {
+      // Try to load from Sheets endpoint, fallback to mock data
       try {
-        const resp = await fetch(STOPS_ENDPOINT);
-        if (!resp.ok) throw new Error('Network error loading stops');
-        const data = await resp.json();
-
-        // Expecting data like:
-        // { id, customerRow, name, fullAddress, plan, phone, email, day, binStatus }
-        stopsState = data.map(s => ({ ...s }));
-
-        clearMarkers();
-        geocodeAndCreateMarkers();
-        selectedStopId = null;
-        renderView();
+        const resp = await fetch(GOOGLE_SHEETS_API_URL);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (Array.isArray(data) && data.length > 0) {
+            stops = data;
+          } else {
+            stops = MOCK_STOPS;
+          }
+        } else {
+          stops = MOCK_STOPS;
+        }
       } catch (err) {
-        console.error('Failed to load stops from sheet', err);
+        console.log("Error loading sheets data, using mock:", err);
+        stops = MOCK_STOPS;
       }
-    }
 
-    function clearMarkers() {
-      Object.values(markers).forEach(m => m.setMap(null));
-      for (const id in markers) {
-        delete markers[id];
-      }
-    }
+      // Ensure each stop has lat/lng (geocode if missing)
+      await ensureLatLngForStops(stops);
 
-    function placeMarker(stop, bounds) {
-      const marker = new google.maps.Marker({
-        position: { lat: stop.lat, lng: stop.lng },
-        map,
-        title: stop.fullAddress,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 7,
-          fillColor: "#166534",
-          fillOpacity: 1,
-          strokeColor: "#ffffff",
-          strokeWeight: 2
-        }
+      setupMapMarkers();
+      applyFilterAndRender();
+
+      locBtnEl.addEventListener("click", focusAllMarkers);
+      dayFilterEl.addEventListener("change", () => {
+        applyFilterAndRender();
       });
 
-      marker.addListener("click", () => {
-        setSelectedStop(stop.id);
-        if (window.innerWidth <= 900) {
-          routePanel.classList.add("expanded");
+      btnDoneEl.addEventListener("click", () => updateCurrentStatus("Done"));
+      btnSkipEl.addEventListener("click", () => updateCurrentStatus("Skipped"));
+      btnContactEl.addEventListener("click", () => {
+        const s = filteredStops[selectedIndex];
+        if (!s) return;
+        if (s.phone) {
+          window.location.href = `tel:${s.phone.replace(/[^0-9+]/g, "")}`;
+        } else if (s.email) {
+          window.location.href = `mailto:${s.email}`;
+        } else {
+          alert("No contact info on file for this house yet.");
         }
       });
-
-      markers[stop.id] = marker;
-      if (bounds && stop.lat && stop.lng) {
-        bounds.extend({ lat: stop.lat, lng: stop.lng });
-      }
     }
 
-    function geocodeAndCreateMarkers() {
-      if (!geocoder || !map || !stopsState.length) return;
+    async function ensureLatLngForStops(list) {
+      const geocodePromises = [];
 
-      const bounds = new google.maps.LatLngBounds();
-      let anyValid = false;
-
-      stopsState.forEach((stop) => {
-        // If already geocoded in memory
-        if (typeof stop.lat === "number" && typeof stop.lng === "number") {
-          placeMarker(stop, bounds);
-          anyValid = true;
-          return;
-        }
-
+      list.forEach((stop) => {
+        if (typeof stop.lat === "number" && typeof stop.lng === "number") return;
         if (!stop.fullAddress) return;
 
-        geocoder.geocode({ address: stop.fullAddress }, (results, status) => {
-          if (status === "OK" && results[0]) {
-            const loc = results[0].geometry.location;
-            stop.lat = loc.lat();
-            stop.lng = loc.lng();
-            placeMarker(stop, bounds);
-            anyValid = true;
-            map.fitBounds(bounds);
-          } else {
-            console.warn("Geocode failed for", stop.fullAddress, status);
-          }
-        });
+        geocodePromises.push(
+          new Promise((resolve) => {
+            geocoder.geocode({ address: stop.fullAddress }, (results, status) => {
+              if (status === "OK" && results[0]) {
+                const loc = results[0].geometry.location;
+                stop.lat = loc.lat();
+                stop.lng = loc.lng();
+              } else {
+                console.log("Geocode failed for", stop.fullAddress, status);
+              }
+              resolve();
+            });
+          })
+        );
       });
 
-      if (anyValid) {
-        map.fitBounds(bounds);
-      }
+      await Promise.all(geocodePromises);
     }
 
-    function focusMarker(stopId) {
-      const marker = markers[stopId];
-      if (marker && map) {
-        map.panTo(marker.getPosition());
-        if (map.getZoom() < 15) map.setZoom(15);
-      }
+    function setupMapMarkers() {
+      markers.forEach((m) => m.setMap(null));
+      markers = [];
+
+      stops.forEach((stop, index) => {
+        if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
+
+        const marker = new google.maps.Marker({
+          position: { lat: stop.lat, lng: stop.lng },
+          map,
+          title: stop.fullAddress,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "#111827",
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2
+          }
+        });
+
+        marker.addListener("click", () => {
+          const idxInFiltered = filteredStops.findIndex((s) => s.id === stop.id);
+          if (idxInFiltered !== -1) {
+            selectedIndex = idxInFiltered;
+            renderCurrentHouse();
+            highlightActiveHouseRow();
+            focusMarkerForCurrent();
+            setSheetState("full");
+          }
+        });
+
+        markers.push(marker);
+      });
+
+      focusAllMarkers();
     }
 
-    /* RENDER */
-    function renderView() {
-      const filtered = getFilteredStops();
-
-      if (!selectedStopId) {
-        const next = getNextPendingStop(filtered);
-        selectedStopId = next ? next.id : null;
+    function focusAllMarkers() {
+      if (!markers.length) {
+        map.setCenter(CITY_CENTER);
+        map.setZoom(14);
+        return;
       }
-
-      renderCurrentStop(filtered);
-      renderHouseList(filtered);
-      updateStats();
+      const b = new google.maps.LatLngBounds();
+      markers.forEach((m) => b.extend(m.getPosition()));
+      map.fitBounds(b, 80);
     }
 
-    function renderCurrentStop(filteredStops) {
-      const current = selectedStopId
-        ? stopsState.find(s => s.id === selectedStopId)
-        : getNextPendingStop(filteredStops);
+    function applyFilterAndRender() {
+      const dayFilterValue = dayFilterEl.value;
+      const todayDayName = new Date().toLocaleDateString("en-US", { weekday: "long" });
 
-      if (!current) {
-        currentStopCard.innerHTML = `
-          <div class="tiny-label">Current house</div>
-          <p class="no-stops">No houses for this filter.</p>
-        `;
+      filteredStops = stops.filter((stop) => {
+        if (!stop.trashDay) return dayFilterValue !== "today";
+        if (dayFilterValue === "all") return true;
+        if (dayFilterValue === "today") return stop.trashDay === todayDayName;
+        return stop.trashDay === dayFilterValue;
+      });
+
+      selectedIndex = 0;
+      renderHousesList();
+      renderCurrentHouse();
+      highlightActiveHouseRow();
+      updateStatsPill();
+    }
+
+    function updateStatsPill() {
+      const total = filteredStops.length;
+      const leftToday = filteredStops.filter((s) => s.status !== "Done").length;
+      statsPillEl.textContent = `${leftToday} left today / ${total} total`;
+    }
+
+    function renderHousesList() {
+      housesListEl.innerHTML = "";
+      if (!filteredStops.length) {
+        emptyTextEl.style.display = "block";
+        return;
+      }
+      emptyTextEl.style.display = "none";
+
+      filteredStops.forEach((stop, index) => {
+        const div = document.createElement("div");
+        div.className = "house-row" + (index === selectedIndex ? " active" : "");
+        div.dataset.index = index;
+
+        const main = document.createElement("div");
+        main.className = "house-row-main";
+        main.textContent = stop.fullAddress || "Address missing";
+
+        const sub = document.createElement("div");
+        sub.className = "house-row-sub";
+        const bits = [];
+        if (stop.plan) bits.push(stop.plan);
+        if (stop.trashDay) bits.push(stop.trashDay);
+        if (stop.status) bits.push(stop.status);
+        sub.textContent = bits.join(" • ");
+
+        div.appendChild(main);
+        div.appendChild(sub);
+        div.addEventListener("click", () => {
+          selectedIndex = index;
+          renderCurrentHouse();
+          highlightActiveHouseRow();
+          focusMarkerForCurrent();
+          setSheetState("full");
+        });
+
+        housesListEl.appendChild(div);
+      });
+    }
+
+    function highlightActiveHouseRow() {
+      const rows = housesListEl.querySelectorAll(".house-row");
+      rows.forEach((row) => {
+        const idx = Number(row.dataset.index);
+        row.classList.toggle("active", idx === selectedIndex);
+      });
+    }
+
+    function renderCurrentHouse() {
+      const stop = filteredStops[selectedIndex];
+
+      if (!stop) {
+        currentAddressEl.textContent = "No houses for this filter.";
+        currentNameEl.textContent = "";
+        currentMetaEl.innerHTML = "";
+        currentStatusTagEl.textContent = "—";
+        currentStatusTagEl.className = "status-tag";
+        currentIndexLabelEl.textContent = "";
+        btnDoneEl.disabled = true;
+        btnSkipEl.disabled = true;
+        btnContactEl.disabled = true;
         return;
       }
 
-      selectedStopId = current.id;
+      currentAddressEl.textContent = stop.fullAddress || "Address missing";
+      currentNameEl.textContent = stop.name || "";
+      currentMetaEl.innerHTML = "";
 
-      const statusClass =
-        current.binStatus === "Done"
-          ? "done"
-          : current.binStatus === "Skipped"
-          ? "skipped"
-          : "";
+      const metaItems = [];
 
-      currentStopCard.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
-          <div>
-            <div class="tiny-label">Current house</div>
-            <p class="current-stop-title">${current.fullAddress}</p>
-            <p class="brand-text-sub" style="margin:2px 0 0; font-size:12px;">
-              ${current.name || "Customer"}
-            </p>
-          </div>
-          <span class="status-pill-small ${statusClass}">${current.binStatus}</span>
-        </div>
-        <div class="current-stop-meta">
-          <div><strong>Plan:</strong> ${current.plan || "—"}</div>
-          <div><strong>Phone:</strong> ${current.phone || "—"}</div>
-          <div><strong>Trash day:</strong> ${current.day || "—"}</div>
-          <div><strong>Row:</strong> ${current.customerRow || "—"}</div>
-        </div>
-        <div class="current-actions">
-          <button class="btn btn-primary" data-action="done" data-id="${current.id}">Done</button>
-          <button class="btn btn-secondary" data-action="skipped" data-id="${current.id}">Skipped</button>
-          <button class="btn btn-ghost" data-action="contact" data-id="${current.id}">Contact</button>
-        </div>
-      `;
+      if (stop.plan) metaItems.push(`<li><span>Plan:</span> ${stop.plan}</li>`);
+      if (stop.bins) metaItems.push(`<li><span>Bins:</span> ${stop.bins}</li>`);
+      if (stop.trashDay) metaItems.push(`<li><span>Trash day:</span> ${stop.trashDay}</li>`);
+      if (stop.phone) metaItems.push(`<li><span>Phone:</span> ${stop.phone}</li>`);
+      if (typeof stop.customerRow !== "undefined") metaItems.push(`<li><span>Customer row:</span> ${stop.customerRow}</li>`);
 
-      focusMarker(current.id);
-    }
+      currentMetaEl.innerHTML = metaItems.join("");
 
-    function renderHouseList(stops) {
-      houseList.innerHTML = "";
-      noStopsMessage.style.display = stops.length ? "none" : "block";
-
-      stops.forEach((stop, index) => {
-        const row = document.createElement("button");
-        row.type = "button";
-        row.className = "house-row" + (stop.id === selectedStopId ? " selected" : "");
-        row.dataset.id = stop.id;
-
-        row.innerHTML = `
-          <div class="house-row-main">
-            <span class="house-row-address">${index + 1}. ${stop.fullAddress}</span>
-            <span class="house-row-sub">
-              ${(stop.plan || "Plan not set")} · ${(stop.day || "Day not set")} · Row ${(stop.customerRow || "—")}
-            </span>
-          </div>
-          <span class="house-row-status">${stop.binStatus || "Pending"}</span>
-        `;
-
-        row.addEventListener("click", () => setSelectedStop(stop.id));
-        houseList.appendChild(row);
-      });
-    }
-
-    function updateStats() {
-      const today = getTodayStopsOnly();
-      const left  = today.filter(s => s.binStatus === "Pending").length;
-      const total = today.length;
-      statsPill.textContent = `${left} left today / ${total} total`;
-      statsPill.className = left === 0 && total > 0 ? "stats-pill success" : "stats-pill";
-    }
-
-    function setSelectedStop(id) {
-      selectedStopId = id;
-      const filtered = getFilteredStops();
-      renderCurrentStop(filtered);
-      renderHouseList(filtered);
-      updateStats();
-    }
-
-    function handleStatusChange(stopId, newStatus) {
-      const stop = stopsState.find(s => s.id === stopId);
-      if (!stop) return;
-      stop.binStatus = newStatus;
-      // FUTURE: send update back to sheet + Twilio SMS
-      renderView();
-    }
-
-    function handleContact(stopId) {
-      const stop = stopsState.find(s => s.id === stopId);
-      if (!stop) return;
-
-      if (stop.phone) {
-        const cleaned = stop.phone.replace(/[^0-9]/g, "");
-        if (cleaned) {
-          window.location.href = `tel:${cleaned}`;
-          return;
-        }
-      }
-
-      alert(`Contact ${stop.name || "customer"} at ${stop.email || "saved email"}.`);
-    }
-
-    /* EVENTS */
-
-    // Login
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = loginForm.email.value;
-      const password = loginForm.password.value;
-
-      if (authenticate(email, password)) {
-        loginError.classList.add("hidden");
-        loginOverlay.classList.add("hidden");
-        appLayout.classList.remove("hidden");
-        userBadge.classList.remove("hidden");
+      const status = (stop.status || "Pending").toLowerCase();
+      currentStatusTagEl.className = "status-tag";
+      if (status === "done") {
+        currentStatusTagEl.classList.add("done");
+        currentStatusTagEl.textContent = "Done";
+      } else if (status === "skipped") {
+        currentStatusTagEl.classList.add("skipped");
+        currentStatusTagEl.textContent = "Skipped";
       } else {
-        loginError.classList.remove("hidden");
+        currentStatusTagEl.classList.add("pending");
+        currentStatusTagEl.textContent = "Pending";
       }
-    });
 
-    // Filter change
-    dayFilter.addEventListener("change", () => {
-      selectedStopId = null;
-      renderView();
-    });
+      currentIndexLabelEl.textContent = `${selectedIndex + 1} of ${filteredStops.length}`;
+      btnDoneEl.disabled = status === "done";
+      btnSkipEl.disabled = status === "skipped";
+      btnContactEl.disabled = !stop.phone && !stop.email;
+    }
 
-    // Current house actions
-    currentStopCard.addEventListener("click", (e) => {
-      const btn = e.target.closest("button[data-action]");
-      if (!btn) return;
-      const stopId = Number(btn.dataset.id);
-      const action = btn.dataset.action;
+    function focusMarkerForCurrent() {
+      const stop = filteredStops[selectedIndex];
+      if (!stop || typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
 
-      if (action === "done")    handleStatusChange(stopId, "Done");
-      if (action === "skipped") handleStatusChange(stopId, "Skipped");
-      if (action === "contact") handleContact(stopId);
-    });
+      map.panTo({ lat: stop.lat, lng: stop.lng });
+      map.setZoom(16);
+    }
 
-    // Bottom sheet toggle (mobile)
-    sheetHandle.addEventListener("click", () => {
-      routePanel.classList.toggle("expanded");
-    });
-
-    /* INIT (non-map) */
-    setInitialDayFilter();
+    function updateCurrentStatus(newStatus) {
+      const stop = filteredStops[selectedIndex];
+      if (!stop) return;
+      stop.status = newStatus;
+      renderCurrentHouse();
+      highlightActiveHouseRow();
+      updateStatsPill();
+      // TODO: later - send status back to Google Sheet via Apps Script
+    }
   </script>
 
-  <!-- GOOGLE MAPS: plug your real key here -->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap"
-    async
-    defer></script>
+  <!--AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs-->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY_HERE&callback=initMap">
+  </script>
 </body>
 </html>
