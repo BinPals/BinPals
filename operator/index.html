@@ -1027,13 +1027,46 @@
       if (hours) return `${hours}h`;
       return `${mins}m`;
     }
-  </script>
+    // Dynamically load Maps JS so the API key can be overridden without redeploying
+    const DEFAULT_MAPS_API_KEY = "AIzaSyCHo96wWsu_HokSbVp26lJKzHMSZrH8R40";
+
+    function resolveMapsApiKey() {
+      const params = new URLSearchParams(window.location.search);
+      const urlKey = params.get("mapsKey");
+      if (urlKey) {
+        localStorage.setItem("bpMapsKey", urlKey);
+        return urlKey;
+      }
+
+      const storedKey = localStorage.getItem("bpMapsKey");
+      if (storedKey) return storedKey;
+
+      return DEFAULT_MAPS_API_KEY;
+    }
+
+    function loadGoogleMapsScript() {
+      const apiKey = resolveMapsApiKey();
+      if (!apiKey) {
+        console.error("Missing Google Maps API key – unable to load map.");
+        return;
+      }
+
+      if (document.getElementById("google-maps-js")) return; // already loading/loaded
+
+      const script = document.createElement("script");
+      script.id = "google-maps-js";
+      script.async = true;
+      script.defer = true;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&callback=initMap`;
+      script.onerror = () => {
+        console.error("Failed to load Google Maps JS – check API key restrictions/billing.");
+      };
 
   <!-- Google Maps JS (production key) -->
   <script
     async
     defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHo96wWsu_HokSbVp26lJKzHMSZrH8R40&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap"
   ></script>
 </body>
 </html>
