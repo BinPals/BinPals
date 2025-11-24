@@ -98,6 +98,12 @@
       letter-spacing: 0.04em;
     }
 
+    .status-pill.muted {
+      border-color: var(--gray-border);
+      background: var(--gray-soft);
+      color: var(--gray-muted);
+    }
+
     .route-header {
       display: flex;
       align-items: center;
@@ -233,6 +239,63 @@
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
+    }
+
+    .auth-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid var(--gray-border);
+      background: var(--gray-soft);
+      margin: 10px 0 4px;
+    }
+
+    .auth-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .auth-form input {
+      flex: 1 1 160px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-border);
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--white);
+    }
+
+    .auth-form button {
+      flex: 0 0 auto;
+      min-width: 110px;
+    }
+
+    .auth-session {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .auth-user-label {
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .auth-note {
+      font-size: 12px;
+      color: var(--gray-muted);
+      margin: 0;
     }
 
     .route-kicker {
@@ -531,7 +594,24 @@
                 <div class="brand-sub">Route tools for field teams</div>
               </div>
             </div>
-            <div class="status-pill">LOGGED IN</div>
+            <div class="status-pill muted" id="authStatus">LOGGED OUT</div>
+          </div>
+
+          <div class="auth-row" id="authRow">
+            <div class="auth-actions">
+              <form class="auth-form" id="loginForm">
+                <input type="email" id="authEmail" placeholder="name@email.com" aria-label="Email" required />
+                <input type="password" id="authCode" placeholder="Access code" aria-label="Access code" required />
+                <button class="btn-pill btn-main" type="submit">Log in</button>
+              </form>
+
+              <div class="auth-session" id="authSession" hidden>
+                <span class="auth-user-label" id="authUserLabel"></span>
+                <button class="btn-pill btn-ghost" id="logoutBtn" type="button">Log out</button>
+              </div>
+
+              <p class="auth-note">Use your operator email with the shared access code to unlock the route tools.</p>
+            </div>
           </div>
 
           <div class="route-meta-top">
@@ -598,8 +678,11 @@
       <script>
       // ===== CONFIG =====
       const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+      const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
       const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
+      const LOGIN_STORAGE_KEY = "bpOperatorSession";
+      const ACCESS_CODE = "binpals2024";
 
       let map;
       let markers = [];
@@ -633,12 +716,30 @@
       const btnOpenNavEl = document.getElementById("btnOpenNav");
       const btnStartStopEl = document.getElementById("btnStartStop");
       const routeTimerEl = document.getElementById("routeTimer");
+      const authStatusEl = document.getElementById("authStatus");
+      const loginFormEl = document.getElementById("loginForm");
+      const authEmailEl = document.getElementById("authEmail");
+      const authCodeEl = document.getElementById("authCode");
+      const authSessionEl = document.getElementById("authSession");
+      const authUserLabelEl = document.getElementById("authUserLabel");
+      const logoutBtnEl = document.getElementById("logoutBtn");
 
       // ===== DATA HELPERS =====
+      async function fetchJson(url) {
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`Request failed with status ${res.status}`);
+        }
+        return res.json();
+      }
+
       async function loadHouses() {
-        const res = await fetch(API_URL);
-        const houses = await res.json();
-        return houses;
+        try {
+          return await fetchJson(API_URL);
+        } catch (primaryErr) {
+          console.warn("Primary fetch failed, retrying with proxy...", primaryErr);
+          return await fetchJson(`${API_PROXY_PREFIX}${encodeURIComponent(API_URL)}`);
+        }
       }
 
       async function fetchStops() {
@@ -727,6 +828,12 @@
       // ===== MAP INIT (called by Google script) =====
       async function initMap() {
         routeDayLabelEl.textContent = getTodayLabel();
+
+        const storedSession = getStoredSession();
+        updateAuthUI(storedSession);
+
+        loginFormEl.addEventListener("submit", handleLogin);
+        logoutBtnEl.addEventListener("click", handleLogout);
 
         map = new google.maps.Map(document.getElementById("map"), {
           center: CITY_CENTER,
@@ -895,6 +1002,79 @@
         updateMarkerVisuals();
         drawRoutePolyline();
         focusAllMarkers(true);
+      }
+
+      // ===== AUTH =====
+      function getStoredSession() {
+        try {
+          const raw = localStorage.getItem(LOGIN_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) {
+          console.error("Failed to read stored session", err);
+          return null;
+        }
+      }
+
+      function persistSession(session) {
+        localStorage.setItem(LOGIN_STORAGE_KEY, JSON.stringify(session));
+      }
+
+      function clearSession() {
+        localStorage.removeItem(LOGIN_STORAGE_KEY);
+      }
+
+      function updateAuthUI(session) {
+        const isLoggedIn = Boolean(session);
+
+        authStatusEl.style.background = "";
+        authStatusEl.style.borderColor = "";
+        authStatusEl.style.color = "";
+
+        authStatusEl.textContent = isLoggedIn ? "LOGGED IN" : "LOGGED OUT";
+        authStatusEl.classList.toggle("muted", !isLoggedIn);
+
+        loginFormEl.hidden = isLoggedIn;
+        authSessionEl.hidden = !isLoggedIn;
+
+        btnDoneEl.disabled = !isLoggedIn;
+        btnSkipEl.disabled = !isLoggedIn;
+        btnContactEl.disabled = !isLoggedIn;
+        btnOpenNavEl.disabled = !isLoggedIn;
+        btnStartStopEl.disabled = !isLoggedIn;
+
+        if (isLoggedIn) {
+          authUserLabelEl.textContent = session.email;
+        } else {
+          authEmailEl.value = "";
+          authCodeEl.value = "";
+          authEmailEl.focus();
+        }
+      }
+
+      function handleLogin(event) {
+        event.preventDefault();
+        const email = authEmailEl.value.trim();
+        const code = authCodeEl.value.trim();
+
+        if (!email || !code) return;
+
+        if (code !== ACCESS_CODE) {
+          authStatusEl.textContent = "INVALID CODE";
+          authStatusEl.classList.remove("muted");
+          authStatusEl.style.background = "#fee2e2";
+          authStatusEl.style.borderColor = "#fecaca";
+          authStatusEl.style.color = "#b91c1c";
+          return;
+        }
+
+        const session = { email, loggedInAt: new Date().toISOString() };
+        persistSession(session);
+        updateAuthUI(session);
+      }
+
+      function handleLogout() {
+        clearSession();
+        updateAuthUI(null);
       }
 
       function updateMarkerVisuals() {
