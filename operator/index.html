@@ -598,20 +598,15 @@
           </div>
 
           <div class="auth-row" id="authRow">
-            <div class="auth-actions">
-              <form class="auth-form" id="loginForm">
-                <input type="email" id="authEmail" placeholder="name@email.com" aria-label="Email" required />
-                <input type="password" id="authCode" placeholder="Access code" aria-label="Access code" required />
-                <button class="btn-pill btn-main" type="submit">Log in</button>
-              </form>
-
-              <div class="auth-session" id="authSession" hidden>
-                <span class="auth-user-label" id="authUserLabel"></span>
+            <div class="auth-session" id="authSession">
+              <span class="auth-user-label" id="authUserLabel"></span>
+              <div class="auth-actions">
                 <button class="btn-pill btn-ghost" id="logoutBtn" type="button">Log out</button>
+                <a class="btn-pill btn-main" href="/operator/login.html">Switch user</a>
               </div>
-
-              <p class="auth-note">Use your operator email with the shared access code to unlock the route tools.</p>
             </div>
+
+            <p class="auth-note">Log in from the dedicated <a href="/operator/login.html">operator login</a> page to unlock the route tools.</p>
           </div>
 
           <div class="route-meta-top">
@@ -673,8 +668,6 @@
     </main>
   </div>
 
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&v=weekly&libraries=marker"></script>
-      <script src="https://unpkg.com/@googlemaps/js-api-loader/dist/index.min.js"></script>
       <script>
       // ===== CONFIG =====
       const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
@@ -682,7 +675,6 @@
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
       const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
       const LOGIN_STORAGE_KEY = "bpOperatorSession";
-      const ACCESS_CODE = "binpals2024";
 
       let map;
       let markers = [];
@@ -717,9 +709,6 @@
       const btnStartStopEl = document.getElementById("btnStartStop");
       const routeTimerEl = document.getElementById("routeTimer");
       const authStatusEl = document.getElementById("authStatus");
-      const loginFormEl = document.getElementById("loginForm");
-      const authEmailEl = document.getElementById("authEmail");
-      const authCodeEl = document.getElementById("authCode");
       const authSessionEl = document.getElementById("authSession");
       const authUserLabelEl = document.getElementById("authUserLabel");
       const logoutBtnEl = document.getElementById("logoutBtn");
@@ -830,9 +819,13 @@
         routeDayLabelEl.textContent = getTodayLabel();
 
         const storedSession = getStoredSession();
+        if (!storedSession) {
+          window.location.href = "/operator/login.html";
+          return;
+        }
+
         updateAuthUI(storedSession);
 
-        loginFormEl.addEventListener("submit", handleLogin);
         logoutBtnEl.addEventListener("click", handleLogout);
 
         map = new google.maps.Map(document.getElementById("map"), {
@@ -1033,7 +1026,6 @@
         authStatusEl.textContent = isLoggedIn ? "LOGGED IN" : "LOGGED OUT";
         authStatusEl.classList.toggle("muted", !isLoggedIn);
 
-        loginFormEl.hidden = isLoggedIn;
         authSessionEl.hidden = !isLoggedIn;
 
         btnDoneEl.disabled = !isLoggedIn;
@@ -1045,36 +1037,13 @@
         if (isLoggedIn) {
           authUserLabelEl.textContent = session.email;
         } else {
-          authEmailEl.value = "";
-          authCodeEl.value = "";
-          authEmailEl.focus();
+          authStatusEl.textContent = "LOGIN REQUIRED";
         }
-      }
-
-      function handleLogin(event) {
-        event.preventDefault();
-        const email = authEmailEl.value.trim();
-        const code = authCodeEl.value.trim();
-
-        if (!email || !code) return;
-
-        if (code !== ACCESS_CODE) {
-          authStatusEl.textContent = "INVALID CODE";
-          authStatusEl.classList.remove("muted");
-          authStatusEl.style.background = "#fee2e2";
-          authStatusEl.style.borderColor = "#fecaca";
-          authStatusEl.style.color = "#b91c1c";
-          return;
-        }
-
-        const session = { email, loggedInAt: new Date().toISOString() };
-        persistSession(session);
-        updateAuthUI(session);
       }
 
       function handleLogout() {
         clearSession();
-        updateAuthUI(null);
+        window.location.href = "/operator/login.html";
       }
 
       function updateMarkerVisuals() {
@@ -1323,7 +1292,7 @@
         return DEFAULT_MAPS_API_KEY;
       }
 
-      async function loadGoogleMaps() {
+      function loadGoogleMaps() {
         const apiKey = resolveMapsApiKey();
         mapApiKey = apiKey;
 
@@ -1332,34 +1301,22 @@
           return;
         }
 
-        try {
-          const loader = new google.maps.plugins.loader.Loader({
-            apiKey,
-            version: "weekly",
-            libraries: ["maps", "marker"],
-          });
+        const existingScript = document.querySelector("script[data-bp-maps]");
+        if (existingScript) return;
 
-          await loader.load();
-
-          initMap();
-        } catch (err) {
-          console.error("Failed to load Google Maps", err);
-        }
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly&libraries=marker&callback=onGoogleMapsReady`;
+        script.async = true;
+        script.defer = true;
+        script.dataset.bpMaps = "true";
+        document.head.appendChild(script);
       }
 
-      async function onGoogleMapsLoaded() {
-        try {
-          await google.maps.importLibrary("maps");
-          await google.maps.importLibrary("marker");
-        } catch (error) {
-          console.error("Failed to import Google Maps libraries.", error);
-        }
+      function onGoogleMapsReady() {
         initMap();
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        loadGoogleMaps();
-      });
+      document.addEventListener("DOMContentLoaded", loadGoogleMaps);
     </script>
-</body>
+  </body>
 </html>
