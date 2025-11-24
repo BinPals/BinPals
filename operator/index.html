@@ -593,6 +593,8 @@
     </main>
   </div>
 
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&v=weekly&libraries=marker"></script>
+      <script src="https://unpkg.com/@googlemaps/js-api-loader/dist/index.min.js"></script>
       <script>
       // ===== CONFIG =====
       const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
@@ -1150,24 +1152,19 @@
           return;
         }
 
-        // If Google Maps is already loaded, just init.
-        if (window.google && window.google.maps) {
-          onGoogleMapsLoaded();
-          return;
-        }
+        try {
+          const loader = new google.maps.plugins.loader.Loader({
+            apiKey,
+            version: "weekly",
+            libraries: ["maps", "marker"],
+          });
 
-        const script = document.createElement("script");
-        script.src =
-          "https://maps.googleapis.com/maps/api/js?key=" +
-          encodeURIComponent(apiKey) +
-          "&v=weekly&libraries=marker";
-        script.async = true;
-        script.defer = true;
-        script.onload = onGoogleMapsLoaded;
-        script.onerror = (err) => {
-          console.error("Failed to load Google Maps JS – check API key restrictions/billing.", err);
-        };
-        document.head.appendChild(script);
+          await loader.load();
+
+          initMap();
+        } catch (err) {
+          console.error("Failed to load Google Maps", err);
+        }
       }
 
       async function onGoogleMapsLoaded() {
