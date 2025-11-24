@@ -131,7 +131,23 @@
 
     #map {
       width: 100%;
-      height: 100%;
+      height: 100vh;
+      min-height: 400px;
+    }
+
+    .binpals-pin {
+      font-size: 26px;
+      transform: translate(-50%, -50%);
+      transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+    }
+
+    .binpals-pin.selected {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .binpals-pin.inactive {
+      opacity: 0.55;
+      filter: grayscale(1);
     }
 
     .loc-btn {
@@ -579,11 +595,9 @@
 
       <script>
       // ===== CONFIG =====
-      const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+      const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
       const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
-      const HOUSE_PIN_PATH =
-        "M12 2C8.134 2 5 5.228 5 9.305c0 5.556 5.941 12.195 6.194 12.474a1.08 1.08 0 0 0 1.612 0C12.941 21.5 19 14.86 19 9.305 19 5.228 15.866 2 12 2Zm0 4.2a3.1 3.1 0 1 1 0 6.2 3.1 3.1 0 0 1 0-6.2Z";
 
       let map;
       let markers = [];
@@ -591,8 +605,8 @@
       let stops = [];
       let filteredStops = [];
       let selectedIndex = 0;
-      let geocoder;
       let routePolyline = null;
+      let mapApiKey = null;
       let routeStart = null;
       let routeEnd = null;
       let routeFinished = false;
@@ -619,15 +633,15 @@
       const routeTimerEl = document.getElementById("routeTimer");
 
       // ===== DATA HELPERS =====
+      async function loadHouses() {
+        const res = await fetch(API_URL);
+        const houses = await res.json();
+        return houses;
+      }
+
       async function fetchStops() {
         try {
-          const resp = await fetch(GOOGLE_SHEETS_API_URL, { cache: "no-cache" });
-
-          if (!resp.ok) {
-            throw new Error(`Sheets API error ${resp.status}`);
-          }
-
-          const data = await resp.json();
+          const data = await loadHouses();
           return normalizeStopData(data);
         } catch (err) {
           console.error("Failed to fetch stops:", err);
@@ -727,8 +741,6 @@
           ]
         });
 
-        geocoder = new google.maps.Geocoder();
-
         stops = await fetchStops();
         emptyTextEl.textContent = "No houses for this filter.";
 
@@ -771,60 +783,59 @@
         });
       }
 
-      window.initMap = initMap; // for Google Maps callback
-
       // ===== MAP + DATA UTILITIES =====
-      function buildHouseIcon({ color, stroke = "#064e3b", scale = 1.2, opacity = 1 }) {
-        return {
-          path: HOUSE_PIN_PATH,
-          fillColor: color,
-          fillOpacity: opacity,
-          strokeColor: stroke,
-          strokeWeight: 1.2,
-          scale,
-          anchor: new google.maps.Point(12, 22)
-        };
+
+      async function geocodeAddress(fullAddress) {
+        if (!mapApiKey) return null;
+
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${encodeURIComponent(
+          mapApiKey
+        )}`;
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
+          return data?.results?.[0]?.geometry?.location || null;
+        } catch (err) {
+          console.error("Failed to geocode", fullAddress, err);
+          return null;
+        }
       }
 
       async function ensureLatLngForStops(list) {
-        const geocodePromises = [];
-
-        list.forEach((stop) => {
+        const geocodePromises = list.map(async (stop) => {
           if (typeof stop.lat === "number" && typeof stop.lng === "number") return;
           if (!stop.fullAddress) return;
 
-          geocodePromises.push(
-            new Promise((resolve) => {
-              geocoder.geocode({ address: stop.fullAddress }, (results, status) => {
-                if (status === "OK" && results[0]) {
-                  const loc = results[0].geometry.location;
-                  stop.lat = loc.lat();
-                  stop.lng = loc.lng();
-                } else {
-                  console.log("Geocode failed for", stop.fullAddress, status);
-                }
-                resolve();
-              });
-            })
-          );
+          const loc = await geocodeAddress(stop.fullAddress);
+          if (loc) {
+            stop.lat = loc.lat;
+            stop.lng = loc.lng;
+          }
         });
 
         await Promise.all(geocodePromises);
       }
 
+      function createPinElement() {
+        const customPinElement = document.createElement("div");
+        customPinElement.className = "binpals-pin";
+        customPinElement.innerHTML = "🏠";
+        return customPinElement;
+      }
+
       function setupMapMarkers() {
-        markers.forEach((m) => m.setMap(null));
+        markers.forEach((m) => (m.map = null));
         markers = [];
         markerById.clear();
 
         stops.forEach((stop) => {
           if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
 
-          const marker = new google.maps.Marker({
+          const marker = new google.maps.marker.AdvancedMarkerElement({
             position: { lat: stop.lat, lng: stop.lng },
             map,
             title: stop.fullAddress,
-            icon: buildHouseIcon({ color: "#22c55e" })
+            content: createPinElement()
           });
 
           marker.addListener("click", () => {
@@ -850,7 +861,7 @@
         const targetStops = preferFiltered && filteredStops.length ? filteredStops : stops;
         const relevantMarkers = targetStops
           .map((s) => markerById.get(s.id))
-          .filter((m) => m && m.getMap());
+          .filter((m) => m && m.map);
 
         if (!relevantMarkers.length) {
           map.setCenter(CITY_CENTER);
@@ -859,7 +870,7 @@
         }
 
         const bounds = new google.maps.LatLngBounds();
-        relevantMarkers.forEach((m) => bounds.extend(m.getPosition()));
+        relevantMarkers.forEach((m) => bounds.extend(new google.maps.LatLng(m.position)));
         map.fitBounds(bounds, 80);
       }
 
@@ -891,17 +902,14 @@
         markerById.forEach((marker, id) => {
           const inFilter = filteredIds.has(id);
           const isSelected = id === selectedId;
+          const pin = marker.content;
 
-          if (isSelected) {
-            marker.setIcon(buildHouseIcon({ color: "#15803d", stroke: "#052e16", scale: 1.35 }));
-            marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
-          } else if (inFilter) {
-            marker.setIcon(buildHouseIcon({ color: "#22c55e", stroke: "#0f5132", scale: 1.2 }));
-            marker.setZIndex(undefined);
-          } else {
-            marker.setIcon(buildHouseIcon({ color: "#d1d5db", stroke: "#9ca3af", scale: 1.1, opacity: 0.9 }));
-            marker.setZIndex(undefined);
+          if (pin) {
+            pin.classList.toggle("inactive", !inFilter);
+            pin.classList.toggle("selected", isSelected);
           }
+
+          marker.zIndex = isSelected ? 1 : undefined;
         });
       }
 
@@ -920,7 +928,7 @@
         routePolyline = new google.maps.Polyline({
           path,
           map,
-          strokeColor: "#15803d",
+          strokeColor: "#16A34A",
           strokeOpacity: 0.9,
           strokeWeight: 4,
           geodesic: true
@@ -1040,9 +1048,9 @@
       function focusMarkerForCurrent() {
         const stop = filteredStops[selectedIndex];
         const marker = stop ? markerById.get(stop.id) : null;
-        if (!stop || !marker) return;
+        if (!stop || !marker || !marker.position) return;
 
-        map.panTo(marker.getPosition());
+        map.panTo(new google.maps.LatLng(marker.position));
         map.setZoom(16);
       }
 
@@ -1133,28 +1141,30 @@
         return DEFAULT_MAPS_API_KEY;
       }
 
-      function loadGoogleMapsScript() {
+      async function loadGoogleMaps() {
         const apiKey = resolveMapsApiKey();
+        mapApiKey = apiKey;
+
         if (!apiKey) {
           console.error("Missing Google Maps API key – unable to load map.");
           return;
         }
 
-        if (document.getElementById("google-maps-js")) return; // already loading/loaded
-
-        const script = document.createElement("script");
-        script.id = "google-maps-js";
-        script.async = true;
-        script.defer = true;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&callback=initMap`;
-        script.onerror = () => {
-          console.error("Failed to load Google Maps JS – check API key restrictions/billing.");
-        };
-
-        document.head.appendChild(script);
+        try {
+          const { Loader } = await import(`https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly`);
+          const loader = new Loader({ apiKey, version: "weekly" });
+          await loader.load();
+          await google.maps.importLibrary("maps");
+          await google.maps.importLibrary("marker");
+          initMap();
+        } catch (error) {
+          console.error("Failed to load Google Maps JS – check API key restrictions/billing.", error);
+        }
       }
 
-      document.addEventListener("DOMContentLoaded", loadGoogleMapsScript);
+      document.addEventListener("DOMContentLoaded", () => {
+        loadGoogleMaps();
+      });
     </script>
 </body>
 </html>
