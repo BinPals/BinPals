@@ -311,6 +311,41 @@
       margin: 0;
     }
 
+    .map-key-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid var(--gray-border);
+      background: var(--white);
+    }
+
+    .map-key-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .map-key-row input {
+      flex: 1 1 200px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-border);
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .map-key-row button {
+      flex: 0 0 auto;
+    }
+
+    .map-key-hint {
+      margin: 0;
+      font-size: 12px;
+      color: var(--gray-muted);
+    }
+
     .route-kicker {
       font-size: 12px;
       text-transform: uppercase;
@@ -621,6 +656,15 @@
             <p class="auth-note">Log in from the dedicated <a href="/operator/login.html">operator login</a> page to unlock the route tools. When logged in, tap the status pill to sign out quickly.</p>
           </div>
 
+          <div class="map-key-box">
+            <div class="field-label">Google Maps key</div>
+            <div class="map-key-row">
+              <input type="password" id="mapKeyInput" placeholder="Enter Maps JavaScript API key" aria-label="Google Maps API key" autocomplete="off" />
+              <button class="btn-pill btn-ghost" id="btnSaveMapKey" type="button">Save key</button>
+            </div>
+            <p class="map-key-hint" id="mapKeyStatus">Using the built-in key. Paste your own if you see map errors.</p>
+          </div>
+
           <div class="route-meta-top">
             <div>
               <div class="route-kicker" id="routeDayLabel">TODAY</div>
@@ -686,6 +730,7 @@
       const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
       const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
+      const MAPS_KEY_STORAGE_KEY = "bpMapsKey";
       const LOGIN_STORAGE_KEY = "bpOperatorSession";
 
       let map;
@@ -723,6 +768,9 @@
       const authStatusEl = document.getElementById("authStatus");
       const authSessionEl = document.getElementById("authSession");
       const authUserLabelEl = document.getElementById("authUserLabel");
+      const mapKeyInputEl = document.getElementById("mapKeyInput");
+      const mapKeyStatusEl = document.getElementById("mapKeyStatus");
+      const btnSaveMapKeyEl = document.getElementById("btnSaveMapKey");
 
       // ===== DATA HELPERS =====
       async function fetchJson(url) {
@@ -819,6 +867,19 @@
 
       authStatusEl.addEventListener("click", handleAuthStatusClick);
       authStatusEl.addEventListener("keydown", handleAuthStatusKeydown);
+
+      if (btnSaveMapKeyEl) {
+        btnSaveMapKeyEl.addEventListener("click", handleMapKeySave);
+      }
+
+      if (mapKeyInputEl) {
+        mapKeyInputEl.addEventListener("keydown", (evt) => {
+          if (evt.key === "Enter") {
+            evt.preventDefault();
+            handleMapKeySave();
+          }
+        });
+      }
 
       window.addEventListener("resize", () => {
         if (isDesktop()) {
@@ -1313,16 +1374,47 @@
         window.open(applePreferred ? appleUrl : googleUrl, "_blank");
       }
 
+      function setMapKeyUIState(apiKey) {
+        if (!mapKeyInputEl || !mapKeyStatusEl) return;
+
+        mapKeyInputEl.value = apiKey || "";
+
+        if (!apiKey) {
+          mapKeyStatusEl.textContent = "No key stored. Paste a Google Maps JavaScript API key to load the map.";
+          return;
+        }
+
+        const usingDefault = apiKey === DEFAULT_MAPS_API_KEY;
+        const suffix = apiKey.length > 8 ? apiKey.slice(-8) : apiKey;
+        mapKeyStatusEl.textContent = usingDefault
+          ? "Using the built-in key. Paste your own if you see map errors."
+          : `Using saved key ending in ${suffix}.`;
+      }
+
+      function handleMapKeySave() {
+        if (!mapKeyInputEl || !mapKeyStatusEl) return;
+
+        const newKey = (mapKeyInputEl.value || "").trim();
+        if (!newKey) {
+          mapKeyStatusEl.textContent = "Please paste a Maps JavaScript API key first.";
+          return;
+        }
+
+        localStorage.setItem(MAPS_KEY_STORAGE_KEY, newKey);
+        mapKeyStatusEl.textContent = "Saved. Reloading the map with your key...";
+        setTimeout(() => window.location.reload(), 400);
+      }
+
       // ===== MAP LOADER =====
       function resolveMapsApiKey() {
         const params = new URLSearchParams(window.location.search);
         const urlKey = params.get("mapsKey");
         if (urlKey) {
-          localStorage.setItem("bpMapsKey", urlKey);
+          localStorage.setItem(MAPS_KEY_STORAGE_KEY, urlKey);
           return urlKey;
         }
 
-        const storedKey = localStorage.getItem("bpMapsKey");
+        const storedKey = localStorage.getItem(MAPS_KEY_STORAGE_KEY);
         if (storedKey) return storedKey;
 
         return DEFAULT_MAPS_API_KEY;
@@ -1331,6 +1423,8 @@
       function loadGoogleMaps() {
         const apiKey = resolveMapsApiKey();
         mapApiKey = apiKey;
+
+        setMapKeyUIState(apiKey);
 
         if (!apiKey) {
           console.error("Missing Google Maps API key – unable to load map.");
