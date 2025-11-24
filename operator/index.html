@@ -1150,16 +1150,34 @@
           return;
         }
 
+        // If Google Maps is already loaded, just init.
+        if (window.google && window.google.maps) {
+          onGoogleMapsLoaded();
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src =
+          "https://maps.googleapis.com/maps/api/js?key=" +
+          encodeURIComponent(apiKey) +
+          "&v=weekly&libraries=marker";
+        script.async = true;
+        script.defer = true;
+        script.onload = onGoogleMapsLoaded;
+        script.onerror = (err) => {
+          console.error("Failed to load Google Maps JS – check API key restrictions/billing.", err);
+        };
+        document.head.appendChild(script);
+      }
+
+      async function onGoogleMapsLoaded() {
         try {
-          const { Loader } = await import(`https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly`);
-          const loader = new Loader({ apiKey, version: "weekly" });
-          await loader.load();
           await google.maps.importLibrary("maps");
           await google.maps.importLibrary("marker");
-          initMap();
         } catch (error) {
-          console.error("Failed to load Google Maps JS – check API key restrictions/billing.", error);
+          console.error("Failed to import Google Maps libraries.", error);
         }
+        initMap();
       }
 
       document.addEventListener("DOMContentLoaded", () => {
