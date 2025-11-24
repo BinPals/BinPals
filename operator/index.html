@@ -96,6 +96,19 @@
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.04em;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .status-pill[data-clickable="true"] {
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(22, 101, 52, 0.15);
+    }
+
+    .status-pill[data-clickable="true"]:hover,
+    .status-pill[data-clickable="true"]:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+      box-shadow: 0 16px 30px rgba(22, 101, 52, 0.22);
     }
 
     .status-pill.muted {
@@ -594,19 +607,18 @@
                 <div class="brand-sub">Route tools for field teams</div>
               </div>
             </div>
-            <div class="status-pill muted" id="authStatus">LOGGED OUT</div>
+            <div class="status-pill muted" id="authStatus" role="button" tabindex="0">LOGGED OUT</div>
           </div>
 
           <div class="auth-row" id="authRow">
             <div class="auth-session" id="authSession">
               <span class="auth-user-label" id="authUserLabel"></span>
               <div class="auth-actions">
-                <button class="btn-pill btn-ghost" id="logoutBtn" type="button">Log out</button>
                 <a class="btn-pill btn-main" href="/operator/login.html">Switch user</a>
               </div>
             </div>
 
-            <p class="auth-note">Log in from the dedicated <a href="/operator/login.html">operator login</a> page to unlock the route tools.</p>
+            <p class="auth-note">Log in from the dedicated <a href="/operator/login.html">operator login</a> page to unlock the route tools. When logged in, tap the status pill to sign out quickly.</p>
           </div>
 
           <div class="route-meta-top">
@@ -711,7 +723,6 @@
       const authStatusEl = document.getElementById("authStatus");
       const authSessionEl = document.getElementById("authSession");
       const authUserLabelEl = document.getElementById("authUserLabel");
-      const logoutBtnEl = document.getElementById("logoutBtn");
 
       // ===== DATA HELPERS =====
       async function fetchJson(url) {
@@ -806,6 +817,9 @@
 
       handleEl.addEventListener("click", toggleSheetState);
 
+      authStatusEl.addEventListener("click", handleAuthStatusClick);
+      authStatusEl.addEventListener("keydown", handleAuthStatusKeydown);
+
       window.addEventListener("resize", () => {
         if (isDesktop()) {
           sheetEl.dataset.state = "full";
@@ -825,8 +839,6 @@
         }
 
         updateAuthUI(storedSession);
-
-        logoutBtnEl.addEventListener("click", handleLogout);
 
         map = new google.maps.Map(document.getElementById("map"), {
           center: CITY_CENTER,
@@ -1025,6 +1037,14 @@
 
         authStatusEl.textContent = isLoggedIn ? "LOGGED IN" : "LOGGED OUT";
         authStatusEl.classList.toggle("muted", !isLoggedIn);
+        authStatusEl.dataset.clickable = "true";
+        authStatusEl.setAttribute(
+          "aria-label",
+          isLoggedIn
+            ? `Logged in as ${session.email}. Click to log out.`
+            : "Login required. Click to go to the operator login page."
+        );
+        authStatusEl.title = isLoggedIn ? "Click to log out" : "Click to log in";
 
         authSessionEl.hidden = !isLoggedIn;
 
@@ -1038,6 +1058,22 @@
           authUserLabelEl.textContent = session.email;
         } else {
           authStatusEl.textContent = "LOGIN REQUIRED";
+        }
+      }
+
+      function handleAuthStatusClick() {
+        const session = getStoredSession();
+        if (session) {
+          handleLogout();
+        } else {
+          window.location.href = "/operator/login.html";
+        }
+      }
+
+      function handleAuthStatusKeydown(event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleAuthStatusClick();
         }
       }
 
@@ -1301,6 +1337,13 @@
           return;
         }
 
+        window.onGoogleMapsReady = onGoogleMapsReady;
+
+        if (window.google && window.google.maps && typeof onGoogleMapsReady === "function") {
+          onGoogleMapsReady();
+          return;
+        }
+
         const existingScript = document.querySelector("script[data-bp-maps]");
         if (existingScript) return;
 
@@ -1309,6 +1352,10 @@
         script.async = true;
         script.defer = true;
         script.dataset.bpMaps = "true";
+        script.onerror = () => {
+          console.error("Failed to load Google Maps script. Check the API key or network connection.");
+          emptyTextEl.textContent = "Map failed to load. Please verify your Google Maps key.";
+        };
         document.head.appendChild(script);
       }
 
