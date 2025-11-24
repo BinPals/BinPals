@@ -286,13 +286,6 @@
       margin-bottom: 4px;
     }
 
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin: 0;
-      color: #9ca3af;
-    }
-
     .addr-title {
       font-size: 16px;
       font-weight: 800;
@@ -745,6 +738,9 @@
       });
     }
 
+    // Make sure Google can find initMap
+    window.initMap = initMap;
+
     async function ensureLatLngForStops(list) {
       const geocodePromises = [];
 
@@ -959,8 +955,11 @@
     }
   </script>
 
-  <script async
-    src="https://maps.googleapis.com/maps/api/js?key= AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap">
-  </script>
+  <!-- Google Maps JS: replace YOUR_REAL_API_KEY_HERE with your actual key (no spaces, no …) -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key= AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap"
+    async
+    defer
+  ></script>
 </body>
 </html>
