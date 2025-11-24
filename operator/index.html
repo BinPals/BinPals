@@ -45,25 +45,16 @@
       background: #f3f4f6;
     }
 
-    /* HEADER ---------------------------------------------------- */
-    .op-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      gap: 16px;
-    }
-
     .brand-wrap {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .brand-mark {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
       display: grid;
       place-items: center;
       background: radial-gradient(circle at 20% 10%, #86efac, #22c55e);
@@ -76,17 +67,17 @@
     .brand-text {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
     }
 
     .brand-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 800;
       letter-spacing: 0.01em;
     }
 
     .brand-sub {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--gray-muted);
     }
 
@@ -101,12 +92,25 @@
       letter-spacing: 0.04em;
     }
 
+    .route-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .route-header .status-pill {
+      margin-left: auto;
+    }
+
     /* LAYOUT ---------------------------------------------------- */
     .op-main {
       flex: 1;
       position: relative;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
     }
 
     .map-panel {
@@ -162,7 +166,7 @@
       background: var(--white);
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       box-shadow: var(--shadow-soft);
-      transform: translateY(calc(90vh - 220px));
+      transform: translateY(calc(90vh - 230px));
       transition: transform 0.22s ease-out;
       z-index: 10;
       display: flex;
@@ -189,10 +193,10 @@
     }
 
     .route-inner {
-      padding: 12px 18px 16px;
+      padding: 16px 20px 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 18px;
       overflow-y: auto;
       flex: 1;
     }
@@ -201,28 +205,29 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
     .route-kicker {
-      font-size: 11px;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       color: var(--gray-muted);
     }
 
     .route-title {
-      margin: 2px 0 0;
-      font-size: 22px;
+      margin: 4px 0 0;
+      font-size: 24px;
       font-weight: 800;
     }
 
     .stats-pill {
-      padding: 8px 18px;
+      padding: 9px 18px;
       border-radius: 999px;
       border: 1px solid var(--gray-border);
       background: var(--gray-soft);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--gray-muted);
       white-space: nowrap;
@@ -233,7 +238,7 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 12px;
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 13px;
       color: var(--gray-muted);
     }
@@ -390,7 +395,7 @@
     }
 
     .houses-title {
-      margin-top: 4px;
+      margin-top: 2px;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.16em;
@@ -445,13 +450,13 @@
 
       .map-panel {
         order: 2;
-        height: calc(100vh - 72px);
+        height: 100vh;
       }
 
       .route-sheet {
         position: relative;
         order: 1;
-        height: calc(100vh - 72px);
+        height: 100vh;
         width: 420px;
         max-width: 460px;
         border-radius: 0 24px 0 0;
@@ -471,17 +476,6 @@
 </head>
 <body>
   <div class="op-shell">
-    <header class="op-header">
-      <div class="brand-wrap">
-        <div class="brand-mark">BP</div>
-        <div class="brand-text">
-          <div class="brand-title">BinPals Operator</div>
-          <div class="brand-sub">Route tools for field teams</div>
-        </div>
-      </div>
-      <div class="status-pill">LOGGED IN</div>
-    </header>
-
     <main class="op-main">
       <!-- MAP -->
       <div class="map-panel">
@@ -499,6 +493,17 @@
           <div class="sheet-handle-bar"></div>
         </div>
         <div class="route-inner">
+          <div class="route-header">
+            <div class="brand-wrap">
+              <div class="brand-mark">BP</div>
+              <div class="brand-text">
+                <div class="brand-title">BinPals Operator</div>
+                <div class="brand-sub">Route tools for field teams</div>
+              </div>
+            </div>
+            <div class="status-pill">LOGGED IN</div>
+          </div>
+
           <div class="route-meta-top">
             <div>
               <div class="route-kicker" id="routeDayLabel">TODAY</div>
