@@ -578,7 +578,8 @@
 
   <script>
     // ===== CONFIG =====
-    const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+    const DEFAULT_GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+    const SHEETS_API_STORAGE_KEY = "bpSheetsApi";
     const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
 
     let map;
@@ -613,6 +614,66 @@
     const routeDayLabelEl = document.getElementById("routeDayLabel");
     const btnOpenNavEl = document.getElementById("btnOpenNav");
     const routeTimerEl = document.getElementById("routeTimer");
+
+    function resolveSheetsApiUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const urlFromQuery = params.get("sheetsApi");
+
+      if (urlFromQuery) {
+        if (urlFromQuery.toLowerCase() === "default") {
+          localStorage.removeItem(SHEETS_API_STORAGE_KEY);
+          return DEFAULT_GOOGLE_SHEETS_API_URL;
+        }
+
+        if (urlFromQuery.startsWith("http")) {
+          localStorage.setItem(SHEETS_API_STORAGE_KEY, urlFromQuery);
+          return urlFromQuery;
+        }
+      }
+
+      const storedUrl = localStorage.getItem(SHEETS_API_STORAGE_KEY);
+      if (storedUrl) return storedUrl;
+
+      return DEFAULT_GOOGLE_SHEETS_API_URL;
+    }
+
+    async function fetchStopsFromUrl(apiUrl) {
+      const resp = await fetch(apiUrl, { cache: "no-cache" });
+
+      if (!resp.ok) {
+        throw new Error(`Sheets API error ${resp.status}`);
+      }
+
+      const data = await resp.json();
+      const parsedStops = normalizeStopData(data);
+
+      if (!parsedStops.length) {
+        console.warn("Sheets API returned no rows. Check API output shape.", { data });
+      }
+
+      return parsedStops;
+    }
+
+    function normalizeStopData(data) {
+      const rows = Array.isArray(data)
+        ? data
+        : data?.rows || data?.stops || data?.data || [];
+
+      if (!Array.isArray(rows)) return [];
+
+      return rows.map((row, idx) => ({
+        ...row,
+        id: row.id || idx + 1,
+        fullAddress: row.fullAddress || row.address || "",
+        name: row.name || row.customer || "",
+        plan: row.plan || row.subscription || row.binPlan || "",
+        phone: row.phone || row.primaryPhone || "",
+        email: row.email || row.primaryEmail || "",
+        customerRow: row.customerRow,
+        trashDay: row.trashDay || row.day || row.serviceDay || "",
+        status: row.status || row.binStatus || row.state || "Pending"
+      }));
+    }
 
     // Helper: get weekday label
     function getTodayLabel() {
@@ -706,32 +767,33 @@
       bounds = new google.maps.LatLngBounds();
 
       // Load real data from Google Sheets endpoint – NO MOCK DATA
+      const sheetsApiUrl = resolveSheetsApiUrl();
+
       try {
-        const resp = await fetch(GOOGLE_SHEETS_API_URL);
-        if (resp.ok) {
-          const data = await resp.json();
+        stops = await fetchStopsFromUrl(sheetsApiUrl);
 
-          // Convert row fields from doGet into consistent stop format
-          stops = (Array.isArray(data) ? data : []).map((row, idx) => ({
-            ...row,
-            id: row.id || idx + 1,
-            fullAddress: row.fullAddress || "",
-            name: row.name || "",
-            plan: row.plan || "",
-            phone: row.phone || "",
-            email: row.email || "",
-            customerRow: row.customerRow,
-            trashDay: row.trashDay || row.day || "",
-            status: row.status || row.binStatus || "Pending"
-          }));
-
-        } else {
-          console.log("Sheets API error:", resp.status);
-          stops = [];
-        }
+        // Reset empty-state copy in case previous load attempts failed
+        emptyTextEl.textContent = "No houses for this filter.";
       } catch (err) {
         console.log("Error loading sheet data:", err);
-        stops = [];
+
+        const isOverride = sheetsApiUrl !== DEFAULT_GOOGLE_SHEETS_API_URL;
+        if (isOverride) {
+          console.warn("Falling back to default Sheets API URL.");
+          localStorage.removeItem(SHEETS_API_STORAGE_KEY);
+
+          try {
+            stops = await fetchStopsFromUrl(DEFAULT_GOOGLE_SHEETS_API_URL);
+            emptyTextEl.textContent = "No houses for this filter.";
+          } catch (fallbackErr) {
+            console.log("Fallback Sheets API error:", fallbackErr);
+            emptyTextEl.textContent = "Unable to load houses from the sheets API.";
+            stops = [];
+          }
+        } else {
+          emptyTextEl.textContent = "Could not reach the sheets API. Check the URL or network.";
+          stops = [];
+        }
       }
 
       // Ensure each stop has lat/lng (geocode if missing)
