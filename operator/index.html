@@ -1062,10 +1062,11 @@
         console.error("Failed to load Google Maps JS – check API key restrictions/billing.");
       };
 
-      document.body.appendChild(script);
-    }
-
-    loadGoogleMapsScript();
-  </script>
+  <!-- Google Maps JS (production key) -->
+  <script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap"
+  ></script>
 </body>
 </html>
