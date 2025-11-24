@@ -579,8 +579,7 @@
 
       <script>
       // ===== CONFIG =====
-      const DEFAULT_GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
-      const SHEETS_API_STORAGE_KEY = "bpSheetsApi";
+      const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
       const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
       const HOUSE_PIN_PATH =
@@ -620,63 +619,45 @@
       const routeTimerEl = document.getElementById("routeTimer");
 
       // ===== DATA HELPERS =====
-      function resolveSheetsApiUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const urlFromQuery = params.get("sheetsApi");
+      async function fetchStops() {
+        try {
+          const resp = await fetch(GOOGLE_SHEETS_API_URL, { cache: "no-cache" });
 
-        if (urlFromQuery) {
-          if (urlFromQuery.toLowerCase() === "default") {
-            localStorage.removeItem(SHEETS_API_STORAGE_KEY);
-            return DEFAULT_GOOGLE_SHEETS_API_URL;
+          if (!resp.ok) {
+            throw new Error(`Sheets API error ${resp.status}`);
           }
 
-          if (urlFromQuery.startsWith("http")) {
-            localStorage.setItem(SHEETS_API_STORAGE_KEY, urlFromQuery);
-            return urlFromQuery;
-          }
+          const data = await resp.json();
+          return normalizeStopData(data);
+        } catch (err) {
+          console.error("Failed to fetch stops:", err);
+          return [];
         }
-
-        const storedUrl = localStorage.getItem(SHEETS_API_STORAGE_KEY);
-        if (storedUrl) return storedUrl;
-
-        return DEFAULT_GOOGLE_SHEETS_API_URL;
-      }
-
-      async function fetchStopsFromUrl(apiUrl) {
-        const resp = await fetch(apiUrl, { cache: "no-cache" });
-
-        if (!resp.ok) {
-          throw new Error(`Sheets API error ${resp.status}`);
-        }
-
-        const data = await resp.json();
-        const parsedStops = normalizeStopData(data);
-
-        if (!parsedStops.length) {
-          console.warn("Sheets API returned no rows. Check API output shape.", { data });
-        }
-
-        return parsedStops;
       }
 
       function normalizeStopData(data) {
-        const rows = Array.isArray(data) ? data : data?.rows || data?.stops || data?.data || [];
+        if (!Array.isArray(data)) return [];
 
-        if (!Array.isArray(rows)) return [];
+        return data.map((row, idx) => {
+          const lat = typeof row.lat === "number" ? row.lat : Number(row.lat);
+          const lng = typeof row.lng === "number" ? row.lng : Number(row.lng);
 
-        return rows.map((row, idx) => ({
-          ...row,
-          id: row.id || idx + 1,
-          fullAddress: row.fullAddress || row.address || "",
-          name: row.name || row.customer || "",
-          plan: row.plan || row.subscription || row.binPlan || "",
-          bins: row.bins || row.binCount || row.numberOfBins || row.binsCount,
-          phone: row.phone || row.primaryPhone || "",
-          email: row.email || row.primaryEmail || "",
-          customerRow: row.customerRow,
-          trashDay: row.trashDay || row.day || row.serviceDay || "",
-          status: row.status || row.binStatus || row.state || "Pending"
-        }));
+          return {
+            ...row,
+            id: typeof row.id === "number" ? row.id : idx + 1,
+            customerRow: row.customerRow,
+            name: row.name || "",
+            fullAddress: row.fullAddress || "",
+            plan: row.plan || "",
+            bins: row.bins || "",
+            phone: row.phone || "",
+            email: row.email || "",
+            trashDay: row.trashDay || "",
+            status: row.status || "Pending",
+            lat: Number.isFinite(lat) ? lat : null,
+            lng: Number.isFinite(lng) ? lng : null
+          };
+        });
       }
 
       function getTodayLabel() {
@@ -748,32 +729,8 @@
 
         geocoder = new google.maps.Geocoder();
 
-        const sheetsApiUrl = resolveSheetsApiUrl();
-
-        try {
-          stops = await fetchStopsFromUrl(sheetsApiUrl);
-          emptyTextEl.textContent = "No houses for this filter.";
-        } catch (err) {
-          console.log("Error loading sheet data:", err);
-
-          const isOverride = sheetsApiUrl !== DEFAULT_GOOGLE_SHEETS_API_URL;
-          if (isOverride) {
-            console.warn("Falling back to default Sheets API URL.");
-            localStorage.removeItem(SHEETS_API_STORAGE_KEY);
-
-            try {
-              stops = await fetchStopsFromUrl(DEFAULT_GOOGLE_SHEETS_API_URL);
-              emptyTextEl.textContent = "No houses for this filter.";
-            } catch (fallbackErr) {
-              console.log("Fallback Sheets API error:", fallbackErr);
-              emptyTextEl.textContent = "Unable to load houses from the sheets API.";
-              stops = [];
-            }
-          } else {
-            emptyTextEl.textContent = "Could not reach the sheets API. Check the URL or network.";
-            stops = [];
-          }
-        }
+        stops = await fetchStops();
+        emptyTextEl.textContent = "No houses for this filter.";
 
         await ensureLatLngForStops(stops);
         setupMapMarkers();
