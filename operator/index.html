@@ -581,46 +581,6 @@
     const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
     const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
 
-    // Fallback mock data so the UI works even if the sheet endpoint isn't ready
-    const MOCK_STOPS = [
-      {
-        id: 1,
-        fullAddress: "12345 N Desert Cactus Dr, Peoria AZ",
-        name: "Garcia Family",
-        plan: "Premium – $45/mo",
-        phone: "555-555-0001",
-        trashDay: "Tuesday",
-        bins: "2",
-        status: "Pending",
-        lat: 33.7423,
-        lng: -112.3001
-      },
-      {
-        id: 2,
-        fullAddress: "9876 W Binpals Way, Peoria AZ",
-        name: "Nguyen Family",
-        plan: "Premium+ – $54/mo",
-        phone: "",
-        trashDay: "Tuesday",
-        bins: "4",
-        status: "Pending",
-        lat: 33.7449,
-        lng: -112.2935
-      },
-      {
-        id: 3,
-        fullAddress: "5555 W Route Runner Rd, Peoria AZ",
-        name: "Jones Family",
-        plan: "Premium – $45/mo",
-        phone: "555-555-0002",
-        trashDay: "Wednesday",
-        bins: "2",
-        status: "Done",
-        lat: 33.7482,
-        lng: -112.3059
-      }
-    ];
-
     let map;
     let markers = [];
     let stops = [];
@@ -745,31 +705,33 @@
       geocoder = new google.maps.Geocoder();
       bounds = new google.maps.LatLngBounds();
 
-      // Try to load from Sheets endpoint, fallback to mock data
+      // Load real data from Google Sheets endpoint – NO MOCK DATA
       try {
         const resp = await fetch(GOOGLE_SHEETS_API_URL);
         if (resp.ok) {
           const data = await resp.json();
-          stops = data.map((item) => ({
-            ...item,
-            fullAddress: item.fullAddress || "",
-            name: item.name || "",
-            plan: item.plan || "",
-            bins: item.bins || "",
-            trashDay: item.trashDay || "",
-            phone: item.phone || "",
-            status: ["Pending", "Skipped", "Done"].includes(item.status) ? item.status : "Pending",
-            hasLatLng: typeof item.lat === "number" && typeof item.lng === "number"
+
+          // Convert row fields from doGet into consistent stop format
+          stops = (Array.isArray(data) ? data : []).map((row, idx) => ({
+            ...row,
+            id: row.id || idx + 1,
+            fullAddress: row.fullAddress || "",
+            name: row.name || "",
+            plan: row.plan || "",
+            phone: row.phone || "",
+            email: row.email || "",
+            customerRow: row.customerRow,
+            trashDay: row.trashDay || row.day || "",
+            status: row.status || row.binStatus || "Pending"
           }));
-          console.log("Sheets endpoint entry:", stops[0]);
-          stops = MOCK_STOPS;
+
         } else {
-          console.log("Sheets unavailable, fallback to mock");
-          stops = MOCK_STOPS;
+          console.log("Sheets API error:", resp.status);
+          stops = [];
         }
       } catch (err) {
-        console.log("Sheets unavailable, fallback to mock (err):", err);
-        stops = MOCK_STOPS;
+        console.log("Error loading sheet data:", err);
+        stops = [];
       }
 
       // Ensure each stop has lat/lng (geocode if missing)
@@ -1068,6 +1030,6 @@
   </script>
 
   <!-- Google Maps JS (NO spaces in the key!) -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initMap" async defer></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOURKEY&callback=initMap"></script>
 </body>
 </html>
