@@ -662,7 +662,7 @@
               <input type="password" id="mapKeyInput" placeholder="Enter Maps JavaScript API key" aria-label="Google Maps API key" autocomplete="off" />
               <button class="btn-pill btn-ghost" id="btnSaveMapKey" type="button">Save key</button>
             </div>
-            <p class="map-key-hint" id="mapKeyStatus">Using the built-in key. Paste your own if you see map errors.</p>
+            <p class="map-key-hint" id="mapKeyStatus">Paste a Google Maps JavaScript API key to load the map.</p>
           </div>
 
           <div class="route-meta-top">
@@ -734,6 +734,7 @@
       const LOGIN_STORAGE_KEY = "bpOperatorSession";
 
       let map;
+      let geocoder;
       let markers = [];
       const markerById = new Map();
       let stops = [];
@@ -916,6 +917,8 @@
           ]
         });
 
+        geocoder = new google.maps.Geocoder();
+
         stops = await fetchStops();
         emptyTextEl.textContent = "No houses for this filter.";
 
@@ -961,15 +964,14 @@
       // ===== MAP + DATA UTILITIES =====
 
       async function geocodeAddress(fullAddress) {
-        if (!mapApiKey) return null;
+        if (!mapApiKey || !geocoder || typeof geocoder.geocode !== "function") return null;
 
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${encodeURIComponent(
-          mapApiKey
-        )}`;
         try {
-          const res = await fetch(url);
-          const data = await res.json();
-          return data?.results?.[0]?.geometry?.location || null;
+          const response = await geocoder.geocode({ address: fullAddress });
+          const location = response?.results?.[0]?.geometry?.location;
+          if (!location) return null;
+
+          return { lat: location.lat(), lng: location.lng() };
         } catch (err) {
           console.error("Failed to geocode", fullAddress, err);
           return null;
@@ -1374,7 +1376,7 @@
         window.open(applePreferred ? appleUrl : googleUrl, "_blank");
       }
 
-      function setMapKeyUIState(apiKey) {
+      function setMapKeyUIState(apiKey, source) {
         if (!mapKeyInputEl || !mapKeyStatusEl) return;
 
         mapKeyInputEl.value = apiKey || "";
@@ -1384,11 +1386,11 @@
           return;
         }
 
-        const usingDefault = apiKey === DEFAULT_MAPS_API_KEY;
         const suffix = apiKey.length > 8 ? apiKey.slice(-8) : apiKey;
-        mapKeyStatusEl.textContent = usingDefault
-          ? "Using the built-in key. Paste your own if you see map errors."
-          : `Using saved key ending in ${suffix}.`;
+        let label = "Using saved key";
+        if (source === "url") label = "Using key from URL";
+        if (source === "default") label = "Using built-in key";
+        mapKeyStatusEl.textContent = `${label} ending in ${suffix}.`;
       }
 
       function handleMapKeySave() {
@@ -1408,26 +1410,32 @@
       // ===== MAP LOADER =====
       function resolveMapsApiKey() {
         const params = new URLSearchParams(window.location.search);
-        const urlKey = params.get("mapsKey");
+        const urlKey = (params.get("mapsKey") || "").trim();
         if (urlKey) {
           localStorage.setItem(MAPS_KEY_STORAGE_KEY, urlKey);
-          return urlKey;
+          return { key: urlKey, source: "url" };
         }
 
-        const storedKey = localStorage.getItem(MAPS_KEY_STORAGE_KEY);
-        if (storedKey) return storedKey;
+        const storedKey = (localStorage.getItem(MAPS_KEY_STORAGE_KEY) || "").trim();
+        if (storedKey) return { key: storedKey, source: "stored" };
 
-        return DEFAULT_MAPS_API_KEY;
+        if (DEFAULT_MAPS_API_KEY) {
+          return { key: DEFAULT_MAPS_API_KEY, source: "default" };
+        }
+
+        return { key: null, source: null };
       }
 
       function loadGoogleMaps() {
-        const apiKey = resolveMapsApiKey();
+        const { key: apiKey, source: apiKeySource } = resolveMapsApiKey();
         mapApiKey = apiKey;
 
-        setMapKeyUIState(apiKey);
+        setMapKeyUIState(apiKey, apiKeySource);
 
         if (!apiKey) {
           console.error("Missing Google Maps API key – unable to load map.");
+          mapKeyStatusEl.textContent = "Enter a valid key to initialize the map and geocoding.";
+          emptyTextEl.textContent = "Map failed to load. Please verify your Google Maps key.";
           return;
         }
 
