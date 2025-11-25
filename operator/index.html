@@ -96,25 +96,6 @@
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.04em;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .status-pill[data-clickable="true"] {
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(22, 101, 52, 0.15);
-    }
-
-    .status-pill[data-clickable="true"]:hover,
-    .status-pill[data-clickable="true"]:focus-visible {
-      transform: translateY(-1px);
-      outline: none;
-      box-shadow: 0 16px 30px rgba(22, 101, 52, 0.22);
-    }
-
-    .status-pill.muted {
-      border-color: var(--gray-border);
-      background: var(--gray-soft);
-      color: var(--gray-muted);
     }
 
     .route-header {
@@ -252,98 +233,6 @@
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
-    }
-
-    .auth-row {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      border: 1px solid var(--gray-border);
-      background: var(--gray-soft);
-      margin: 10px 0 4px;
-    }
-
-    .auth-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .auth-form input {
-      flex: 1 1 160px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--gray-border);
-      font-family: inherit;
-      font-size: 14px;
-      background: var(--white);
-    }
-
-    .auth-form button {
-      flex: 0 0 auto;
-      min-width: 110px;
-    }
-
-    .auth-session {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .auth-user-label {
-      font-weight: 700;
-      color: var(--navy);
-    }
-
-    .auth-note {
-      font-size: 12px;
-      color: var(--gray-muted);
-      margin: 0;
-    }
-
-    .map-key-box {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      border: 1px solid var(--gray-border);
-      background: var(--white);
-    }
-
-    .map-key-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .map-key-row input {
-      flex: 1 1 200px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--gray-border);
-      font-family: inherit;
-      font-size: 14px;
-    }
-
-    .map-key-row button {
-      flex: 0 0 auto;
-    }
-
-    .map-key-hint {
-      margin: 0;
-      font-size: 12px;
-      color: var(--gray-muted);
     }
 
     .route-kicker {
@@ -642,27 +531,7 @@
                 <div class="brand-sub">Route tools for field teams</div>
               </div>
             </div>
-            <div class="status-pill muted" id="authStatus" role="button" tabindex="0">LOGGED OUT</div>
-          </div>
-
-          <div class="auth-row" id="authRow">
-            <div class="auth-session" id="authSession">
-              <span class="auth-user-label" id="authUserLabel"></span>
-              <div class="auth-actions">
-                <a class="btn-pill btn-main" href="/operator/login.html">Switch user</a>
-              </div>
-            </div>
-
-            <p class="auth-note">Log in from the dedicated <a href="/operator/login.html">operator login</a> page to unlock the route tools. When logged in, tap the status pill to sign out quickly.</p>
-          </div>
-
-          <div class="map-key-box">
-            <div class="field-label">Google Maps key</div>
-            <div class="map-key-row">
-              <input type="password" id="mapKeyInput" placeholder="Enter Maps JavaScript API key" aria-label="Google Maps API key" autocomplete="off" />
-              <button class="btn-pill btn-ghost" id="btnSaveMapKey" type="button">Save key</button>
-            </div>
-            <p class="map-key-hint" id="mapKeyStatus">Paste your Google Maps JavaScript API key to load the map. The key is stored only in this browser.</p>
+            <div class="status-pill">LOGGED IN</div>
           </div>
 
           <div class="route-meta-top">
@@ -703,16 +572,16 @@
               <span>Bin status</span>
               <span id="currentIndexLabel"></span>
             </div>
-              <div class="button-row">
-                <button class="btn-pill btn-main" id="btnDone">Mark done</button>
-                <button class="btn-pill btn-ghost" id="btnSkip">Skip</button>
-                <button class="btn-pill btn-ghost" id="btnContact">Contact</button>
-              </div>
-              <div class="button-row" style="margin-top:8px;">
-                <button class="btn-pill btn-main" id="btnStartStop" type="button">Start route</button>
-                <button class="btn-pill btn-ghost" id="btnOpenNav" type="button">Open in Maps</button>
-              </div>
+            <div class="button-row">
+              <button class="btn-pill btn-main" id="btnDone">Mark done</button>
+              <button class="btn-pill btn-ghost" id="btnSkip">Skip</button>
+              <button class="btn-pill btn-ghost" id="btnContact">Contact</button>
             </div>
+            <div class="button-row" style="margin-top:8px;">
+              <button class="btn-pill btn-main" id="btnStartStop" type="button">Start route</button>
+              <button class="btn-pill btn-ghost" id="btnOpenNav" type="button">Open in Maps</button>
+            </div>
+          </div>
 
           <div>
             <div class="houses-title">Houses</div>
@@ -724,745 +593,579 @@
     </main>
   </div>
 
-      <script>
-      // ===== CONFIG =====
-      const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
-      const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
-      const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
-      const MAPS_KEY_STORAGE_KEY = "bpMapsKey";
-      const LOGIN_STORAGE_KEY = "bpOperatorSession";
+  <script>
+    // ===== CONFIG =====
+    const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+    const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
+    const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
 
-      let map;
-      let geocoder;
-      let markers = [];
-      const markerById = new Map();
-      let stops = [];
-      let filteredStops = [];
-      let selectedIndex = 0;
-      let routePolyline = null;
-      let mapApiKey = null;
-      let routeStart = null;
-      let routeEnd = null;
-      let routeFinished = false;
+    // TODO: PUT YOUR REAL GOOGLE MAPS JAVASCRIPT API KEY HERE
+    const GOOGLE_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
 
-      // DOM refs
-      const sheetEl = document.getElementById("routeSheet");
-      const handleEl = document.getElementById("sheetHandle");
-      const dayFilterEl = document.getElementById("dayFilter");
-      const statsPillEl = document.getElementById("statsPill");
-      const housesListEl = document.getElementById("housesList");
-      const emptyTextEl = document.getElementById("emptyText");
-      const currentAddressEl = document.getElementById("currentAddress");
-      const currentNameEl = document.getElementById("currentName");
-      const currentMetaEl = document.getElementById("currentMeta");
-      const currentStatusTagEl = document.getElementById("currentStatusTag");
-      const currentIndexLabelEl = document.getElementById("currentIndexLabel");
-      const btnDoneEl = document.getElementById("btnDone");
-      const btnSkipEl = document.getElementById("btnSkip");
-      const btnContactEl = document.getElementById("btnContact");
-      const locBtnEl = document.getElementById("locBtn");
-      const routeDayLabelEl = document.getElementById("routeDayLabel");
-      const btnOpenNavEl = document.getElementById("btnOpenNav");
-      const btnStartStopEl = document.getElementById("btnStartStop");
-      const routeTimerEl = document.getElementById("routeTimer");
-      const authStatusEl = document.getElementById("authStatus");
-      const authSessionEl = document.getElementById("authSession");
-      const authUserLabelEl = document.getElementById("authUserLabel");
-      const mapKeyInputEl = document.getElementById("mapKeyInput");
-      const mapKeyStatusEl = document.getElementById("mapKeyStatus");
-      const btnSaveMapKeyEl = document.getElementById("btnSaveMapKey");
+    let map;
+    let geocoder;
+    let markers = [];
+    const markerById = new Map();
+    let stops = [];
+    let filteredStops = [];
+    let selectedIndex = 0;
+    let routePolyline = null;
+    let routeStart = null;
+    let routeEnd = null;
+    let routeFinished = false;
 
-      // ===== DATA HELPERS =====
-      async function fetchJson(url) {
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`Request failed with status ${res.status}`);
-        }
-        return res.json();
+    // DOM refs
+    const sheetEl = document.getElementById("routeSheet");
+    const handleEl = document.getElementById("sheetHandle");
+    const dayFilterEl = document.getElementById("dayFilter");
+    const statsPillEl = document.getElementById("statsPill");
+    const housesListEl = document.getElementById("housesList");
+    const emptyTextEl = document.getElementById("emptyText");
+    const currentAddressEl = document.getElementById("currentAddress");
+    const currentNameEl = document.getElementById("currentName");
+    const currentMetaEl = document.getElementById("currentMeta");
+    const currentStatusTagEl = document.getElementById("currentStatusTag");
+    const currentIndexLabelEl = document.getElementById("currentIndexLabel");
+    const btnDoneEl = document.getElementById("btnDone");
+    const btnSkipEl = document.getElementById("btnSkip");
+    const btnContactEl = document.getElementById("btnContact");
+    const locBtnEl = document.getElementById("locBtn");
+    const routeDayLabelEl = document.getElementById("routeDayLabel");
+    const btnOpenNavEl = document.getElementById("btnOpenNav");
+    const btnStartStopEl = document.getElementById("btnStartStop");
+    const routeTimerEl = document.getElementById("routeTimer");
+
+    // ===== BASIC HELPERS =====
+    async function fetchJson(url) {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(\`Request failed with status \${res.status}\`);
       }
+      return res.json();
+    }
 
-      async function loadHouses() {
-        try {
-          return await fetchJson(API_URL);
-        } catch (primaryErr) {
-          console.warn("Primary fetch failed, retrying with proxy...", primaryErr);
-          return await fetchJson(`${API_PROXY_PREFIX}${encodeURIComponent(API_URL)}`);
-        }
+    async function loadHouses() {
+      try {
+        return await fetchJson(API_URL);
+      } catch (primaryErr) {
+        console.warn("Primary fetch failed, retrying with proxy...", primaryErr);
+        return await fetchJson(\`\${API_PROXY_PREFIX}\${encodeURIComponent(API_URL)}\`);
       }
+    }
 
-      async function fetchStops() {
-        try {
-          const data = await loadHouses();
-          return normalizeStopData(data);
-        } catch (err) {
-          console.error("Failed to fetch stops:", err);
-          return [];
-        }
+    async function fetchStops() {
+      try {
+        const data = await loadHouses();
+        return normalizeStopData(data);
+      } catch (err) {
+        console.error("Failed to fetch stops:", err);
+        return [];
       }
+    }
 
-      function normalizeStopData(data) {
-        if (!Array.isArray(data)) return [];
+    function normalizeStopData(data) {
+      if (!Array.isArray(data)) return [];
 
-        return data.map((row, idx) => {
-          const lat = typeof row.lat === "number" ? row.lat : Number(row.lat);
-          const lng = typeof row.lng === "number" ? row.lng : Number(row.lng);
+      return data.map((row, idx) => {
+        const lat = typeof row.lat === "number" ? row.lat : Number(row.lat);
+        const lng = typeof row.lng === "number" ? row.lng : Number(row.lng);
 
-          return {
-            ...row,
-            id: typeof row.id === "number" ? row.id : idx + 1,
-            customerRow: row.customerRow,
-            name: row.name || "",
-            fullAddress: row.fullAddress || "",
-            plan: row.plan || "",
-            bins: row.bins || "",
-            phone: row.phone || "",
-            email: row.email || "",
-            trashDay: row.trashDay || "",
-            status: row.status || "Pending",
-            lat: Number.isFinite(lat) ? lat : null,
-            lng: Number.isFinite(lng) ? lng : null
-          };
-        });
-      }
+        return {
+          ...row,
+          id: typeof row.id === "number" ? row.id : idx + 1,
+          customerRow: row.customerRow,
+          name: row.name || "",
+          fullAddress: row.fullAddress || "",
+          plan: row.plan || "",
+          bins: row.bins || "",
+          phone: row.phone || "",
+          email: row.email || "",
+          trashDay: row.trashDay || "",
+          status: row.status || "Pending",
+          lat: Number.isFinite(lat) ? lat : null,
+          lng: Number.isFinite(lng) ? lng : null
+        };
+      });
+    }
 
-      function getTodayLabel() {
-        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const now = new Date();
-        return `TODAY · ${days[now.getDay()].toUpperCase()}`;
-      }
+    function getTodayLabel() {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const now = new Date();
+      return \`TODAY · \${days[now.getDay()].toUpperCase()}\`;
+    }
 
-      function isDesktop() {
-        return window.innerWidth >= 900;
-      }
+    function isDesktop() {
+      return window.innerWidth >= 900;
+    }
 
-      // ===== SHEET BEHAVIOR =====
-      function setSheetState(state) {
-        if (isDesktop()) return; // static on desktop
-        const previousState = sheetEl.dataset.state || "peek";
-        if (previousState === state) return;
+    // ===== SHEET BEHAVIOR =====
+    function setSheetState(state) {
+      if (isDesktop()) return;
+      const previousState = sheetEl.dataset.state || "peek";
+      if (previousState === state) return;
 
-        sheetEl.dataset.state = state;
+      sheetEl.dataset.state = state;
 
-        if (previousState === "peek" && state === "full" && map) {
-          requestAnimationFrame(() => {
-            google.maps.event.trigger(map, "resize");
+      if (previousState === "peek" && state === "full" && map) {
+        requestAnimationFrame(() => {
+          google.maps.event.trigger(map, "resize");
 
-            const current = filteredStops[selectedIndex];
-            if (current && typeof current.lat === "number" && typeof current.lng === "number") {
-              focusMarkerForCurrent();
-            } else {
-              focusAllMarkers();
-            }
-          });
-        }
-      }
-
-      function toggleSheetState() {
-        if (isDesktop()) return;
-        const current = sheetEl.dataset.state || "peek";
-        setSheetState(current === "peek" ? "full" : "peek");
-      }
-
-      handleEl.addEventListener("click", toggleSheetState);
-
-      authStatusEl.addEventListener("click", handleAuthStatusClick);
-      authStatusEl.addEventListener("keydown", handleAuthStatusKeydown);
-
-      if (btnSaveMapKeyEl) {
-        btnSaveMapKeyEl.addEventListener("click", handleMapKeySave);
-      }
-
-      if (mapKeyInputEl) {
-        mapKeyInputEl.addEventListener("keydown", (evt) => {
-          if (evt.key === "Enter") {
-            evt.preventDefault();
-            handleMapKeySave();
+          const current = filteredStops[selectedIndex];
+          if (current && typeof current.lat === "number" && typeof current.lng === "number") {
+            focusMarkerForCurrent();
+          } else {
+            focusAllMarkers();
           }
         });
       }
+    }
 
-      window.addEventListener("resize", () => {
-        if (isDesktop()) {
-          sheetEl.dataset.state = "full";
+    function toggleSheetState() {
+      if (isDesktop()) return;
+      const current = sheetEl.dataset.state || "peek";
+      setSheetState(current === "peek" ? "full" : "peek");
+    }
+
+    handleEl.addEventListener("click", toggleSheetState);
+
+    window.addEventListener("resize", () => {
+      if (isDesktop()) {
+        sheetEl.dataset.state = "full";
+      } else {
+        sheetEl.dataset.state = "peek";
+      }
+    });
+
+    // ===== MAP INIT (callback) =====
+    async function initMap() {
+      routeDayLabelEl.textContent = getTodayLabel();
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: CITY_CENTER,
+        zoom: 14,
+        disableDefaultUI: true,
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#ebeef2" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#4b5563" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#f9fafb" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+          { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#e5e7eb" }] },
+          { featureType: "poi", elementType: "geometry", stylers: [{ color: "#e5e7eb" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#dbeafe" }] }
+        ]
+      });
+
+      geocoder = new google.maps.Geocoder();
+
+      stops = await fetchStops();
+      emptyTextEl.textContent = "No houses for this filter.";
+
+      await ensureLatLngForStops(stops);
+      setupMapMarkers();
+      applyFilterAndRender();
+
+      locBtnEl.addEventListener("click", () => focusAllMarkers(true));
+      dayFilterEl.addEventListener("change", () => {
+        applyFilterAndRender();
+      });
+
+      btnDoneEl.addEventListener("click", () => updateCurrentStatus("Done"));
+      btnSkipEl.addEventListener("click", () => updateCurrentStatus("Skipped"));
+      btnContactEl.addEventListener("click", () => {
+        const s = filteredStops[selectedIndex];
+        if (!s) return;
+        if (s.phone) {
+          window.location.href = \`tel:\${s.phone.replace(/[^0-9+]/g, "")}\`;
+        } else if (s.email) {
+          window.location.href = \`mailto:\${s.email}\`;
         } else {
-          sheetEl.dataset.state = "peek";
+          alert("No contact info on file for this house yet.");
         }
       });
 
-      // ===== MAP INIT (called by Google script) =====
-      async function initMap() {
-        routeDayLabelEl.textContent = getTodayLabel();
+      btnOpenNavEl.addEventListener("click", () => {
+        const stop = filteredStops[selectedIndex];
+        if (!stop || !stop.fullAddress) return;
+        startRoute();
+        openNavigationTo(stop.fullAddress);
+      });
 
-        const storedSession = getStoredSession();
-        if (!storedSession) {
-          window.location.href = "/operator/login.html";
-          return;
-        }
-
-        updateAuthUI(storedSession);
-
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: CITY_CENTER,
-          zoom: 14,
-          disableDefaultUI: true,
-          styles: [
-            { elementType: "geometry", stylers: [{ color: "#ebeef2" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#4b5563" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#f9fafb" }] },
-            { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-            { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#e5e7eb" }] },
-            { featureType: "poi", elementType: "geometry", stylers: [{ color: "#e5e7eb" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#dbeafe" }] }
-          ]
-        });
-
-        geocoder = new google.maps.Geocoder();
-
-        stops = await fetchStops();
-        emptyTextEl.textContent = "No houses for this filter.";
-
-        await ensureLatLngForStops(stops);
-        setupMapMarkers();
-        applyFilterAndRender();
-
-        locBtnEl.addEventListener("click", () => focusAllMarkers(true));
-        dayFilterEl.addEventListener("change", () => {
-          applyFilterAndRender();
-        });
-
-        btnDoneEl.addEventListener("click", () => updateCurrentStatus("Done"));
-        btnSkipEl.addEventListener("click", () => updateCurrentStatus("Skipped"));
-        btnContactEl.addEventListener("click", () => {
-          const s = filteredStops[selectedIndex];
-          if (!s) return;
-          if (s.phone) {
-            window.location.href = `tel:${s.phone.replace(/[^0-9+]/g, "")}`;
-          } else if (s.email) {
-            window.location.href = `mailto:${s.email}`;
-          } else {
-            alert("No contact info on file for this house yet.");
-          }
-        });
-
-        btnOpenNavEl.addEventListener("click", () => {
-          const stop = filteredStops[selectedIndex];
-          if (!stop || !stop.fullAddress) return;
-          startRoute();
-          openNavigationTo(stop.fullAddress);
-        });
-
-        btnStartStopEl.addEventListener("click", () => {
-          if (!routeStart || routeFinished) {
-            startRoute(true);
-          } else {
-            stopRoute();
-          }
-        });
-      }
-
-      // ===== MAP + DATA UTILITIES =====
-
-      async function geocodeAddress(fullAddress) {
-        if (!mapApiKey || !geocoder || typeof geocoder.geocode !== "function") return null;
-
-        try {
-          const response = await geocoder.geocode({ address: fullAddress });
-          const location = response?.results?.[0]?.geometry?.location;
-          if (!location) return null;
-
-          return { lat: location.lat(), lng: location.lng() };
-        } catch (err) {
-          console.error("Failed to geocode", fullAddress, err);
-          return null;
-        }
-      }
-
-      async function ensureLatLngForStops(list) {
-        const geocodePromises = list.map(async (stop) => {
-          if (typeof stop.lat === "number" && typeof stop.lng === "number") return;
-          if (!stop.fullAddress) return;
-
-          const loc = await geocodeAddress(stop.fullAddress);
-          if (loc) {
-            stop.lat = loc.lat;
-            stop.lng = loc.lng;
-          }
-        });
-
-        await Promise.all(geocodePromises);
-      }
-
-      function createPinElement() {
-        const customPinElement = document.createElement("div");
-        customPinElement.className = "binpals-pin";
-        customPinElement.innerHTML = "🏠";
-        return customPinElement;
-      }
-
-      function setupMapMarkers() {
-        markers.forEach((m) => (m.map = null));
-        markers = [];
-        markerById.clear();
-
-        stops.forEach((stop) => {
-          if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
-
-          const marker = new google.maps.marker.AdvancedMarkerElement({
-            position: { lat: stop.lat, lng: stop.lng },
-            map,
-            title: stop.fullAddress,
-            content: createPinElement()
-          });
-
-          marker.addListener("click", () => {
-            const idxInFiltered = filteredStops.findIndex((s) => s.id === stop.id);
-            if (idxInFiltered !== -1) {
-              selectedIndex = idxInFiltered;
-              renderCurrentHouse();
-              highlightActiveHouseRow();
-              updateMarkerVisuals();
-              focusMarkerForCurrent();
-              setSheetState("full");
-            }
-          });
-
-          markers.push(marker);
-          markerById.set(stop.id, marker);
-        });
-
-        focusAllMarkers();
-      }
-
-      function focusAllMarkers(preferFiltered = false) {
-        const targetStops = preferFiltered && filteredStops.length ? filteredStops : stops;
-        const relevantMarkers = targetStops
-          .map((s) => markerById.get(s.id))
-          .filter((m) => m && m.map);
-
-        if (!relevantMarkers.length) {
-          map.setCenter(CITY_CENTER);
-          map.setZoom(13.5);
-          return;
-        }
-
-        const bounds = new google.maps.LatLngBounds();
-        relevantMarkers.forEach((m) => bounds.extend(new google.maps.LatLng(m.position)));
-        map.fitBounds(bounds, 80);
-      }
-
-      function applyFilterAndRender() {
-        const dayFilterValue = dayFilterEl.value;
-        const todayDayName = new Date().toLocaleDateString("en-US", { weekday: "long" });
-
-        filteredStops = stops.filter((stop) => {
-          const stopDay = (stop.trashDay || "").trim();
-          if (dayFilterValue === "all") return true;
-          if (dayFilterValue === "today") return stopDay === todayDayName;
-          return stopDay === dayFilterValue;
-        });
-
-        selectedIndex = 0;
-        renderHousesList();
-        renderCurrentHouse();
-        highlightActiveHouseRow();
-        updateStatsPill();
-        updateMarkerVisuals();
-        drawRoutePolyline();
-        focusAllMarkers(true);
-      }
-
-      // ===== AUTH =====
-      function getStoredSession() {
-        try {
-          const raw = localStorage.getItem(LOGIN_STORAGE_KEY);
-          return raw ? JSON.parse(raw) : null;
-        } catch (err) {
-          console.error("Failed to read stored session", err);
-          return null;
-        }
-      }
-
-      function persistSession(session) {
-        localStorage.setItem(LOGIN_STORAGE_KEY, JSON.stringify(session));
-      }
-
-      function clearSession() {
-        localStorage.removeItem(LOGIN_STORAGE_KEY);
-      }
-
-      function updateAuthUI(session) {
-        const isLoggedIn = Boolean(session);
-
-        authStatusEl.style.background = "";
-        authStatusEl.style.borderColor = "";
-        authStatusEl.style.color = "";
-
-        authStatusEl.textContent = isLoggedIn ? "LOGGED IN" : "LOGGED OUT";
-        authStatusEl.classList.toggle("muted", !isLoggedIn);
-        authStatusEl.dataset.clickable = "true";
-        authStatusEl.setAttribute(
-          "aria-label",
-          isLoggedIn
-            ? `Logged in as ${session.email}. Click to log out.`
-            : "Login required. Click to go to the operator login page."
-        );
-        authStatusEl.title = isLoggedIn ? "Click to log out" : "Click to log in";
-
-        authSessionEl.hidden = !isLoggedIn;
-
-        btnDoneEl.disabled = !isLoggedIn;
-        btnSkipEl.disabled = !isLoggedIn;
-        btnContactEl.disabled = !isLoggedIn;
-        btnOpenNavEl.disabled = !isLoggedIn;
-        btnStartStopEl.disabled = !isLoggedIn;
-
-        if (isLoggedIn) {
-          authUserLabelEl.textContent = session.email;
+      btnStartStopEl.addEventListener("click", () => {
+        if (!routeStart || routeFinished) {
+          startRoute(true);
         } else {
-          authStatusEl.textContent = "LOGIN REQUIRED";
+          stopRoute();
         }
-      }
+      });
+    }
 
-      function handleAuthStatusClick() {
-        const session = getStoredSession();
-        if (session) {
-          handleLogout();
-        } else {
-          window.location.href = "/operator/login.html";
+    // ===== MAP + DATA UTILITIES =====
+    async function geocodeAddress(fullAddress) {
+      if (!geocoder || typeof geocoder.geocode !== "function") return null;
+
+      try {
+        const response = await geocoder.geocode({ address: fullAddress });
+        const location = response?.results?.[0]?.geometry?.location;
+        if (!location) return null;
+        return { lat: location.lat(), lng: location.lng() };
+      } catch (err) {
+        console.error("Failed to geocode", fullAddress, err);
+        return null;
+      }
+    }
+
+    async function ensureLatLngForStops(list) {
+      const geocodePromises = list.map(async (stop) => {
+        if (typeof stop.lat === "number" && typeof stop.lng === "number") return;
+        if (!stop.fullAddress) return;
+
+        const loc = await geocodeAddress(stop.fullAddress);
+        if (loc) {
+          stop.lat = loc.lat;
+          stop.lng = loc.lng;
         }
-      }
+      });
 
-      function handleAuthStatusKeydown(event) {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          handleAuthStatusClick();
-        }
-      }
+      await Promise.all(geocodePromises);
+    }
 
-      function handleLogout() {
-        clearSession();
-        window.location.href = "/operator/login.html";
-      }
+    function createPinElement() {
+      const customPinElement = document.createElement("div");
+      customPinElement.className = "binpals-pin";
+      customPinElement.innerHTML = "🏠";
+      return customPinElement;
+    }
 
-      function updateMarkerVisuals() {
-        const selectedId = filteredStops[selectedIndex]?.id;
-        const filteredIds = new Set(filteredStops.map((s) => s.id));
+    function setupMapMarkers() {
+      markers.forEach((m) => (m.map = null));
+      markers = [];
+      markerById.clear();
 
-        markerById.forEach((marker, id) => {
-          const inFilter = filteredIds.has(id);
-          const isSelected = id === selectedId;
-          const pin = marker.content;
+      stops.forEach((stop) => {
+        if (typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
 
-          if (pin) {
-            pin.classList.toggle("inactive", !inFilter);
-            pin.classList.toggle("selected", isSelected);
-          }
-
-          marker.zIndex = isSelected ? 1 : undefined;
-        });
-      }
-
-      function drawRoutePolyline() {
-        if (routePolyline) {
-          routePolyline.setMap(null);
-          routePolyline = null;
-        }
-
-        const path = filteredStops
-          .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
-          .map((s) => ({ lat: s.lat, lng: s.lng }));
-
-        if (!path.length) return;
-
-        routePolyline = new google.maps.Polyline({
-          path,
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+          position: { lat: stop.lat, lng: stop.lng },
           map,
-          strokeColor: "#16A34A",
-          strokeOpacity: 0.9,
-          strokeWeight: 4,
-          geodesic: true
+          title: stop.fullAddress,
+          content: createPinElement()
         });
-      }
 
-      function updateStatsPill() {
-        const total = filteredStops.length;
-        const leftToday = filteredStops.filter((s) => (s.status || "Pending").toLowerCase() !== "done").length;
-        statsPillEl.textContent = `${leftToday} left today / ${total} total`;
-      }
-
-      // ===== UI RENDERING =====
-      function renderHousesList() {
-        housesListEl.innerHTML = "";
-        if (!filteredStops.length) {
-          emptyTextEl.style.display = "block";
-          return;
-        }
-        emptyTextEl.style.display = "none";
-
-        filteredStops.forEach((stop, index) => {
-          const div = document.createElement("div");
-          div.className = "house-row" + (index === selectedIndex ? " active" : "");
-          div.dataset.index = index;
-
-          const main = document.createElement("div");
-          main.className = "house-row-main";
-          main.textContent = stop.fullAddress || "Address missing";
-
-          const sub = document.createElement("div");
-          sub.className = "house-row-sub";
-          const bits = [];
-          if (stop.plan) bits.push(stop.plan);
-          if (stop.trashDay) bits.push(stop.trashDay);
-          if (stop.status) bits.push(stop.status);
-          sub.textContent = bits.join(" • ");
-
-          div.appendChild(main);
-          div.appendChild(sub);
-          div.addEventListener("click", () => {
-            selectedIndex = index;
+        marker.addListener("click", () => {
+          const idxInFiltered = filteredStops.findIndex((s) => s.id === stop.id);
+          if (idxInFiltered !== -1) {
+            selectedIndex = idxInFiltered;
             renderCurrentHouse();
             highlightActiveHouseRow();
             updateMarkerVisuals();
             focusMarkerForCurrent();
             setSheetState("full");
-          });
-
-          housesListEl.appendChild(div);
+          }
         });
+
+        markers.push(marker);
+        markerById.set(stop.id, marker);
+      });
+
+      focusAllMarkers();
+    }
+
+    function focusAllMarkers(preferFiltered = false) {
+      const targetStops = preferFiltered && filteredStops.length ? filteredStops : stops;
+      const relevantMarkers = targetStops
+        .map((s) => markerById.get(s.id))
+        .filter((m) => m && m.map);
+
+      if (!relevantMarkers.length) {
+        map.setCenter(CITY_CENTER);
+        map.setZoom(13.5);
+        return;
       }
 
-      function highlightActiveHouseRow() {
-        const rows = housesListEl.querySelectorAll(".house-row");
-        rows.forEach((row) => {
-          const idx = Number(row.dataset.index);
-          row.classList.toggle("active", idx === selectedIndex);
-        });
-      }
+      const bounds = new google.maps.LatLngBounds();
+      relevantMarkers.forEach((m) => bounds.extend(m.position));
+      map.fitBounds(bounds, 80);
+    }
 
-      function renderCurrentHouse() {
-        const stop = filteredStops[selectedIndex];
+    function applyFilterAndRender() {
+      const dayFilterValue = dayFilterEl.value;
+      const todayDayName = new Date().toLocaleDateString("en-US", { weekday: "long" });
 
-        if (!stop) {
-          currentAddressEl.textContent = "No houses for this filter.";
-          currentNameEl.textContent = "";
-          currentMetaEl.innerHTML = "";
-          currentStatusTagEl.textContent = "—";
-          currentStatusTagEl.className = "status-tag";
-          currentIndexLabelEl.textContent = "";
-          btnDoneEl.disabled = true;
-          btnSkipEl.disabled = true;
-          btnContactEl.disabled = true;
-          btnOpenNavEl.disabled = true;
-          btnStartStopEl.disabled = true;
-          return;
+      filteredStops = stops.filter((stop) => {
+        const stopDay = (stop.trashDay || "").trim();
+        if (dayFilterValue === "all") return true;
+        if (dayFilterValue === "today") return stopDay === todayDayName;
+        return stopDay === dayFilterValue;
+      });
+
+      selectedIndex = 0;
+      renderHousesList();
+      renderCurrentHouse();
+      highlightActiveHouseRow();
+      updateStatsPill();
+      updateMarkerVisuals();
+      drawRoutePolyline();
+      focusAllMarkers(true);
+    }
+
+    function updateMarkerVisuals() {
+      const selectedId = filteredStops[selectedIndex]?.id;
+      const filteredIds = new Set(filteredStops.map((s) => s.id));
+
+      markerById.forEach((marker, id) => {
+        const inFilter = filteredIds.has(id);
+        const isSelected = id === selectedId;
+        const pin = marker.content;
+
+        if (pin) {
+          pin.classList.toggle("inactive", !inFilter);
+          pin.classList.toggle("selected", isSelected);
         }
 
-        btnOpenNavEl.disabled = false;
-        btnStartStopEl.disabled = false;
+        marker.zIndex = isSelected ? 1 : undefined;
+      });
+    }
 
-        currentAddressEl.textContent = stop.fullAddress || "Address missing";
-        currentNameEl.textContent = stop.name || "";
+    function drawRoutePolyline() {
+      if (routePolyline) {
+        routePolyline.setMap(null);
+        routePolyline = null;
+      }
+
+      const path = filteredStops
+        .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
+        .map((s) => ({ lat: s.lat, lng: s.lng }));
+
+      if (!path.length) return;
+
+      routePolyline = new google.maps.Polyline({
+        path,
+        map,
+        strokeColor: "#16A34A",
+        strokeOpacity: 0.9,
+        strokeWeight: 4,
+        geodesic: true
+      });
+    }
+
+    function updateStatsPill() {
+      const total = filteredStops.length;
+      const leftToday = filteredStops.filter((s) => (s.status || "Pending").toLowerCase() !== "done").length;
+      statsPillEl.textContent = \`\${leftToday} left today / \${total} total\`;
+    }
+
+    // ===== UI RENDERING =====
+    function renderHousesList() {
+      housesListEl.innerHTML = "";
+      if (!filteredStops.length) {
+        emptyTextEl.style.display = "block";
+        return;
+      }
+      emptyTextEl.style.display = "none";
+
+      filteredStops.forEach((stop, index) => {
+        const div = document.createElement("div");
+        div.className = "house-row" + (index === selectedIndex ? " active" : "");
+        div.dataset.index = index;
+
+        const main = document.createElement("div");
+        main.className = "house-row-main";
+        main.textContent = stop.fullAddress || "Address missing";
+
+        const sub = document.createElement("div");
+        sub.className = "house-row-sub";
+        const bits = [];
+        if (stop.plan) bits.push(stop.plan);
+        if (stop.trashDay) bits.push(stop.trashDay);
+        if (stop.status) bits.push(stop.status);
+        sub.textContent = bits.join(" • ");
+
+        div.appendChild(main);
+        div.appendChild(sub);
+        div.addEventListener("click", () => {
+          selectedIndex = index;
+          renderCurrentHouse();
+          highlightActiveHouseRow();
+          updateMarkerVisuals();
+          focusMarkerForCurrent();
+          setSheetState("full");
+        });
+
+        housesListEl.appendChild(div);
+      });
+    }
+
+    function highlightActiveHouseRow() {
+      const rows = housesListEl.querySelectorAll(".house-row");
+      rows.forEach((row) => {
+        const idx = Number(row.dataset.index);
+        row.classList.toggle("active", idx === selectedIndex);
+      });
+    }
+
+    function renderCurrentHouse() {
+      const stop = filteredStops[selectedIndex];
+
+      if (!stop) {
+        currentAddressEl.textContent = "No houses for this filter.";
+        currentNameEl.textContent = "";
         currentMetaEl.innerHTML = "";
-
-        const metaItems = [];
-
-        if (stop.plan) metaItems.push(`<li><span>Plan:</span> ${stop.plan}</li>`);
-        if (stop.bins) metaItems.push(`<li><span>Bins:</span> ${stop.bins}</li>`);
-        if (stop.trashDay) metaItems.push(`<li><span>Trash day:</span> ${stop.trashDay}</li>`);
-        if (stop.phone) metaItems.push(`<li><span>Phone:</span> ${stop.phone}</li>`);
-        if (typeof stop.customerRow !== "undefined") metaItems.push(`<li><span>Customer row:</span> ${stop.customerRow}</li>`);
-
-        currentMetaEl.innerHTML = metaItems.join("");
-
-        const status = (stop.status || "Pending").toLowerCase();
+        currentStatusTagEl.textContent = "—";
         currentStatusTagEl.className = "status-tag";
-        if (status === "done") {
-          currentStatusTagEl.classList.add("done");
-          currentStatusTagEl.textContent = "Done";
-        } else if (status === "skipped") {
-          currentStatusTagEl.classList.add("skipped");
-          currentStatusTagEl.textContent = "Skipped";
-        } else {
-          currentStatusTagEl.classList.add("pending");
-          currentStatusTagEl.textContent = "Pending";
-        }
-
-        currentIndexLabelEl.textContent = `${selectedIndex + 1} of ${filteredStops.length}`;
-        btnDoneEl.disabled = status === "done";
-        btnSkipEl.disabled = status === "skipped";
-        btnContactEl.disabled = !stop.phone && !stop.email;
+        currentIndexLabelEl.textContent = "";
+        btnDoneEl.disabled = true;
+        btnSkipEl.disabled = true;
+        btnContactEl.disabled = true;
+        btnOpenNavEl.disabled = true;
+        btnStartStopEl.disabled = true;
+        return;
       }
 
-      // ===== ROUTE ACTIONS =====
-      function focusMarkerForCurrent() {
-        const stop = filteredStops[selectedIndex];
-        const marker = stop ? markerById.get(stop.id) : null;
-        if (!stop || !marker || !marker.position) return;
+      btnOpenNavEl.disabled = false;
+      btnStartStopEl.disabled = false;
 
-        map.panTo(new google.maps.LatLng(marker.position));
-        map.setZoom(16);
+      currentAddressEl.textContent = stop.fullAddress || "Address missing";
+      currentNameEl.textContent = stop.name || "";
+      currentMetaEl.innerHTML = "";
+
+      const metaItems = [];
+
+      if (stop.plan) metaItems.push(\`<li><span>Plan:</span> \${stop.plan}</li>\`);
+      if (stop.bins) metaItems.push(\`<li><span>Bins:</span> \${stop.bins}</li>\`);
+      if (stop.trashDay) metaItems.push(\`<li><span>Trash day:</span> \${stop.trashDay}</li>\`);
+      if (stop.phone) metaItems.push(\`<li><span>Phone:</span> \${stop.phone}</li>\`);
+      if (typeof stop.customerRow !== "undefined") metaItems.push(\`<li><span>Customer row:</span> \${stop.customerRow}</li>\`);
+
+      currentMetaEl.innerHTML = metaItems.join("");
+
+      const status = (stop.status || "Pending").toLowerCase();
+      currentStatusTagEl.className = "status-tag";
+      if (status === "done") {
+        currentStatusTagEl.classList.add("done");
+        currentStatusTagEl.textContent = "Done";
+      } else if (status === "skipped") {
+        currentStatusTagEl.classList.add("skipped");
+        currentStatusTagEl.textContent = "Skipped";
+      } else {
+        currentStatusTagEl.classList.add("pending");
+        currentStatusTagEl.textContent = "Pending";
       }
 
-      function updateCurrentStatus(newStatus) {
-        const stop = filteredStops[selectedIndex];
-        if (!stop) return;
-        stop.status = newStatus;
-        renderCurrentHouse();
-        highlightActiveHouseRow();
-        updateStatsPill();
-        updateMarkerVisuals();
-        if (routeStart && filteredStops.every((s) => (s.status || "").toLowerCase() === "done")) finishRouteIfNeeded();
+      currentIndexLabelEl.textContent = \`\${selectedIndex + 1} of \${filteredStops.length}\`;
+      btnDoneEl.disabled = status === "done";
+      btnSkipEl.disabled = status === "skipped";
+      btnContactEl.disabled = !stop.phone && !stop.email;
+    }
+
+    // ===== ROUTE ACTIONS =====
+    function focusMarkerForCurrent() {
+      const stop = filteredStops[selectedIndex];
+      const marker = stop ? markerById.get(stop.id) : null;
+      if (!stop || !marker || !marker.position) return;
+
+      map.panTo(marker.position);
+      map.setZoom(16);
+    }
+
+    function updateCurrentStatus(newStatus) {
+      const stop = filteredStops[selectedIndex];
+      if (!stop) return;
+      stop.status = newStatus;
+      renderCurrentHouse();
+      highlightActiveHouseRow();
+      updateStatsPill();
+      updateMarkerVisuals();
+      if (routeStart && filteredStops.every((s) => (s.status || "").toLowerCase() === "done")) finishRouteIfNeeded();
+    }
+
+    function startRoute(forceRestart = false) {
+      if (routeStart && !forceRestart && !routeFinished) return;
+      routeStart = new Date();
+      routeEnd = null;
+      routeFinished = false;
+      updateRouteTimerDisplay();
+      updateStartStopButton();
+    }
+
+    function stopRoute() {
+      if (!routeStart) return;
+      routeEnd = new Date();
+      routeFinished = true;
+      updateRouteTimerDisplay();
+      updateStartStopButton();
+    }
+
+    function finishRouteIfNeeded() {
+      if (routeFinished || !routeStart) return;
+      stopRoute();
+    }
+
+    function formatDuration(totalMins) {
+      const hours = Math.floor(totalMins / 60);
+      const mins = totalMins % 60;
+      if (hours && mins) return \`\${hours}h \${mins}m\`;
+      if (hours) return \`\${hours}h\`;
+      return \`\${mins}m\`;
+    }
+
+    function updateRouteTimerDisplay() {
+      if (!routeStart) {
+        routeTimerEl.textContent = "";
+        return;
       }
 
-      function startRoute(forceRestart = false) {
-        if (routeStart && !forceRestart && !routeFinished) return;
-        routeStart = new Date();
-        routeEnd = null;
-        routeFinished = false;
-        updateRouteTimerDisplay();
-        updateStartStopButton();
+      if (!routeFinished) {
+        routeTimerEl.textContent = \`Today's run: started \${routeStart.toLocaleTimeString()}\`;
+        return;
       }
 
-      function stopRoute() {
-        if (!routeStart) return;
-        routeEnd = new Date();
-        routeFinished = true;
-        updateRouteTimerDisplay();
-        updateStartStopButton();
+      const durationMs = (routeEnd || new Date()) - routeStart;
+      const durationMins = Math.round(durationMs / 60000);
+      routeTimerEl.textContent = \`Today's run: \${formatDuration(durationMins)}\`;
+    }
+
+    function updateStartStopButton() {
+      if (!routeStart || routeFinished) {
+        btnStartStopEl.textContent = "Start route";
+      } else {
+        btnStartStopEl.textContent = "Stop route";
+      }
+    }
+
+    function openNavigationTo(address) {
+      const applePreferred =
+        /Mac|iPhone|iPad|iPod/.test(navigator.platform || "") &&
+        /Safari/.test(navigator.userAgent || "");
+      const appleUrl = \`https://maps.apple.com/?daddr=\${encodeURIComponent(address)}\`;
+      const googleUrl = \`https://www.google.com/maps/dir/?api=1&destination=\${encodeURIComponent(address)}\`;
+      window.open(applePreferred ? appleUrl : googleUrl, "_blank");
+    }
+
+    // ===== MAP LOADER =====
+    function loadGoogleMaps() {
+      const apiKey = (GOOGLE_MAPS_API_KEY || "").trim();
+      if (!apiKey) {
+        console.error("Missing Google Maps API key – set GOOGLE_MAPS_API_KEY at top of script.");
+        emptyTextEl.textContent = "Map failed to load. Please add your Google Maps API key in the code.";
+        return;
       }
 
-      function finishRouteIfNeeded() {
-        if (routeFinished || !routeStart) return;
-        stopRoute();
-      }
-
-      function formatDuration(totalMins) {
-        const hours = Math.floor(totalMins / 60);
-        const mins = totalMins % 60;
-        if (hours && mins) return `${hours}h ${mins}m`;
-        if (hours) return `${hours}h`;
-        return `${mins}m`;
-      }
-
-      function updateRouteTimerDisplay() {
-        if (!routeStart) {
-          routeTimerEl.textContent = "";
-          return;
-        }
-
-        if (!routeFinished) {
-          routeTimerEl.textContent = `Today's run: started ${routeStart.toLocaleTimeString()}`;
-          return;
-        }
-
-        const durationMs = (routeEnd || new Date()) - routeStart;
-        const durationMins = Math.round(durationMs / 60000);
-        routeTimerEl.textContent = `Today's run: ${formatDuration(durationMins)}`;
-      }
-
-      function updateStartStopButton() {
-        if (!routeStart || routeFinished) {
-          btnStartStopEl.textContent = "Start route";
-        } else {
-          btnStartStopEl.textContent = "Stop route";
-        }
-      }
-
-      function openNavigationTo(address) {
-        const applePreferred = /Mac|iPhone|iPad|iPod/.test(navigator.platform || "") && /Safari/.test(navigator.userAgent || "");
-        const appleUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(address)}`;
-        const googleUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
-        window.open(applePreferred ? appleUrl : googleUrl, "_blank");
-      }
-
-      function setMapKeyUIState(apiKey, source) {
-        if (!mapKeyInputEl || !mapKeyStatusEl) return;
-
-        mapKeyInputEl.value = apiKey || "";
-
-        if (!apiKey) {
-          mapKeyStatusEl.textContent = "No key stored. Paste a Google Maps JavaScript API key to load the map.";
-          return;
-        }
-
-        const suffix = apiKey.length > 8 ? apiKey.slice(-8) : apiKey;
-        let label = "Using saved key";
-        if (source === "url") label = "Using key from URL";
-        mapKeyStatusEl.textContent = `${label} ending in ${suffix}.`;
-      }
-
-      function handleMapKeySave() {
-        if (!mapKeyInputEl || !mapKeyStatusEl) return;
-
-        const newKey = (mapKeyInputEl.value || "").trim();
-        if (!newKey) {
-          mapKeyStatusEl.textContent = "Please paste a Maps JavaScript API key first.";
-          return;
-        }
-
-        localStorage.setItem(MAPS_KEY_STORAGE_KEY, newKey);
-        mapKeyStatusEl.textContent = "Saved. Reloading the map with your key...";
-        setTimeout(() => window.location.reload(), 400);
-      }
-
-      // ===== MAP LOADER =====
-      function getMapKeyFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const urlKey = (params.get("mapsKey") || "").trim();
-        return urlKey || null;
-      }
-
-      function getStoredMapKey() {
-        const storedKey = (localStorage.getItem(MAPS_KEY_STORAGE_KEY) || "").trim();
-        return storedKey || null;
-      }
-
-      function loadGoogleMaps() {
-        const urlKey = getMapKeyFromUrl();
-        const storedKey = getStoredMapKey();
-        const apiKey = urlKey || storedKey;
-
-        if (urlKey && urlKey !== storedKey) {
-          localStorage.setItem(MAPS_KEY_STORAGE_KEY, urlKey);
-        }
-
-        mapApiKey = apiKey;
-        setMapKeyUIState(apiKey, urlKey ? "url" : "stored");
-
-        if (!apiKey) {
-          console.error("Missing Google Maps API key – unable to load map.");
-          mapKeyStatusEl.textContent = "Enter a valid key to initialize the map and geocoding.";
-          emptyTextEl.textContent = "Map failed to load. Please verify your Google Maps key.";
-          return;
-        }
-
-        window.onGoogleMapsReady = onGoogleMapsReady;
-
-        if (window.google && window.google.maps && typeof onGoogleMapsReady === "function") {
-          onGoogleMapsReady();
-          return;
-        }
-
-        const existingScript = document.querySelector("script[data-bp-maps]");
-        if (existingScript) return;
-
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly&libraries=marker&callback=onGoogleMapsReady`;
-        script.async = true;
-        script.defer = true;
-        script.dataset.bpMaps = "true";
-        script.onerror = () => {
-          console.error("Failed to load Google Maps script. Check the API key or network connection.");
-          emptyTextEl.textContent = "Map failed to load. Please verify your Google Maps key.";
-        };
-        document.head.appendChild(script);
-      }
-
-      function onGoogleMapsReady() {
+      window.onGoogleMapsReady = () => {
         initMap();
-      }
+      };
 
-      document.addEventListener("DOMContentLoaded", loadGoogleMaps);
-    </script>
-  </body>
+      const script = document.createElement("script");
+      script.src = \`https://maps.googleapis.com/maps/api/js?key=\${encodeURIComponent(apiKey)}&v=weekly&libraries=marker&callback=onGoogleMapsReady\`;
+      script.async = true;
+      script.defer = true;
+      script.onerror = () => {
+        console.error("Failed to load Google Maps script. Check the API key or network connection.");
+        emptyTextEl.textContent = "Map failed to load. Please verify your Google Maps key.";
+      };
+      document.head.appendChild(script);
+    }
+
+    document.addEventListener("DOMContentLoaded", loadGoogleMaps);
+  </script>
+</body>
 </html>
