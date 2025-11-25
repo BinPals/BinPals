@@ -729,7 +729,7 @@
       const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
       const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
-      const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
+      const DEFAULT_MAPS_API_KEY = "";
       const MAPS_KEY_STORAGE_KEY = "bpMapsKey";
       const LOGIN_STORAGE_KEY = "bpOperatorSession";
 
@@ -1419,8 +1419,9 @@
         const storedKey = (localStorage.getItem(MAPS_KEY_STORAGE_KEY) || "").trim();
         if (storedKey) return { key: storedKey, source: "stored" };
 
-        if (DEFAULT_MAPS_API_KEY) {
-          return { key: DEFAULT_MAPS_API_KEY, source: "default" };
+        const defaultKey = (DEFAULT_MAPS_API_KEY || "").trim();
+        if (defaultKey) {
+          return { key: defaultKey, source: "default" };
         }
 
         return { key: null, source: null };
