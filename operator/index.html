@@ -662,7 +662,7 @@
               <input type="password" id="mapKeyInput" placeholder="Enter Maps JavaScript API key" aria-label="Google Maps API key" autocomplete="off" />
               <button class="btn-pill btn-ghost" id="btnSaveMapKey" type="button">Save key</button>
             </div>
-            <p class="map-key-hint" id="mapKeyStatus">Paste a Google Maps JavaScript API key to load the map.</p>
+            <p class="map-key-hint" id="mapKeyStatus">Paste your Google Maps JavaScript API key to load the map. The key is stored only in this browser.</p>
           </div>
 
           <div class="route-meta-top">
@@ -729,7 +729,6 @@
       const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
       const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
       const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
-      const DEFAULT_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
       const MAPS_KEY_STORAGE_KEY = "bpMapsKey";
       const LOGIN_STORAGE_KEY = "bpOperatorSession";
 
@@ -1389,7 +1388,6 @@
         const suffix = apiKey.length > 8 ? apiKey.slice(-8) : apiKey;
         let label = "Using saved key";
         if (source === "url") label = "Using key from URL";
-        if (source === "default") label = "Using built-in key";
         mapKeyStatusEl.textContent = `${label} ending in ${suffix}.`;
       }
 
@@ -1408,30 +1406,28 @@
       }
 
       // ===== MAP LOADER =====
-      function resolveMapsApiKey() {
+      function getMapKeyFromUrl() {
         const params = new URLSearchParams(window.location.search);
         const urlKey = (params.get("mapsKey") || "").trim();
-        if (urlKey) {
-          localStorage.setItem(MAPS_KEY_STORAGE_KEY, urlKey);
-          return { key: urlKey, source: "url" };
-        }
+        return urlKey || null;
+      }
 
+      function getStoredMapKey() {
         const storedKey = (localStorage.getItem(MAPS_KEY_STORAGE_KEY) || "").trim();
-        if (storedKey) return { key: storedKey, source: "stored" };
-
-        const defaultKey = (DEFAULT_MAPS_API_KEY || "").trim();
-        if (defaultKey) {
-          return { key: defaultKey, source: "default" };
-        }
-
-        return { key: null, source: null };
+        return storedKey || null;
       }
 
       function loadGoogleMaps() {
-        const { key: apiKey, source: apiKeySource } = resolveMapsApiKey();
-        mapApiKey = apiKey;
+        const urlKey = getMapKeyFromUrl();
+        const storedKey = getStoredMapKey();
+        const apiKey = urlKey || storedKey;
 
-        setMapKeyUIState(apiKey, apiKeySource);
+        if (urlKey && urlKey !== storedKey) {
+          localStorage.setItem(MAPS_KEY_STORAGE_KEY, urlKey);
+        }
+
+        mapApiKey = apiKey;
+        setMapKeyUIState(apiKey, urlKey ? "url" : "stored");
 
         if (!apiKey) {
           console.error("Missing Google Maps API key – unable to load map.");
