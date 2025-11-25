@@ -879,266 +879,256 @@
         </div>
 
         <!-- FORM -->
-        <form
-          id="estimateForm"
-          method="POST"
-          action="https://docs.google.com/forms/d/e/1FAIpQLSeehAkGSoRi4TYJ-MJ01aRJ0F_zx_fGnu39NJQg8MW3SAvpPA/formResponse">
+      <form
+  id="estimateForm"
+  method="POST"
+  action="https://docs.google.com/forms/d/e/1FAIpQLSfxI9eM5LbrdJVfafqGUVg1bjhed-6u9YMzL7UdS2M8iGHPCg/formResponse">
 
-          <!-- Step 1 -->
-          <div class="step-panel active" data-step="1">
-            <div class="step-title">Step 1 – Your info</div>
-            <div class="step-helper">So we know who to email and text.</div>
+  <!-- Step 1 -->
+  <div class="step-panel active" data-step="1">
+    <div class="step-title">Step 1 – Your info</div>
+    <div class="step-helper">So we know who to email and text.</div>
 
-            <div class="field-row">
-              <div>
-                <label>Full name *</label>
-                <!-- Full name -->
-                <input type="text" name="entry.104280084" required placeholder="First and last name" />
-              </div>
-              <div>
-                <label>Phone number *</label>
-                <!-- Phone -->
-                <input
-                  type="tel"
-                  name="entry.902938994"
-                  inputmode="tel"
-                  required
-                  placeholder="(555) 123-4567"
-                />
-              </div>
-            </div>
+    <div class="field-row">
+      <div>
+        <label>Full name *</label>
+        <!-- Full name -->
+        <input
+          type="text"
+          name="entry.1781175414"
+          required
+          placeholder="First and last name"
+        />
+      </div>
+      <div>
+        <label>Phone number *</label>
+        <!-- Phone -->
+        <input
+          type="tel"
+          name="entry.1831463173"
+          inputmode="tel"
+          required
+          placeholder="(555) 123-4567"
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Email address *</label>
-              <!-- Email -->
-              <input type="email" name="entry.417977469" required placeholder="you@example.com" />
-            </div>
+    <div>
+      <label>Email address *</label>
+      <!-- Email -->
+      <input
+        type="email"
+        name="entry.651072410"
+        required
+        placeholder="you@example.com"
+      />
+    </div>
 
-            <div class="consent-box">
-              <!-- SMS consent (local only, not sent to Google as entry) -->
-              <input
-                type="checkbox"
-                id="smsConsent"
-                name="smsConsent"
-                value="Yes"
-                required
-              />
-              <div class="consent-text">
-                <strong>I agree to receive service updates, payment notifications, and pickup reminders from BinPals at the number provided.</strong>
-                Message &amp; data rates may apply. Reply STOP to unsubscribe.
-                <div class="consent-note">You may receive 1–4 service-related messages per week, depending on your pickup schedule.</div>
-              </div>
-            </div>
-          </div>
+    <div class="consent-box">
+      <!-- SMS consent (local only, not sent to Google as entry) -->
+      <input
+        type="checkbox"
+        id="smsConsent"
+        name="smsConsent"
+        value="Yes"
+        required
+      />
+      <div class="consent-text">
+        <strong>I agree to receive service updates, payment notifications, and pickup reminders from BinPals at the number provided.</strong>
+        Message &amp; data rates may apply. Reply STOP to unsubscribe.
+        <div class="consent-note">
+          You may receive 1–4 service-related messages per week, depending on your pickup schedule.
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <!-- Step 2 -->
-          <div class="step-panel" data-step="2">
-            <div class="step-title">Step 2 – Your address</div>
-            <div class="step-helper">So we can check your route.</div>
+  <!-- Step 2 -->
+  <div class="step-panel" data-step="2">
+    <div class="step-title">Step 2 – Your address</div>
+    <div class="step-helper">So we can check your route.</div>
 
-            <label>Street address *</label>
-            <!-- Street -->
-            <input type="text" name="entry.2139416814" required placeholder="House number and street" />
+    <label>Street address *</label>
+    <!-- Street -->
+    <input
+      type="text"
+      name="entry.547270743"
+      required
+      placeholder="House number and street"
+    />
 
-            <div class="field-row">
-              <div>
-                <label>City *</label>
-                <!-- City -->
-                <input type="text" name="entry.565605156" required placeholder="City" />
-              </div>
+    <div class="field-row">
+      <div>
+        <label>City *</label>
+        <!-- City -->
+        <input
+          type="text"
+          name="entry.249937834"
+          required
+          placeholder="City"
+        />
+      </div>
 
-              <div>
-                <label>State *</label>
-                <!-- State -->
-                <select name="entry.2058220492" required>
-                  <option value="" disabled selected>Select state</option>
-                  <option value="AL">Alabama</option>
-                  <option value="AK">Alaska</option>
-                  <option value="AZ">Arizona</option>
-                  <option value="AR">Arkansas</option>
-                  <option value="CA">California</option>
-                  <option value="CO">Colorado</option>
-                  <option value="CT">Connecticut</option>
-                  <option value="DE">Delaware</option>
-                  <option value="FL">Florida</option>
-                  <option value="GA">Georgia</option>
-                  <option value="HI">Hawaii</option>
-                  <option value="ID">Idaho</option>
-                  <option value="IL">Illinois</option>
-                  <option value="IN">Indiana</option>
-                  <option value="IA">Iowa</option>
-                  <option value="KS">Kansas</option>
-                  <option value="KY">Kentucky</option>
-                  <option value="LA">Louisiana</option>
-                  <option value="ME">Maine</option>
-                  <option value="MD">Maryland</option>
-                  <option value="MA">Massachusetts</option>
-                  <option value="MI">Michigan</option>
-                  <option value="MN">Minnesota</option>
-                  <option value="MS">Mississippi</option>
-                  <option value="MO">Missouri</option>
-                  <option value="MT">Montana</option>
-                  <option value="NE">Nebraska</option>
-                  <option value="NV">Nevada</option>
-                  <option value="NH">New Hampshire</option>
-                  <option value="NJ">New Jersey</option>
-                  <option value="NM">New Mexico</option>
-                  <option value="NY">New York</option>
-                  <option value="NC">North Carolina</option>
-                  <option value="ND">North Dakota</option>
-                  <option value="OH">Ohio</option>
-                  <option value="OK">Oklahoma</option>
-                  <option value="OR">Oregon</option>
-                  <option value="PA">Pennsylvania</option>
-                  <option value="RI">Rhode Island</option>
-                  <option value="SC">South Carolina</option>
-                  <option value="SD">South Dakota</option>
-                  <option value="TN">Tennessee</option>
-                  <option value="TX">Texas</option>
-                  <option value="UT">Utah</option>
-                  <option value="VT">Vermont</option>
-                  <option value="VA">Virginia</option>
-                  <option value="WA">Washington</option>
-                  <option value="WV">West Virginia</option>
-                  <option value="WI">Wisconsin</option>
-                  <option value="WY">Wyoming</option>
-                </select>
-              </div>
+      <div>
+        <label>State *</label>
+        <!-- State (we'll keep full names for UX, form will just store the text) -->
+        <select name="entry.569326425" required>
+          <option value="" disabled selected>Select state</option>
+          <option value="Arizona">Arizona</option>
+          <option value="California">California</option>
+          <option value="Nevada">Nevada</option>
+          <option value="Kansas">Kansas</option>
+          <!-- add more if you want, but these are your main ones -->
+        </select>
+      </div>
 
-              <div>
-                <label>ZIP code *</label>
-                <!-- ZIP -->
-                <input
-                  type="text"
-                  name="entry.55232557"
-                  required
-                  inputmode="numeric"
-                  pattern="\d{5}"
-                  placeholder="ZIP"
-                />
-              </div>
-            </div>
+      <div>
+        <label>ZIP code *</label>
+        <!-- ZIP -->
+        <input
+          type="text"
+          name="entry.627856236"
+          required
+          inputmode="numeric"
+          pattern="\d{5}"
+          placeholder="ZIP"
+        />
+      </div>
+    </div>
 
-            <div class="field-row">
-              <div>
-                <label>Gate access?</label>
-                <!-- Gate access -->
-                <select name="entry.1763188541">
-                  <option value="" disabled selected>Select an option</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
-              </div>
-              <div>
-                <label>Gate code or special instructions (optional)</label>
-                <!-- Gate code / notes -->
-                <input type="text" name="entry.303272276" placeholder="Gate code, community name, etc." />
-              </div>
-            </div>
-          </div>
+    <div class="field-row">
+      <div>
+        <label>Gate access?</label>
+        <!-- Gate access -->
+        <select name="entry.257830709">
+          <option value="" disabled selected>Select an option</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div>
+        <label>Gate code or special instructions (optional)</label>
+        <!-- Gate code / notes -->
+        <input
+          type="text"
+          name="entry.1380998071"
+          placeholder="Gate code, community name, etc."
+        />
+      </div>
+    </div>
+  </div>
 
-          <!-- Step 3 -->
-          <div class="step-panel" data-step="3">
-            <div class="step-title">Step 3 – Bins & trash day</div>
-            <div class="step-helper">So we can price your service and route you correctly.</div>
+  <!-- Step 3 -->
+  <div class="step-panel" data-step="3">
+    <div class="step-title">Step 3 – Bins & trash day</div>
+    <div class="step-helper">
+      So we can price your service and route you correctly.
+    </div>
 
-            <div class="field-row">
-              <div>
-                <label>How many trash bins? *</label>
-                <!-- Number of bins -->
-                <input
-                  type="number"
-                  name="entry.1777532498"
-                  required
-                  min="1"
-                  placeholder="Example: 2"
-                />
-              </div>
+    <div class="field-row">
+      <div>
+        <label>How many trash bins? *</label>
+        <!-- Number of bins -->
+        <input
+          type="number"
+          name="entry.32746915"
+          required
+          min="1"
+          placeholder="Example: 2"
+        />
+      </div>
 
-              <div>
-                <label>Trash day *</label>
-                <!-- Trash day -->
-                <select name="entry.12034793" required>
-                  <option value="" disabled selected>Pick your trash day</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                </select>
-              </div>
-            </div>
-          </div>
+      <div>
+        <label>Trash day *</label>
+        <!-- Trash day -->
+        <select name="entry.213311383" required>
+          <option value="" disabled selected>Pick your trash day</option>
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-          <!-- Step 4 -->
-          <div class="step-panel" data-step="4">
-            <div class="step-title">Step 4 – Pick your plan</div>
-            <div class="step-helper">
-              Choose the option that fits your number of bins or select a one-time service.
-            </div>
+  <!-- Step 4 -->
+  <div class="step-panel" data-step="4">
+    <div class="step-title">Step 4 – Pick your plan</div>
+    <div class="step-helper">
+      Choose the option that fits your number of bins or select a one-time service.
+    </div>
 
-            <div class="plan-grid" id="planGrid">
-              <!-- Plan 1 -->
-              <label class="plan-card" data-plan="premium">
-                <input
-                  type="radio"
-                  name="entry.707531909"
-                  value="Premium – $45/mo (up to 2 cans)"
-                  required
-                />
-                <div class="plan-name">Premium</div>
-                <div class="plan-price">$45/mo</div>
-                <div class="plan-detail">Up to 2 trash bins, each pickup day.</div>
-                <span class="plan-tag">Most popular for small homes</span>
-              </label>
+    <div class="plan-grid" id="planGrid">
+      <!-- Plan 1 -->
+      <label class="plan-card" data-plan="premium">
+        <input
+          type="radio"
+          name="entry.757271099"
+          value="Premium – $45/mo (up to 2 cans)"
+          required
+        />
+        <div class="plan-name">Premium</div>
+        <div class="plan-price">$45/mo</div>
+        <div class="plan-detail">
+          Up to 2 trash bins, each pickup day.
+        </div>
+        <span class="plan-tag">Most popular for small homes</span>
+      </label>
 
-              <!-- Plan 2 -->
-              <label class="plan-card" data-plan="premiumPlus">
-                <input
-                  type="radio"
-                  name="entry.707531909"
-                  value="Premium+ – $54/mo (3–4 cans)"
-                />
-                <div class="plan-name">Premium+</div>
-                <div class="plan-price">$54/mo</div>
-                <div class="plan-detail">3–4 trash bins, each pickup day.</div>
-                <span class="plan-tag">Best for separate dwellings or shared homes</span>
-              </label>
+      <!-- Plan 2 -->
+      <label class="plan-card" data-plan="premiumPlus">
+        <input
+          type="radio"
+          name="entry.757271099"
+          value="Premium+ – $54/mo (3–4 cans)"
+        />
+        <div class="plan-name">Premium+</div>
+        <div class="plan-price">$54/mo</div>
+        <div class="plan-detail">
+          3–4 trash bins, each pickup day.
+        </div>
+        <span class="plan-tag">Best for separate dwellings or shared homes</span>
+      </label>
 
-              <!-- Plan 3 -->
-              <label class="plan-card" data-plan="oneTime">
-                <input
-                  type="radio"
-                  name="entry.707531909"
-                  value="One Time – $35"
-                />
-                <div class="plan-name">One Time Service</div>
-                <div class="plan-price">$35</div>
-                <div class="plan-detail">One-time visit for up to 4 bins.</div>
-                <span class="plan-tag">Perfect for trying BinPals Trash Valet</span>
-              </label>
-            </div>
-          </div>
+      <!-- Plan 3 -->
+      <label class="plan-card" data-plan="oneTime">
+        <input
+          type="radio"
+          name="entry.757271099"
+          value="One Time – $35"
+        />
+        <div class="plan-name">One Time Service</div>
+        <div class="plan-price">$35</div>
+        <div class="plan-detail">
+          One-time visit for up to 4 bins.
+        </div>
+        <span class="plan-tag">Perfect for trying BinPals Trash Valet</span>
+      </label>
+    </div>
+  </div>
 
-          <!-- Hidden Google Form fields -->
-          <!-- Status: Pending -->
-          <input type="hidden" name="entry.409104529" value="Pending" />
-          <input type="hidden" name="submit" value="Submit" />
+  <!-- Hidden Google Form field: submit -->
+  <input type="hidden" name="submit" value="Submit" />
 
-          <!-- Buttons -->
-          <div class="buttons">
-            <button type="button" class="btn-secondary" id="backBtn">Back</button>
-            <button type="button" class="btn-primary" id="nextBtn">Next</button>
-          </div>
+  <!-- Buttons -->
+  <div class="buttons">
+    <button type="button" class="btn-secondary" id="backBtn">Back</button>
+    <button type="button" class="btn-primary" id="nextBtn">Next</button>
+  </div>
 
-          <div id="message"></div>
+  <div id="message"></div>
 
-          <div class="legal-links">
-            <a href="https://getbinpals.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>
-            <a href="https://getbinpals.com/terms" target="_blank" rel="noopener">Terms &amp; Conditions</a>
-          </div>
-        </form>
-
+  <div class="legal-links">
+    <a href="https://getbinpals.com/privacy-policy" target="_blank" rel="noopener"
+      >Privacy Policy</a
+    >
+    <a href="https://getbinpals.com/terms" target="_blank" rel="noopener"
+      >Terms &amp; Conditions</a
+    >
+  </div>
+</form>
         <div class="footer-note">
           We usually reply within <strong>1–2 business days.</strong><br />
           If you need help, you can also email us at <strong>Binpalsteam@gmail.com</strong>.
@@ -1172,211 +1162,214 @@
 
   <script src="layout.js"></script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var step = 1;
-      var totalSteps = 4;
+<script src="layout.js"></script>
 
-      var progress      = document.getElementById("progress");
-      var panels        = document.querySelectorAll(".step-panel");
-      var backBtn       = document.getElementById("backBtn");
-      var nextBtn       = document.getElementById("nextBtn");
-      var form          = document.getElementById("estimateForm");
-      var message       = document.getElementById("message");
-      var stepNav       = document.querySelectorAll(".step-nav-item");
-      var formWrapper   = document.getElementById("formWrapper");
-      var successScreen = document.getElementById("successScreen");
-      var planGrid      = document.getElementById("planGrid");
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var step = 1;
+    var totalSteps = 4;
 
-      var binCountInput   = form ? form.querySelector('input[name="entry.1777532498"]') : null;
-      var premiumCard     = planGrid ? planGrid.querySelector('[data-plan="premium"]') : null;
-      var premiumPlusCard = planGrid ? planGrid.querySelector('[data-plan="premiumPlus"]') : null;
+    var progress      = document.getElementById("progress");
+    var panels        = document.querySelectorAll(".step-panel");
+    var backBtn       = document.getElementById("backBtn");
+    var nextBtn       = document.getElementById("nextBtn");
+    var form          = document.getElementById("estimateForm");
+    var message       = document.getElementById("message");
+    var stepNav       = document.querySelectorAll(".step-nav-item");
+    var formWrapper   = document.getElementById("formWrapper");
+    var successScreen = document.getElementById("successScreen");
+    var planGrid      = document.getElementById("planGrid");
 
-      function updateUI() {
-        // show active panel
-        for (var i = 0; i < panels.length; i++) {
-          panels[i].classList.remove("active");
-        }
-        var currentPanel = document.querySelector('.step-panel[data-step="' + step + '"]');
-        if (currentPanel) currentPanel.classList.add("active");
+    // UPDATED: number-of-bins input name
+    var binCountInput   = form ? form.querySelector('input[name="entry.32746915"]') : null;
+    var premiumCard     = planGrid ? planGrid.querySelector('[data-plan="premium"]') : null;
+    var premiumPlusCard = planGrid ? planGrid.querySelector('[data-plan="premiumPlus"]') : null;
 
-        // back button visibility
-        if (backBtn) backBtn.style.visibility = step === 1 ? "hidden" : "visible";
+    function updateUI() {
+      // show active panel
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.remove("active");
+      }
+      var currentPanel = document.querySelector('.step-panel[data-step="' + step + '"]');
+      if (currentPanel) currentPanel.classList.add("active");
 
-        // next button text
-        if (nextBtn) nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
+      // back button visibility
+      if (backBtn) backBtn.style.visibility = step === 1 ? "hidden" : "visible";
 
-        // progress bar
-        if (progress) progress.style.width = (step / totalSteps) * 100 + "%";
+      // next button text
+      if (nextBtn) nextBtn.textContent = step === totalSteps ? "Send request" : "Next";
 
-        // step nav
-        for (var j = 0; j < stepNav.length; j++) {
-          var item = stepNav[j];
-          var s = Number(item.getAttribute("data-step-nav"));
-          item.classList.remove("active", "completed");
-          if (s < step) item.classList.add("completed");
-          else if (s === step) item.classList.add("active");
-        }
+      // progress bar
+      if (progress) progress.style.width = (step / totalSteps) * 100 + "%";
+
+      // step nav
+      for (var j = 0; j < stepNav.length; j++) {
+        var item = stepNav[j];
+        var s = Number(item.getAttribute("data-step-nav"));
+        item.classList.remove("active", "completed");
+        if (s < step) item.classList.add("completed");
+        else if (s === step) item.classList.add("active");
+      }
+    }
+
+    function markSelectedCard(card) {
+      if (!planGrid || !card) return;
+      var radio = card.querySelector('input[type="radio"]');
+      if (!radio || radio.disabled) return;
+
+      var cards = planGrid.querySelectorAll(".plan-card");
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].classList.remove("selected");
       }
 
-      function markSelectedCard(card) {
-        if (!planGrid || !card) return;
-        var radio = card.querySelector('input[type="radio"]');
-        if (!radio || radio.disabled) return;
+      radio.checked = true;
+      card.classList.add("selected");
+    }
 
-        var cards = planGrid.querySelectorAll(".plan-card");
-        for (var i = 0; i < cards.length; i++) {
-          cards[i].classList.remove("selected");
-        }
-
-        radio.checked = true;
-        card.classList.add("selected");
-      }
-
-      function setPlanDisabled(card, disabled) {
-        if (!card) return;
-        var radio = card.querySelector('input[type="radio"]');
-        card.classList.toggle("disabled", !!disabled);
-        if (radio) {
-          radio.disabled = !!disabled;
-          if (disabled) {
-            radio.checked = false;
-          }
-        }
+    function setPlanDisabled(card, disabled) {
+      if (!card) return;
+      var radio = card.querySelector('input[type="radio"]');
+      card.classList.toggle("disabled", !!disabled);
+      if (radio) {
+        radio.disabled = !!disabled;
         if (disabled) {
-          card.classList.remove("selected");
+          radio.checked = false;
         }
       }
+      if (disabled) {
+        card.classList.remove("selected");
+      }
+    }
 
-      function updatePlansForBins() {
-        if (!planGrid || !binCountInput) return;
-        var binCount = parseInt(binCountInput.value, 10);
-        var hasNumber = !isNaN(binCount);
-        var selectedRadio = planGrid.querySelector('.plan-card input[type="radio"]:checked');
-        var selectedCard = selectedRadio ? selectedRadio.closest(".plan-card") : null;
-        var selectedPlan = selectedCard ? selectedCard.getAttribute("data-plan") : null;
+    function updatePlansForBins() {
+      if (!planGrid || !binCountInput) return;
+      var binCount = parseInt(binCountInput.value, 10);
+      var hasNumber = !isNaN(binCount);
+      var selectedRadio = planGrid.querySelector('.plan-card input[type="radio"]:checked');
+      var selectedCard = selectedRadio ? selectedRadio.closest(".plan-card") : null;
+      var selectedPlan = selectedCard ? selectedCard.getAttribute("data-plan") : null;
 
-        // reset
+      // reset
+      setPlanDisabled(premiumCard, false);
+      setPlanDisabled(premiumPlusCard, false);
+
+      if (!hasNumber) return;
+
+      if (binCount <= 2) {
         setPlanDisabled(premiumCard, false);
+        setPlanDisabled(premiumPlusCard, true);
+        if (!selectedRadio || selectedRadio.disabled || selectedPlan !== "premium") {
+          markSelectedCard(premiumCard);
+        }
+      } else if (binCount >= 3) {
+        setPlanDisabled(premiumCard, true);
         setPlanDisabled(premiumPlusCard, false);
-
-        if (!hasNumber) return;
-
-        if (binCount <= 2) {
-          setPlanDisabled(premiumCard, false);
-          setPlanDisabled(premiumPlusCard, true);
-          if (!selectedRadio || selectedRadio.disabled || selectedPlan !== "premium") {
-            markSelectedCard(premiumCard);
-          }
-        } else if (binCount >= 3) {
-          setPlanDisabled(premiumCard, true);
-          setPlanDisabled(premiumPlusCard, false);
-          if (!selectedRadio || selectedRadio.disabled || selectedPlan !== "premiumPlus") {
-            markSelectedCard(premiumPlusCard);
-          }
+        if (!selectedRadio || selectedRadio.disabled || selectedPlan !== "premiumPlus") {
+          markSelectedCard(premiumPlusCard);
         }
       }
+    }
 
-      function validateCurrentStep() {
-        var currentPanel = document.querySelector('.step-panel[data-step="' + step + '"]');
-        if (!currentPanel) return true;
+    function validateCurrentStep() {
+      var currentPanel = document.querySelector('.step-panel[data-step="' + step + '"]');
+      if (!currentPanel) return true;
 
-        var inputs = currentPanel.querySelectorAll("input, select");
-        for (var i = 0; i < inputs.length; i++) {
-          var el = inputs[i];
+      var inputs = currentPanel.querySelectorAll("input, select");
+      for (var i = 0; i < inputs.length; i++) {
+        var el = inputs[i];
 
-          // ignore hidden / disabled
-          if (el.type === "hidden" || el.disabled) continue;
+        // ignore hidden / disabled
+        if (el.type === "hidden" || el.disabled) continue;
 
-          if (!el.checkValidity()) {
-            el.reportValidity();
-            return false;
-          }
+        if (!el.checkValidity()) {
+          el.reportValidity();
+          return false;
         }
-        return true;
       }
+      return true;
+    }
 
-      if (planGrid) {
-        planGrid.addEventListener("change", function (e) {
-          if (e.target && e.target.type === "radio") {
-            var cards = planGrid.querySelectorAll(".plan-card");
-            for (var i = 0; i < cards.length; i++) {
-              cards[i].classList.remove("selected");
-            }
-            var selectedCard = e.target.closest(".plan-card");
-            if (selectedCard) selectedCard.classList.add("selected");
+    if (planGrid) {
+      planGrid.addEventListener("change", function (e) {
+        if (e.target && e.target.type === "radio") {
+          var cards = planGrid.querySelectorAll(".plan-card");
+          for (var i = 0; i < cards.length; i++) {
+            cards[i].classList.remove("selected");
           }
-        });
-      }
+          var selectedCard = e.target.closest(".plan-card");
+          if (selectedCard) selectedCard.classList.add("selected");
+        }
+      });
+    }
 
-      if (binCountInput) {
-        binCountInput.addEventListener("input", updatePlansForBins);
-      }
+    if (binCountInput) {
+      binCountInput.addEventListener("input", updatePlansForBins);
+    }
 
-      updateUI();
-      updatePlansForBins();
+    updateUI();
+    updatePlansForBins();
 
-      if (nextBtn) {
-        nextBtn.addEventListener("click", function () {
-          if (message) message.textContent = "";
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        if (message) message.textContent = "";
 
-          if (step < totalSteps) {
-            if (!validateCurrentStep()) {
-              if (message) {
-                message.textContent = "Please complete all required fields on this step.";
-              }
-              return;
+        if (step < totalSteps) {
+          if (!validateCurrentStep()) {
+            if (message) {
+              message.textContent = "Please complete all required fields on this step.";
             }
-            step++;
+            return;
+          }
+          step++;
+          updateUI();
+        } else if (form) {
+          if (!validateCurrentStep()) {
+            if (message) {
+              message.textContent = "Please complete all required fields.";
+            }
+            return;
+          }
+          form.requestSubmit();
+        }
+      });
+    }
+
+    if (backBtn) {
+      backBtn.addEventListener("click", function () {
+        if (step > 1) {
+          step--;
+          updateUI();
+        }
+      });
+    }
+
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (message) message.textContent = "";
+
+        var formData = new FormData(form);
+        var params = new URLSearchParams(formData);
+
+        fetch(form.action, { method: "POST", mode: "no-cors", body: params })
+          .then(function () {
+            if (formWrapper) formWrapper.style.display = "none";
+            if (successScreen) successScreen.style.display = "flex";
+            window.scrollTo(0, 0);
+
+            form.reset();
+            step = 1;
             updateUI();
-          } else if (form) {
-            if (!validateCurrentStep()) {
-              if (message) {
-                message.textContent = "Please complete all required fields.";
-              }
-              return;
+          })
+          .catch(function () {
+            if (message) {
+              message.textContent = "Something went wrong. Please try again.";
             }
-            form.requestSubmit();
-          }
-        });
-      }
-
-      if (backBtn) {
-        backBtn.addEventListener("click", function () {
-          if (step > 1) {
-            step--;
-            updateUI();
-          }
-        });
-      }
-
-      if (form) {
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          if (message) message.textContent = "";
-
-          var formData = new FormData(form);
-          var params = new URLSearchParams(formData);
-
-          fetch(form.action, { method: "POST", mode: "no-cors", body: params })
-            .then(function () {
-              if (formWrapper) formWrapper.style.display = "none";
-              if (successScreen) successScreen.style.display = "flex";
-              window.scrollTo(0, 0);
-
-              form.reset();
-              step = 1;
-              updateUI();
-            })
-            .catch(function () {
-              if (message) {
-                message.textContent = "Something went wrong. Please try again.";
-              }
-            });
-        });
-      }
-    });
-  </script>
+          });
+      });
+    }
+  });
+</script>
 </body>
 </html>
 
