@@ -529,6 +529,8 @@
               <div class="brand-text">
                 <div class="brand-title">BinPals Operator</div>
                 <div class="brand-sub">Route tools for field teams</div>
+                <div class="brand-sub" id="operatorLabel"></div>
+                <div class="brand-sub" id="routeLabel"></div>
               </div>
             </div>
             <div class="status-pill">LOGGED IN</div>
@@ -643,6 +645,18 @@
     const btnOpenNavEl = document.getElementById("btnOpenNav");
     const btnStartStopEl = document.getElementById("btnStartStop");
     const routeTimerEl = document.getElementById("routeTimer");
+    const operatorLabelEl = document.getElementById("operatorLabel");
+    const routeLabelEl = document.getElementById("routeLabel");
+
+    if (operatorLabelEl) {
+      operatorLabelEl.textContent = OPERATOR_ID ? "Operator: " + OPERATOR_ID : "";
+      operatorLabelEl.style.display = OPERATOR_ID ? "block" : "none";
+    }
+
+    if (routeLabelEl) {
+      routeLabelEl.textContent = ROUTE_ID ? "Route: " + ROUTE_ID : "";
+      routeLabelEl.style.display = ROUTE_ID ? "block" : "none";
+    }
 
     // ===== HELPERS =====
     function fetchJson(url) {
@@ -676,10 +690,17 @@
 
       return loadHouses(urlWithParams)
         .then(function (data) {
+          if (!Array.isArray(data)) {
+            emptyTextEl.textContent = "Couldn’t load stops right now. Please try again.";
+            return [];
+          }
+
+          emptyTextEl.textContent = "No houses for this filter.";
           return normalizeStopData(data);
         })
         .catch(function (err) {
           console.error("Failed to fetch stops:", err);
+          emptyTextEl.textContent = "Couldn’t load stops right now. Please try again.";
           return [];
         });
     }
@@ -780,9 +801,6 @@
 
       fetchStops().then(function (result) {
         stops = result;
-        if (OPERATOR_ID && ROUTE_ID) {
-          emptyTextEl.textContent = "No houses for this filter.";
-        }
 
         ensureLatLngForStops(stops).then(function () {
           setupMapMarkers();
