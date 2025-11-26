@@ -593,29 +593,35 @@
     </main>
   </div>
     <script>
-    // ===== CONFIG =====
-    const API_URL = "https://script.google.com/macros/s/AKfycbwfCDosVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl97JJE_UbHYAbV-S2cDui1IaV/exec";
-    const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
-    const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
+    (function () {
+      // ===== CONFIG =====
+      const API_URL = "https://script.google.com/macros/s/AKfycbwfCDosVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl97JJE_UbHYAbV-S2cDui1IaV/exec";
+      const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
+      const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
 
-    // TODO: put your real Google Maps JavaScript API key here
-    const GOOGLE_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
+      // TODO: put your real Google Maps JavaScript API key here
+      const GOOGLE_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
 
-    const urlParams   = new URLSearchParams(window.location.search);
-    const OPERATOR_ID = (urlParams.get("op") || "").trim();
-    const ROUTE_ID    = (urlParams.get("route") || "").trim();
+      const urlParams   = new URLSearchParams(window.location.search);
+      const OPERATOR_ID = (urlParams.get("op") || "").trim();
+      const ROUTE_ID    = (urlParams.get("route") || "").trim();
 
-    let map;
-    let geocoder;
-    let markers = [];
-    const markerById = new Map();
-    let stops = [];
-    let filteredStops = [];
-    let selectedIndex = 0;
-    let routePolyline = null;
-    let routeStart = null;
-    let routeEnd = null;
-    let routeFinished = false;
+      if (!OPERATOR_ID || !ROUTE_ID) {
+        window.location.href = "/operator/login.html";
+        return;
+      }
+
+      let map;
+      let geocoder;
+      let markers = [];
+      const markerById = new Map();
+      let stops = [];
+      let filteredStops = [];
+      let selectedIndex = 0;
+      let routePolyline = null;
+      let routeStart = null;
+      let routeEnd = null;
+      let routeFinished = false;
 
     // DOM refs
     const sheetEl = document.getElementById("routeSheet");
@@ -1244,7 +1250,8 @@
       document.head.appendChild(script);
     }
 
-    document.addEventListener("DOMContentLoaded", loadGoogleMaps);
+      document.addEventListener("DOMContentLoaded", loadGoogleMaps);
+    })();
   </script>
 </body>
 </html>
