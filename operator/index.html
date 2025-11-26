@@ -594,12 +594,16 @@
   </div>
     <script>
     // ===== CONFIG =====
-    const API_URL = "https://script.google.com/macros/s/AKfycbzMbxMEk0wYJybHDPjwsK8V-pxbYuwgeIFmrbWXSWbVGNsglM5geBWjse0ID2bq1XD0fQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwfCDosVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl97JJE_UbHYAbV-S2cDui1IaV/exec";
     const API_PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
     const CITY_CENTER = { lat: 33.7415, lng: -112.2985 }; // North Peoria / Vistancia
 
     // TODO: put your real Google Maps JavaScript API key here
     const GOOGLE_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
+
+    const urlParams   = new URLSearchParams(window.location.search);
+    const OPERATOR_ID = (urlParams.get("op") || "").trim();
+    const ROUTE_ID    = (urlParams.get("route") || "").trim();
 
     let map;
     let geocoder;
@@ -644,15 +648,27 @@
       });
     }
 
-    function loadHouses() {
-      return fetchJson(API_URL).catch(function (primaryErr) {
+    function loadHouses(targetUrl) {
+      var urlToUse = targetUrl || API_URL;
+      return fetchJson(urlToUse).catch(function (primaryErr) {
         console.warn("Primary fetch failed, retrying with proxy...", primaryErr);
-        return fetchJson(API_PROXY_PREFIX + encodeURIComponent(API_URL));
+        return fetchJson(API_PROXY_PREFIX + encodeURIComponent(urlToUse));
       });
     }
 
     function fetchStops() {
-      return loadHouses()
+      if (!OPERATOR_ID || !ROUTE_ID) {
+        emptyTextEl.textContent = "Missing operator or route. Please log in again.";
+        return Promise.resolve([]);
+      }
+
+      var params = new URLSearchParams();
+      if (OPERATOR_ID) params.set("operatorId", OPERATOR_ID);
+      if (ROUTE_ID) params.set("routeId", ROUTE_ID);
+
+      var urlWithParams = API_URL + "?" + params.toString();
+
+      return loadHouses(urlWithParams)
         .then(function (data) {
           return normalizeStopData(data);
         })
@@ -758,7 +774,9 @@
 
       fetchStops().then(function (result) {
         stops = result;
-        emptyTextEl.textContent = "No houses for this filter.";
+        if (OPERATOR_ID && ROUTE_ID) {
+          emptyTextEl.textContent = "No houses for this filter.";
+        }
 
         ensureLatLngForStops(stops).then(function () {
           setupMapMarkers();
