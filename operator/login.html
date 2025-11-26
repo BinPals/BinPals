@@ -107,6 +107,12 @@
       color: #b91c1c;
     }
 
+    .status-pill.neutral {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+      color: #4b5563;
+    }
+
     .login-form {
       display: flex;
       flex-direction: column;
@@ -195,37 +201,71 @@
       <button class="btn-main" type="submit">Log in</button>
     </form>
 
-    <p class="foot-note">Choose your operator ID and assigned route to access the <a class="link" href="/operator/">route dashboard</a>.</p>
+    <p class="foot-note">
+      Choose your operator ID and assigned route to access the
+      <a class="link" href="#">route dashboard</a>.
+    </p>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      var form = document.getElementById("loginForm");
-      var opInput = document.getElementById("operatorId");
-      var routeInput = document.getElementById("routeId");
+      var form        = document.getElementById("loginForm");
+      var opInput     = document.getElementById("operatorId");
+      var routeInput  = document.getElementById("routeId");
+      var statusPill  = document.getElementById("statusPill");
 
-      if (!form || !opInput || !routeInput) return;
+      if (!form || !opInput || !routeInput || !statusPill) return;
+
+      // Helper: update pill
+      function setStatus(text, mode) {
+        statusPill.textContent = text;
+        statusPill.classList.remove("error", "neutral");
+        if (mode === "error") {
+          statusPill.classList.add("error");
+        } else if (mode === "neutral") {
+          statusPill.classList.add("neutral");
+        }
+      }
+
+      // Optional: prefill from URL (login.html?op=OP01&route=R1)
+      var params = new URLSearchParams(window.location.search);
+      var preOp    = (params.get("op") || "").trim();
+      var preRoute = (params.get("route") || "").trim();
+
+      if (preOp) {
+        opInput.value = preOp;
+      }
+      if (preRoute) {
+        routeInput.value = preRoute;
+      }
+      if (preOp || preRoute) {
+        setStatus("PREFILLED FROM LINK", "neutral");
+      }
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        var op = (opInput.value || "").trim();
+        var op    = (opInput.value || "").trim();
         var route = (routeInput.value || "").trim();
 
         if (!op) {
-          alert("Please choose your operator ID.");
+          setStatus("SELECT AN OPERATOR ID", "error");
           opInput.focus();
           return;
         }
 
         if (!route) {
-          alert("Please choose your route.");
+          setStatus("SELECT A ROUTE", "error");
           routeInput.focus();
           return;
         }
 
+        setStatus("LOGGING IN…", "neutral");
+
+        // If your operator dashboard file is /operator/index.html
+        // and this login file is also inside /operator/, this is correct:
         var targetUrl = "index.html?op=" + encodeURIComponent(op) +
-          "&route=" + encodeURIComponent(route);
+                        "&route=" + encodeURIComponent(route);
 
         window.location.href = targetUrl;
       });
