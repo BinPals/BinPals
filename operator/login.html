@@ -113,7 +113,8 @@
       gap: 12px;
     }
 
-    .login-form input {
+    .login-form input,
+    .login-form select {
       width: 100%;
       padding: 12px 14px;
       border-radius: 12px;
@@ -121,6 +122,14 @@
       font-size: 15px;
       font-family: inherit;
       background: var(--gray-soft);
+      appearance: none;
+    }
+
+    .login-form select {
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8L10 12L14 8' stroke='%236b7280' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
     }
 
     .btn-main {
@@ -171,61 +180,55 @@
     <div class="status-pill" id="statusPill">READY</div>
 
     <form class="login-form" id="loginForm">
-      <input type="email" id="email" placeholder="name@email.com" aria-label="Email" required />
-      <input type="password" id="accessCode" placeholder="Access code" aria-label="Access code" required />
+      <select id="operatorId" required aria-label="Operator">
+        <option value="" disabled selected>Select operator</option>
+        <option value="OP01">OP01 – Dajon</option>
+        <option value="OP02">OP02 – California</option>
+      </select>
+
+      <select id="routeId" required aria-label="Route">
+        <option value="" disabled selected>Select route</option>
+        <option value="R1">R1 – Tuesday Vistancia</option>
+        <option value="R2">R2 – Thursday Peoria</option>
+      </select>
+
       <button class="btn-main" type="submit">Log in</button>
     </form>
 
-    <p class="foot-note">Use your operator email with the shared access code. After logging in you'll be redirected to the <a class="link" href="/operator/">route dashboard</a>.</p>
+    <p class="foot-note">Choose your operator ID and assigned route to access the <a class="link" href="/operator/">route dashboard</a>.</p>
   </div>
 
   <script>
-    const ACCESS_CODE = "binpals2024";
-    const LOGIN_STORAGE_KEY = "bpOperatorSession";
+    document.addEventListener("DOMContentLoaded", function () {
+      var form = document.getElementById("loginForm");
+      var opInput = document.getElementById("operatorId");
+      var routeInput = document.getElementById("routeId");
 
-    function persistSession(session) {
-      localStorage.setItem(LOGIN_STORAGE_KEY, JSON.stringify(session));
-    }
+      if (!form || !opInput || !routeInput) return;
 
-    function getStoredSession() {
-      try {
-        const raw = localStorage.getItem(LOGIN_STORAGE_KEY);
-        return raw ? JSON.parse(raw) : null;
-      } catch (err) {
-        console.error("Failed to read stored session", err);
-        return null;
-      }
-    }
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    function updateStatus(message, isError = false) {
-      const status = document.getElementById("statusPill");
-      status.textContent = message;
-      status.classList.toggle("error", Boolean(isError));
-    }
+        var op = (opInput.value || "").trim();
+        var route = (routeInput.value || "").trim();
 
-    const existingSession = getStoredSession();
-    if (existingSession) {
-      window.location.href = "/operator/";
-    }
+        if (!op) {
+          alert("Please choose your operator ID.");
+          opInput.focus();
+          return;
+        }
 
-    document.getElementById("loginForm").addEventListener("submit", (event) => {
-      event.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const code = document.getElementById("accessCode").value.trim();
+        if (!route) {
+          alert("Please choose your route.");
+          routeInput.focus();
+          return;
+        }
 
-      if (!email || !code) {
-        updateStatus("Email and code required", true);
-        return;
-      }
+        var targetUrl = "index.html?op=" + encodeURIComponent(op) +
+          "&route=" + encodeURIComponent(route);
 
-      if (code !== ACCESS_CODE) {
-        updateStatus("Invalid access code", true);
-        return;
-      }
-
-      persistSession({ email, loggedInAt: new Date().toISOString() });
-      updateStatus("Logging you in...");
-      window.location.href = "/operator/";
+        window.location.href = targetUrl;
+      });
     });
   </script>
 </body>
