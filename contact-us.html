@@ -893,12 +893,7 @@
       <div>
         <label>Full name *</label>
         <!-- Full name -->
-        <input
-          type="text"
-          name="entry.1781175414"
-          required
-          placeholder="First and last name"
-        />
+        <input type="text" name="entry.1781175414" required placeholder="First and last name" />
       </div>
       <div>
         <label>Phone number *</label>
@@ -916,16 +911,11 @@
     <div>
       <label>Email address *</label>
       <!-- Email -->
-      <input
-        type="email"
-        name="entry.651072410"
-        required
-        placeholder="you@example.com"
-      />
+      <input type="email" name="entry.651072410" required placeholder="you@example.com" />
     </div>
 
     <div class="consent-box">
-      <!-- SMS consent (local only, not sent to Google as entry) -->
+      <!-- SMS consent (only used on your side, not mapped to Google) -->
       <input
         type="checkbox"
         id="smsConsent"
@@ -936,9 +926,7 @@
       <div class="consent-text">
         <strong>I agree to receive service updates, payment notifications, and pickup reminders from BinPals at the number provided.</strong>
         Message &amp; data rates may apply. Reply STOP to unsubscribe.
-        <div class="consent-note">
-          You may receive 1–4 service-related messages per week, depending on your pickup schedule.
-        </div>
+        <div class="consent-note">You may receive 1–4 service-related messages per week, depending on your pickup schedule.</div>
       </div>
     </div>
   </div>
@@ -950,35 +938,70 @@
 
     <label>Street address *</label>
     <!-- Street -->
-    <input
-      type="text"
-      name="entry.547270743"
-      required
-      placeholder="House number and street"
-    />
+    <input type="text" name="entry.547270743" required placeholder="House number and street" />
 
     <div class="field-row">
       <div>
         <label>City *</label>
         <!-- City -->
-        <input
-          type="text"
-          name="entry.249937834"
-          required
-          placeholder="City"
-        />
+        <input type="text" name="entry.249937834" required placeholder="City" />
       </div>
 
       <div>
         <label>State *</label>
-        <!-- State (we'll keep full names for UX, form will just store the text) -->
+        <!-- State -->
         <select name="entry.569326425" required>
           <option value="" disabled selected>Select state</option>
-          <option value="Arizona">Arizona</option>
-          <option value="California">California</option>
-          <option value="Nevada">Nevada</option>
-          <option value="Kansas">Kansas</option>
-          <!-- add more if you want, but these are your main ones -->
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option>
+          <option value="CA">California</option>
+          <option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option>
+          <option value="DE">Delaware</option>
+          <option value="FL">Florida</option>
+          <option value="GA">Georgia</option>
+          <option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option>
+          <option value="IL">Illinois</option>
+          <option value="IN">Indiana</option>
+          <option value="IA">Iowa</option>
+          <option value="KS">Kansas</option>
+          <option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option>
+          <option value="ME">Maine</option>
+          <option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option>
+          <option value="MI">Michigan</option>
+          <option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option>
+          <option value="MO">Missouri</option>
+          <option value="MT">Montana</option>
+          <option value="NE">Nebraska</option>
+          <option value="NV">Nevada</option>
+          <option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option>
+          <option value="NM">New Mexico</option>
+          <option value="NY">New York</option>
+          <option value="NC">North Carolina</option>
+          <option value="ND">North Dakota</option>
+          <option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option>
+          <option value="OR">Oregon</option>
+          <option value="PA">Pennsylvania</option>
+          <option value="RI">Rhode Island</option>
+          <option value="SC">South Carolina</option>
+          <option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option>
+          <option value="TX">Texas</option>
+          <option value="UT">Utah</option>
+          <option value="VT">Vermont</option>
+          <option value="VA">Virginia</option>
+          <option value="WA">Washington</option>
+          <option value="WV">West Virginia</option>
+          <option value="WI">Wisconsin</option>
+          <option value="WY">Wyoming</option>
         </select>
       </div>
 
@@ -1009,11 +1032,7 @@
       <div>
         <label>Gate code or special instructions (optional)</label>
         <!-- Gate code / notes -->
-        <input
-          type="text"
-          name="entry.1380998071"
-          placeholder="Gate code, community name, etc."
-        />
+        <input type="text" name="entry.1380998071" placeholder="Gate code, community name, etc." />
       </div>
     </div>
   </div>
@@ -1021,9 +1040,7 @@
   <!-- Step 3 -->
   <div class="step-panel" data-step="3">
     <div class="step-title">Step 3 – Bins & trash day</div>
-    <div class="step-helper">
-      So we can price your service and route you correctly.
-    </div>
+    <div class="step-helper">So we can price your service and route you correctly.</div>
 
     <div class="field-row">
       <div>
@@ -1066,14 +1083,12 @@
         <input
           type="radio"
           name="entry.757271099"
-          value="Premium – $45/mo (up to 2 cans)"
+          value="Premium - $45/mo (up to 2 cans)"
           required
         />
         <div class="plan-name">Premium</div>
         <div class="plan-price">$45/mo</div>
-        <div class="plan-detail">
-          Up to 2 trash bins, each pickup day.
-        </div>
+        <div class="plan-detail">Up to 2 trash bins, each pickup day.</div>
         <span class="plan-tag">Most popular for small homes</span>
       </label>
 
@@ -1082,13 +1097,11 @@
         <input
           type="radio"
           name="entry.757271099"
-          value="Premium+ – $54/mo (3–4 cans)"
+          value="Premium + - $54/mo (3-4 cans)"
         />
         <div class="plan-name">Premium+</div>
         <div class="plan-price">$54/mo</div>
-        <div class="plan-detail">
-          3–4 trash bins, each pickup day.
-        </div>
+        <div class="plan-detail">3–4 trash bins, each pickup day.</div>
         <span class="plan-tag">Best for separate dwellings or shared homes</span>
       </label>
 
@@ -1097,19 +1110,17 @@
         <input
           type="radio"
           name="entry.757271099"
-          value="One Time – $35"
+          value="One Time - $25 (2 cans $7 add-on for Extra)"
         />
         <div class="plan-name">One Time Service</div>
-        <div class="plan-price">$35</div>
-        <div class="plan-detail">
-          One-time visit for up to 4 bins.
-        </div>
+        <div class="plan-price">$25</div>
+        <div class="plan-detail">One-time visit for up to 2 cans, $7/additional can.</div>
         <span class="plan-tag">Perfect for trying BinPals Trash Valet</span>
       </label>
     </div>
   </div>
 
-  <!-- Hidden Google Form field: submit -->
+  <!-- (No more hidden entry.409104529 – status is handled in Sheets/Apps Script) -->
   <input type="hidden" name="submit" value="Submit" />
 
   <!-- Buttons -->
@@ -1121,12 +1132,8 @@
   <div id="message"></div>
 
   <div class="legal-links">
-    <a href="https://getbinpals.com/privacy-policy" target="_blank" rel="noopener"
-      >Privacy Policy</a
-    >
-    <a href="https://getbinpals.com/terms" target="_blank" rel="noopener"
-      >Terms &amp; Conditions</a
-    >
+    <a href="https://getbinpals.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>
+    <a href="https://getbinpals.com/terms" target="_blank" rel="noopener">Terms &amp; Conditions</a>
   </div>
 </form>
         <div class="footer-note">
