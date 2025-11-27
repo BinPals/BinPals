@@ -20,6 +20,7 @@ let selectedIndex = 0;
 let directionsService;
 let directionsRenderer;
 let routeRunning = false;
+window.routeRunning = routeRunning;
 let totalDistanceMeters = 0;
 
 // DOM refs (set after DOMContentLoaded)
@@ -297,6 +298,7 @@ function onStartStopToggle() {
   if (!filteredStops.length) return;
 
   routeRunning = !routeRunning;
+  window.routeRunning = routeRunning;
 
   if (btnStartStopEl) {
     btnStartStopEl.textContent = routeRunning ? "Route running" : "Start route";
@@ -367,6 +369,9 @@ function onSkip() {
 
   // TODO: send "Skipped" to backend if you want
 }
+
+// Expose control to other scripts
+window.onStartStopToggle = onStartStopToggle;
 
 // ===============================
 // UI updates: current card + progress + distance
