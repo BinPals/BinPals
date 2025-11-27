@@ -1,29 +1,24 @@
 // ===============================
 // BinPals Operator Map
-// Clean v2 with:
-// - Start/Stop route
-// - Animated progress
-// - Distance traveled today
+// Uses Full Address + Geocoder (no Lat/Lng columns required)
 // ===============================
 
-// ----- Core map state -----
 let map;
 let geocoder;
 let markers = [];
 let markerById = new Map();
 
-let stops = [];          // all stops coming from backend
-let filteredStops = [];  // currently filtered (for this operator, lat/lng present)
+let stops = [];          // all stops from backend
+let filteredStops = [];  // stops for this operator
 let selectedIndex = 0;
 
-// Route + progress state
 let directionsService;
 let directionsRenderer;
 let routeRunning = false;
 window.routeRunning = routeRunning;
 let totalDistanceMeters = 0;
 
-// DOM refs (set after DOMContentLoaded)
+// DOM refs
 let btnMarkDoneEl;
 let btnSkipEl;
 let btnStartStopEl;
@@ -38,7 +33,7 @@ let currentPhoneEl;
 let currentStatusEl;
 let currentStatusTagEl;
 
-// Get operator from URL, e.g. ?op=OP01
+// ----- operator from URL -----
 function getOperatorIdFromUrl() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -60,7 +55,6 @@ function getOperatorIdFromUrl() {
 function initOperatorMap() {
   const operatorId = getOperatorIdFromUrl();
 
-  // 1. Load data from global
   if (Array.isArray(window.BINPALS_STOPS)) {
     stops = window.BINPALS_STOPS.slice();
   } else {
@@ -68,18 +62,13 @@ function initOperatorMap() {
     stops = [];
   }
 
-  // 1a. Filter by operator (frontend-side)
-  let operatorStops = stops;
+  // Filter by operator only (no lat/lng requirement)
   if (operatorId) {
-    operatorStops = stops.filter(function (s) {
-      return (String(s.operatorId || "").toUpperCase() === operatorId);
-    });
+    filteredStops = stops.filter(s => String(s.operatorId || "").toUpperCase() === operatorId);
+  } else {
+    filteredStops = stops.slice();
   }
 
-  // 1b. Accept all stops (we will geocode them client-side)
-  filteredStops = operatorStops.slice();
-
-  // 2. Basic map
   const mapEl = document.getElementById("map");
   if (!mapEl) {
     console.error("#map element not found.");
@@ -87,7 +76,7 @@ function initOperatorMap() {
   }
 
   map = new google.maps.Map(mapEl, {
-    center: { lat: 33.4484, lng: -112.0740 }, // Phoenix-ish default
+    center: { lat: 33.4484, lng: -112.0740 },
     zoom: 12,
     mapTypeControl: false,
     fullscreenControl: false,
@@ -95,8 +84,6 @@ function initOperatorMap() {
   });
 
   geocoder = new google.maps.Geocoder();
-
-  // 3. Directions API for road-following route line
   directionsService = new google.maps.DirectionsService();
   directionsRenderer = new google.maps.DirectionsRenderer({
     suppressMarkers: true,
@@ -109,12 +96,10 @@ function initOperatorMap() {
   });
   directionsRenderer.setMap(map);
 
-  // 4. Setup DOM references & events
   hookDom();
 
-  // If there are no stops for this operator, just reset the UI and bail
   if (!filteredStops.length) {
-    console.log("No stops for operator or no geocoded stops.");
+    console.log("No stops for this operator.");
     updateProgressUi();
     updateDistanceUi();
     if (currentAddressEl) currentAddressEl.textContent = "No houses for this filter.";
@@ -123,12 +108,10 @@ function initOperatorMap() {
   }
 
   renderMarkers();
-  // Keep the selection card hidden until an address is tapped.
   setRouteRunningState(true);
   updateProgressUi();
 }
 
-// Make initOperatorMap global for Google callback
 window.initOperatorMap = initOperatorMap;
 
 // ===============================
@@ -149,15 +132,9 @@ function hookDom() {
   currentStatusEl    = document.getElementById("currentStatus");
   currentStatusTagEl = document.getElementById("currentStatusTag");
 
-  if (btnMarkDoneEl) {
-    btnMarkDoneEl.addEventListener("click", onMarkDone);
-  }
-  if (btnSkipEl) {
-    btnSkipEl.addEventListener("click", onSkip);
-  }
-  if (btnStartStopEl) {
-    btnStartStopEl.addEventListener("click", onStartStopToggle);
-  }
+  if (btnMarkDoneEl) btnMarkDoneEl.addEventListener("click", onMarkDone);
+  if (btnSkipEl) btnSkipEl.addEventListener("click", onSkip);
+  if (btnStartStopEl) btnStartStopEl.addEventListener("click", onStartStopToggle);
 }
 
 function setRouteRunningState(nextState) {
@@ -181,97 +158,77 @@ function setRouteRunningState(nextState) {
 // Markers + selection
 // ===============================
 function renderMarkers() {
-  // Clear any existing markers
-  markers.forEach(function (m) { m.setMap(null); });
+  markers.forEach(m => m.setMap(null));
   markers = [];
   markerById.clear();
 
   if (!filteredStops.length) return;
 
-  const stopsWithLatLng = [];
   const bounds = new google.maps.LatLngBounds();
 
-  // First, ensure each stop has lat/lng. If missing, geocode.
-  filteredStops.forEach(function (stop) {
-    if (typeof stop.lat === "number" && typeof stop.lng === "number") {
-      stopsWithLatLng.push(stop);
-      addMarkerForStop(stop, stopsWithLatLng.length - 1, bounds);
-    } else {
-      const address = stop.fullAddress || stop.address || "";
-
-      geocoder.geocode({ address: address }, function (results, status) {
-        if (status === "OK" && results[0]) {
-          const pos = results[0].geometry.location;
-          stop.lat = pos.lat();
-          stop.lng = pos.lng();
-
-          stopsWithLatLng.push(stop);
-          addMarkerForStop(stop, stopsWithLatLng.length - 1, bounds);
-
-          // Update global filteredStops so downstream code can use lat/lng
-          filteredStops = stopsWithLatLng.slice();
-        } else {
-          console.warn("Geocode failed for stop", stop, status);
-        }
-      });
-    }
+  filteredStops.forEach((stop, index) => {
+    createMarkerForStop(stop, index, bounds);
   });
-
-  // After geocoding sync stops, store the updated list and adjust map.
-  filteredStops = stopsWithLatLng.slice();
-
-  if (!bounds.isEmpty()) {
-    map.fitBounds(bounds);
-  }
 }
 
-function addMarkerForStop(stop, index, bounds) {
-  const pos = { lat: stop.lat, lng: stop.lng };
+function createMarkerForStop(stop, index, bounds) {
+  // If we already have lat/lng, use it
+  if (typeof stop.lat === "number" && typeof stop.lng === "number") {
+    const pos = { lat: stop.lat, lng: stop.lng };
+    const marker = new google.maps.Marker({
+      position: pos,
+      map: map,
+      title: stop.fullAddress || stop.address || stop.name || "Stop",
+      icon: makeMarkerIcon(false)
+    });
+    marker.addListener("click", () => setSelectedIndex(index));
+    markers.push(marker);
+    markerById.set(stop.id, marker);
+    bounds.extend(pos);
+    map.fitBounds(bounds);
+    return;
+  }
 
-  const marker = new google.maps.Marker({
-    position: pos,
-    map: map,
-    title: stop.fullAddress || stop.address || stop.name || "Stop",
-    icon: makeMarkerIcon(false)   // not selected by default
+  // Otherwise geocode by full address
+  const addr = stop.fullAddress || stop.address;
+  if (!addr || !geocoder) return;
+
+  geocoder.geocode({ address: addr }, (results, status) => {
+    if (status !== "OK" || !results[0]) {
+      console.warn("Geocode failed for", addr, status);
+      return;
+    }
+    const loc = results[0].geometry.location;
+    stop.lat = loc.lat();
+    stop.lng = loc.lng();
+
+    const pos = { lat: stop.lat, lng: stop.lng };
+    const marker = new google.maps.Marker({
+      position: pos,
+      map: map,
+      title: addr,
+      icon: makeMarkerIcon(false)
+    });
+    marker.addListener("click", () => setSelectedIndex(index));
+    markers.push(marker);
+    markerById.set(stop.id, marker);
+    bounds.extend(pos);
+    map.fitBounds(bounds);
   });
-
-  marker.addListener("click", function () {
-    setSelectedIndex(index);
-  });
-
-  markers.push(marker);
-  markerById.set(stop.id, marker);
-  bounds.extend(pos);
 }
 
 function makeMarkerIcon(isSelected) {
   const baseColor = isSelected ? "#16A34A" : "#2563EB";
-
-  // Simple circle SVG
   const svg =
     `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="14" cy="14" r="10" fill="${baseColor}" />
       <circle cx="14" cy="14" r="6" fill="#ffffff" />
     </svg>`;
-
   return {
     url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
     scaledSize: new google.maps.Size(28, 28),
     anchor: new google.maps.Point(14, 14)
   };
-}
-
-function autoSelectFirstStop() {
-  if (!filteredStops.length) return;
-
-  // Prefer first Pending, fall back to first stop
-  const pendingIndex = filteredStops.findIndex(function (s) {
-    return (s.status || "").toLowerCase() === "pending";
-  });
-
-  selectedIndex = pendingIndex >= 0 ? pendingIndex : 0;
-  highlightSelectedMarker();
-  centerMapOnSelected();
 }
 
 function setSelectedIndex(index) {
@@ -280,12 +237,11 @@ function setSelectedIndex(index) {
   highlightSelectedMarker();
   centerMapOnSelected();
   updateUiForSelection();
-
   drawFullDayRoute();
 }
 
 function highlightSelectedMarker() {
-  markers.forEach(function (marker, i) {
+  markers.forEach((marker, i) => {
     marker.setIcon(makeMarkerIcon(i === selectedIndex));
     marker.setZIndex(i === selectedIndex ? 1000 : 1);
   });
@@ -293,41 +249,36 @@ function highlightSelectedMarker() {
 
 function centerMapOnSelected() {
   const stop = filteredStops[selectedIndex];
-  if (!stop || !map) return;
-
+  if (!stop || !map || typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
   map.panTo({ lat: stop.lat, lng: stop.lng });
   map.setZoom(Math.max(map.getZoom(), 15));
 }
 
 // ===============================
-// Route line (Directions API)
+// Route line
 // ===============================
 function clearRouteLine() {
   if (directionsRenderer) {
     directionsRenderer.set("directions", null);
   }
 }
-// Draws the entire route for the day so operators always see the path.
+
 function drawFullDayRoute() {
   if (!routeRunning) return;
   if (!filteredStops.length) return;
 
-  // A single stop does not need a rendered route line.
-  if (filteredStops.length === 1) {
+  const geocoded = filteredStops.filter(s => typeof s.lat === "number" && typeof s.lng === "number");
+  if (geocoded.length < 2) {
     clearRouteLine();
     return;
   }
 
-  const origin = filteredStops[0];
-  const destination = filteredStops[filteredStops.length - 1];
-  const waypoints = filteredStops
-    .slice(1, -1)
-    .map(function (stop) {
-      return {
-        location: { lat: stop.lat, lng: stop.lng },
-        stopover: true
-      };
-    });
+  const origin = geocoded[0];
+  const destination = geocoded[geocoded.length - 1];
+  const waypoints = geocoded.slice(1, -1).map(stop => ({
+    location: { lat: stop.lat, lng: stop.lng },
+    stopover: true
+  }));
 
   directionsService.route(
     {
@@ -337,7 +288,7 @@ function drawFullDayRoute() {
       travelMode: google.maps.TravelMode.DRIVING,
       optimizeWaypoints: false
     },
-    function (result, status) {
+    (result, status) => {
       if (status === "OK") {
         directionsRenderer.setDirections(result);
       } else {
@@ -353,7 +304,6 @@ function drawFullDayRoute() {
 // ===============================
 function onStartStopToggle() {
   if (!filteredStops.length) return;
-
   setRouteRunningState(!routeRunning);
 }
 
@@ -361,21 +311,18 @@ function onMarkDone() {
   if (!filteredStops.length) return;
 
   const current = filteredStops[selectedIndex];
-
-  // 1. Update status locally
   current.status = "Done";
 
-  // 2. Calculate segment distance if route is running
   if (routeRunning) {
     const next = filteredStops[selectedIndex + 1];
-    if (next) {
+    if (next && typeof current.lat === "number" && typeof current.lng === "number" &&
+        typeof next.lat === "number" && typeof next.lng === "number") {
       const d = haversineMeters(current.lat, current.lng, next.lat, next.lng);
       totalDistanceMeters += d;
       updateDistanceUi();
     }
   }
 
-  // 3. Move to next
   if (selectedIndex < filteredStops.length - 1) {
     selectedIndex += 1;
   }
@@ -383,10 +330,7 @@ function onMarkDone() {
   centerMapOnSelected();
   updateUiForSelection();
   updateProgressUi();
-
   drawFullDayRoute();
-
-  // TODO: send status change back to server / Apps Script
 }
 
 function onSkip() {
@@ -403,17 +347,13 @@ function onSkip() {
   centerMapOnSelected();
   updateUiForSelection();
   updateProgressUi();
-
   drawFullDayRoute();
-
-  // TODO: send "Skipped" to backend if you want
 }
 
-// Expose control to other scripts
 window.onStartStopToggle = onStartStopToggle;
 
 // ===============================
-// UI updates: current card + progress + distance
+// UI updates
 // ===============================
 function updateUiForSelection() {
   const stop = filteredStops[selectedIndex];
@@ -421,32 +361,16 @@ function updateUiForSelection() {
 
   const addr = stop.fullAddress || stop.address || "";
 
-  if (selectionCardEl) {
-    selectionCardEl.classList.add("is-visible");
-  }
-
-  if (currentAddressEl) {
-    currentAddressEl.textContent = addr;
-  }
-  if (currentPlanEl) {
-    currentPlanEl.textContent = stop.plan || "";
-  }
+  if (selectionCardEl) selectionCardEl.classList.add("is-visible");
+  if (currentAddressEl) currentAddressEl.textContent = addr;
+  if (currentPlanEl) currentPlanEl.textContent = stop.plan || "";
   if (currentBinsEl) {
-    const binsText =
-      stop.bins == null || stop.bins === ""
-        ? ""
-        : String(stop.bins) + " bins";
+    const binsText = stop.bins == null || stop.bins === "" ? "" : String(stop.bins) + " bins";
     currentBinsEl.textContent = binsText;
   }
-  if (currentPhoneEl) {
-    currentPhoneEl.textContent = stop.phone || "";
-  }
-  if (currentStatusEl) {
-    currentStatusEl.textContent = stop.status || "Pending";
-  }
-  if (currentStatusTagEl) {
-    currentStatusTagEl.textContent = stop.status || "Pending";
-  }
+  if (currentPhoneEl) currentPhoneEl.textContent = stop.phone || "";
+  if (currentStatusEl) currentStatusEl.textContent = stop.status || "Pending";
+  if (currentStatusTagEl) currentStatusTagEl.textContent = stop.status || "Pending";
 }
 
 function updateProgressUi() {
@@ -457,7 +381,7 @@ function updateProgressUi() {
     return;
   }
 
-  const doneCount = filteredStops.filter(function (s) {
+  const doneCount = filteredStops.filter(s => {
     const sStatus = (s.status || "").toLowerCase();
     return sStatus === "done" || sStatus === "completed";
   }).length;
@@ -468,7 +392,6 @@ function updateProgressUi() {
   if (runStatsLabelEl) {
     runStatsLabelEl.textContent = leftCount + " left today / " + total + " total";
   }
-
   if (runProgressBarEl) {
     runProgressBarEl.style.width = pct.toFixed(1) + "%";
   }
@@ -477,17 +400,16 @@ function updateProgressUi() {
 function updateDistanceUi() {
   const miles = totalDistanceMeters / 1609.344;
   if (runDistanceLabelEl) {
-    runDistanceLabelEl.textContent =
-      "Today’s run: " + miles.toFixed(1) + " mi";
+    runDistanceLabelEl.textContent = "Today’s run: " + miles.toFixed(1) + " mi";
   }
 }
 
 // ===============================
-// Distance helper (Haversine)
+// Distance helper
 // ===============================
 function haversineMeters(lat1, lon1, lat2, lon2) {
-  const R = 6371000; // meters
-  const toRad = function (deg) { return deg * Math.PI / 180; };
+  const R = 6371000;
+  const toRad = deg => deg * Math.PI / 180;
 
   const φ1 = toRad(lat1);
   const φ2 = toRad(lat2);
