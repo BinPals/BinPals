@@ -218,96 +218,96 @@
   </section>
 
   <script>
-    (function () {
-      const API_URL = 'https://script.google.com/macros/s/AKfycbwfcDOsVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl9-7JJE_UbHYAbV-S2cDu_i1av/exec';
+  (function () {
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwfCDosVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl97JJE_UbHYAbV-S2cDui1IaV/exec';
+    const params = new URLSearchParams(window.location.search);
+    const OPERATOR_ID = (
+      params.get('operatorId') ||
+      params.get('operator') ||
+      params.get('op') ||
+      'OP01'
+    ).trim();
+    const operatorQueryParam =
+      params.has('operatorId') ? 'operatorId' :
+      params.has('operator') ? 'operator' :
+      'op';
+
+    const stopsTableBody = document.getElementById('stopsTableBody');
+    const statStopsEl = document.getElementById('statStops');
+    const statPendingEl = document.getElementById('statPending');
+    const statDoneEl = document.getElementById('statDone');
+    const operatorLabel = document.getElementById('operatorLabel');
+    const startRouteBtn = document.getElementById('btnStartRoute');
+
+    if (operatorLabel) {
+      operatorLabel.textContent = `Operator: ${OPERATOR_ID}`;
+    }
+
+    function statusClass(status) {
+      const s = (status || '').toLowerCase();
+      if (s === 'done' || s === 'completed') return 'status-pill done';
+      if (s === 'skipped') return 'status-pill skipped';
+      return 'status-pill pending';
+    }
+
+    function renderStops(stops) {
+      if (!Array.isArray(stops) || !stops.length) {
+        stopsTableBody.innerHTML = '<tr><td colspan="3" style="color: var(--gray-muted);">No houses assigned for today.</td></tr>';
+        statStopsEl.textContent = '0';
+        statPendingEl.textContent = '0';
+        statDoneEl.textContent = '0';
+        return;
+      }
+
+      const total = stops.length;
+      const pending = stops.filter(s => (s.status || '').toLowerCase() === 'pending').length;
+      const done = stops.filter(s => {
+        const status = (s.status || '').toLowerCase();
+        return status === 'done' || status === 'completed';
+      }).length;
+
+      statStopsEl.textContent = total;
+      statPendingEl.textContent = pending;
+      statDoneEl.textContent = done;
+
+      stopsTableBody.innerHTML = '';
+      stops.forEach(stop => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${stop.fullAddress || stop.address || '—'}</td>
+          <td>${stop.plan || ''}</td>
+          <td><span class="${statusClass(stop.status)}">${stop.status || 'Pending'}</span></td>
+        `;
+        stopsTableBody.appendChild(tr);
+      });
+    }
+
+    const apiUrl = new URL(API_URL);
+    apiUrl.searchParams.set('operatorId', OPERATOR_ID);
+    apiUrl.searchParams.set('t', Date.now());
+
+    fetch(apiUrl.toString(), { cache: 'no-store' })
+      .then(resp => resp.json())
+      .then(data => {
+        window.BINPALS_STOPS = Array.isArray(data) ? data : [];
+        renderStops(window.BINPALS_STOPS);
+      })
+      .catch(err => {
+        console.error('Error loading stops:', err);
+        renderStops([]);
+      });
+
+    startRouteBtn.addEventListener('click', function () {
       const params = new URLSearchParams(window.location.search);
-      const OPERATOR_ID = (
+      const opId = (
         params.get('operatorId') ||
         params.get('operator') ||
         params.get('op') ||
         'OP01'
       ).trim();
-      const operatorQueryParam =
-        params.has('operatorId') ? 'operatorId' :
-        params.has('operator') ? 'operator' :
-        'op';
-
-      const stopsTableBody = document.getElementById('stopsTableBody');
-      const statStopsEl = document.getElementById('statStops');
-      const statPendingEl = document.getElementById('statPending');
-      const statDoneEl = document.getElementById('statDone');
-      const operatorLabel = document.getElementById('operatorLabel');
-      const startRouteBtn = document.getElementById('btnStartRoute');
-
-      if (operatorLabel) {
-        operatorLabel.textContent = `Operator: ${OPERATOR_ID}`;
-      }
-
-      function statusClass(status) {
-        const s = (status || '').toLowerCase();
-        if (s === 'done' || s === 'completed') return 'status-pill done';
-        if (s === 'skipped') return 'status-pill skipped';
-        return 'status-pill pending';
-      }
-
-      function renderStops(stops) {
-        if (!Array.isArray(stops) || !stops.length) {
-          stopsTableBody.innerHTML = '<tr><td colspan="3" style="color: var(--gray-muted);">No houses assigned for today.</td></tr>';
-          statStopsEl.textContent = '0';
-          statPendingEl.textContent = '0';
-          statDoneEl.textContent = '0';
-          return;
-        }
-
-        const total = stops.length;
-        const pending = stops.filter(s => (s.status || '').toLowerCase() === 'pending').length;
-        const done = stops.filter(s => {
-          const status = (s.status || '').toLowerCase();
-          return status === 'done' || status === 'completed';
-        }).length;
-
-        statStopsEl.textContent = total;
-        statPendingEl.textContent = pending;
-        statDoneEl.textContent = done;
-
-        stopsTableBody.innerHTML = '';
-        stops.forEach(stop => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${stop.fullAddress || stop.address || '—'}</td>
-            <td>${stop.plan || ''}</td>
-            <td><span class="${statusClass(stop.status)}">${stop.status || 'Pending'}</span></td>
-          `;
-          stopsTableBody.appendChild(tr);
-        });
-      }
-
-      const apiUrl = new URL(API_URL);
-      apiUrl.searchParams.set('operatorId', OPERATOR_ID);
-      apiUrl.searchParams.set('t', Date.now());
-
-      fetch(apiUrl.toString(), { cache: 'no-store' })
-        .then(resp => resp.json())
-        .then(data => {
-          window.BINPALS_STOPS = Array.isArray(data) ? data : [];
-          renderStops(window.BINPALS_STOPS);
-        })
-        .catch(err => {
-          console.error('Error loading stops:', err);
-          renderStops([]);
-        });
-
-      startRouteBtn.addEventListener('click', function () {
-        const params = new URLSearchParams(window.location.search);
-        const opId = (
-          params.get('operatorId') ||
-          params.get('operator') ||
-          params.get('op') ||
-          'OP01'
-        ).trim();
-        window.location.href = `/operator/route.html?${operatorQueryParam}=${encodeURIComponent(opId)}`;
-      });
-    })();
-  </script>
+      window.location.href = `/operator/route.html?${operatorQueryParam}=${encodeURIComponent(opId)}`;
+    });
+  })();
+</script>
 </body>
 </html>
