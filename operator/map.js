@@ -1,17 +1,22 @@
 // ===============================
 // BinPals Operator Map
-// Uses Full Address + Geocoder (no Lat/Lng columns required)
+// - Filters by operator AND today's trash day
+// - Start/Stop route
+// - Distance + progress
+// - Next / Prev house + Hide card
 // ===============================
 
+// ----- Core map state -----
 let map;
 let geocoder;
 let markers = [];
 let markerById = new Map();
 
-let stops = [];          // all stops from backend
-let filteredStops = [];  // stops for this operator
+let stops = [];          // all stops coming from backend
+let filteredStops = [];  // filtered by operator + today's trash day (+ lat/lng)
 let selectedIndex = 0;
 
+// Route + progress state
 let directionsService;
 let directionsRenderer;
 let routeRunning = false;
@@ -22,6 +27,9 @@ let totalDistanceMeters = 0;
 let btnMarkDoneEl;
 let btnSkipEl;
 let btnStartStopEl;
+let btnPrevEl;
+let btnNextEl;
+let btnHideCardEl;
 let runStatsLabelEl;
 let runDistanceLabelEl;
 let runProgressBarEl;
@@ -32,8 +40,11 @@ let currentBinsEl;
 let currentPhoneEl;
 let currentStatusEl;
 let currentStatusTagEl;
+let housePositionLabelEl;
 
-// ----- operator from URL -----
+// ---------- Helpers ----------
+
+// Get operator from URL, e.g. ?op=OP01
 function getOperatorIdFromUrl() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -49,12 +60,21 @@ function getOperatorIdFromUrl() {
   }
 }
 
+// Get today's day name: Monday, Tuesday, etc.
+function getTodayDayName() {
+  const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const now = new Date();
+  return days[now.getDay()];
+}
+
 // ===============================
 //  INIT ENTRYPOINT (called by Google Maps callback)
 // ===============================
 function initOperatorMap() {
   const operatorId = getOperatorIdFromUrl();
+  const todayName  = getTodayDayName().toLowerCase();
 
+  // 1. Load data from global
   if (Array.isArray(window.BINPALS_STOPS)) {
     stops = window.BINPALS_STOPS.slice();
   } else {
@@ -62,13 +82,22 @@ function initOperatorMap() {
     stops = [];
   }
 
-  // Filter by operator only (no lat/lng requirement)
+  // 1a. Filter by operator
+  let operatorStops = stops;
   if (operatorId) {
-    filteredStops = stops.filter(s => String(s.operatorId || "").toUpperCase() === operatorId);
-  } else {
-    filteredStops = stops.slice();
+    operatorStops = stops.filter(function (s) {
+      return (String(s.operatorId || "").toUpperCase() === operatorId);
+    });
   }
 
+  // 1b. Filter by today's trash day + require lat/lng
+  filteredStops = operatorStops.filter(function (s) {
+    const day = (s.trashDay || "").toString().toLowerCase();
+    const hasCoords = typeof s.lat === "number" && typeof s.lng === "number";
+    return hasCoords && day === todayName;
+  });
+
+  // 2. Basic map
   const mapEl = document.getElementById("map");
   if (!mapEl) {
     console.error("#map element not found.");
@@ -76,7 +105,7 @@ function initOperatorMap() {
   }
 
   map = new google.maps.Map(mapEl, {
-    center: { lat: 33.4484, lng: -112.0740 },
+    center: { lat: 33.4484, lng: -112.0740 }, // Phoenix-ish default
     zoom: 12,
     mapTypeControl: false,
     fullscreenControl: false,
@@ -84,6 +113,8 @@ function initOperatorMap() {
   });
 
   geocoder = new google.maps.Geocoder();
+
+  // 3. Directions API for road-following route line
   directionsService = new google.maps.DirectionsService();
   directionsRenderer = new google.maps.DirectionsRenderer({
     suppressMarkers: true,
@@ -96,45 +127,78 @@ function initOperatorMap() {
   });
   directionsRenderer.setMap(map);
 
+  // 4. Setup DOM references & events
   hookDom();
 
   if (!filteredStops.length) {
-    console.log("No stops for this operator.");
+    console.log("No stops for operator today or no geocoded stops.");
     updateProgressUi();
     updateDistanceUi();
-    if (currentAddressEl) currentAddressEl.textContent = "No houses for this filter.";
-    if (selectionCardEl) selectionCardEl.classList.add("is-visible");
+    if (currentAddressEl) {
+      currentAddressEl.textContent = "No houses for today’s route.";
+    }
+    if (selectionCardEl) {
+      selectionCardEl.classList.add("is-visible");
+    }
     return;
   }
 
   renderMarkers();
+
+  // Start with first pending, but keep card hidden until marker tap
+  autoSelectFirstStop();
   setRouteRunningState(true);
   updateProgressUi();
 }
 
+// Make initOperatorMap global for Google callback
 window.initOperatorMap = initOperatorMap;
 
 // ===============================
 // DOM wiring
 // ===============================
 function hookDom() {
-  btnMarkDoneEl      = document.getElementById("btnMarkDone");
-  btnSkipEl          = document.getElementById("btnSkip");
-  btnStartStopEl     = document.getElementById("btnStartStop");
-  runStatsLabelEl    = document.getElementById("runStatsLabel");
-  runDistanceLabelEl = document.getElementById("runDistanceLabel");
-  runProgressBarEl   = document.getElementById("runProgressBar");
-  selectionCardEl    = document.getElementById("selectionCard");
-  currentAddressEl   = document.getElementById("currentAddress");
-  currentPlanEl      = document.getElementById("currentPlan");
-  currentBinsEl      = document.getElementById("currentBins");
-  currentPhoneEl     = document.getElementById("currentPhone");
-  currentStatusEl    = document.getElementById("currentStatus");
-  currentStatusTagEl = document.getElementById("currentStatusTag");
+  btnMarkDoneEl        = document.getElementById("btnMarkDone");
+  btnSkipEl            = document.getElementById("btnSkip");
+  btnStartStopEl       = document.getElementById("btnStartStop"); // may not exist on this layout
+  btnPrevEl            = document.getElementById("btnPrev");
+  btnNextEl            = document.getElementById("btnNext");
+  btnHideCardEl        = document.getElementById("btnHideCard");
+  runStatsLabelEl      = document.getElementById("runStatsLabel");
+  runDistanceLabelEl   = document.getElementById("runDistanceLabel");
+  runProgressBarEl     = document.getElementById("runProgressBar");
+  selectionCardEl      = document.getElementById("selectionCard");
+  currentAddressEl     = document.getElementById("currentAddress");
+  currentPlanEl        = document.getElementById("currentPlan");
+  currentBinsEl        = document.getElementById("currentBins");
+  currentPhoneEl       = document.getElementById("currentPhone");
+  currentStatusEl      = document.getElementById("currentStatus");
+  currentStatusTagEl   = document.getElementById("currentStatusTag");
+  housePositionLabelEl = document.getElementById("housePositionLabel");
 
   if (btnMarkDoneEl) btnMarkDoneEl.addEventListener("click", onMarkDone);
-  if (btnSkipEl) btnSkipEl.addEventListener("click", onSkip);
-  if (btnStartStopEl) btnStartStopEl.addEventListener("click", onStartStopToggle);
+  if (btnSkipEl)     btnSkipEl.addEventListener("click", onSkip);
+
+  if (btnStartStopEl) {
+    btnStartStopEl.addEventListener("click", onStartStopToggle);
+  }
+
+  if (btnPrevEl) {
+    btnPrevEl.addEventListener("click", function () {
+      moveSelection(-1);
+    });
+  }
+  if (btnNextEl) {
+    btnNextEl.addEventListener("click", function () {
+      moveSelection(1);
+    });
+  }
+
+  if (btnHideCardEl && selectionCardEl) {
+    btnHideCardEl.addEventListener("click", function () {
+      selectionCardEl.classList.remove("is-visible");
+    });
+  }
 }
 
 function setRouteRunningState(nextState) {
@@ -158,7 +222,7 @@ function setRouteRunningState(nextState) {
 // Markers + selection
 // ===============================
 function renderMarkers() {
-  markers.forEach(m => m.setMap(null));
+  markers.forEach(function (m) { m.setMap(null); });
   markers = [];
   markerById.clear();
 
@@ -166,64 +230,39 @@ function renderMarkers() {
 
   const bounds = new google.maps.LatLngBounds();
 
-  filteredStops.forEach((stop, index) => {
-    createMarkerForStop(stop, index, bounds);
-  });
-}
-
-function createMarkerForStop(stop, index, bounds) {
-  // If we already have lat/lng, use it
-  if (typeof stop.lat === "number" && typeof stop.lng === "number") {
+  filteredStops.forEach(function (stop, index) {
     const pos = { lat: stop.lat, lng: stop.lng };
+
     const marker = new google.maps.Marker({
       position: pos,
       map: map,
       title: stop.fullAddress || stop.address || stop.name || "Stop",
       icon: makeMarkerIcon(false)
     });
-    marker.addListener("click", () => setSelectedIndex(index));
-    markers.push(marker);
-    markerById.set(stop.id, marker);
-    bounds.extend(pos);
-    map.fitBounds(bounds);
-    return;
-  }
 
-  // Otherwise geocode by full address
-  const addr = stop.fullAddress || stop.address;
-  if (!addr || !geocoder) return;
-
-  geocoder.geocode({ address: addr }, (results, status) => {
-    if (status !== "OK" || !results[0]) {
-      console.warn("Geocode failed for", addr, status);
-      return;
-    }
-    const loc = results[0].geometry.location;
-    stop.lat = loc.lat();
-    stop.lng = loc.lng();
-
-    const pos = { lat: stop.lat, lng: stop.lng };
-    const marker = new google.maps.Marker({
-      position: pos,
-      map: map,
-      title: addr,
-      icon: makeMarkerIcon(false)
+    marker.addListener("click", function () {
+      setSelectedIndex(index, { fromMarker: true });
     });
-    marker.addListener("click", () => setSelectedIndex(index));
+
     markers.push(marker);
     markerById.set(stop.id, marker);
     bounds.extend(pos);
-    map.fitBounds(bounds);
   });
+
+  if (!bounds.isEmpty()) {
+    map.fitBounds(bounds);
+  }
 }
 
 function makeMarkerIcon(isSelected) {
   const baseColor = isSelected ? "#16A34A" : "#2563EB";
+
   const svg =
     `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="14" cy="14" r="10" fill="${baseColor}" />
-      <circle cx="14" cy="14" r="6" fill="#ffffff" />
+      <circle cx=\"14\" cy=\"14\" r=\"10\" fill=\"${baseColor}\" />
+      <circle cx=\"14\" cy=\"14\" r=\"6\" fill=\"#ffffff\" />
     </svg>`;
+
   return {
     url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
     scaledSize: new google.maps.Size(28, 28),
@@ -231,17 +270,42 @@ function makeMarkerIcon(isSelected) {
   };
 }
 
-function setSelectedIndex(index) {
+function autoSelectFirstStop() {
+  if (!filteredStops.length) return;
+
+  const pendingIndex = filteredStops.findIndex(function (s) {
+    return (s.status || "").toLowerCase() === "pending";
+  });
+
+  selectedIndex = pendingIndex >= 0 ? pendingIndex : 0;
+  highlightSelectedMarker();
+  centerMapOnSelected();
+}
+
+function setSelectedIndex(index, opts) {
   if (index < 0 || index >= filteredStops.length) return;
   selectedIndex = index;
   highlightSelectedMarker();
   centerMapOnSelected();
   updateUiForSelection();
+  updateProgressUi();
   drawFullDayRoute();
+
+  if (selectionCardEl && (!opts || !opts.fromMarker)) {
+    // ensure card visible when changed via next/prev
+    selectionCardEl.classList.add("is-visible");
+  }
+}
+
+function moveSelection(delta) {
+  if (!filteredStops.length) return;
+  const len = filteredStops.length;
+  const nextIndex = (selectedIndex + delta + len) % len;
+  setSelectedIndex(nextIndex);
 }
 
 function highlightSelectedMarker() {
-  markers.forEach((marker, i) => {
+  markers.forEach(function (marker, i) {
     marker.setIcon(makeMarkerIcon(i === selectedIndex));
     marker.setZIndex(i === selectedIndex ? 1000 : 1);
   });
@@ -249,13 +313,14 @@ function highlightSelectedMarker() {
 
 function centerMapOnSelected() {
   const stop = filteredStops[selectedIndex];
-  if (!stop || !map || typeof stop.lat !== "number" || typeof stop.lng !== "number") return;
+  if (!stop || !map) return;
+
   map.panTo({ lat: stop.lat, lng: stop.lng });
   map.setZoom(Math.max(map.getZoom(), 15));
 }
 
 // ===============================
-// Route line
+// Route line (Directions API)
 // ===============================
 function clearRouteLine() {
   if (directionsRenderer) {
@@ -267,18 +332,21 @@ function drawFullDayRoute() {
   if (!routeRunning) return;
   if (!filteredStops.length) return;
 
-  const geocoded = filteredStops.filter(s => typeof s.lat === "number" && typeof s.lng === "number");
-  if (geocoded.length < 2) {
+  if (filteredStops.length === 1) {
     clearRouteLine();
     return;
   }
 
-  const origin = geocoded[0];
-  const destination = geocoded[geocoded.length - 1];
-  const waypoints = geocoded.slice(1, -1).map(stop => ({
-    location: { lat: stop.lat, lng: stop.lng },
-    stopover: true
-  }));
+  const origin = filteredStops[0];
+  const destination = filteredStops[filteredStops.length - 1];
+  const waypoints = filteredStops
+    .slice(1, -1)
+    .map(function (stop) {
+      return {
+        location: { lat: stop.lat, lng: stop.lng },
+        stopover: true
+      };
+    });
 
   directionsService.route(
     {
@@ -288,7 +356,7 @@ function drawFullDayRoute() {
       travelMode: google.maps.TravelMode.DRIVING,
       optimizeWaypoints: false
     },
-    (result, status) => {
+    function (result, status) {
       if (status === "OK") {
         directionsRenderer.setDirections(result);
       } else {
@@ -315,8 +383,7 @@ function onMarkDone() {
 
   if (routeRunning) {
     const next = filteredStops[selectedIndex + 1];
-    if (next && typeof current.lat === "number" && typeof current.lng === "number" &&
-        typeof next.lat === "number" && typeof next.lng === "number") {
+    if (next) {
       const d = haversineMeters(current.lat, current.lng, next.lat, next.lng);
       totalDistanceMeters += d;
       updateDistanceUi();
@@ -350,10 +417,11 @@ function onSkip() {
   drawFullDayRoute();
 }
 
+// Expose control (if needed)
 window.onStartStopToggle = onStartStopToggle;
 
 // ===============================
-// UI updates
+// UI updates: current card + progress + distance
 // ===============================
 function updateUiForSelection() {
   const stop = filteredStops[selectedIndex];
@@ -361,16 +429,27 @@ function updateUiForSelection() {
 
   const addr = stop.fullAddress || stop.address || "";
 
-  if (selectionCardEl) selectionCardEl.classList.add("is-visible");
+  if (selectionCardEl) {
+    selectionCardEl.classList.add("is-visible");
+  }
+
   if (currentAddressEl) currentAddressEl.textContent = addr;
-  if (currentPlanEl) currentPlanEl.textContent = stop.plan || "";
+  if (currentPlanEl)    currentPlanEl.textContent    = stop.plan || "";
   if (currentBinsEl) {
-    const binsText = stop.bins == null || stop.bins === "" ? "" : String(stop.bins) + " bins";
+    const binsText =
+      stop.bins == null || stop.bins === ""
+        ? ""
+        : String(stop.bins) + " bins";
     currentBinsEl.textContent = binsText;
   }
-  if (currentPhoneEl) currentPhoneEl.textContent = stop.phone || "";
+  if (currentPhoneEl)  currentPhoneEl.textContent  = stop.phone || "";
   if (currentStatusEl) currentStatusEl.textContent = stop.status || "Pending";
   if (currentStatusTagEl) currentStatusTagEl.textContent = stop.status || "Pending";
+
+  if (housePositionLabelEl) {
+    housePositionLabelEl.textContent =
+      (selectedIndex + 1) + " of " + filteredStops.length;
+  }
 }
 
 function updateProgressUi() {
@@ -381,7 +460,7 @@ function updateProgressUi() {
     return;
   }
 
-  const doneCount = filteredStops.filter(s => {
+  const doneCount = filteredStops.filter(function (s) {
     const sStatus = (s.status || "").toLowerCase();
     return sStatus === "done" || sStatus === "completed";
   }).length;
@@ -392,6 +471,7 @@ function updateProgressUi() {
   if (runStatsLabelEl) {
     runStatsLabelEl.textContent = leftCount + " left today / " + total + " total";
   }
+
   if (runProgressBarEl) {
     runProgressBarEl.style.width = pct.toFixed(1) + "%";
   }
@@ -400,16 +480,17 @@ function updateProgressUi() {
 function updateDistanceUi() {
   const miles = totalDistanceMeters / 1609.344;
   if (runDistanceLabelEl) {
-    runDistanceLabelEl.textContent = "Today’s run: " + miles.toFixed(1) + " mi";
+    runDistanceLabelEl.textContent =
+      "Today’s run: " + miles.toFixed(1) + " mi";
   }
 }
 
 // ===============================
-// Distance helper
+// Distance helper (Haversine)
 // ===============================
 function haversineMeters(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const toRad = deg => deg * Math.PI / 180;
+  const R = 6371000; // meters
+  const toRad = function (deg) { return deg * Math.PI / 180; };
 
   const φ1 = toRad(lat1);
   const φ2 = toRad(lat2);

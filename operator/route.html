@@ -153,10 +153,16 @@
       transform: translateY(0);
     }
 
+    .selection-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .hide-btn { padding: 6px 10px; border: 1px solid var(--gray-border); border-radius: 10px; background: #fff; color: var(--gray-muted); font-weight: 700; cursor: pointer; }
+
     .selection-label { margin: 0; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-muted); }
     .addr-title { margin: 0; font-size: 18px; font-weight: 800; }
     .meta-list { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 4px; font-size: 13px; color: var(--gray-muted); }
     .meta-list span { font-weight: 700; color: var(--navy); }
+
+    .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+    .nav-btn { padding: 9px 12px; border: 1px solid var(--gray-border); background: #fff; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
     .status-row { margin-top: 6px; }
     .status-tag { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--gray-border); background: var(--gray-soft); font-size: 12px; font-weight: 700; color: var(--gray-muted); }
@@ -185,17 +191,30 @@
     </header>
 
     <section class="selection-card" id="selectionCard">
-      <p class="selection-label">Selected house</p>
+      <div class="selection-header">
+        <p class="selection-label">Selected house</p>
+        <button id="btnHideCard" class="hide-btn">Hide</button>
+      </div>
+
       <p class="addr-title" id="currentAddress">Tap a house to view details.</p>
+
       <ul class="meta-list">
         <li><span>Plan:</span> <span id="currentPlan"></span></li>
         <li><span>Bins:</span> <span id="currentBins"></span></li>
         <li><span>Phone:</span> <span id="currentPhone"></span></li>
         <li><span>Status:</span> <span id="currentStatus"></span></li>
       </ul>
+
+      <div class="nav-row">
+        <button id="btnPrev" class="nav-btn">◀ Prev</button>
+        <span id="housePositionLabel">0 of 0</span>
+        <button id="btnNext" class="nav-btn">Next ▶</button>
+      </div>
+
       <div class="status-row">
         <span class="status-tag" id="currentStatusTag">Pending</span>
       </div>
+
       <div class="btn-row">
         <button id="btnMarkDone" class="btn-primary">Mark done</button>
         <button id="btnSkip" class="btn-ghost">Skip</button>
