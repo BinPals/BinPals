@@ -221,7 +221,16 @@
     (function () {
       const API_URL = 'https://script.google.com/macros/s/AKfycbwfcDOsVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl9-7JJE_UbHYAbV-S2cDu_i1av/exec';
       const params = new URLSearchParams(window.location.search);
-      const OPERATOR_ID = (params.get('op') || 'OP01').trim();
+      const OPERATOR_ID = (
+        params.get('operatorId') ||
+        params.get('operator') ||
+        params.get('op') ||
+        'OP01'
+      ).trim();
+      const operatorQueryParam =
+        params.has('operatorId') ? 'operatorId' :
+        params.has('operator') ? 'operator' :
+        'op';
 
       const stopsTableBody = document.getElementById('stopsTableBody');
       const statStopsEl = document.getElementById('statStops');
@@ -286,8 +295,13 @@
 
       startRouteBtn.addEventListener('click', function () {
         const params = new URLSearchParams(window.location.search);
-        const opId = params.get('op') || 'OP01';
-        window.location.href = `/operator/route.html?op=${encodeURIComponent(opId)}`;
+        const opId = (
+          params.get('operatorId') ||
+          params.get('operator') ||
+          params.get('op') ||
+          'OP01'
+        ).trim();
+        window.location.href = `/operator/route.html?${operatorQueryParam}=${encodeURIComponent(opId)}`;
       });
     })();
   </script>
