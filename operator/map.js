@@ -125,8 +125,7 @@ function initOperatorMap() {
   }
 
   renderMarkers();
-  autoSelectFirstStop();
-  updateUiForSelection();
+  // Keep the selection card hidden until an address is tapped.
   setRouteRunningState(true);
   updateProgressUi();
 }
