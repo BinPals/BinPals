@@ -282,7 +282,11 @@
         });
       }
 
-      fetch(`${API_URL}?operatorId=${encodeURIComponent(OPERATOR_ID)}`)
+      const apiUrl = new URL(API_URL);
+      apiUrl.searchParams.set('operatorId', OPERATOR_ID);
+      apiUrl.searchParams.set('t', Date.now());
+
+      fetch(apiUrl.toString(), { cache: 'no-store' })
         .then(resp => resp.json())
         .then(data => {
           window.BINPALS_STOPS = Array.isArray(data) ? data : [];
