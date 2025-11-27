@@ -627,18 +627,82 @@ if (!OPERATOR_ID) {
 }
 
       let map;
-      let geocoder;
-      let markers = [];
-      const markerById = new Map();
-      let stops = [];
-      let filteredStops = [];
-      let selectedIndex = 0;
-      let routePolyline = null;
-      let directionsService;
-      let directionsRenderer;
-      let routeStart = null;
-      let routeEnd = null;
-      let routeFinished = false;
+let geocoder;
+let markers = [];
+const markerById = new Map();
+let stops = [];
+let filteredStops = [];
+let selectedIndex = 0;
+
+// Route drawing
+let routePolyline = null;       // old polyline (kept in case we need fallback)
+let directionsService;
+let directionsRenderer;
+let routeStart = null;
+let routeEnd = null;
+let routeFinished = false;
+let routeRunning = false;       // <-- NEW: only draw route once started
+
+function clearRouteLine() {
+  // Clear old polyline if used
+  if (routePolyline) {
+    routePolyline.setMap(null);
+    routePolyline = null;
+  }
+
+  // Clear Directions renderer route
+  if (directionsRenderer) {
+    directionsRenderer.set('directions', null);
+  }
+}
+
+function drawCurrentSegment() {
+  if (!routeRunning) return;
+  if (!directionsService || !directionsRenderer) return;
+  if (!filteredStops || filteredStops.length < 2) return;
+
+  // We only care about stops with lat/lng
+  const geoStops = filteredStops.filter(function (s) {
+    return typeof s.lat === 'number' && typeof s.lng === 'number';
+  });
+
+  if (!geoStops.length) return;
+
+  // Make sure selectedIndex is within range
+  if (selectedIndex < 0) selectedIndex = 0;
+  if (selectedIndex >= geoStops.length) selectedIndex = geoStops.length - 1;
+
+  const current = geoStops[selectedIndex];
+  const next = geoStops[selectedIndex + 1];
+
+  // If this is the last stop, no segment to draw
+  if (!next) {
+    clearRouteLine();
+    return;
+  }
+
+  const origin = { lat: current.lat, lng: current.lng };
+  const destination = { lat: next.lat, lng: next.lng };
+
+  directionsService.route(
+    {
+      origin: origin,
+      destination: destination,
+      waypoints: [],                  // simple 2-point segment
+      travelMode: google.maps.TravelMode.DRIVING,
+      optimizeWaypoints: false
+    },
+    function (result, status) {
+      if (status === google.maps.DirectionsStatus.OK) {
+        directionsRenderer.setDirections(result);
+      } else {
+        console.error('Directions request failed:', status);
+        // If Directions fails, just clear the line so it doesn’t look wrong
+        clearRouteLine();
+      }
+    }
+  );
+}
 
     // DOM refs
     const sheetEl = document.getElementById("routeSheet");
