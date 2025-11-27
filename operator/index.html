@@ -634,6 +634,8 @@ if (!OPERATOR_ID) {
       let filteredStops = [];
       let selectedIndex = 0;
       let routePolyline = null;
+      let directionsService;
+      let directionsRenderer;
       let routeStart = null;
       let routeEnd = null;
       let routeFinished = false;
@@ -820,6 +822,19 @@ map = new google.maps.Map(document.getElementById("map"), {
   disableDefaultUI: true,
   mapId: "21c5d738f6fd9e55fa89adc2"
 });
+
+      // Directions API for road-following route line
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,         // we use our own custom pins
+        preserveViewport: true,
+        polylineOptions: {
+          strokeColor: "#16A34A",
+          strokeOpacity: 0.85,
+          strokeWeight: 3
+        }
+      });
+      directionsRenderer.setMap(map);
 
       geocoder = new google.maps.Geocoder();
 
@@ -1033,29 +1048,52 @@ function createPinElement() {
     }
 
     function drawRoutePolyline() {
-      if (routePolyline) {
-        routePolyline.setMap(null);
-        routePolyline = null;
+      // Clear old route if renderer exists
+      if (directionsRenderer) {
+        directionsRenderer.set('directions', null);
       }
 
-      var path = filteredStops
-        .filter(function (s) {
-          return typeof s.lat === "number" && typeof s.lng === "number";
-        })
-        .map(function (s) {
-          return { lat: s.lat, lng: s.lng };
-        });
-
-      if (!path.length) return;
-
-      routePolyline = new google.maps.Polyline({
-        path: path,
-        map: map,
-        strokeColor: "#16A34A",
-        strokeOpacity: 0.9,
-        strokeWeight: 4,
-        geodesic: true
+      // Need at least 2 stops with lat/lng
+      var pathStops = filteredStops.filter(function (s) {
+        return typeof s.lat === "number" && typeof s.lng === "number";
       });
+
+      if (!directionsService || !directionsRenderer || pathStops.length < 2) {
+        return;
+      }
+
+      var origin = { lat: pathStops[0].lat, lng: pathStops[0].lng };
+      var destination = {
+        lat: pathStops[pathStops.length - 1].lat,
+        lng: pathStops[pathStops.length - 1].lng
+      };
+
+      // All middle stops become waypoints
+      var waypoints = [];
+      for (var i = 1; i < pathStops.length - 1; i++) {
+        waypoints.push({
+          location: { lat: pathStops[i].lat, lng: pathStops[i].lng },
+          stopover: true
+        });
+      }
+
+      directionsService.route(
+        {
+          origin: origin,
+          destination: destination,
+          waypoints: waypoints,
+          travelMode: google.maps.TravelMode.DRIVING,
+          optimizeWaypoints: false
+        },
+        function (result, status) {
+          if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(result);
+          } else {
+            console.error("Directions request failed:", status);
+            // Fallback: no route line if directions fail
+          }
+        }
+      );
     }
 
     function updateStatsPill() {
