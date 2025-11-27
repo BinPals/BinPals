@@ -605,13 +605,14 @@
       const GOOGLE_MAPS_API_KEY = "AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs";
 
       const urlParams   = new URLSearchParams(window.location.search);
-      const OPERATOR_ID = (urlParams.get("op") || "").trim();
-      const ROUTE_ID    = (urlParams.get("route") || "").trim();
+const OPERATOR_ID = (urlParams.get("op") || "").trim();
+const ROUTE_ID    = (urlParams.get("route") || "").trim(); // optional now
 
-      if (!OPERATOR_ID || !ROUTE_ID) {
-        window.location.href = "/operator/login.html";
-        return;
-      }
+// Only require operator
+if (!OPERATOR_ID) {
+  window.location.href = "/operator/login.html";
+  return;
+}
 
       let map;
       let geocoder;
