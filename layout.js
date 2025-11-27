@@ -6,6 +6,7 @@
   const headerTarget = document.querySelector('[data-component="site-header"]');
   if (headerTarget) {
     const ctaHref = isContact ? "#estimateForm" : "contact-us.html#estimateForm";
+    const pricingHref = page === "home" ? "#pricing" : "index.html#pricing";
     const navLink = (hrefPage) => (page === hrefPage ? " class=\"active\"" : "");
 
     headerTarget.innerHTML = `
@@ -18,7 +19,7 @@
     <div class="header-actions">
       <nav class="header-nav">
         <a href="index.html"${navLink("home")}>Home</a>
-        <a href="pricing.html"${navLink("pricing")}>Pricing</a>
+        <a href="${pricingHref}"${navLink("pricing")}>Pricing</a>
         <a href="contact-us.html"${navLink("contact")}>Contact</a>
       </nav>
 
