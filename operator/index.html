@@ -678,33 +678,38 @@ if (!OPERATOR_ID) {
     }
 
     function fetchStops() {
-      if (!OPERATOR_ID || !ROUTE_ID) {
-        emptyTextEl.textContent = "Missing operator or route. Please log in again.";
-        return Promise.resolve([]);
+  // Require operator, route is optional
+  if (!OPERATOR_ID) {
+    emptyTextEl.textContent = "Missing operator. Please log in again.";
+    return Promise.resolve([]);
+  }
+
+  var params = new URLSearchParams();
+  params.set("operatorId", OPERATOR_ID);   // ✅ required
+  if (ROUTE_ID) {
+    params.set("routeId", ROUTE_ID);       // optional – ignored by API if blank
+  }
+
+  var urlWithParams = API_URL + "?" + params.toString();
+
+  return loadHouses(urlWithParams)
+    .then(function (data) {
+      if (!Array.isArray(data)) {
+        emptyTextEl.textContent = "Couldn’t load stops right now. Please try again.";
+        return [];
       }
 
-      var params = new URLSearchParams();
-      if (OPERATOR_ID) params.set("operatorId", OPERATOR_ID);
-      if (ROUTE_ID) params.set("routeId", ROUTE_ID);
-
-      var urlWithParams = API_URL + "?" + params.toString();
-
-      return loadHouses(urlWithParams)
-        .then(function (data) {
-          if (!Array.isArray(data)) {
-            emptyTextEl.textContent = "Couldn’t load stops right now. Please try again.";
-            return [];
-          }
-
-          emptyTextEl.textContent = "No houses for this filter.";
-          return normalizeStopData(data);
-        })
-        .catch(function (err) {
-          console.error("Failed to fetch stops:", err);
-          emptyTextEl.textContent = "Couldn’t load stops right now. Please try again.";
-          return [];
-        });
-    }
+      // If we got here, we at least talked to the API.
+      // Saying "No houses for this filter." is handled later by the day filter.
+      emptyTextEl.textContent = "No houses for this filter.";
+      return normalizeStopData(data);
+    })
+    .catch(function (err) {
+      console.error("Failed to fetch stops:", err);
+      emptyTextEl.textContent = "Couldn’t load stops right now. Please try again.";
+      return [];
+    });
+}
 
     function normalizeStopData(data) {
       if (!Array.isArray(data)) return [];
