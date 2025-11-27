@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BinPals Operator | Today's Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #166534;
+      --green-soft: #ecfdf3;
+      --green-border: #bbf7d0;
+      --navy: #0f172a;
+      --gray-bg: #f3f4f6;
+      --gray-border: #e5e7eb;
+      --gray-muted: #6b7280;
+      --gray-soft: #f9fafb;
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.16);
+      --radius-lg: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--gray-bg);
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      padding: 28px 22px 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    p.lead {
+      margin: 6px 0 0;
+      color: var(--gray-muted);
+      font-size: 15px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      padding: 0 22px 18px;
+    }
+
+    .stat-card {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--gray-border);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gray-muted);
+      margin: 0;
+    }
+
+    .stat-value {
+      margin: 4px 0 0;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .card-shell {
+      padding: 0 22px 26px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+      padding: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--gray-border);
+    }
+
+    th {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      color: var(--gray-muted);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--gray-border);
+      background: var(--gray-soft);
+      color: var(--gray-muted);
+    }
+
+    .status-pill.pending { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+    .status-pill.done { background: #dcfce7; border-color: #bbf7d0; color: #166534; }
+    .status-pill.skipped { background: #fee2e2; border-color: #fecaca; color: #b91c1c; }
+
+    .btn-primary {
+      width: 100%;
+      max-width: 360px;
+      margin: 8px auto 0;
+      padding: 14px 22px;
+      border-radius: 999px;
+      border: none;
+      background: var(--green);
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      display: block;
+      box-shadow: 0 14px 28px rgba(22, 101, 52, 0.25);
+    }
+
+    .card-meta {
+      display: grid;
+      gap: 6px;
+      color: var(--gray-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      th:nth-child(2), td:nth-child(2) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Today’s service</h1>
+    <p class="lead">Review your stops for today, then start your route.</p>
+  </header>
+
+  <section class="stats-row">
+    <article class="stat-card">
+      <p class="stat-label">Stops today</p>
+      <p class="stat-value" id="statStops">0</p>
+    </article>
+    <article class="stat-card">
+      <p class="stat-label">Pending</p>
+      <p class="stat-value" id="statPending">0</p>
+    </article>
+    <article class="stat-card">
+      <p class="stat-label">Completed</p>
+      <p class="stat-value" id="statDone">0</p>
+    </article>
+  </section>
+
+  <section class="card-shell">
+    <article class="card">
+      <h2>Today’s houses</h2>
+      <div class="card-meta" id="operatorLabel"></div>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Plan</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="stopsTableBody">
+            <tr><td colspan="3" style="color: var(--gray-muted);">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button id="btnStartRoute" class="btn-primary">Start route</button>
+    </article>
+
+    <article class="card">
+      <h2>Tomorrow’s preview</h2>
+      <div class="card-meta">Pulling assigned houses. (Coming soon)</div>
+    </article>
+
+    <article class="card">
+      <h2>Notes from admin</h2>
+      <div class="card-meta">No new notes.</div>
+    </article>
+
+    <article class="card">
+      <h2>Last run summary</h2>
+      <div class="card-meta">Miles + time will display here after your run.</div>
+    </article>
+  </section>
+
+  <script>
+    (function () {
+      const API_URL = 'https://script.google.com/macros/s/AKfycbwfcDOsVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl9-7JJE_UbHYAbV-S2cDu_i1av/exec';
+      const params = new URLSearchParams(window.location.search);
+      const OPERATOR_ID = (params.get('op') || 'OP01').trim();
+
+      const stopsTableBody = document.getElementById('stopsTableBody');
+      const statStopsEl = document.getElementById('statStops');
+      const statPendingEl = document.getElementById('statPending');
+      const statDoneEl = document.getElementById('statDone');
+      const operatorLabel = document.getElementById('operatorLabel');
+      const startRouteBtn = document.getElementById('btnStartRoute');
+
+      if (operatorLabel) {
+        operatorLabel.textContent = `Operator: ${OPERATOR_ID}`;
+      }
+
+      function statusClass(status) {
+        const s = (status || '').toLowerCase();
+        if (s === 'done' || s === 'completed') return 'status-pill done';
+        if (s === 'skipped') return 'status-pill skipped';
+        return 'status-pill pending';
+      }
+
+      function renderStops(stops) {
+        if (!Array.isArray(stops) || !stops.length) {
+          stopsTableBody.innerHTML = '<tr><td colspan="3" style="color: var(--gray-muted);">No houses assigned for today.</td></tr>';
+          statStopsEl.textContent = '0';
+          statPendingEl.textContent = '0';
+          statDoneEl.textContent = '0';
+          return;
+        }
+
+        const total = stops.length;
+        const pending = stops.filter(s => (s.status || '').toLowerCase() === 'pending').length;
+        const done = stops.filter(s => {
+          const status = (s.status || '').toLowerCase();
+          return status === 'done' || status === 'completed';
+        }).length;
+
+        statStopsEl.textContent = total;
+        statPendingEl.textContent = pending;
+        statDoneEl.textContent = done;
+
+        stopsTableBody.innerHTML = '';
+        stops.forEach(stop => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${stop.fullAddress || stop.address || '—'}</td>
+            <td>${stop.plan || ''}</td>
+            <td><span class="${statusClass(stop.status)}">${stop.status || 'Pending'}</span></td>
+          `;
+          stopsTableBody.appendChild(tr);
+        });
+      }
+
+      fetch(`${API_URL}?operatorId=${encodeURIComponent(OPERATOR_ID)}`)
+        .then(resp => resp.json())
+        .then(data => {
+          window.BINPALS_STOPS = Array.isArray(data) ? data : [];
+          renderStops(window.BINPALS_STOPS);
+        })
+        .catch(err => {
+          console.error('Error loading stops:', err);
+          renderStops([]);
+        });
+
+      startRouteBtn.addEventListener('click', function () {
+        const params = new URLSearchParams(window.location.search);
+        const opId = params.get('op') || 'OP01';
+        window.location.href = `/operator/route.html?op=${encodeURIComponent(opId)}`;
+      });
+    })();
+  </script>
+</body>
+</html>
