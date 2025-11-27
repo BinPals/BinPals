@@ -12,8 +12,8 @@ let geocoder;
 let markers = [];
 let markerById = new Map();
 
-let stops = [];          // all stops for this operator today
-let filteredStops = [];  // currently filtered (e.g. trash day, today only)
+let stops = [];          // all stops coming from backend
+let filteredStops = [];  // currently filtered (for this operator, lat/lng present)
 let selectedIndex = 0;
 
 // Route + progress state
@@ -36,10 +36,28 @@ let currentPhoneEl;
 let currentStatusEl;
 let currentStatusTagEl;
 
+// Get operator from URL, e.g. ?op=OP01
+function getOperatorIdFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const op =
+      (params.get("op") ||
+        params.get("operator") ||
+        params.get("operatorId") ||
+        "").trim();
+    return op.toUpperCase();
+  } catch (e) {
+    console.warn("Could not read operator from URL:", e);
+    return "";
+  }
+}
+
 // ===============================
 //  INIT ENTRYPOINT (called by Google Maps callback)
 // ===============================
 function initOperatorMap() {
+  const operatorId = getOperatorIdFromUrl();
+
   // 1. Load data from global
   if (Array.isArray(window.BINPALS_STOPS)) {
     stops = window.BINPALS_STOPS.slice();
@@ -48,7 +66,16 @@ function initOperatorMap() {
     stops = [];
   }
 
-  filteredStops = stops.filter(function (s) {
+  // 1a. Filter by operator (frontend-side)
+  let operatorStops = stops;
+  if (operatorId) {
+    operatorStops = stops.filter(function (s) {
+      return (String(s.operatorId || "").toUpperCase() === operatorId);
+    });
+  }
+
+  // 1b. Only keep stops that have lat/lng
+  filteredStops = operatorStops.filter(function (s) {
     return typeof s.lat === "number" && typeof s.lng === "number";
   });
 
@@ -84,6 +111,16 @@ function initOperatorMap() {
 
   // 4. Setup DOM references & events
   hookDom();
+
+  // If there are no stops for this operator, just reset the UI and bail
+  if (!filteredStops.length) {
+    console.log("No stops for operator or no geocoded stops.");
+    updateProgressUi();
+    updateDistanceUi();
+    if (currentAddressEl) currentAddressEl.textContent = "No houses for this filter.";
+    return;
+  }
+
   renderMarkers();
   autoSelectFirstStop();
   updateUiForSelection();
@@ -140,7 +177,7 @@ function renderMarkers() {
     const marker = new google.maps.Marker({
       position: pos,
       map: map,
-      title: stop.address || stop.name || "Stop",
+      title: stop.fullAddress || stop.address || stop.name || "Stop",
       icon: makeMarkerIcon(false)   // not selected by default
     });
 
@@ -267,7 +304,6 @@ function onStartStopToggle() {
 
   if (routeRunning) {
     // Reset distance when starting a brand new run.
-    // If you want to keep distance across restarts, remove this line:
     totalDistanceMeters = 0;
     updateDistanceUi();
     drawCurrentSegment();
@@ -308,7 +344,6 @@ function onMarkDone() {
   }
 
   // TODO: send status change back to server / Apps Script
-  // e.g. via fetch to a doPost endpoint with { rowId: current.id, status: "Done" }
 }
 
 function onSkip() {
@@ -340,14 +375,20 @@ function updateUiForSelection() {
   const stop = filteredStops[selectedIndex];
   if (!stop) return;
 
+  const addr = stop.fullAddress || stop.address || "";
+
   if (currentAddressEl) {
-    currentAddressEl.textContent = stop.address || "";
+    currentAddressEl.textContent = addr;
   }
   if (currentPlanEl) {
     currentPlanEl.textContent = stop.plan || "";
   }
   if (currentBinsEl) {
-    currentBinsEl.textContent = (stop.bins != null ? stop.bins : "") + " bins";
+    const binsText =
+      stop.bins == null || stop.bins === ""
+        ? ""
+        : String(stop.bins) + " bins";
+    currentBinsEl.textContent = binsText;
   }
   if (currentPhoneEl) {
     currentPhoneEl.textContent = stop.phone || "";
