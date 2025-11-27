@@ -921,6 +921,16 @@ map = new google.maps.Map(document.getElementById("map"), {
 
       btnDoneEl.addEventListener("click", function () {
         updateCurrentStatus("Done");
+
+        selectedIndex = Math.min(selectedIndex + 1, filteredStops.length - 1);
+        renderCurrentHouse();
+        highlightActiveHouseRow();
+        updateMarkerVisuals();
+        focusMarkerForCurrent && focusMarkerForCurrent();
+
+        if (routeRunning) {
+          drawCurrentSegment();
+        }
       });
 
       btnSkipEl.addEventListener("click", function () {
@@ -946,13 +956,25 @@ map = new google.maps.Map(document.getElementById("map"), {
         openNavigationTo(stop.fullAddress);
       });
 
-      btnStartStopEl.addEventListener("click", function () {
-        if (!routeStart || routeFinished) {
-          startRoute(true);
-        } else {
-          stopRoute();
-        }
-      });
+      if (btnStartStopEl) {
+        btnStartStopEl.addEventListener("click", function () {
+          // If no houses, nothing to run
+          if (!filteredStops || !filteredStops.length) return;
+
+          // Turn ON
+          if (!routeRunning) {
+            routeRunning = true;
+            btnStartStopEl.textContent = "Route running";
+            drawCurrentSegment();
+            return;
+          }
+
+          // Turn OFF (optional – keeps UX simple if you want to stop)
+          routeRunning = false;
+          btnStartStopEl.textContent = "Start route";
+          clearRouteLine();
+        });
+      }
     }
 
     // ===== MAP + DATA UTILITIES =====
@@ -1077,7 +1099,11 @@ function createPinElement() {
       highlightActiveHouseRow();
       updateStatsPill();
       updateMarkerVisuals();
-      drawRoutePolyline();
+      if (routeRunning) {
+        drawCurrentSegment();
+      } else {
+        clearRouteLine();
+      }
       focusAllMarkers(true);
     }
 
@@ -1315,7 +1341,9 @@ function createPinElement() {
       if (!routeStart) return;
       routeEnd = new Date();
       routeFinished = true;
+      routeRunning = false;
       updateRouteTimerDisplay();
+      clearRouteLine();
       updateStartStopButton();
     }
 
@@ -1349,11 +1377,8 @@ function createPinElement() {
     }
 
     function updateStartStopButton() {
-      if (!routeStart || routeFinished) {
-        btnStartStopEl.textContent = "Start route";
-      } else {
-        btnStartStopEl.textContent = "Stop route";
-      }
+      if (!btnStartStopEl) return;
+      btnStartStopEl.textContent = routeRunning ? "Route running" : "Start route";
     }
 
     function openNavigationTo(address) {
