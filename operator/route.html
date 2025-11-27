@@ -124,24 +124,26 @@
       border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 14px 28px rgba(15, 23, 52, 0.12);
     }
 
     .selection-card {
       position: absolute;
-      left: 12px;
-      bottom: 12px;
-      max-width: 420px;
-      width: calc(100% - 24px);
-      padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.96);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 12px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.94);
       border: 1px solid var(--gray-border);
-      border-radius: 18px;
+      border-radius: var(--radius-xl);
       box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-direction: column;
+      backdrop-filter: blur(10px);
+      display: grid;
       gap: 10px;
+      transform: translateY(12px);
       opacity: 0;
-      transform: translateY(6px);
+      pointer-events: none;
       transition: opacity 0.25s ease, transform 0.25s ease;
       z-index: 2;
     }
@@ -210,82 +212,80 @@
   </script>
 
   <script>
-    (function () {
-      const API_URL = 'https://script.google.com/macros/s/AKfycbwfcDOsVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl9-7JJE_UbHYAbV-S2cDu_i1av/exec';
-      const params = new URLSearchParams(window.location.search);
-      const OPERATOR_ID = (
-        params.get('operatorId') ||
-        params.get('operator') ||
-        params.get('op') ||
-        'OP01'
+  (function () {
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwfCDosVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl97JJE_UbHYAbV-S2cDui1IaV/exec';
+    const params = new URLSearchParams(window.location.search);
+    const OPERATOR_ID = (
+      params.get('operatorId') ||
+      params.get('operator') ||
+      params.get('op') ||
+      'OP01'
+    ).trim();
+    const operatorQueryParam =
+      params.has('operatorId') ? 'operatorId' :
+      params.has('operator') ? 'operator' :
+      'op';
+
+    function resolveMapsApiKey() {
+      const key = (
+        window.BINPALS_GOOGLE_MAPS_API_KEY ||
+        window.BINPALS_MAPS_API_KEY ||
+        params.get('mapsKey') ||
+        params.get('mapKey') ||
+        ''
       ).trim();
-      const operatorQueryParam =
-        params.has('operatorId') ? 'operatorId' :
-        params.has('operator') ? 'operator' :
-        'op';
 
-      function resolveMapsApiKey() {
-        const key = (
-          window.BINPALS_GOOGLE_MAPS_API_KEY ||
-          window.BINPALS_MAPS_API_KEY ||
-          params.get('mapsKey') ||
-          params.get('mapKey') ||
-          ''
-        ).trim();
-
-        // Treat the placeholder as "no key" so users must replace it.
-        if (key && key !== 'PASTE_GOOGLE_MAPS_API_KEY_HERE') {
-          return key;
-        }
-
-        return '';
+      if (key && key !== 'PASTE_GOOGLE_MAPS_API_KEY_HERE') {
+        return key;
       }
+      return '';
+    }
 
-      function loadGoogleMaps() {
-        const GOOGLE_MAPS_API_KEY = resolveMapsApiKey();
-        if (!GOOGLE_MAPS_API_KEY) {
-          console.error('Google Maps API key is missing. Provide ?mapsKey=YOUR_KEY or set window.BINPALS_GOOGLE_MAPS_API_KEY.');
-          const routeTitle = document.getElementById('routeTitle');
-          const address = document.getElementById('currentAddress');
-          if (routeTitle) routeTitle.textContent = 'Add a Google Maps API key to continue';
-          if (address) address.textContent = 'Map cannot load without a valid Google Maps JavaScript API key.';
-          return;
-        }
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_API_KEY)}&callback=initOperatorMap`;
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
+    function loadGoogleMaps() {
+      const GOOGLE_MAPS_API_KEY = resolveMapsApiKey();
+      if (!GOOGLE_MAPS_API_KEY) {
+        console.error('Google Maps API key is missing. Provide ?mapsKey=YOUR_KEY or set window.BINPALS_GOOGLE_MAPS_API_KEY.');
+        const routeTitle = document.getElementById('routeTitle');
+        const address = document.getElementById('currentAddress');
+        if (routeTitle) routeTitle.textContent = 'Add a Google Maps API key to continue';
+        if (address) address.textContent = 'Map cannot load without a valid Google Maps JavaScript API key.';
+        return;
       }
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_API_KEY)}&callback=initOperatorMap`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
 
-      const apiUrl = new URL(API_URL);
-      apiUrl.searchParams.set('operatorId', OPERATOR_ID);
-      apiUrl.searchParams.set('t', Date.now());
+    const apiUrl = new URL(API_URL);
+    apiUrl.searchParams.set('operatorId', OPERATOR_ID);
+    apiUrl.searchParams.set('t', Date.now());
 
-      fetch(apiUrl.toString(), { cache: 'no-store' })
-        .then(resp => resp.json())
-        .then(data => {
-          window.BINPALS_STOPS = Array.isArray(data) ? data : [];
-          loadGoogleMaps();
-        })
-        .catch(err => {
-          console.error('Error loading stops:', err);
-          window.BINPALS_STOPS = [];
-          loadGoogleMaps();
-        });
-
-      document.getElementById('btnEndRoute').addEventListener('click', function () {
-        window.location.href = `/operator/home.html?${operatorQueryParam}=${encodeURIComponent(OPERATOR_ID)}`;
+    fetch(apiUrl.toString(), { cache: 'no-store' })
+      .then(resp => resp.json())
+      .then(data => {
+        window.BINPALS_STOPS = Array.isArray(data) ? data : [];
+        loadGoogleMaps();
+      })
+      .catch(err => {
+        console.error('Error loading stops:', err);
+        window.BINPALS_STOPS = [];
+        loadGoogleMaps();
       });
 
-      document.getElementById('btnContact').addEventListener('click', function () {
-        const phoneText = (document.getElementById('currentPhone')?.textContent || '').trim();
-        if (phoneText) {
-          window.location.href = `tel:${phoneText.replace(/[^0-9+]/g, '')}`;
-        }
-      });
-    })();
-  </script>
+    document.getElementById('btnEndRoute').addEventListener('click', function () {
+      window.location.href = `/operator/home.html?${operatorQueryParam}=${encodeURIComponent(OPERATOR_ID)}`;
+    });
+
+    document.getElementById('btnContact').addEventListener('click', function () {
+      const phoneText = (document.getElementById('currentPhone')?.textContent || '').trim();
+      if (phoneText) {
+        window.location.href = `tel:${phoneText.replace(/[^0-9+]/g, '')}`;
+      }
+    });
+  })();
+</script>
   <script src="/operator/map.js"></script>
 </body>
 </html>
