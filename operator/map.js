@@ -30,6 +30,7 @@ let btnStartStopEl;
 let runStatsLabelEl;
 let runDistanceLabelEl;
 let runProgressBarEl;
+let selectionCardEl;
 let currentAddressEl;
 let currentPlanEl;
 let currentBinsEl;
@@ -119,6 +120,7 @@ function initOperatorMap() {
     updateProgressUi();
     updateDistanceUi();
     if (currentAddressEl) currentAddressEl.textContent = "No houses for this filter.";
+    if (selectionCardEl) selectionCardEl.classList.add("is-visible");
     return;
   }
 
@@ -142,6 +144,7 @@ function hookDom() {
   runStatsLabelEl    = document.getElementById("runStatsLabel");
   runDistanceLabelEl = document.getElementById("runDistanceLabel");
   runProgressBarEl   = document.getElementById("runProgressBar");
+  selectionCardEl    = document.getElementById("selectionCard");
   currentAddressEl   = document.getElementById("currentAddress");
   currentPlanEl      = document.getElementById("currentPlan");
   currentBinsEl      = document.getElementById("currentBins");
@@ -171,7 +174,7 @@ function setRouteRunningState(nextState) {
   if (routeRunning) {
     totalDistanceMeters = 0;
     updateDistanceUi();
-    drawCurrentSegment();
+    drawFullDayRoute();
   } else {
     clearRouteLine();
   }
@@ -251,9 +254,7 @@ function setSelectedIndex(index) {
   centerMapOnSelected();
   updateUiForSelection();
 
-  if (routeRunning) {
-    drawCurrentSegment();
-  }
+  drawFullDayRoute();
 }
 
 function highlightSelectedMarker() {
@@ -279,24 +280,35 @@ function clearRouteLine() {
     directionsRenderer.set("directions", null);
   }
 }
-
-function drawCurrentSegment() {
+// Draws the entire route for the day so operators always see the path.
+function drawFullDayRoute() {
   if (!routeRunning) return;
   if (!filteredStops.length) return;
 
-  const current = filteredStops[selectedIndex];
-  const next = filteredStops[selectedIndex + 1];
-
-  if (!next) {
+  // A single stop does not need a rendered route line.
+  if (filteredStops.length === 1) {
     clearRouteLine();
     return;
   }
 
+  const origin = filteredStops[0];
+  const destination = filteredStops[filteredStops.length - 1];
+  const waypoints = filteredStops
+    .slice(1, -1)
+    .map(function (stop) {
+      return {
+        location: { lat: stop.lat, lng: stop.lng },
+        stopover: true
+      };
+    });
+
   directionsService.route(
     {
-      origin:      { lat: current.lat, lng: current.lng },
-      destination: { lat: next.lat,    lng: next.lng    },
-      travelMode: google.maps.TravelMode.DRIVING
+      origin: { lat: origin.lat, lng: origin.lng },
+      destination: { lat: destination.lat, lng: destination.lng },
+      waypoints: waypoints,
+      travelMode: google.maps.TravelMode.DRIVING,
+      optimizeWaypoints: false
     },
     function (result, status) {
       if (status === "OK") {
@@ -345,9 +357,7 @@ function onMarkDone() {
   updateUiForSelection();
   updateProgressUi();
 
-  if (routeRunning) {
-    drawCurrentSegment();
-  }
+  drawFullDayRoute();
 
   // TODO: send status change back to server / Apps Script
 }
@@ -367,9 +377,7 @@ function onSkip() {
   updateUiForSelection();
   updateProgressUi();
 
-  if (routeRunning) {
-    drawCurrentSegment();
-  }
+  drawFullDayRoute();
 
   // TODO: send "Skipped" to backend if you want
 }
@@ -385,6 +393,10 @@ function updateUiForSelection() {
   if (!stop) return;
 
   const addr = stop.fullAddress || stop.address || "";
+
+  if (selectionCardEl) {
+    selectionCardEl.classList.add("is-visible");
+  }
 
   if (currentAddressEl) {
     currentAddressEl.textContent = addr;

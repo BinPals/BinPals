@@ -45,32 +45,28 @@
       inset: 0;
     }
 
-    .route-bottom {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #fff;
-      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-      box-shadow: var(--shadow-soft);
-      padding: 16px 18px 24px;
+    .route-header {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
       display: flex;
-      flex-direction: column;
-      gap: 14px;
-      max-height: calc(100vh - 80px);
-      overflow-y: auto;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--gray-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(8px);
+      z-index: 2;
     }
 
-    .route-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
+    .route-title-block { display: grid; gap: 4px; }
 
     .route-kicker {
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--gray-muted);
@@ -78,30 +74,39 @@
     }
 
     .route-title {
-      margin: 4px 0 0;
-      font-size: 24px;
+      margin: 0;
+      font-size: 20px;
       font-weight: 800;
     }
 
+    .run-distance { font-size: 12px; color: var(--gray-muted); margin: 0; }
+
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .stats-pill {
-      padding: 9px 14px;
+      padding: 8px 12px;
       border-radius: 999px;
       border: 1px solid var(--gray-border);
       background: var(--gray-soft);
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--gray-muted);
       white-space: nowrap;
     }
 
-    .run-distance { font-size: 13px; color: var(--gray-muted); }
-
     .progress-shell {
-      width: 100%;
-      height: 10px;
+      width: 200px;
+      max-width: 28vw;
+      height: 8px;
       background: var(--gray-border);
       border-radius: 999px;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     #runProgressBar {
@@ -111,66 +116,89 @@
       transition: width 0.25s ease;
     }
 
-    .current-house-card {
-      border: 1px solid var(--gray-border);
-      border-radius: 16px;
-      padding: 14px;
+    .end-route {
+      padding: 9px 12px;
       background: #fff;
-      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+      color: var(--navy);
+      border: 1px solid var(--gray-border);
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    .addr-title { margin: 0; font-size: 17px; font-weight: 800; }
-    .meta-list { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 4px; font-size: 13px; color: var(--gray-muted); }
+    .selection-card {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      max-width: 420px;
+      width: calc(100% - 24px);
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--gray-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 2;
+    }
+
+    .selection-card.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .selection-label { margin: 0; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-muted); }
+    .addr-title { margin: 0; font-size: 18px; font-weight: 800; }
+    .meta-list { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 4px; font-size: 13px; color: var(--gray-muted); }
     .meta-list span { font-weight: 700; color: var(--navy); }
 
-    .status-row { margin-top: 10px; }
+    .status-row { margin-top: 6px; }
     .status-tag { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--gray-border); background: var(--gray-soft); font-size: 12px; font-weight: 700; color: var(--gray-muted); }
 
-    .btn-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
-    .btn-primary { padding: 12px 14px; background: var(--green); color: #fff; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 14px 28px rgba(22, 101, 52, 0.25); }
-    .btn-ghost { padding: 12px 14px; background: #fff; color: var(--navy); border: 1px solid var(--gray-border); border-radius: 14px; font-weight: 700; cursor: pointer; }
-    .btn-link { background: none; border: none; color: var(--gray-muted); font-weight: 700; text-decoration: underline; padding: 6px 0 0; cursor: pointer; }
+    .btn-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+    .btn-primary { padding: 11px 12px; background: var(--green); color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 14px 28px rgba(22, 101, 52, 0.25); }
+    .btn-ghost { padding: 11px 12px; background: #fff; color: var(--navy); border: 1px solid var(--gray-border); border-radius: 12px; font-weight: 700; cursor: pointer; }
   </style>
 </head>
 <body>
   <main class="operator-route">
     <div id="map"></div>
-
-    <section class="route-bottom">
-      <div class="route-top-row">
-        <div>
-          <p class="route-kicker" id="routeDayLabel">TODAY</p>
-          <h1 class="route-title" id="routeTitle">Today’s route</h1>
-        </div>
+    <header class="route-header">
+      <div class="route-title-block">
+        <p class="route-kicker" id="routeDayLabel">TODAY</p>
+        <h1 class="route-title" id="routeTitle">Today’s route</h1>
+        <p class="run-distance" id="runDistanceLabel">Today’s run: 0.0 mi</p>
+      </div>
+      <div class="header-stats">
         <div class="stats-pill" id="runStatsLabel">0 left today / 0 total</div>
-      </div>
-
-      <div class="run-distance" id="runDistanceLabel">Today’s run: 0.0 mi</div>
-
-      <div class="progress-shell">
-        <div id="runProgressBar"></div>
-      </div>
-
-      <div class="current-house-card">
-        <p class="addr-title" id="currentAddress">No houses for this filter.</p>
-        <ul class="meta-list">
-          <li><span>Plan:</span> <span id="currentPlan"></span></li>
-          <li><span>Bins:</span> <span id="currentBins"></span></li>
-          <li><span>Phone:</span> <span id="currentPhone"></span></li>
-          <li><span>Status:</span> <span id="currentStatus"></span></li>
-        </ul>
-        <div class="status-row">
-          <span class="status-tag" id="currentStatusTag">Pending</span>
+        <div class="progress-shell">
+          <div id="runProgressBar"></div>
         </div>
+        <button id="btnEndRoute" class="end-route">End route</button>
       </div>
+    </header>
 
+    <section class="selection-card" id="selectionCard">
+      <p class="selection-label">Selected house</p>
+      <p class="addr-title" id="currentAddress">Tap a house to view details.</p>
+      <ul class="meta-list">
+        <li><span>Plan:</span> <span id="currentPlan"></span></li>
+        <li><span>Bins:</span> <span id="currentBins"></span></li>
+        <li><span>Phone:</span> <span id="currentPhone"></span></li>
+        <li><span>Status:</span> <span id="currentStatus"></span></li>
+      </ul>
+      <div class="status-row">
+        <span class="status-tag" id="currentStatusTag">Pending</span>
+      </div>
       <div class="btn-row">
         <button id="btnMarkDone" class="btn-primary">Mark done</button>
         <button id="btnSkip" class="btn-ghost">Skip</button>
         <button id="btnContact" class="btn-ghost">Contact</button>
       </div>
-
-      <button id="btnEndRoute" class="btn-link">End route</button>
     </section>
   </main>
 
