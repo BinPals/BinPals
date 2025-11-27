@@ -177,11 +177,38 @@
   <script>
     (function () {
       const API_URL = 'https://script.google.com/macros/s/AKfycbwfcDOsVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl9-7JJE_UbHYAbV-S2cDu_i1av/exec';
-      const GOOGLE_MAPS_API_KEY = 'YOUR_REAL_GOOGLE_MAPS_KEY';
       const params = new URLSearchParams(window.location.search);
-      const OPERATOR_ID = (params.get('op') || 'OP01').trim();
+      const OPERATOR_ID = (
+        params.get('operatorId') ||
+        params.get('operator') ||
+        params.get('op') ||
+        'OP01'
+      ).trim();
+      const operatorQueryParam =
+        params.has('operatorId') ? 'operatorId' :
+        params.has('operator') ? 'operator' :
+        'op';
+
+      function resolveMapsApiKey() {
+        return (
+          window.BINPALS_GOOGLE_MAPS_API_KEY ||
+          window.BINPALS_MAPS_API_KEY ||
+          params.get('mapsKey') ||
+          params.get('mapKey') ||
+          ''
+        ).trim();
+      }
 
       function loadGoogleMaps() {
+        const GOOGLE_MAPS_API_KEY = resolveMapsApiKey();
+        if (!GOOGLE_MAPS_API_KEY) {
+          console.error('Google Maps API key is missing. Provide ?mapsKey=YOUR_KEY or set window.BINPALS_GOOGLE_MAPS_API_KEY.');
+          const routeTitle = document.getElementById('routeTitle');
+          const address = document.getElementById('currentAddress');
+          if (routeTitle) routeTitle.textContent = 'Add a Google Maps API key to continue';
+          if (address) address.textContent = 'Map cannot load without a valid Google Maps JavaScript API key.';
+          return;
+        }
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_API_KEY)}&callback=initOperatorMap`;
         script.async = true;
@@ -202,7 +229,7 @@
         });
 
       document.getElementById('btnEndRoute').addEventListener('click', function () {
-        window.location.href = `/operator/home.html?op=${encodeURIComponent(OPERATOR_ID)}`;
+        window.location.href = `/operator/home.html?${operatorQueryParam}=${encodeURIComponent(OPERATOR_ID)}`;
       });
 
       document.getElementById('btnContact').addEventListener('click', function () {
