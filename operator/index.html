@@ -135,20 +135,32 @@
       min-height: 400px;
     }
 
-    .binpals-pin {
-      font-size: 26px;
-      transform: translate(-50%, -50%);
-      transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
-    }
+/* SIMPLE DOT PINS */
+.binpals-pin {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #16a34a;           /* active green */
+  border: 2px solid #ffffff;     /* white ring */
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease,
+    background-color 0.18s ease;
+}
 
-    .binpals-pin.selected {
-      transform: translate(-50%, -50%) scale(1.2);
-    }
+.binpals-pin.selected {
+  transform: translate(-50%, -50%) scale(1.4);
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.35);
+}
 
-    .binpals-pin.inactive {
-      opacity: 0.55;
-      filter: grayscale(1);
-    }
+.binpals-pin.inactive {
+  background: #9ca3af;           /* gray for filtered-out pins */
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.25);
+  opacity: 0.7;
+}
 
     .loc-btn {
       position: absolute;
@@ -897,12 +909,12 @@ map = new google.maps.Map(document.getElementById("map"), {
       return Promise.all(promises);
     }
 
-    function createPinElement() {
-      var customPinElement = document.createElement("div");
-      customPinElement.className = "binpals-pin";
-      customPinElement.innerHTML = "🏠";
-      return customPinElement;
-    }
+function createPinElement() {
+  var customPinElement = document.createElement("div");
+  customPinElement.className = "binpals-pin";
+  // no innerHTML – just a clean dot
+  return customPinElement;
+}
 
     function setupMapMarkers() {
       markers.forEach(function (m) {
