@@ -236,20 +236,14 @@ function hookDom() {
   }
 
   if (btnPrevEl) {
-    btnPrevEl.addEventListener("click", function () {
-      moveSelection(-1);
-    });
+    btnPrevEl.addEventListener("click", onPrevHouse);
   }
   if (btnNextEl) {
-    btnNextEl.addEventListener("click", function () {
-      moveSelection(1);
-    });
+    btnNextEl.addEventListener("click", onNextHouse);
   }
 
   if (btnHideCardEl && selectionCardEl) {
-    btnHideCardEl.addEventListener("click", function () {
-      selectionCardEl.classList.remove("is-visible");
-    });
+    btnHideCardEl.addEventListener("click", hideSelectionCard);
   }
 }
 
@@ -354,6 +348,34 @@ function moveSelection(delta) {
   const len = filteredStops.length;
   const nextIndex = (selectedIndex + delta + len) % len;
   setSelectedIndex(nextIndex);
+}
+
+function hideSelectionCard() {
+  if (selectionCardEl) {
+    selectionCardEl.classList.remove("is-visible");
+  }
+}
+
+function onPrevHouse() {
+  if (!filteredStops.length) return;
+  if (selectedIndex === 0) return;
+
+  selectedIndex -= 1;
+  highlightSelectedMarker();
+  centerMapOnSelected();
+  updateUiForSelection();
+  updateProgressUi();
+}
+
+function onNextHouse() {
+  if (!filteredStops.length) return;
+  if (selectedIndex >= filteredStops.length - 1) return;
+
+  selectedIndex += 1;
+  highlightSelectedMarker();
+  centerMapOnSelected();
+  updateUiForSelection();
+  updateProgressUi();
 }
 
 function highlightSelectedMarker() {
