@@ -76,10 +76,8 @@ function initOperatorMap() {
     });
   }
 
-  // 1b. Only keep stops that have lat/lng
-  filteredStops = operatorStops.filter(function (s) {
-    return typeof s.lat === "number" && typeof s.lng === "number";
-  });
+  // 1b. Accept all stops (we will geocode them client-side)
+  filteredStops = operatorStops.slice();
 
   // 2. Basic map
   const mapEl = document.getElementById("map");
@@ -190,30 +188,60 @@ function renderMarkers() {
 
   if (!filteredStops.length) return;
 
+  const stopsWithLatLng = [];
   const bounds = new google.maps.LatLngBounds();
 
-  filteredStops.forEach(function (stop, index) {
-    const pos = { lat: stop.lat, lng: stop.lng };
+  // First, ensure each stop has lat/lng. If missing, geocode.
+  filteredStops.forEach(function (stop) {
+    if (typeof stop.lat === "number" && typeof stop.lng === "number") {
+      stopsWithLatLng.push(stop);
+      addMarkerForStop(stop, stopsWithLatLng.length - 1, bounds);
+    } else {
+      const address = stop.fullAddress || stop.address || "";
 
-    const marker = new google.maps.Marker({
-      position: pos,
-      map: map,
-      title: stop.fullAddress || stop.address || stop.name || "Stop",
-      icon: makeMarkerIcon(false)   // not selected by default
-    });
+      geocoder.geocode({ address: address }, function (results, status) {
+        if (status === "OK" && results[0]) {
+          const pos = results[0].geometry.location;
+          stop.lat = pos.lat();
+          stop.lng = pos.lng();
 
-    marker.addListener("click", function () {
-      setSelectedIndex(index);
-    });
+          stopsWithLatLng.push(stop);
+          addMarkerForStop(stop, stopsWithLatLng.length - 1, bounds);
 
-    markers.push(marker);
-    markerById.set(stop.id, marker);
-    bounds.extend(pos);
+          // Update global filteredStops so downstream code can use lat/lng
+          filteredStops = stopsWithLatLng.slice();
+        } else {
+          console.warn("Geocode failed for stop", stop, status);
+        }
+      });
+    }
   });
+
+  // After geocoding sync stops, store the updated list and adjust map.
+  filteredStops = stopsWithLatLng.slice();
 
   if (!bounds.isEmpty()) {
     map.fitBounds(bounds);
   }
+}
+
+function addMarkerForStop(stop, index, bounds) {
+  const pos = { lat: stop.lat, lng: stop.lng };
+
+  const marker = new google.maps.Marker({
+    position: pos,
+    map: map,
+    title: stop.fullAddress || stop.address || stop.name || "Stop",
+    icon: makeMarkerIcon(false)   // not selected by default
+  });
+
+  marker.addListener("click", function () {
+    setSelectedIndex(index);
+  });
+
+  markers.push(marker);
+  markerById.set(stop.id, marker);
+  bounds.extend(pos);
 }
 
 function makeMarkerIcon(isSelected) {
