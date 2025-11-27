@@ -67,6 +67,44 @@ function getTodayDayName() {
   return days[now.getDay()];
 }
 
+// Geocode any stops missing coordinates; returns a Promise of geocoded stops only
+function geocodeStopsIfNeeded(stopsToGeocode) {
+  if (!Array.isArray(stopsToGeocode) || !geocoder) {
+    return Promise.resolve(stopsToGeocode || []);
+  }
+
+  const geocodeOne = function (stop) {
+    return new Promise(function (resolve) {
+      if (Number.isFinite(stop.lat) && Number.isFinite(stop.lng)) {
+        resolve(stop);
+        return;
+      }
+
+      const addr = (stop.fullAddress || stop.address || "").trim();
+      if (!addr) {
+        resolve(null);
+        return;
+      }
+
+      geocoder.geocode({ address: addr }, function (results, status) {
+        if (status === "OK" && results && results[0] && results[0].geometry) {
+          const loc = results[0].geometry.location;
+          stop.lat = typeof loc.lat === "function" ? loc.lat() : loc.lat;
+          stop.lng = typeof loc.lng === "function" ? loc.lng() : loc.lng;
+          resolve(stop);
+        } else {
+          console.warn("Geocode failed for address:", addr, status);
+          resolve(null);
+        }
+      });
+    });
+  };
+
+  return Promise.all(stopsToGeocode.map(geocodeOne)).then(function (results) {
+    return results.filter(Boolean);
+  });
+}
+
 // ===============================
 //  INIT ENTRYPOINT (called by Google Maps callback)
 // ===============================
@@ -90,7 +128,7 @@ function initOperatorMap() {
     });
   }
 
-  // 1b. Normalize coordinates and filter by today's trash day
+  // 1b. Normalize coordinates and filter by today's trash day/address
   filteredStops = operatorStops
     .map(function (s) {
       const latNum = typeof s.lat === "string" ? parseFloat(s.lat) : s.lat;
@@ -102,9 +140,9 @@ function initOperatorMap() {
       });
     })
     .filter(function (s) {
-      const day = (s.trashDay || "").toString().toLowerCase();
-      const hasCoords = typeof s.lat === "number" && typeof s.lng === "number";
-      return hasCoords && day === todayName;
+      const day = (s.trashDay || "").toString().toLowerCase().trim();
+      const hasAddress = (s.fullAddress || s.address || "").trim() !== "";
+      return hasAddress && day === todayName;
     });
 
   // 2. Basic map
@@ -140,25 +178,29 @@ function initOperatorMap() {
   // 4. Setup DOM references & events
   hookDom();
 
-  if (!filteredStops.length) {
-    console.log("No stops for operator today or no geocoded stops.");
+  geocodeStopsIfNeeded(filteredStops).then(function (geoResults) {
+    filteredStops = geoResults;
+
+    if (!filteredStops.length) {
+      console.log("No stops for operator today or no geocoded stops.");
+      updateProgressUi();
+      updateDistanceUi();
+      if (currentAddressEl) {
+        currentAddressEl.textContent = "No houses for today’s route.";
+      }
+      if (selectionCardEl) {
+        selectionCardEl.classList.add("is-visible");
+      }
+      return;
+    }
+
+    renderMarkers();
+
+    // Start with first pending, but keep card hidden until marker tap
+    autoSelectFirstStop();
+    setRouteRunningState(true);
     updateProgressUi();
-    updateDistanceUi();
-    if (currentAddressEl) {
-      currentAddressEl.textContent = "No houses for today’s route.";
-    }
-    if (selectionCardEl) {
-      selectionCardEl.classList.add("is-visible");
-    }
-    return;
-  }
-
-  renderMarkers();
-
-  // Start with first pending, but keep card hidden until marker tap
-  autoSelectFirstStop();
-  setRouteRunningState(true);
-  updateProgressUi();
+  });
 }
 
 // Make initOperatorMap global for Google callback
