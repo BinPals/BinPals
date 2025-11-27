@@ -25,9 +25,7 @@
       --radius-xl: 24px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -101,25 +99,12 @@
       width: fit-content;
     }
 
-    .status-pill.error {
-      background: #fee2e2;
-      border-color: #fecaca;
-      color: #b91c1c;
-    }
-
-    .status-pill.neutral {
-      background: #e5e7eb;
-      border-color: #d1d5db;
-      color: #4b5563;
-    }
-
     .login-form {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .login-form input,
     .login-form select {
       width: 100%;
       padding: 12px 14px;
@@ -129,9 +114,6 @@
       font-family: inherit;
       background: var(--gray-soft);
       appearance: none;
-    }
-
-    .login-form select {
       background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8L10 12L14 8' stroke='%236b7280' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
@@ -192,81 +174,34 @@
         <option value="OP02">OP02 – California</option>
       </select>
 
-      <select id="routeId" required aria-label="Route">
-        <option value="" disabled selected>Select route</option>
-        <option value="R1">R1 – Tuesday Vistancia</option>
-        <option value="R2">R2 – Thursday Peoria</option>
-      </select>
-
       <button class="btn-main" type="submit">Log in</button>
     </form>
 
     <p class="foot-note">
-      Choose your operator ID and assigned route to access the
-      <a class="link" href="#">route dashboard</a>.
+      Choose your operator ID to access the <a class="link" href="/operator/">route dashboard</a>.
+      Use the Trash day filter inside the dashboard to switch between Monday, Tuesday, etc.
     </p>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      var form        = document.getElementById("loginForm");
-      var opInput     = document.getElementById("operatorId");
-      var routeInput  = document.getElementById("routeId");
-      var statusPill  = document.getElementById("statusPill");
+      var form = document.getElementById("loginForm");
+      var opInput = document.getElementById("operatorId");
 
-      if (!form || !opInput || !routeInput || !statusPill) return;
-
-      // Helper: update pill
-      function setStatus(text, mode) {
-        statusPill.textContent = text;
-        statusPill.classList.remove("error", "neutral");
-        if (mode === "error") {
-          statusPill.classList.add("error");
-        } else if (mode === "neutral") {
-          statusPill.classList.add("neutral");
-        }
-      }
-
-      // Optional: prefill from URL (login.html?op=OP01&route=R1)
-      var params = new URLSearchParams(window.location.search);
-      var preOp    = (params.get("op") || "").trim();
-      var preRoute = (params.get("route") || "").trim();
-
-      if (preOp) {
-        opInput.value = preOp;
-      }
-      if (preRoute) {
-        routeInput.value = preRoute;
-      }
-      if (preOp || preRoute) {
-        setStatus("PREFILLED FROM LINK", "neutral");
-      }
+      if (!form || !opInput) return;
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        var op    = (opInput.value || "").trim();
-        var route = (routeInput.value || "").trim();
-
+        var op = (opInput.value || "").trim();
         if (!op) {
-          setStatus("SELECT AN OPERATOR ID", "error");
+          alert("Please choose your operator ID.");
           opInput.focus();
           return;
         }
 
-        if (!route) {
-          setStatus("SELECT A ROUTE", "error");
-          routeInput.focus();
-          return;
-        }
-
-        setStatus("LOGGING IN…", "neutral");
-
-        // If your operator dashboard file is /operator/index.html
-        // and this login file is also inside /operator/, this is correct:
-        var targetUrl = "index.html?op=" + encodeURIComponent(op) +
-                        "&route=" + encodeURIComponent(route);
-
+        // Only send operator ID; route is handled inside the dashboard by Trash day filter
+        var targetUrl = "index.html?op=" + encodeURIComponent(op);
         window.location.href = targetUrl;
       });
     });
