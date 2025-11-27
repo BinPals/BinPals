@@ -125,6 +125,7 @@ function initOperatorMap() {
   renderMarkers();
   autoSelectFirstStop();
   updateUiForSelection();
+  setRouteRunningState(true);
   updateProgressUi();
 }
 
@@ -156,6 +157,23 @@ function hookDom() {
   }
   if (btnStartStopEl) {
     btnStartStopEl.addEventListener("click", onStartStopToggle);
+  }
+}
+
+function setRouteRunningState(nextState) {
+  routeRunning = nextState;
+  window.routeRunning = routeRunning;
+
+  if (btnStartStopEl) {
+    btnStartStopEl.textContent = routeRunning ? "Route running" : "Start route";
+  }
+
+  if (routeRunning) {
+    totalDistanceMeters = 0;
+    updateDistanceUi();
+    drawCurrentSegment();
+  } else {
+    clearRouteLine();
   }
 }
 
@@ -297,21 +315,7 @@ function drawCurrentSegment() {
 function onStartStopToggle() {
   if (!filteredStops.length) return;
 
-  routeRunning = !routeRunning;
-  window.routeRunning = routeRunning;
-
-  if (btnStartStopEl) {
-    btnStartStopEl.textContent = routeRunning ? "Route running" : "Start route";
-  }
-
-  if (routeRunning) {
-    // Reset distance when starting a brand new run.
-    totalDistanceMeters = 0;
-    updateDistanceUi();
-    drawCurrentSegment();
-  } else {
-    clearRouteLine();
-  }
+  setRouteRunningState(!routeRunning);
 }
 
 function onMarkDone() {
