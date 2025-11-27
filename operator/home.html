@@ -286,11 +286,23 @@
     apiUrl.searchParams.set('operatorId', OPERATOR_ID);
     apiUrl.searchParams.set('t', Date.now());
 
+    function getTodayDayName() {
+      const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      const now = new Date();
+      return days[now.getDay()];
+    }
+
     fetch(apiUrl.toString(), { cache: 'no-store' })
       .then(resp => resp.json())
       .then(data => {
-        window.BINPALS_STOPS = Array.isArray(data) ? data : [];
-        renderStops(window.BINPALS_STOPS);
+        const allStops = Array.isArray(data) ? data : [];
+        const todayName = getTodayDayName().toLowerCase();
+        const todayStops = allStops.filter(s =>
+          (s.trashDay || "").toString().toLowerCase() === todayName
+        );
+
+        window.BINPALS_STOPS = todayStops;
+        renderStops(todayStops);
       })
       .catch(err => {
         console.error('Error loading stops:', err);
