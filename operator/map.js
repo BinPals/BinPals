@@ -90,12 +90,22 @@ function initOperatorMap() {
     });
   }
 
-  // 1b. Filter by today's trash day + require lat/lng
-  filteredStops = operatorStops.filter(function (s) {
-    const day = (s.trashDay || "").toString().toLowerCase();
-    const hasCoords = typeof s.lat === "number" && typeof s.lng === "number";
-    return hasCoords && day === todayName;
-  });
+  // 1b. Normalize coordinates and filter by today's trash day
+  filteredStops = operatorStops
+    .map(function (s) {
+      const latNum = typeof s.lat === "string" ? parseFloat(s.lat) : s.lat;
+      const lngNum = typeof s.lng === "string" ? parseFloat(s.lng) : s.lng;
+
+      return Object.assign({}, s, {
+        lat: Number.isFinite(latNum) ? latNum : null,
+        lng: Number.isFinite(lngNum) ? lngNum : null
+      });
+    })
+    .filter(function (s) {
+      const day = (s.trashDay || "").toString().toLowerCase();
+      const hasCoords = typeof s.lat === "number" && typeof s.lng === "number";
+      return hasCoords && day === todayName;
+    });
 
   // 2. Basic map
   const mapEl = document.getElementById("map");

@@ -238,6 +238,10 @@
     const statDoneEl = document.getElementById('statDone');
     const operatorLabel = document.getElementById('operatorLabel');
     const startRouteBtn = document.getElementById('btnStartRoute');
+    const mapsKey =
+      params.get('mapsKey') ||
+      params.get('mapKey') ||
+      '';
 
     if (operatorLabel) {
       operatorLabel.textContent = `Operator: ${OPERATOR_ID}`;
@@ -310,14 +314,15 @@
       });
 
     startRouteBtn.addEventListener('click', function () {
-      const params = new URLSearchParams(window.location.search);
-      const opId = (
-        params.get('operatorId') ||
-        params.get('operator') ||
-        params.get('op') ||
-        'OP01'
-      ).trim();
-      window.location.href = `/operator/route.html?${operatorQueryParam}=${encodeURIComponent(opId)}`;
+      const nextParams = new URLSearchParams();
+      nextParams.set(operatorQueryParam, OPERATOR_ID);
+
+      // Preserve any provided Google Maps API key so the route map can load
+      if (mapsKey) {
+        nextParams.set('mapsKey', mapsKey);
+      }
+
+      window.location.href = `/operator/route.html?${nextParams.toString()}`;
     });
   })();
 </script>
