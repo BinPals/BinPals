@@ -637,11 +637,62 @@
       </section>
     </main>
   </div>
-    <script>
-      // Provide today's stops before loading the map. Replace with live data from Apps Script.
-      window.BINPALS_STOPS = window.BINPALS_STOPS || [];
-    </script>
+    <!-- Operator map logic -->
     <script src="map.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXXAH6ZiQ6Zr6jPkPlsvRB_R-UDt0UKs&callback=initOperatorMap"></script>
-</body>
+
+    <script>
+      (function () {
+        // =======================
+        // CONFIG
+        // =======================
+        // Use the SAME web app URL you already use for doGet()
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwfcDOsVOxUzbnycehqsFm0AV31WgXYv6YZNNC80wGl9-7JJE_UbHYAbV-S2cDui1av/exec';
+        // ^^^ replace with YOUR real deployed Apps Script web app URL if different
+
+        const GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_KEY_HERE'; // keep your real key
+
+        // Read operator from URL:  /operator/index.html?op=OP01
+        const urlParams   = new URLSearchParams(window.location.search);
+        const OPERATOR_ID = (urlParams.get('op') || '').trim() || 'OP01'; // fallback for testing
+
+        // Expose operator on the UI if you have a label for it
+        const opLabel = document.getElementById('operatorIdLabel');
+        if (opLabel) opLabel.textContent = OPERATOR_ID;
+
+        // This is what map.js will read
+        window.BINPALS_STOPS = [];
+
+        function loadGoogleMaps() {
+          const script = document.createElement('script');
+          script.src =
+            'https://maps.googleapis.com/maps/api/js?key=' +
+            encodeURIComponent(GOOGLE_MAPS_API_KEY) +
+            '&callback=initOperatorMap';
+          script.async = true;
+          script.defer = true;
+          document.head.appendChild(script);
+        }
+
+        // Fetch stops for this operator from Apps Script
+        fetch(API_URL + '?operatorId=' + encodeURIComponent(OPERATOR_ID))
+          .then(function (resp) {
+            return resp.json();
+          })
+          .then(function (data) {
+            console.log('Stops from API:', data);
+            if (Array.isArray(data)) {
+              window.BINPALS_STOPS = data;
+            } else {
+              window.BINPALS_STOPS = [];
+            }
+            loadGoogleMaps();
+          })
+          .catch(function (err) {
+            console.error('Error loading stops:', err);
+            window.BINPALS_STOPS = [];
+            loadGoogleMaps();
+          });
+      })();
+    </script>
+  </body>
 </html>
