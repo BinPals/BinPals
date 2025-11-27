@@ -4,16 +4,30 @@
   <meta charset="utf-8" />
   <title>BinPals Operator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="refresh" content="0;url=/operator/home.html">
+
   <script>
     (function () {
-      const params = window.location.search || '';
-      const target = '/operator/home.html' + params;
+      const params = new URLSearchParams(window.location.search);
+      let op = params.get("op");
+
+      // ---------------------------
+      // 1. If no operator ID, set a default temporarily (OP01)
+      // TODO: replace this with a real login/select page
+      // ---------------------------
+      if (!op) {
+        op = "OP01";
+        params.set("op", op);
+      }
+
+      // Build target URL
+      const target = "/operator/home.html?" + params.toString();
+
+      // Redirect
       window.location.replace(target);
     })();
   </script>
 </head>
 <body>
-  <p>Redirecting to operator home…</p>
+  <p>Redirecting operator…</p>
 </body>
 </html>
